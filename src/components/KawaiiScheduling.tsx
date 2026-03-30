@@ -8,6 +8,7 @@ import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay } fr
 import { toast } from 'sonner';
 
 const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scheduling`;
+const SYNC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-acuity`;
 const PRISMIC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/prismic`;
 const headers = {
   'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
@@ -27,10 +28,11 @@ interface PrismicSchedulingItem {
   id: string;
   event_title: string;
   event_description: string;
-  event_day: string | null;
-  event_time: string | null;
+  event_price: string;
+  event_length: string;
   event_image: string | null;
   event_image_alt: string;
+  availability: Record<string, string>;
 }
 
 interface TimeSlot {
@@ -38,7 +40,14 @@ interface TimeSlot {
   endTime: string;
 }
 
-const fetchTypes = async (): Promise<AppointmentType[]> => {
+// Sync Prismic → DB first, then fetch types
+const syncAndFetchTypes = async (): Promise<AppointmentType[]> => {
+  // Trigger sync from Prismic to DB (updates availability_slots + appointment_types)
+  try {
+    await fetch(SYNC_URL, { method: 'POST', headers });
+  } catch (e) {
+    console.warn('Prismic sync failed, using existing DB data:', e);
+  }
   const res = await fetch(`${BASE_URL}?action=types`, { headers });
   if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
@@ -86,7 +95,7 @@ const KawaiiScheduling = () => {
 
   const { data: appointmentTypes, isLoading: typesLoading } = useQuery({
     queryKey: ['scheduling-types'],
-    queryFn: fetchTypes,
+    queryFn: syncAndFetchTypes,
   });
 
   const { data: prismicItems } = useQuery({
@@ -94,11 +103,13 @@ const KawaiiScheduling = () => {
     queryFn: fetchPrismicScheduling,
   });
 
-  // Match Prismic content to appointment types by name
+  // Match Prismic content to appointment types by name (fuzzy - checks if either contains the other)
   const getPrismicData = (typeName: string) => {
-    return prismicItems?.find(
-      (item) => item.event_title.toLowerCase().trim() === typeName.toLowerCase().trim()
-    );
+    const name = typeName.toLowerCase().trim();
+    return prismicItems?.find((item) => {
+      const title = item.event_title.toLowerCase().trim();
+      return title === name || title.includes(name) || name.includes(title);
+    });
   };
 
   const { data: availableDates } = useQuery({
@@ -263,11 +274,8 @@ const KawaiiScheduling = () => {
                     <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">
                       {prismic?.event_description || type.description || ''}
                     </p>
-                    {prismic?.event_day && (
-                      <p className="text-muted-foreground text-xs font-body mb-1">📅 {prismic.event_day}</p>
-                    )}
-                    {prismic?.event_time && (
-                      <p className="text-muted-foreground text-xs font-body mb-2">⏰ {prismic.event_time}</p>
+                    {prismic?.availability && Object.entries(prismic.availability).some(([, v]) => v && v.toLowerCase() !== 'no availability') && (
+                      <p className="text-muted-foreground text-xs font-body mb-2">📅 Available select days</p>
                     )}
                     <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
                       <span className="flex items-center gap-1">

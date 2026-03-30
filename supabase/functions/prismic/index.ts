@@ -22,7 +22,7 @@ serve(async (req) => {
     }
 
     const url = new URL(req.url);
-    const type = url.searchParams.get("type"); // "product_pages" or "scheduling"
+    const type = url.searchParams.get("type");
 
     if (!type) {
       return new Response(
@@ -31,34 +31,23 @@ serve(async (req) => {
       );
     }
 
-    // Fetch from Prismic REST API v2
     const apiUrl = `https://${repoName}.cdn.prismic.io/api/v2`;
-    
-    // First get the API ref
     const apiRes = await fetch(apiUrl, {
       headers: accessToken ? { Authorization: `Token ${accessToken}` } : {},
     });
-    if (!apiRes.ok) {
-      throw new Error(`Prismic API init failed: ${apiRes.status}`);
-    }
+    if (!apiRes.ok) throw new Error(`Prismic API init failed: ${apiRes.status}`);
     const apiData = await apiRes.json();
     const ref = apiData.refs?.[0]?.ref;
     if (!ref) throw new Error("No master ref found");
 
-    // Query documents by type
     const query = `[[at(document.type,"${type}")]]`;
     let searchUrl = `${apiUrl}/documents/search?ref=${ref}&q=${encodeURIComponent(query)}&pageSize=100`;
-    if (accessToken) {
-      searchUrl += `&access_token=${accessToken}`;
-    }
-    
+    if (accessToken) searchUrl += `&access_token=${accessToken}`;
+
     const searchRes = await fetch(searchUrl);
-    if (!searchRes.ok) {
-      throw new Error(`Prismic search failed: ${searchRes.status}`);
-    }
+    if (!searchRes.ok) throw new Error(`Prismic search failed: ${searchRes.status}`);
     const searchData = await searchRes.json();
 
-    // Transform based on type
     let results: any[] = [];
 
     if (type === "product_pages") {
@@ -71,15 +60,23 @@ serve(async (req) => {
         main_image_alt: doc.data.main_image?.alt || "",
       }));
     } else if (type === "scheduling") {
-      results = (searchData.results || []).map((doc: any) => ({
-        id: doc.id,
-        event_title: doc.data.event_title?.[0]?.text || "",
-        event_description: doc.data.event_description?.[0]?.text || "",
-        event_day: doc.data.event_day || null,
-        event_time: doc.data.event_time || null,
-        event_image: doc.data.event_image?.url || null,
-        event_image_alt: doc.data.event_image?.alt || "",
-      }));
+      const dayNames = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
+      results = (searchData.results || []).map((doc: any) => {
+        const availability: Record<string, string> = {};
+        for (const day of dayNames) {
+          availability[day] = doc.data[`${day}_event_availability`]?.[0]?.text || "";
+        }
+        return {
+          id: doc.id,
+          event_title: doc.data.event_title?.[0]?.text || "",
+          event_description: doc.data.event_description?.[0]?.text || "",
+          event_price: doc.data.event_price?.[0]?.text || "",
+          event_length: doc.data.event_length?.[0]?.text || "",
+          event_image: doc.data.event_image?.url || null,
+          event_image_alt: doc.data.event_image?.alt || "",
+          availability,
+        };
+      });
     } else {
       results = searchData.results || [];
     }
