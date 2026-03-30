@@ -51,6 +51,13 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        klawsome: {
+          red: "hsl(var(--klawsome-red))",
+          navy: "hsl(var(--klawsome-navy))",
+          yellow: "hsl(var(--klawsome-yellow))",
+          "baby-blue": "hsl(var(--klawsome-baby-blue))",
+          "baby-pink": "hsl(var(--klawsome-baby-pink))",
+        },
         kawaii: {
           pink: "hsl(var(--kawaii-pink))",
           lavender: "hsl(var(--kawaii-lavender))",
