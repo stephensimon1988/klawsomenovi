@@ -214,7 +214,7 @@ const KawaiiScheduling = () => {
   }
 
   return (
-    <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15 relative overflow-hidden">
+    <section id="scheduling" className="py-20 px-4 bg-primary relative overflow-hidden">
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-16"
