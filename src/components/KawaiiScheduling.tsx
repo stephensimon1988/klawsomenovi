@@ -298,12 +298,12 @@ const KawaiiScheduling = () => {
             </Button>
 
             <div className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 p-6">
-              <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
-              <p className="text-muted-foreground text-sm font-body mb-2">
+              <h3 className="font-heading font-bold text-xl mb-1 text-white">{selectedType.name}</h3>
+              <p className="text-white/60 text-sm font-body mb-2">
                 {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
               </p>
               {selectedType.description && (
-                <p className="text-muted-foreground text-sm font-body mb-6">{selectedType.description}</p>
+                <p className="text-white/60 text-sm font-body mb-6">{selectedType.description}</p>
               )}
 
               {/* Month nav */}
