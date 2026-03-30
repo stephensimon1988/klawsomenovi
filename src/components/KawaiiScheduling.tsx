@@ -223,10 +223,10 @@ const KawaiiScheduling = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            <span className="kawaii-text-gradient">Book an Appointment</span> 📅
+          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4 text-white">
+            Book an Appointment 📅
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto font-body">
             Pick a service, choose a date, and find the perfect time! ✨
           </p>
         </motion.div>
