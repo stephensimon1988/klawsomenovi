@@ -185,7 +185,7 @@ const KawaiiScheduling = () => {
 
   if (bookingSuccess) {
     return (
-      <section id="scheduling" className="py-20 px-4">
+      <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15">
         <div className="container mx-auto max-w-lg">
           <motion.div
             className="bg-card rounded-kawaii border border-border p-10 text-center kawaii-shadow"
@@ -214,7 +214,7 @@ const KawaiiScheduling = () => {
   }
 
   return (
-    <section id="scheduling" className="py-20 px-4">
+    <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15 relative overflow-hidden">
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -251,7 +251,7 @@ const KawaiiScheduling = () => {
                 <motion.button
                   key={type.id}
                   onClick={() => setSelectedType(type)}
-                  className="bg-card rounded-kawaii border border-border text-left kawaii-shadow hover:border-primary/50 transition-colors overflow-hidden"
+                  className="bg-white/70 backdrop-blur-sm rounded-kawaii border border-white/60 text-left kawaii-shadow hover:border-primary/50 transition-colors overflow-hidden"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -297,7 +297,7 @@ const KawaiiScheduling = () => {
               ← Back to services
             </Button>
 
-            <div className="bg-card rounded-kawaii border border-border p-6 kawaii-shadow">
+            <div className="bg-white/80 backdrop-blur-sm rounded-kawaii border border-white/60 p-6 kawaii-shadow">
               <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
               <p className="text-muted-foreground text-sm font-body mb-2">
                 {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
