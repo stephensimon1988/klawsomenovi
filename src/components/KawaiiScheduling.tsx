@@ -103,11 +103,13 @@ const KawaiiScheduling = () => {
     queryFn: fetchPrismicScheduling,
   });
 
-  // Match Prismic content to appointment types by name
+  // Match Prismic content to appointment types by name (fuzzy - checks if either contains the other)
   const getPrismicData = (typeName: string) => {
-    return prismicItems?.find(
-      (item) => item.event_title.toLowerCase().trim() === typeName.toLowerCase().trim()
-    );
+    const name = typeName.toLowerCase().trim();
+    return prismicItems?.find((item) => {
+      const title = item.event_title.toLowerCase().trim();
+      return title === name || title.includes(name) || name.includes(title);
+    });
   };
 
   const { data: availableDates } = useQuery({
