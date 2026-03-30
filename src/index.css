@@ -6,54 +6,57 @@
 
 @layer base {
   :root {
-    --background: 340 100% 97%;
-    --foreground: 330 30% 25%;
+    --background: 0 0% 100%;
+    --foreground: 220 20% 20%;
 
     --card: 0 0% 100%;
-    --card-foreground: 330 30% 25%;
+    --card-foreground: 220 20% 20%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 330 30% 25%;
+    --popover-foreground: 220 20% 20%;
 
-    --primary: 340 82% 76%;
+    --primary: 200 70% 60%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 270 60% 88%;
-    --secondary-foreground: 270 40% 30%;
+    --secondary: 340 60% 80%;
+    --secondary-foreground: 340 40% 25%;
 
-    --muted: 340 40% 94%;
-    --muted-foreground: 330 15% 50%;
+    --muted: 210 30% 96%;
+    --muted-foreground: 220 10% 45%;
 
-    --accent: 160 50% 82%;
-    --accent-foreground: 160 40% 25%;
+    --accent: 340 60% 85%;
+    --accent-foreground: 340 40% 25%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 340 40% 90%;
-    --input: 340 40% 90%;
-    --ring: 340 82% 76%;
+    --border: 210 20% 92%;
+    --input: 210 20% 92%;
+    --ring: 200 70% 60%;
 
     --radius: 1rem;
 
-    --kawaii-pink: 340 82% 76%;
-    --kawaii-lavender: 270 60% 88%;
-    --kawaii-mint: 160 50% 82%;
-    --kawaii-yellow: 45 100% 88%;
-    --kawaii-peach: 20 100% 90%;
-    --kawaii-sky: 200 80% 88%;
+    --kawaii-pink: 340 60% 82%;
+    --kawaii-lavender: 260 50% 85%;
+    --kawaii-mint: 160 45% 82%;
+    --kawaii-yellow: 45 90% 85%;
+    --kawaii-peach: 20 80% 88%;
+    --kawaii-sky: 200 70% 85%;
+    --kawaii-baby-blue: 200 70% 60%;
+    --kawaii-baby-pink: 340 60% 80%;
+    --kawaii-white: 0 0% 100%;
 
     --font-heading: 'Quicksand', sans-serif;
     --font-body: 'Nunito', sans-serif;
 
-    --sidebar-background: 340 100% 97%;
-    --sidebar-foreground: 330 30% 25%;
-    --sidebar-primary: 340 82% 76%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 220 20% 20%;
+    --sidebar-primary: 200 70% 60%;
     --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 270 60% 88%;
-    --sidebar-accent-foreground: 270 40% 30%;
-    --sidebar-border: 340 40% 90%;
-    --sidebar-ring: 340 82% 76%;
+    --sidebar-accent: 340 60% 85%;
+    --sidebar-accent-foreground: 340 40% 25%;
+    --sidebar-border: 210 20% 92%;
+    --sidebar-ring: 200 70% 60%;
   }
 }
 
