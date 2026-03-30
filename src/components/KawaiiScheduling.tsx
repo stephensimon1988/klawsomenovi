@@ -391,7 +391,7 @@ const KawaiiScheduling = () => {
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Phone number"
