@@ -44,10 +44,10 @@ const KawaiiProducts = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            <span className="kawaii-text-gradient">Our Products</span> 🛍️
+            <span className="kawaii-text-gradient">Tokens</span> 🪙
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body">
-            Browse our cutest collection! Each item is ready to add a sprinkle of joy to your day.
+            Grab tokens for the klaw machines! More tokens = more bonus coins! ✨
           </p>
         </motion.div>
 
