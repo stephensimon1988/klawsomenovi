@@ -410,7 +410,7 @@ const KawaiiScheduling = () => {
                       <Button
                         onClick={() => bookMutation.mutate()}
                         disabled={!formData.name || !formData.email || bookMutation.isPending}
-                        className="w-full rounded-bubble font-heading kawaii-shadow text-base py-5"
+                        className="w-full rounded-bubble font-heading text-base py-5 bg-klawsome-navy hover:bg-klawsome-navy/90 text-white"
                       >
                         {bookMutation.isPending ? (
                           <Loader2 className="w-5 h-5 animate-spin mr-2" />
