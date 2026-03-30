@@ -89,6 +89,18 @@ const KawaiiScheduling = () => {
     queryFn: fetchTypes,
   });
 
+  const { data: prismicItems } = useQuery({
+    queryKey: ['prismic-scheduling'],
+    queryFn: fetchPrismicScheduling,
+  });
+
+  // Match Prismic content to appointment types by name
+  const getPrismicData = (typeName: string) => {
+    return prismicItems?.find(
+      (item) => item.event_title.toLowerCase().trim() === typeName.toLowerCase().trim()
+    );
+  };
+
   const { data: availableDates } = useQuery({
     queryKey: ['scheduling-dates', selectedType?.id, monthStr],
     queryFn: () => fetchAvailability(selectedType!.id, monthStr),
