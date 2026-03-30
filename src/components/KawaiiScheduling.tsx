@@ -251,22 +251,25 @@ const KawaiiScheduling = () => {
                 <motion.button
                   key={type.id}
                   onClick={() => setSelectedType(type)}
-                  className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 text-left hover:border-white/40 transition-colors overflow-hidden"
+                  className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 text-left hover:border-white/40 transition-colors overflow-hidden flex flex-col"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
                   whileHover={{ y: -3 }}
                 >
-                  {prismic?.event_image && (
-                    <div className="w-full h-40 overflow-hidden">
+                  {/* Fixed-height image area for alignment */}
+                  <div className="w-full h-48 flex items-center justify-center overflow-hidden bg-white/5">
+                    {prismic?.event_image ? (
                       <img
                         src={prismic.event_image}
                         alt={prismic.event_image_alt || type.name}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                  )}
-                  <div className="p-6">
+                    ) : (
+                      <Calendar className="w-12 h-12 text-white/30" />
+                    )}
+                  </div>
+                  <div className="p-6 flex flex-col flex-1">
                     <Calendar className="w-8 h-8 text-white mb-3" />
                     <h3 className="font-heading font-bold text-lg text-white mb-1">
                       {prismic?.event_title || type.name}
@@ -277,7 +280,7 @@ const KawaiiScheduling = () => {
                     {prismic?.availability && Object.entries(prismic.availability).some(([, v]) => v && v.toLowerCase() !== 'no availability') && (
                       <p className="text-white/60 text-xs font-body mb-2">📅 Available select days</p>
                     )}
-                    <div className="flex items-center gap-3 text-sm text-white/60 font-body">
+                    <div className="flex items-center gap-3 text-sm text-white/60 font-body mt-auto">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" /> {type.duration_minutes} min
                       </span>
