@@ -15,7 +15,7 @@ const KawaiiNav = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-border">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-md border-b border-klawsome-baby-blue/30">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
           {/* Desktop nav links on the left */}
@@ -24,7 +24,7 @@ const KawaiiNav = () => {
               <a
                 key={link.label}
                 href={link.href}
-                className="font-heading font-semibold text-muted-foreground hover:text-primary transition-colors duration-200"
+                className="font-heading font-semibold text-klawsome-navy/70 hover:text-primary transition-colors duration-200"
               >
                 {link.label}
               </a>
@@ -34,7 +34,7 @@ const KawaiiNav = () => {
           {/* Mobile toggle on left */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 text-foreground"
+            className="md:hidden p-2 text-klawsome-navy"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
@@ -57,7 +57,7 @@ const KawaiiNav = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-white border-b border-border overflow-hidden"
+            className="md:hidden bg-white border-b border-klawsome-baby-blue/30 overflow-hidden"
           >
             <div className="px-4 py-4 space-y-3">
               {navLinks.map((link) => (
@@ -65,7 +65,7 @@ const KawaiiNav = () => {
                   key={link.label}
                   href={link.href}
                   onClick={() => setIsOpen(false)}
-                  className="block font-heading font-semibold text-muted-foreground hover:text-primary py-2 transition-colors"
+                  className="block font-heading font-semibold text-klawsome-navy/70 hover:text-primary py-2 transition-colors"
                 >
                   {link.label}
                 </a>
