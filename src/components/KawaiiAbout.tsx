@@ -51,7 +51,7 @@ const KawaiiAbout = () => {
               transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <img src={feature.image} alt={feature.title} className="w-24 h-24 mx-auto mb-5 object-contain" />
+              <img src={feature.image} alt={feature.title} className="w-full max-w-[20rem] mx-auto mb-5 object-contain" />
               <h3 className="text-xl font-heading font-bold mb-3 text-white">{feature.title}</h3>
               <p className="text-white/70 font-body leading-relaxed">{feature.description}</p>
             </motion.div>
