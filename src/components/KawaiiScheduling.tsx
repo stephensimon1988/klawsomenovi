@@ -384,7 +384,7 @@ const KawaiiScheduling = () => {
                           placeholder="Your name *"
                           value={formData.name}
                           onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Email address *"
