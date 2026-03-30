@@ -8,6 +8,7 @@ import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay } fr
 import { toast } from 'sonner';
 
 const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scheduling`;
+const PRISMIC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/prismic`;
 const headers = {
   'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
   'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
@@ -22,6 +23,16 @@ interface AppointmentType {
   price: number;
 }
 
+interface PrismicSchedulingItem {
+  id: string;
+  event_title: string;
+  event_description: string;
+  event_day: string | null;
+  event_time: string | null;
+  event_image: string | null;
+  event_image_alt: string;
+}
+
 interface TimeSlot {
   time: string;
   endTime: string;
@@ -32,6 +43,13 @@ const fetchTypes = async (): Promise<AppointmentType[]> => {
   if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
   return json.types || [];
+};
+
+const fetchPrismicScheduling = async (): Promise<PrismicSchedulingItem[]> => {
+  const res = await fetch(`${PRISMIC_URL}?type=scheduling`, { headers });
+  if (!res.ok) throw new Error('Failed to fetch Prismic scheduling');
+  const json = await res.json();
+  return json.results || [];
 };
 
 const fetchAvailability = async (typeId: string, month: string): Promise<string[]> => {
@@ -70,6 +88,18 @@ const KawaiiScheduling = () => {
     queryKey: ['scheduling-types'],
     queryFn: fetchTypes,
   });
+
+  const { data: prismicItems } = useQuery({
+    queryKey: ['prismic-scheduling'],
+    queryFn: fetchPrismicScheduling,
+  });
+
+  // Match Prismic content to appointment types by name
+  const getPrismicData = (typeName: string) => {
+    return prismicItems?.find(
+      (item) => item.event_title.toLowerCase().trim() === typeName.toLowerCase().trim()
+    );
+  };
 
   const { data: availableDates } = useQuery({
     queryKey: ['scheduling-dates', selectedType?.id, monthStr],
@@ -204,29 +234,51 @@ const KawaiiScheduling = () => {
                 No services available yet — check back soon! 🌸
               </div>
             )}
-            {appointmentTypes.map((type, index) => (
-              <motion.button
-                key={type.id}
-                onClick={() => setSelectedType(type)}
-                className="bg-card rounded-kawaii border border-border p-6 text-left kawaii-shadow hover:border-primary/50 transition-colors"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-                whileHover={{ y: -3 }}
-              >
-                <Calendar className="w-8 h-8 text-primary mb-3" />
-                <h3 className="font-heading font-bold text-lg text-foreground mb-1">{type.name}</h3>
-                {type.description && (
-                  <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">{type.description}</p>
-                )}
-                <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
-                  <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" /> {type.duration_minutes} min
-                  </span>
-                  {type.price > 0 && <span className="font-heading font-bold text-primary">${type.price}</span>}
-                </div>
-              </motion.button>
-            ))}
+            {appointmentTypes.map((type, index) => {
+              const prismic = getPrismicData(type.name);
+              return (
+                <motion.button
+                  key={type.id}
+                  onClick={() => setSelectedType(type)}
+                  className="bg-card rounded-kawaii border border-border text-left kawaii-shadow hover:border-primary/50 transition-colors overflow-hidden"
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: index * 0.1 }}
+                  whileHover={{ y: -3 }}
+                >
+                  {prismic?.event_image && (
+                    <div className="w-full h-40 overflow-hidden">
+                      <img
+                        src={prismic.event_image}
+                        alt={prismic.event_image_alt || type.name}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                  <div className="p-6">
+                    <Calendar className="w-8 h-8 text-primary mb-3" />
+                    <h3 className="font-heading font-bold text-lg text-foreground mb-1">
+                      {prismic?.event_title || type.name}
+                    </h3>
+                    <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">
+                      {prismic?.event_description || type.description || ''}
+                    </p>
+                    {prismic?.event_day && (
+                      <p className="text-muted-foreground text-xs font-body mb-1">📅 {prismic.event_day}</p>
+                    )}
+                    {prismic?.event_time && (
+                      <p className="text-muted-foreground text-xs font-body mb-2">⏰ {prismic.event_time}</p>
+                    )}
+                    <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
+                      <span className="flex items-center gap-1">
+                        <Clock className="w-4 h-4" /> {type.duration_minutes} min
+                      </span>
+                      {type.price > 0 && <span className="font-heading font-bold text-primary">${type.price}</span>}
+                    </div>
+                  </div>
+                </motion.button>
+              );
+            })}
           </motion.div>
         )}
 
