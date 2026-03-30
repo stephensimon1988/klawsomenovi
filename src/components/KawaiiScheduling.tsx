@@ -185,7 +185,7 @@ const KawaiiScheduling = () => {
 
   if (bookingSuccess) {
     return (
-      <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15">
+      <section id="scheduling" className="py-20 px-4 bg-primary">
         <div className="container mx-auto max-w-lg">
           <motion.div
             className="bg-card rounded-kawaii border border-border p-10 text-center kawaii-shadow"
