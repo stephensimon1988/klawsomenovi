@@ -241,7 +241,7 @@ const KawaiiScheduling = () => {
         {appointmentTypes && !selectedType && (
           <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {appointmentTypes.length === 0 && (
-              <div className="col-span-full text-center text-muted-foreground font-body py-10">
+              <div className="col-span-full text-center text-white/70 font-body py-10">
                 No services available yet — check back soon! 🌸
               </div>
             )}
