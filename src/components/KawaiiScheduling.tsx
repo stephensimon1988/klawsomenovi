@@ -239,9 +239,12 @@ const KawaiiScheduling = () => {
 
             <div className="bg-card rounded-kawaii border border-border p-6 kawaii-shadow">
               <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
-              <p className="text-muted-foreground text-sm font-body mb-6">
+              <p className="text-muted-foreground text-sm font-body mb-2">
                 {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
               </p>
+              {selectedType.description && (
+                <p className="text-muted-foreground text-sm font-body mb-6">{selectedType.description}</p>
+              )}
 
               {/* Month nav */}
               <div className="flex items-center justify-between mb-4">
