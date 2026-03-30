@@ -360,7 +360,7 @@ const KawaiiScheduling = () => {
                             variant={selectedTime?.time === slot.time ? 'default' : 'outline'}
                             size="sm"
                             onClick={() => setSelectedTime(slot)}
-                            className="rounded-bubble font-body text-sm"
+                            className={`rounded-bubble font-body text-sm ${selectedTime?.time === slot.time ? 'bg-klawsome-yellow text-klawsome-navy' : 'border-white/30 text-white hover:bg-white/20 hover:text-white'}`}
                           >
                             {formatTimeDisplay(slot.time)}
                           </Button>
