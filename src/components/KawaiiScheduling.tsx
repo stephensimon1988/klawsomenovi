@@ -308,11 +308,11 @@ const KawaiiScheduling = () => {
 
               {/* Month nav */}
               <div className="flex items-center justify-between mb-4">
-                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="text-white hover:bg-white/10 hover:text-white">
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <span className="font-heading font-bold">{format(currentMonth, 'MMMM yyyy')}</span>
-                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+                <span className="font-heading font-bold text-white">{format(currentMonth, 'MMMM yyyy')}</span>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="text-white hover:bg-white/10 hover:text-white">
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
