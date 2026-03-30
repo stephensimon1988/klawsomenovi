@@ -58,6 +58,8 @@ export default {
           yellow: "hsl(var(--kawaii-yellow))",
           peach: "hsl(var(--kawaii-peach))",
           sky: "hsl(var(--kawaii-sky))",
+          "baby-blue": "hsl(var(--kawaii-baby-blue))",
+          "baby-pink": "hsl(var(--kawaii-baby-pink))",
         },
         sidebar: {
           DEFAULT: "hsl(var(--sidebar-background))",
