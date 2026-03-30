@@ -347,11 +347,11 @@ const KawaiiScheduling = () => {
               <AnimatePresence mode="wait">
                 {selectedDate && (
                   <motion.div key="times" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-                    <h4 className="font-heading font-bold text-sm mb-3">
+                    <h4 className="font-heading font-bold text-sm mb-3 text-white">
                       Available times for {format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}
                     </h4>
                     {timesLoading ? (
-                      <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+                      <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
                     ) : availableTimes && availableTimes.length > 0 ? (
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
                         {availableTimes.map((slot) => (
