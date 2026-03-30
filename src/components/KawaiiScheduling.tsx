@@ -297,7 +297,7 @@ const KawaiiScheduling = () => {
               ← Back to services
             </Button>
 
-            <div className="bg-white/80 backdrop-blur-sm rounded-kawaii border border-white/60 p-6 kawaii-shadow">
+            <div className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 p-6">
               <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
               <p className="text-muted-foreground text-sm font-body mb-2">
                 {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
