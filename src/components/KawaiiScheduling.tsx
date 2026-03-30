@@ -188,7 +188,7 @@ const KawaiiScheduling = () => {
       <section id="scheduling" className="py-20 px-4 bg-primary">
         <div className="container mx-auto max-w-lg">
           <motion.div
-            className="bg-card rounded-kawaii border border-border p-10 text-center kawaii-shadow"
+            className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 p-10 text-center"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
