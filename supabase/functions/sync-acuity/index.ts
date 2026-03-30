@@ -6,18 +6,30 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type, x-supabase-client-platform, x-supabase-client-platform-version, x-supabase-client-runtime, x-supabase-client-runtime-version',
 };
 
-const ACUITY_BASE = 'https://acuityscheduling.com/api/v1';
+const DAY_MAP: Record<string, number> = {
+  sunday: 0, monday: 1, tuesday: 2, wednesday: 3,
+  thursday: 4, friday: 5, saturday: 6,
+};
 
-async function acuityFetch(path: string, userId: string, apiKey: string) {
-  const auth = btoa(`${userId}:${apiKey}`);
-  const res = await fetch(`${ACUITY_BASE}${path}`, {
-    headers: { 'Authorization': `Basic ${auth}` },
-  });
-  if (!res.ok) {
-    const text = await res.text();
-    throw new Error(`Acuity API error [${res.status}]: ${text}`);
+// Parse "2:30pm-6:00pm" or "10:00am-11:00am" into { start: "14:30:00", end: "18:00:00" }
+function parseTimeRange(text: string): { start: string; end: string } | null {
+  const cleaned = text.toLowerCase().trim();
+  if (cleaned === "no availability" || cleaned === "closed" || cleaned === "none" || !cleaned) {
+    return null;
   }
-  return res.json();
+
+  const match = cleaned.match(/^(\d{1,2}):(\d{2})\s*(am|pm)\s*[-–]\s*(\d{1,2}):(\d{2})\s*(am|pm)$/);
+  if (!match) return null;
+
+  const [, h1, m1, p1, h2, m2, p2] = match;
+  const to24 = (h: string, m: string, p: string) => {
+    let hour = parseInt(h);
+    if (p === "pm" && hour !== 12) hour += 12;
+    if (p === "am" && hour === 12) hour = 0;
+    return `${String(hour).padStart(2, "0")}:${m}:00`;
+  };
+
+  return { start: to24(h1, m1, p1), end: to24(h2, m2, p2) };
 }
 
 serve(async (req) => {
@@ -26,46 +38,65 @@ serve(async (req) => {
   }
 
   try {
-    const ACUITY_USER_ID = Deno.env.get('ACUITY_USER_ID');
-    const ACUITY_API_KEY = Deno.env.get('ACUITY_API_KEY');
-    if (!ACUITY_USER_ID || !ACUITY_API_KEY) {
-      throw new Error('Acuity credentials not configured');
-    }
-
+    const accessToken = Deno.env.get("PRISMIC_ACCESS_TOKEN");
+    const repoName = Deno.env.get("PRISMIC_REPOSITORY_NAME");
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+
+    if (!repoName) throw new Error("Prismic repository name not configured");
+
     const supabase = createClient(supabaseUrl, supabaseKey);
 
-    // 1. Fetch appointment types from Acuity
-    const acuityTypes = await acuityFetch('/appointment-types', ACUITY_USER_ID, ACUITY_API_KEY);
+    // 1. Fetch scheduling documents from Prismic
+    const apiUrl = `https://${repoName}.cdn.prismic.io/api/v2`;
+    const apiRes = await fetch(apiUrl, {
+      headers: accessToken ? { Authorization: `Token ${accessToken}` } : {},
+    });
+    if (!apiRes.ok) throw new Error(`Prismic API init failed: ${apiRes.status}`);
+    const apiData = await apiRes.json();
+    const ref = apiData.refs?.[0]?.ref;
+    if (!ref) throw new Error("No master ref found");
+
+    const query = '[[at(document.type,"scheduling")]]';
+    let searchUrl = `${apiUrl}/documents/search?ref=${ref}&q=${encodeURIComponent(query)}&pageSize=100`;
+    if (accessToken) searchUrl += `&access_token=${accessToken}`;
+
+    const searchRes = await fetch(searchUrl);
+    if (!searchRes.ok) throw new Error(`Prismic search failed: ${searchRes.status}`);
+    const searchData = await searchRes.json();
+    const docs = searchData.results || [];
 
     const synced: string[] = [];
 
-    for (const at of acuityTypes) {
-      if (!at.name) continue;
+    for (const doc of docs) {
+      const d = doc.data;
+      const title = d.event_title?.[0]?.text || "";
+      const description = d.event_description?.[0]?.text || "";
+      const priceText = d.event_price?.[0]?.text || "0";
+      const price = parseFloat(priceText) || 0;
+      const lengthText = d.event_length?.[0]?.text || "";
+      const durationMinutes = parseInt(lengthText) || 60;
 
-      // Upsert into appointment_types (match by name)
+      if (!title) continue;
+
+      // 2. Match or create appointment_type by name
       const { data: existing } = await supabase
         .from('appointment_types')
         .select('id')
-        .eq('name', at.name)
+        .eq('name', title)
         .maybeSingle();
 
       const record = {
-        name: at.name,
-        description: at.description || '',
-        duration_minutes: at.duration || 60,
-        price: at.price ? parseFloat(at.price) : 0,
+        name: title,
+        description,
+        duration_minutes: durationMinutes,
+        price,
         is_active: true,
       };
 
       let typeId: string;
-
       if (existing) {
-        await supabase
-          .from('appointment_types')
-          .update(record)
-          .eq('id', existing.id);
+        await supabase.from('appointment_types').update(record).eq('id', existing.id);
         typeId = existing.id;
       } else {
         const { data: inserted, error } = await supabase
@@ -77,37 +108,38 @@ serve(async (req) => {
         typeId = inserted.id;
       }
 
-      // 2. Try to fetch availability for this type from Acuity
-      // Acuity availability endpoint: /availability/classes or /availability/dates
-      // We'll create default Mon-Fri 9-5 slots if none exist yet
-      const { data: existingSlots } = await supabase
-        .from('availability_slots')
-        .select('id')
-        .eq('appointment_type_id', typeId)
-        .limit(1);
+      // 3. Delete old availability_slots for this type
+      await supabase.from('availability_slots').delete().eq('appointment_type_id', typeId);
 
-      if (!existingSlots || existingSlots.length === 0) {
-        // Create default Mon-Fri 9am-5pm slots
-        const defaultSlots = [];
-        for (let day = 1; day <= 5; day++) {
-          defaultSlots.push({
+      // 4. Parse per-day availability from Prismic and create new slots
+      const newSlots: any[] = [];
+      for (const [dayName, dayNum] of Object.entries(DAY_MAP)) {
+        const fieldName = `${dayName}_event_availability`;
+        const availText = d[fieldName]?.[0]?.text || "";
+        const parsed = parseTimeRange(availText);
+        if (parsed) {
+          newSlots.push({
             appointment_type_id: typeId,
-            day_of_week: day,
-            start_time: '09:00:00',
-            end_time: '17:00:00',
+            day_of_week: dayNum,
+            start_time: parsed.start,
+            end_time: parsed.end,
             is_active: true,
           });
         }
-        await supabase.from('availability_slots').insert(defaultSlots);
       }
 
-      synced.push(at.name);
+      if (newSlots.length > 0) {
+        const { error: slotError } = await supabase.from('availability_slots').insert(newSlots);
+        if (slotError) console.error(`Slot insert error for ${title}:`, slotError);
+      }
+
+      synced.push(`${title} (${newSlots.length} day slots)`);
     }
 
-    return new Response(JSON.stringify({ 
-      success: true, 
+    return new Response(JSON.stringify({
+      success: true,
       synced,
-      message: `Synced ${synced.length} appointment types from Acuity` 
+      message: `Synced ${synced.length} scheduling items from Prismic`,
     }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     });
