@@ -79,15 +79,20 @@ serve(async (req) => {
 
       if (!title) continue;
 
-      // 2. Match or create appointment_type by name
-      const { data: existing } = await supabase
+      // 2. Match appointment_type - try exact match first, then fuzzy
+      const { data: allTypes } = await supabase
         .from('appointment_types')
-        .select('id')
-        .eq('name', title)
-        .maybeSingle();
+        .select('id, name');
 
+      const titleLower = title.toLowerCase().trim();
+      const existing = (allTypes || []).find((t: any) => {
+        const n = t.name.toLowerCase().trim();
+        return n === titleLower || titleLower.includes(n) || n.includes(titleLower);
+      });
+
+      // When syncing, keep the original DB name if matched, otherwise use Prismic title
       const record = {
-        name: title,
+        name: existing ? existing.name : title,
         description,
         duration_minutes: durationMinutes,
         price,
