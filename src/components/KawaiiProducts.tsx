@@ -14,11 +14,12 @@ interface SquareProduct {
   variationId: string | null;
 }
 
-const pastelColors = [
-  'bg-kawaii-pink/20',
-  'bg-kawaii-lavender/20',
-  'bg-kawaii-sky/20',
-  'bg-kawaii-mint/20',
+const cardAccents = [
+  'from-klawsome-red/15 to-klawsome-baby-pink/20',
+  'from-klawsome-yellow/25 to-klawsome-baby-blue/15',
+  'from-klawsome-baby-blue/25 to-klawsome-baby-pink/15',
+  'from-klawsome-baby-pink/20 to-klawsome-yellow/20',
+  'from-klawsome-navy/10 to-klawsome-baby-blue/20',
 ];
 
 const fetchProducts = async (): Promise<SquareProduct[]> => {
@@ -34,7 +35,7 @@ const KawaiiProducts = () => {
   });
 
   return (
-    <section id="products" className="py-20 px-4 bg-muted/30">
+    <section id="products" className="py-20 px-4 bg-gradient-to-b from-klawsome-baby-blue/15 via-background to-klawsome-baby-pink/10">
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -70,7 +71,7 @@ const KawaiiProducts = () => {
         )}
 
         {products && products.length > 0 && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
@@ -81,7 +82,7 @@ const KawaiiProducts = () => {
                 transition={{ duration: 0.5, delay: index * 0.1 }}
                 whileHover={{ y: -5, transition: { duration: 0.2 } }}
               >
-                <div className={`h-48 ${pastelColors[index % pastelColors.length]} flex items-center justify-center overflow-hidden`}>
+                <div className={`h-40 bg-gradient-to-br ${cardAccents[index % cardAccents.length]} flex items-center justify-center overflow-hidden`}>
                   {product.imageUrl ? (
                     <img
                       src={product.imageUrl}
@@ -90,7 +91,7 @@ const KawaiiProducts = () => {
                       loading="lazy"
                     />
                   ) : (
-                    <ShoppingBag className="w-16 h-16 text-muted-foreground/30" />
+                    <div className="text-5xl">🪙</div>
                   )}
                 </div>
 
@@ -99,8 +100,8 @@ const KawaiiProducts = () => {
                   <p className="text-muted-foreground text-sm font-body mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-heading font-bold text-xl text-primary">{product.price}</span>
-                    <Button size="sm" className="rounded-bubble font-heading kawaii-shadow text-sm">
-                      Add to Cart
+                    <Button size="sm" className="rounded-bubble font-heading kawaii-shadow text-sm bg-klawsome-navy hover:bg-klawsome-navy/90 text-white">
+                      Buy
                     </Button>
                   </div>
                 </div>

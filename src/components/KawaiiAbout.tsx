@@ -4,27 +4,30 @@ import { Heart, Sparkles, Star } from 'lucide-react';
 const features = [
   {
     icon: Heart,
-    title: 'Made with Love',
-    description: 'Every product is carefully crafted with attention to detail and lots of love ♡',
-    color: 'bg-primary/10 text-primary',
+    title: 'Fun for Everyone',
+    description: 'Whether you\'re 5 or 55, our klaw machines bring joy to players of all ages ♡',
+    color: 'bg-primary/15 text-primary',
+    borderColor: 'border-primary/20',
   },
   {
     icon: Sparkles,
-    title: 'Unique Designs',
-    description: 'One-of-a-kind kawaii designs that you won\'t find anywhere else ✨',
-    color: 'bg-kawaii-lavender/30 text-secondary-foreground',
+    title: 'Amazing Prizes',
+    description: 'From plushies to collectibles — our machines are loaded with awesome rewards ✨',
+    color: 'bg-klawsome-yellow/30 text-klawsome-navy',
+    borderColor: 'border-klawsome-yellow/40',
   },
   {
     icon: Star,
-    title: 'Premium Quality',
-    description: 'Only the finest materials for products that last and bring joy every day ⭐',
-    color: 'bg-kawaii-yellow/30 text-foreground',
+    title: 'Premium Experience',
+    description: 'Top-quality machines, clean arcade, and friendly staff every single visit ⭐',
+    color: 'bg-klawsome-baby-blue/40 text-klawsome-navy',
+    borderColor: 'border-klawsome-baby-blue/50',
   },
 ];
 
 const KawaiiAbout = () => {
   return (
-    <section id="about" className="py-20 px-4">
+    <section id="about" className="py-20 px-4 bg-gradient-to-b from-klawsome-baby-pink/10 via-klawsome-yellow/5 to-background">
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -34,10 +37,10 @@ const KawaiiAbout = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            <span className="kawaii-text-gradient">About Us</span> 🌸
+            <span className="kawaii-text-gradient">About Us</span> 🎪
           </h2>
           <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body">
-            We're a small team passionate about bringing kawaii culture to everyone through adorable, high-quality products.
+            Klawsome is your go-to spot for klaw machine fun, amazing prizes, and unforgettable moments!
           </p>
         </motion.div>
 
@@ -45,7 +48,7 @@ const KawaiiAbout = () => {
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              className="bg-card rounded-kawaii p-8 border border-border kawaii-shadow text-center"
+              className={`bg-card rounded-kawaii p-8 border ${feature.borderColor} kawaii-shadow text-center`}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
