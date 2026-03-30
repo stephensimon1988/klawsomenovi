@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 190 60% 97%;
+    --background: 0 0% 100%;
     --foreground: 216 50% 20%;
 
     --card: 0 0% 100%;
@@ -15,9 +15,11 @@
     --popover: 0 0% 100%;
     --popover-foreground: 216 50% 20%;
 
+    /* Coral red — main brand */
     --primary: 351 76% 62%;
     --primary-foreground: 0 0% 100%;
 
+    /* Baby pink */
     --secondary: 340 60% 80%;
     --secondary-foreground: 340 40% 25%;
 
@@ -30,12 +32,13 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 190 30% 88%;
-    --input: 190 30% 88%;
+    --border: 216 30% 80%;
+    --input: 216 30% 80%;
     --ring: 351 76% 62%;
 
     --radius: 1rem;
 
+    /* Logo colors — bold solids */
     --klawsome-red: 351 76% 62%;
     --klawsome-navy: 216 50% 28%;
     --klawsome-yellow: 50 84% 70%;
@@ -43,6 +46,7 @@
     --klawsome-baby-pink: 340 60% 85%;
     --klawsome-white: 0 0% 100%;
 
+    /* Legacy tokens */
     --kawaii-pink: 340 60% 82%;
     --kawaii-lavender: 260 50% 85%;
     --kawaii-mint: 160 45% 82%;
@@ -99,17 +103,17 @@
   }
 
   .kawaii-shadow {
-    box-shadow: 0 8px 30px hsl(var(--klawsome-red) / 0.12),
-                0 4px 10px hsl(var(--klawsome-baby-pink) / 0.1);
+    box-shadow: 0 8px 30px hsl(var(--klawsome-navy) / 0.15),
+                0 4px 10px hsl(var(--klawsome-navy) / 0.08);
   }
 
   .kawaii-shadow-lg {
-    box-shadow: 0 15px 50px hsl(var(--klawsome-red) / 0.18),
-                0 8px 20px hsl(var(--klawsome-baby-pink) / 0.12);
+    box-shadow: 0 15px 50px hsl(var(--klawsome-navy) / 0.2),
+                0 8px 20px hsl(var(--klawsome-navy) / 0.1);
   }
 
   .kawaii-text-gradient {
-    background: linear-gradient(135deg, hsl(var(--klawsome-red)), hsl(var(--klawsome-navy)));
+    background: linear-gradient(135deg, hsl(var(--klawsome-red)), hsl(var(--klawsome-yellow)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;

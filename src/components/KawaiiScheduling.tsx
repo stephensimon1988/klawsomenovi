@@ -185,26 +185,26 @@ const KawaiiScheduling = () => {
 
   if (bookingSuccess) {
     return (
-      <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15">
+      <section id="scheduling" className="py-20 px-4 bg-primary">
         <div className="container mx-auto max-w-lg">
           <motion.div
-            className="bg-card rounded-kawaii border border-border p-10 text-center kawaii-shadow"
+            className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 p-10 text-center"
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
-            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-heading font-bold mb-3">Booking Confirmed! 🎉</h2>
-            <p className="text-muted-foreground font-body mb-2">
+            <h2 className="text-3xl font-heading font-bold mb-3 text-white">Booking Confirmed! 🎉</h2>
+            <p className="text-white/80 font-body mb-2">
               <strong>{selectedType?.name}</strong> on{' '}
               <strong>{selectedDate && format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}</strong> at{' '}
               <strong>{selectedTime && formatTimeDisplay(selectedTime.time)}</strong>
             </p>
-            <p className="text-muted-foreground font-body text-sm mb-6">
+            <p className="text-white/60 font-body text-sm mb-6">
               A confirmation will be sent to <strong>{formData.email}</strong>
             </p>
-            <Button onClick={resetAll} className="rounded-bubble font-heading kawaii-shadow">
+            <Button onClick={resetAll} className="rounded-bubble font-heading bg-klawsome-navy hover:bg-klawsome-navy/90 text-white">
               Book Another ✨
             </Button>
           </motion.div>
@@ -214,7 +214,7 @@ const KawaiiScheduling = () => {
   }
 
   return (
-    <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-klawsome-yellow/15 via-klawsome-baby-blue/20 to-klawsome-baby-pink/15 relative overflow-hidden">
+    <section id="scheduling" className="py-20 px-4 bg-primary relative overflow-hidden">
       <div className="container mx-auto">
         <motion.div
           className="text-center mb-16"
@@ -223,17 +223,17 @@ const KawaiiScheduling = () => {
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
         >
-          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4">
-            <span className="kawaii-text-gradient">Book an Appointment</span> 📅
+          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4 text-white">
+            Book an Appointment 📅
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body">
+          <p className="text-white/70 text-lg max-w-2xl mx-auto font-body">
             Pick a service, choose a date, and find the perfect time! ✨
           </p>
         </motion.div>
 
         {typesLoading && (
           <div className="flex justify-center py-20">
-            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+            <Loader2 className="w-10 h-10 animate-spin text-white" />
           </div>
         )}
 
@@ -241,7 +241,7 @@ const KawaiiScheduling = () => {
         {appointmentTypes && !selectedType && (
           <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
             {appointmentTypes.length === 0 && (
-              <div className="col-span-full text-center text-muted-foreground font-body py-10">
+              <div className="col-span-full text-center text-white/70 font-body py-10">
                 No services available yet — check back soon! 🌸
               </div>
             )}
@@ -251,7 +251,7 @@ const KawaiiScheduling = () => {
                 <motion.button
                   key={type.id}
                   onClick={() => setSelectedType(type)}
-                  className="bg-white/70 backdrop-blur-sm rounded-kawaii border border-white/60 text-left kawaii-shadow hover:border-primary/50 transition-colors overflow-hidden"
+                  className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 text-left hover:border-white/40 transition-colors overflow-hidden"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -267,21 +267,21 @@ const KawaiiScheduling = () => {
                     </div>
                   )}
                   <div className="p-6">
-                    <Calendar className="w-8 h-8 text-primary mb-3" />
-                    <h3 className="font-heading font-bold text-lg text-foreground mb-1">
+                    <Calendar className="w-8 h-8 text-white mb-3" />
+                    <h3 className="font-heading font-bold text-lg text-white mb-1">
                       {prismic?.event_title || type.name}
                     </h3>
-                    <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">
+                    <p className="text-white/70 text-sm font-body mb-2 line-clamp-2">
                       {prismic?.event_description || type.description || ''}
                     </p>
                     {prismic?.availability && Object.entries(prismic.availability).some(([, v]) => v && v.toLowerCase() !== 'no availability') && (
-                      <p className="text-muted-foreground text-xs font-body mb-2">📅 Available select days</p>
+                      <p className="text-white/60 text-xs font-body mb-2">📅 Available select days</p>
                     )}
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
+                    <div className="flex items-center gap-3 text-sm text-white/60 font-body">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" /> {type.duration_minutes} min
                       </span>
-                      {type.price > 0 && <span className="font-heading font-bold text-primary">${type.price}</span>}
+                      {type.price > 0 && <span className="font-heading font-bold text-klawsome-yellow">${type.price}</span>}
                     </div>
                   </div>
                 </motion.button>
@@ -293,26 +293,26 @@ const KawaiiScheduling = () => {
         {/* Step 2: Calendar + Times + Form */}
         {selectedType && (
           <motion.div className="max-w-3xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Button variant="ghost" onClick={() => { setSelectedType(null); setSelectedDate(null); setSelectedTime(null); }} className="mb-6 font-heading">
+            <Button variant="ghost" onClick={() => { setSelectedType(null); setSelectedDate(null); setSelectedTime(null); }} className="mb-6 font-heading text-white hover:text-white/80 hover:bg-white/10">
               ← Back to services
             </Button>
 
-            <div className="bg-white/80 backdrop-blur-sm rounded-kawaii border border-white/60 p-6 kawaii-shadow">
-              <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
-              <p className="text-muted-foreground text-sm font-body mb-2">
+            <div className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 p-6">
+              <h3 className="font-heading font-bold text-xl mb-1 text-white">{selectedType.name}</h3>
+              <p className="text-white/60 text-sm font-body mb-2">
                 {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
               </p>
               {selectedType.description && (
-                <p className="text-muted-foreground text-sm font-body mb-6">{selectedType.description}</p>
+                <p className="text-white/60 text-sm font-body mb-6">{selectedType.description}</p>
               )}
 
               {/* Month nav */}
               <div className="flex items-center justify-between mb-4">
-                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))} className="text-white hover:bg-white/10 hover:text-white">
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
-                <span className="font-heading font-bold">{format(currentMonth, 'MMMM yyyy')}</span>
-                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}>
+                <span className="font-heading font-bold text-white">{format(currentMonth, 'MMMM yyyy')}</span>
+                <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(addMonths(currentMonth, 1))} className="text-white hover:bg-white/10 hover:text-white">
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -320,7 +320,7 @@ const KawaiiScheduling = () => {
               {/* Calendar */}
               <div className="grid grid-cols-7 gap-1 mb-6">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-                  <div key={d} className="text-center text-xs font-heading font-bold text-muted-foreground py-2">{d}</div>
+                  <div key={d} className="text-center text-xs font-heading font-bold text-white/50 py-2">{d}</div>
                 ))}
                 {calendarDays.map((day, i) => {
                   if (day === null) return <div key={`e-${i}`} />;
@@ -333,9 +333,9 @@ const KawaiiScheduling = () => {
                       onClick={() => handleDateClick(day)}
                       disabled={!isAvailable}
                       className={`py-2 rounded-lg text-sm font-body transition-colors
-                        ${isSelected ? 'bg-primary text-primary-foreground font-bold' : ''}
-                        ${isAvailable && !isSelected ? 'hover:bg-primary/20 text-foreground cursor-pointer' : ''}
-                        ${!isAvailable ? 'text-muted-foreground/30 cursor-default' : ''}`}
+                        ${isSelected ? 'bg-klawsome-yellow text-klawsome-navy font-bold' : ''}
+                        ${isAvailable && !isSelected ? 'hover:bg-white/20 text-white cursor-pointer' : ''}
+                        ${!isAvailable ? 'text-white/20 cursor-default' : ''}`}
                     >
                       {day}
                     </button>
@@ -347,11 +347,11 @@ const KawaiiScheduling = () => {
               <AnimatePresence mode="wait">
                 {selectedDate && (
                   <motion.div key="times" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
-                    <h4 className="font-heading font-bold text-sm mb-3">
+                    <h4 className="font-heading font-bold text-sm mb-3 text-white">
                       Available times for {format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}
                     </h4>
                     {timesLoading ? (
-                      <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+                      <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin text-white" /></div>
                     ) : availableTimes && availableTimes.length > 0 ? (
                       <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
                         {availableTimes.map((slot) => (
@@ -360,14 +360,14 @@ const KawaiiScheduling = () => {
                             variant={selectedTime?.time === slot.time ? 'default' : 'outline'}
                             size="sm"
                             onClick={() => setSelectedTime(slot)}
-                            className="rounded-bubble font-body text-sm"
+                            className={`rounded-bubble font-body text-sm ${selectedTime?.time === slot.time ? 'bg-klawsome-yellow text-klawsome-navy' : 'border-white/30 text-white hover:bg-white/20 hover:text-white'}`}
                           >
                             {formatTimeDisplay(slot.time)}
                           </Button>
                         ))}
                       </div>
                     ) : (
-                      <p className="text-muted-foreground text-sm font-body mb-6">No times available 😢</p>
+                      <p className="text-white/60 text-sm font-body mb-6">No times available 😢</p>
                     )}
                   </motion.div>
                 )}
@@ -377,40 +377,40 @@ const KawaiiScheduling = () => {
               <AnimatePresence mode="wait">
                 {selectedTime && (
                   <motion.div key="form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                    <div className="border-t border-border pt-6 mt-2">
-                      <h4 className="font-heading font-bold text-sm mb-4">Your Details 💌</h4>
+                    <div className="border-t border-white/20 pt-6 mt-2">
+                      <h4 className="font-heading font-bold text-sm mb-4 text-white">Your Details 💌</h4>
                       <div className="grid sm:grid-cols-2 gap-4 mb-4">
                         <Input
                           placeholder="Your name *"
                           value={formData.name}
                           onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Email address *"
                           type="email"
                           value={formData.email}
                           onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Phone number"
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Notes (optional)"
                           value={formData.notes}
                           onChange={(e) => setFormData(p => ({ ...p, notes: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                       </div>
                       <Button
                         onClick={() => bookMutation.mutate()}
                         disabled={!formData.name || !formData.email || bookMutation.isPending}
-                        className="w-full rounded-bubble font-heading kawaii-shadow text-base py-5"
+                        className="w-full rounded-bubble font-heading text-base py-5 bg-klawsome-navy hover:bg-klawsome-navy/90 text-white"
                       >
                         {bookMutation.isPending ? (
                           <Loader2 className="w-5 h-5 animate-spin mr-2" />
