@@ -3,6 +3,7 @@ import KawaiiHero from '@/components/KawaiiHero';
 import KawaiiAbout from '@/components/KawaiiAbout';
 import KawaiiProducts from '@/components/KawaiiProducts';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiScheduling from '@/components/KawaiiScheduling';
 
 const Index = () => {
   return (
@@ -11,6 +12,7 @@ const Index = () => {
       <KawaiiHero />
       <KawaiiAbout />
       <KawaiiProducts />
+      <KawaiiScheduling />
       <KawaiiFooter />
     </div>
   );
