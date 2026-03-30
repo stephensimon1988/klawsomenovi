@@ -71,15 +71,26 @@ serve(async (req) => {
         main_image_alt: doc.data.main_image?.alt || "",
       }));
     } else if (type === "scheduling") {
-      results = (searchData.results || []).map((doc: any) => ({
-        id: doc.id,
-        event_title: doc.data.event_title?.[0]?.text || "",
-        event_description: doc.data.event_description?.[0]?.text || "",
-        event_day: doc.data.event_day || null,
-        event_time: doc.data.event_time || null,
-        event_image: doc.data.event_image?.url || null,
-        event_image_alt: doc.data.event_image?.alt || "",
-      }));
+      // Check if raw=true to return full document data for debugging
+      const raw = url.searchParams.get("raw");
+      if (raw === "true") {
+        results = (searchData.results || []).map((doc: any) => ({
+          id: doc.id,
+          uid: doc.uid,
+          all_fields: Object.keys(doc.data || {}),
+          data: doc.data,
+        }));
+      } else {
+        results = (searchData.results || []).map((doc: any) => ({
+          id: doc.id,
+          event_title: doc.data.event_title?.[0]?.text || "",
+          event_description: doc.data.event_description?.[0]?.text || "",
+          event_day: doc.data.event_day || null,
+          event_time: doc.data.event_time || null,
+          event_image: doc.data.event_image?.url || null,
+          event_image_alt: doc.data.event_image?.alt || "",
+        }));
+      }
     } else {
       results = searchData.results || [];
     }
