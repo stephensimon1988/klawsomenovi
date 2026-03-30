@@ -8,6 +8,7 @@ import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay } fr
 import { toast } from 'sonner';
 
 const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scheduling`;
+const PRISMIC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/prismic`;
 const headers = {
   'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
   'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
@@ -22,6 +23,16 @@ interface AppointmentType {
   price: number;
 }
 
+interface PrismicSchedulingItem {
+  id: string;
+  event_title: string;
+  event_description: string;
+  event_day: string | null;
+  event_time: string | null;
+  event_image: string | null;
+  event_image_alt: string;
+}
+
 interface TimeSlot {
   time: string;
   endTime: string;
@@ -32,6 +43,13 @@ const fetchTypes = async (): Promise<AppointmentType[]> => {
   if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
   return json.types || [];
+};
+
+const fetchPrismicScheduling = async (): Promise<PrismicSchedulingItem[]> => {
+  const res = await fetch(`${PRISMIC_URL}?type=scheduling`, { headers });
+  if (!res.ok) throw new Error('Failed to fetch Prismic scheduling');
+  const json = await res.json();
+  return json.results || [];
 };
 
 const fetchAvailability = async (typeId: string, month: string): Promise<string[]> => {
