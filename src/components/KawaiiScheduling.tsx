@@ -293,7 +293,7 @@ const KawaiiScheduling = () => {
         {/* Step 2: Calendar + Times + Form */}
         {selectedType && (
           <motion.div className="max-w-3xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-            <Button variant="ghost" onClick={() => { setSelectedType(null); setSelectedDate(null); setSelectedTime(null); }} className="mb-6 font-heading">
+            <Button variant="ghost" onClick={() => { setSelectedType(null); setSelectedDate(null); setSelectedTime(null); }} className="mb-6 font-heading text-white hover:text-white/80 hover:bg-white/10">
               ← Back to services
             </Button>
 
