@@ -1,19 +1,21 @@
 import { motion } from 'framer-motion';
-import { Heart, Sparkles, Star, Gamepad2 } from 'lucide-react';
+import playKlawImg from '@/assets/play-klaw-machines.gif';
+import winPlushiesImg from '@/assets/win-plushies.gif';
+import tradeUpImg from '@/assets/trade-up.gif';
 
 const features = [
   {
-    icon: Gamepad2,
+    image: playKlawImg,
     title: 'Play klaw machines',
     description: 'Over forty top-quality klaw machines loaded with amazing prizes — test your skill and grab your favorites!',
   },
   {
-    icon: Heart,
+    image: winPlushiesImg,
     title: 'Win plushies & collectibles',
     description: 'Kawaii plushies, rare collectibles, and exclusive items you won\'t find anywhere else!',
   },
   {
-    icon: Star,
+    image: tradeUpImg,
     title: 'Trade up for bigger wins',
     description: 'Use your smaller wins to trade up for the grand prizes — the more you play, the bigger you win! ⭐',
   },
@@ -49,9 +51,7 @@ const KawaiiAbout = () => {
               transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <div className="inline-flex p-4 rounded-bubble bg-white/20 text-white mb-5">
-                <feature.icon className="w-7 h-7" />
-              </div>
+              <img src={feature.image} alt={feature.title} className="w-24 h-24 mx-auto mb-5 object-contain" />
               <h3 className="text-xl font-heading font-bold mb-3 text-white">{feature.title}</h3>
               <p className="text-white/70 font-body leading-relaxed">{feature.description}</p>
             </motion.div>
