@@ -47,11 +47,12 @@ serve(async (req) => {
 
     // Query documents by type
     const query = `[[at(document.type,"${type}")]]`;
-    const searchUrl = `${apiUrl}/documents/search?ref=${ref}&q=${encodeURIComponent(query)}&pageSize=100`;
+    let searchUrl = `${apiUrl}/documents/search?ref=${ref}&q=${encodeURIComponent(query)}&pageSize=100`;
+    if (accessToken) {
+      searchUrl += `&access_token=${accessToken}`;
+    }
     
-    const searchRes = await fetch(searchUrl, {
-      headers: accessToken ? { Authorization: `Token ${accessToken}` } : {},
-    });
+    const searchRes = await fetch(searchUrl);
     if (!searchRes.ok) {
       throw new Error(`Prismic search failed: ${searchRes.status}`);
     }
