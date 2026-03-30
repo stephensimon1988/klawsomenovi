@@ -333,9 +333,9 @@ const KawaiiScheduling = () => {
                       onClick={() => handleDateClick(day)}
                       disabled={!isAvailable}
                       className={`py-2 rounded-lg text-sm font-body transition-colors
-                        ${isSelected ? 'bg-primary text-primary-foreground font-bold' : ''}
-                        ${isAvailable && !isSelected ? 'hover:bg-primary/20 text-foreground cursor-pointer' : ''}
-                        ${!isAvailable ? 'text-muted-foreground/30 cursor-default' : ''}`}
+                        ${isSelected ? 'bg-klawsome-yellow text-klawsome-navy font-bold' : ''}
+                        ${isAvailable && !isSelected ? 'hover:bg-white/20 text-white cursor-pointer' : ''}
+                        ${!isAvailable ? 'text-white/20 cursor-default' : ''}`}
                     >
                       {day}
                     </button>
