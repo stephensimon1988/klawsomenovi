@@ -267,21 +267,21 @@ const KawaiiScheduling = () => {
                     </div>
                   )}
                   <div className="p-6">
-                    <Calendar className="w-8 h-8 text-primary mb-3" />
-                    <h3 className="font-heading font-bold text-lg text-foreground mb-1">
+                    <Calendar className="w-8 h-8 text-white mb-3" />
+                    <h3 className="font-heading font-bold text-lg text-white mb-1">
                       {prismic?.event_title || type.name}
                     </h3>
-                    <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">
+                    <p className="text-white/70 text-sm font-body mb-2 line-clamp-2">
                       {prismic?.event_description || type.description || ''}
                     </p>
                     {prismic?.availability && Object.entries(prismic.availability).some(([, v]) => v && v.toLowerCase() !== 'no availability') && (
-                      <p className="text-muted-foreground text-xs font-body mb-2">📅 Available select days</p>
+                      <p className="text-white/60 text-xs font-body mb-2">📅 Available select days</p>
                     )}
-                    <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
+                    <div className="flex items-center gap-3 text-sm text-white/60 font-body">
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" /> {type.duration_minutes} min
                       </span>
-                      {type.price > 0 && <span className="font-heading font-bold text-primary">${type.price}</span>}
+                      {type.price > 0 && <span className="font-heading font-bold text-klawsome-yellow">${type.price}</span>}
                     </div>
                   </div>
                 </motion.button>
