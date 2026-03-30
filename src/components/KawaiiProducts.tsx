@@ -1,40 +1,38 @@
 import { motion } from 'framer-motion';
-import { ShoppingBag } from 'lucide-react';
+import { ShoppingBag, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 
-// Placeholder products - will be replaced with Square catalog data
-const placeholderProducts = [
-  {
-    id: '1',
-    name: 'Kawaii Plush Bear',
-    price: '$24.99',
-    description: 'Super soft and cuddly plush bear with adorable bow 🧸',
-    color: 'bg-kawaii-pink/20',
-  },
-  {
-    id: '2',
-    name: 'Pastel Sticker Pack',
-    price: '$8.99',
-    description: 'Set of 20 kawaii stickers in dreamy pastel colors 🌈',
-    color: 'bg-kawaii-lavender/20',
-  },
-  {
-    id: '3',
-    name: 'Cloud Night Light',
-    price: '$19.99',
-    description: 'Soft glowing cloud lamp for sweet dreams ☁️',
-    color: 'bg-kawaii-sky/20',
-  },
-  {
-    id: '4',
-    name: 'Bunny Notebook',
-    price: '$12.99',
-    description: 'Adorable lined notebook with bunny design 🐰',
-    color: 'bg-kawaii-mint/20',
-  },
+interface SquareProduct {
+  id: string;
+  name: string;
+  description: string;
+  price: string;
+  currency: string;
+  imageUrl: string | null;
+  variationId: string | null;
+}
+
+const pastelColors = [
+  'bg-kawaii-pink/20',
+  'bg-kawaii-lavender/20',
+  'bg-kawaii-sky/20',
+  'bg-kawaii-mint/20',
 ];
 
+const fetchProducts = async (): Promise<SquareProduct[]> => {
+  const { data, error } = await supabase.functions.invoke('square-catalog');
+  if (error) throw new Error(error.message);
+  return data.products || [];
+};
+
 const KawaiiProducts = () => {
+  const { data: products, isLoading, error } = useQuery({
+    queryKey: ['square-products'],
+    queryFn: fetchProducts,
+  });
+
   return (
     <section id="products" className="py-20 px-4 bg-muted/30">
       <div className="container mx-auto">
@@ -53,35 +51,63 @@ const KawaiiProducts = () => {
           </p>
         </motion.div>
 
-        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {placeholderProducts.map((product, index) => (
-            <motion.div
-              key={product.id}
-              className="bg-card rounded-kawaii border border-border overflow-hidden kawaii-shadow group"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ y: -5, transition: { duration: 0.2 } }}
-            >
-              {/* Product image placeholder */}
-              <div className={`h-48 ${product.color} flex items-center justify-center`}>
-                <ShoppingBag className="w-16 h-16 text-muted-foreground/30" />
-              </div>
+        {isLoading && (
+          <div className="flex justify-center items-center py-20">
+            <Loader2 className="w-10 h-10 animate-spin text-primary" />
+          </div>
+        )}
 
-              <div className="p-5">
-                <h3 className="font-heading font-bold text-lg text-foreground mb-1">{product.name}</h3>
-                <p className="text-muted-foreground text-sm font-body mb-3">{product.description}</p>
-                <div className="flex items-center justify-between">
-                  <span className="font-heading font-bold text-xl text-primary">{product.price}</span>
-                  <Button size="sm" className="rounded-bubble font-heading kawaii-shadow text-sm">
-                    Add to Cart
-                  </Button>
+        {error && (
+          <div className="text-center py-10 text-muted-foreground font-body">
+            <p>Couldn't load products right now. Please try again later! 💫</p>
+          </div>
+        )}
+
+        {products && products.length === 0 && (
+          <div className="text-center py-10 text-muted-foreground font-body">
+            <p>No products available yet — check back soon! 🌸</p>
+          </div>
+        )}
+
+        {products && products.length > 0 && (
+          <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {products.map((product, index) => (
+              <motion.div
+                key={product.id}
+                className="bg-card rounded-kawaii border border-border overflow-hidden kawaii-shadow group"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+              >
+                <div className={`h-48 ${pastelColors[index % pastelColors.length]} flex items-center justify-center overflow-hidden`}>
+                  {product.imageUrl ? (
+                    <img
+                      src={product.imageUrl}
+                      alt={product.name}
+                      className="w-full h-full object-cover"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <ShoppingBag className="w-16 h-16 text-muted-foreground/30" />
+                  )}
                 </div>
-              </div>
-            </motion.div>
-          ))}
-        </div>
+
+                <div className="p-5">
+                  <h3 className="font-heading font-bold text-lg text-foreground mb-1">{product.name}</h3>
+                  <p className="text-muted-foreground text-sm font-body mb-3 line-clamp-2">{product.description}</p>
+                  <div className="flex items-center justify-between">
+                    <span className="font-heading font-bold text-xl text-primary">{product.price}</span>
+                    <Button size="sm" className="rounded-bubble font-heading kawaii-shadow text-sm">
+                      Add to Cart
+                    </Button>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );
