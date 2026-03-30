@@ -18,7 +18,16 @@ const KawaiiNav = () => {
     <nav className="fixed top-0 left-0 right-0 z-50 bg-klawsome-navy">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-16">
-          {/* Desktop nav links on the left */}
+          {/* Logo on the left */}
+          <a href="#" className="flex items-center">
+            <img
+              src={klawsomeLogo}
+              alt="Klawsome"
+              className="h-10 w-auto"
+            />
+          </a>
+
+          {/* Desktop nav links on the right */}
           <div className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
@@ -31,22 +40,13 @@ const KawaiiNav = () => {
             ))}
           </div>
 
-          {/* Mobile toggle on left */}
+          {/* Mobile toggle on right */}
           <button
             onClick={() => setIsOpen(!isOpen)}
             className="md:hidden p-2 text-white"
           >
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
-
-          {/* Logo on the right */}
-          <a href="#" className="flex items-center">
-            <img
-              src={klawsomeLogo}
-              alt="Klawsome"
-              className="h-10 w-auto brightness-0 invert"
-            />
-          </a>
         </div>
       </div>
 
