@@ -367,7 +367,7 @@ const KawaiiScheduling = () => {
                         ))}
                       </div>
                     ) : (
-                      <p className="text-muted-foreground text-sm font-body mb-6">No times available 😢</p>
+                      <p className="text-white/60 text-sm font-body mb-6">No times available 😢</p>
                     )}
                   </motion.div>
                 )}
