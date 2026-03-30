@@ -272,11 +272,8 @@ const KawaiiScheduling = () => {
                     <p className="text-muted-foreground text-sm font-body mb-2 line-clamp-2">
                       {prismic?.event_description || type.description || ''}
                     </p>
-                    {prismic?.event_day && (
-                      <p className="text-muted-foreground text-xs font-body mb-1">📅 {prismic.event_day}</p>
-                    )}
-                    {prismic?.event_time && (
-                      <p className="text-muted-foreground text-xs font-body mb-2">⏰ {prismic.event_time}</p>
+                    {prismic?.availability && Object.entries(prismic.availability).some(([, v]) => v && v.toLowerCase() !== 'no availability') && (
+                      <p className="text-muted-foreground text-xs font-body mb-2">📅 Available select days</p>
                     )}
                     <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
                       <span className="flex items-center gap-1">
