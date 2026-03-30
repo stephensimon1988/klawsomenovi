@@ -6,7 +6,7 @@
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
+    --background: 190 60% 97%;
     --foreground: 216 50% 20%;
 
     --card: 0 0% 100%;
@@ -15,15 +15,13 @@
     --popover: 0 0% 100%;
     --popover-foreground: 216 50% 20%;
 
-    /* Coral red — main brand color from logo */
     --primary: 351 76% 62%;
     --primary-foreground: 0 0% 100%;
 
-    /* Baby pink */
     --secondary: 340 60% 80%;
     --secondary-foreground: 340 40% 25%;
 
-    --muted: 190 30% 96%;
+    --muted: 190 40% 93%;
     --muted-foreground: 216 30% 40%;
 
     --accent: 50 84% 70%;
@@ -32,21 +30,19 @@
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 190 20% 90%;
-    --input: 190 20% 90%;
+    --border: 190 30% 88%;
+    --input: 190 30% 88%;
     --ring: 351 76% 62%;
 
     --radius: 1rem;
 
-    /* Logo palette */
     --klawsome-red: 351 76% 62%;
     --klawsome-navy: 216 50% 28%;
     --klawsome-yellow: 50 84% 70%;
     --klawsome-baby-blue: 190 75% 91%;
-    --klawsome-baby-pink: 340 60% 80%;
+    --klawsome-baby-pink: 340 60% 85%;
     --klawsome-white: 0 0% 100%;
 
-    /* Legacy kawaii tokens mapped to new palette */
     --kawaii-pink: 340 60% 82%;
     --kawaii-lavender: 260 50% 85%;
     --kawaii-mint: 160 45% 82%;
@@ -85,7 +81,6 @@
 }
 
 @layer utilities {
-  /* Main brand gradient: coral red → yellow */
   .kawaii-gradient {
     background: linear-gradient(
       135deg,
@@ -97,9 +92,9 @@
   .kawaii-gradient-soft {
     background: linear-gradient(
       135deg,
-      hsl(var(--klawsome-baby-blue) / 0.25) 0%,
-      hsl(var(--klawsome-baby-pink) / 0.25) 50%,
-      hsl(var(--klawsome-yellow) / 0.15) 100%
+      hsl(var(--klawsome-baby-blue) / 0.4) 0%,
+      hsl(var(--klawsome-baby-pink) / 0.35) 40%,
+      hsl(var(--klawsome-yellow) / 0.3) 100%
     );
   }
 
@@ -113,7 +108,6 @@
                 0 8px 20px hsl(var(--klawsome-baby-pink) / 0.12);
   }
 
-  /* Text gradient: coral → navy */
   .kawaii-text-gradient {
     background: linear-gradient(135deg, hsl(var(--klawsome-red)), hsl(var(--klawsome-navy)));
     -webkit-background-clip: text;
