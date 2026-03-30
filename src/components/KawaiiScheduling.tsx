@@ -377,8 +377,8 @@ const KawaiiScheduling = () => {
               <AnimatePresence mode="wait">
                 {selectedTime && (
                   <motion.div key="form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                    <div className="border-t border-border pt-6 mt-2">
-                      <h4 className="font-heading font-bold text-sm mb-4">Your Details 💌</h4>
+                    <div className="border-t border-white/20 pt-6 mt-2">
+                      <h4 className="font-heading font-bold text-sm mb-4 text-white">Your Details 💌</h4>
                       <div className="grid sm:grid-cols-2 gap-4 mb-4">
                         <Input
                           placeholder="Your name *"
