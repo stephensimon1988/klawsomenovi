@@ -33,7 +33,7 @@ const KawaiiAbout = () => {
           transition={{ duration: 0.6 }}
         >
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4 text-white">
-            Five ways to have fun at Klawsome
+            How to play
           </h2>
           <p className="text-white/70 text-lg max-w-2xl mx-auto font-body">
             The ultimate klaw machine experience awaits you! 🎪
@@ -44,14 +44,17 @@ const KawaiiAbout = () => {
           {features.map((feature, index) => (
             <motion.div
               key={feature.title}
-              className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20 text-center"
+              className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20 text-center flex flex-col"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.5, delay: index * 0.15 }}
               whileHover={{ y: -5, transition: { duration: 0.2 } }}
             >
-              <img src={feature.image} alt={feature.title} className="w-full max-w-[20rem] mx-auto mb-5 object-contain" />
+              {/* Fixed-height icon area so titles align across cards */}
+              <div className="h-56 flex items-center justify-center mb-5">
+                <img src={feature.image} alt={feature.title} className="max-h-full max-w-full object-contain" />
+              </div>
               <h3 className="text-xl font-heading font-bold mb-3 text-white">{feature.title}</h3>
               <p className="text-white/70 font-body leading-relaxed">{feature.description}</p>
             </motion.div>
