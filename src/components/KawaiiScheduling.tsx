@@ -95,7 +95,7 @@ const KawaiiScheduling = () => {
 
   const { data: appointmentTypes, isLoading: typesLoading } = useQuery({
     queryKey: ['scheduling-types'],
-    queryFn: fetchTypes,
+    queryFn: syncAndFetchTypes,
   });
 
   const { data: prismicItems } = useQuery({
