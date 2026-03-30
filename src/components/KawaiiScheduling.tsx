@@ -1,108 +1,122 @@
-import { motion } from 'framer-motion';
-import { Calendar, Clock, Loader2, ChevronLeft, ChevronRight } from 'lucide-react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Calendar, Clock, Loader2, ChevronLeft, ChevronRight, Check } from 'lucide-react';
 import { Button } from './ui/button';
-import { useQuery } from '@tanstack/react-query';
-import { supabase } from '@/integrations/supabase/client';
+import { Input } from './ui/input';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useState, useMemo } from 'react';
-import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay, isSameDay, parseISO } from 'date-fns';
+import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay } from 'date-fns';
+import { toast } from 'sonner';
+
+const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scheduling`;
+const headers = {
+  'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+  'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
+  'Content-Type': 'application/json',
+};
 
 interface AppointmentType {
-  id: number;
+  id: string;
   name: string;
-  duration: number;
-  price: string;
   description: string;
-  category: string;
+  duration_minutes: number;
+  price: number;
 }
 
-interface AvailableDate {
-  date: string;
-}
-
-interface AvailableTime {
+interface TimeSlot {
   time: string;
+  endTime: string;
 }
 
-const fetchAppointmentTypes = async (): Promise<AppointmentType[]> => {
-  const { data, error } = await supabase.functions.invoke('acuity-scheduling', {
-    body: null,
-    headers: {},
-  });
-  // Use GET via query param workaround - invoke sends POST, so we use a different approach
-  const res = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/acuity-scheduling?action=appointment-types`,
-    {
-      headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
-    }
-  );
-  if (!res.ok) throw new Error('Failed to fetch appointment types');
+const fetchTypes = async (): Promise<AppointmentType[]> => {
+  const res = await fetch(`${BASE_URL}?action=types`, { headers });
+  if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
-  return json.appointmentTypes || [];
+  return json.types || [];
 };
 
-const fetchAvailableDates = async (appointmentTypeID: number, month: string): Promise<AvailableDate[]> => {
-  const res = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/acuity-scheduling?action=availability&appointmentTypeID=${appointmentTypeID}&month=${month}`,
-    {
-      headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
-    }
-  );
-  if (!res.ok) throw new Error('Failed to fetch dates');
+const fetchAvailability = async (typeId: string, month: string): Promise<string[]> => {
+  const res = await fetch(`${BASE_URL}?action=availability&typeId=${typeId}&month=${month}`, { headers });
+  if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
-  return json.dates || [];
+  return json.availableDates || [];
 };
 
-const fetchAvailableTimes = async (appointmentTypeID: number, date: string): Promise<AvailableTime[]> => {
-  const res = await fetch(
-    `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/acuity-scheduling?action=times&appointmentTypeID=${appointmentTypeID}&date=${date}`,
-    {
-      headers: {
-        'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
-        'apikey': import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY,
-      },
-    }
-  );
-  if (!res.ok) throw new Error('Failed to fetch times');
+const fetchTimes = async (typeId: string, date: string): Promise<TimeSlot[]> => {
+  const res = await fetch(`${BASE_URL}?action=times&typeId=${typeId}&date=${date}`, { headers });
+  if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
   return json.times || [];
 };
 
+const formatTimeDisplay = (time: string) => {
+  const [h, m] = time.split(':').map(Number);
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  const hour12 = h % 12 || 12;
+  return `${hour12}:${String(m).padStart(2, '0')} ${ampm}`;
+};
+
 const KawaiiScheduling = () => {
+  const queryClient = useQueryClient();
   const [selectedType, setSelectedType] = useState<AppointmentType | null>(null);
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = useState<TimeSlot | null>(null);
+  const [formData, setFormData] = useState({ name: '', email: '', phone: '', notes: '' });
+  const [bookingSuccess, setBookingSuccess] = useState(false);
 
   const monthStr = format(currentMonth, 'yyyy-MM');
 
   const { data: appointmentTypes, isLoading: typesLoading } = useQuery({
-    queryKey: ['acuity-types'],
-    queryFn: fetchAppointmentTypes,
+    queryKey: ['scheduling-types'],
+    queryFn: fetchTypes,
   });
 
   const { data: availableDates } = useQuery({
-    queryKey: ['acuity-dates', selectedType?.id, monthStr],
-    queryFn: () => fetchAvailableDates(selectedType!.id, monthStr),
+    queryKey: ['scheduling-dates', selectedType?.id, monthStr],
+    queryFn: () => fetchAvailability(selectedType!.id, monthStr),
     enabled: !!selectedType,
   });
 
   const { data: availableTimes, isLoading: timesLoading } = useQuery({
-    queryKey: ['acuity-times', selectedType?.id, selectedDate],
-    queryFn: () => fetchAvailableTimes(selectedType!.id, selectedDate!),
+    queryKey: ['scheduling-times', selectedType?.id, selectedDate],
+    queryFn: () => fetchTimes(selectedType!.id, selectedDate!),
     enabled: !!selectedType && !!selectedDate,
   });
 
-  const availableDateStrings = useMemo(
-    () => new Set((availableDates || []).map((d) => d.date)),
-    [availableDates]
-  );
+  const bookMutation = useMutation({
+    mutationFn: async () => {
+      const res = await fetch(`${BASE_URL}?action=book`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({
+          typeId: selectedType!.id,
+          customerName: formData.name,
+          customerEmail: formData.email,
+          customerPhone: formData.phone,
+          date: selectedDate,
+          startTime: selectedTime!.time,
+          endTime: selectedTime!.endTime,
+          notes: formData.notes,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || 'Booking failed');
+      }
+      return res.json();
+    },
+    onSuccess: () => {
+      setBookingSuccess(true);
+      queryClient.invalidateQueries({ queryKey: ['scheduling-times'] });
+      toast.success('Booking confirmed! 🎉');
+    },
+    onError: (err: Error) => {
+      toast.error(err.message);
+    },
+  });
 
-  // Calendar grid
+  const dateSet = useMemo(() => new Set(availableDates || []), [availableDates]);
+
   const daysInMonth = getDaysInMonth(currentMonth);
   const firstDayOfWeek = getDay(startOfMonth(currentMonth));
   const calendarDays = useMemo(() => {
@@ -114,10 +128,49 @@ const KawaiiScheduling = () => {
 
   const handleDateClick = (day: number) => {
     const dateStr = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'yyyy-MM-dd');
-    if (availableDateStrings.has(dateStr)) {
+    if (dateSet.has(dateStr)) {
       setSelectedDate(dateStr);
+      setSelectedTime(null);
     }
   };
+
+  const resetAll = () => {
+    setSelectedType(null);
+    setSelectedDate(null);
+    setSelectedTime(null);
+    setFormData({ name: '', email: '', phone: '', notes: '' });
+    setBookingSuccess(false);
+  };
+
+  if (bookingSuccess) {
+    return (
+      <section id="scheduling" className="py-20 px-4">
+        <div className="container mx-auto max-w-lg">
+          <motion.div
+            className="bg-card rounded-kawaii border border-border p-10 text-center kawaii-shadow"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+          >
+            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="w-8 h-8 text-primary" />
+            </div>
+            <h2 className="text-3xl font-heading font-bold mb-3">Booking Confirmed! 🎉</h2>
+            <p className="text-muted-foreground font-body mb-2">
+              <strong>{selectedType?.name}</strong> on{' '}
+              <strong>{selectedDate && format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}</strong> at{' '}
+              <strong>{selectedTime && formatTimeDisplay(selectedTime.time)}</strong>
+            </p>
+            <p className="text-muted-foreground font-body text-sm mb-6">
+              A confirmation will be sent to <strong>{formData.email}</strong>
+            </p>
+            <Button onClick={resetAll} className="rounded-bubble font-heading kawaii-shadow">
+              Book Another ✨
+            </Button>
+          </motion.div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section id="scheduling" className="py-20 px-4">
@@ -143,13 +196,14 @@ const KawaiiScheduling = () => {
           </div>
         )}
 
-        {/* Step 1: Choose appointment type */}
+        {/* Step 1: Choose type */}
         {appointmentTypes && !selectedType && (
-          <motion.div
-            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-          >
+          <motion.div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-4xl mx-auto" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+            {appointmentTypes.length === 0 && (
+              <div className="col-span-full text-center text-muted-foreground font-body py-10">
+                No services available yet — check back soon! 🌸
+              </div>
+            )}
             {appointmentTypes.map((type, index) => (
               <motion.button
                 key={type.id}
@@ -167,37 +221,29 @@ const KawaiiScheduling = () => {
                 )}
                 <div className="flex items-center gap-3 text-sm text-muted-foreground font-body">
                   <span className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" /> {type.duration} min
+                    <Clock className="w-4 h-4" /> {type.duration_minutes} min
                   </span>
-                  {type.price && <span className="font-heading font-bold text-primary">${type.price}</span>}
+                  {type.price > 0 && <span className="font-heading font-bold text-primary">${type.price}</span>}
                 </div>
               </motion.button>
             ))}
           </motion.div>
         )}
 
-        {/* Step 2: Calendar + Times */}
+        {/* Step 2: Calendar + Times + Form */}
         {selectedType && (
-          <motion.div
-            className="max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            <Button
-              variant="ghost"
-              onClick={() => { setSelectedType(null); setSelectedDate(null); }}
-              className="mb-6 font-heading"
-            >
+          <motion.div className="max-w-3xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+            <Button variant="ghost" onClick={() => { setSelectedType(null); setSelectedDate(null); setSelectedTime(null); }} className="mb-6 font-heading">
               ← Back to services
             </Button>
 
             <div className="bg-card rounded-kawaii border border-border p-6 kawaii-shadow">
               <h3 className="font-heading font-bold text-xl mb-1">{selectedType.name}</h3>
               <p className="text-muted-foreground text-sm font-body mb-6">
-                {selectedType.duration} min {selectedType.price && `· $${selectedType.price}`}
+                {selectedType.duration_minutes} min{selectedType.price > 0 && ` · $${selectedType.price}`}
               </p>
 
-              {/* Month navigation */}
+              {/* Month nav */}
               <div className="flex items-center justify-between mb-4">
                 <Button variant="ghost" size="sm" onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}>
                   <ChevronLeft className="w-4 h-4" />
@@ -208,33 +254,25 @@ const KawaiiScheduling = () => {
                 </Button>
               </div>
 
-              {/* Calendar grid */}
+              {/* Calendar */}
               <div className="grid grid-cols-7 gap-1 mb-6">
                 {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
-                  <div key={d} className="text-center text-xs font-heading font-bold text-muted-foreground py-2">
-                    {d}
-                  </div>
+                  <div key={d} className="text-center text-xs font-heading font-bold text-muted-foreground py-2">{d}</div>
                 ))}
                 {calendarDays.map((day, i) => {
-                  if (day === null) return <div key={`empty-${i}`} />;
-                  const dateStr = format(
-                    new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day),
-                    'yyyy-MM-dd'
-                  );
-                  const isAvailable = availableDateStrings.has(dateStr);
+                  if (day === null) return <div key={`e-${i}`} />;
+                  const dateStr = format(new Date(currentMonth.getFullYear(), currentMonth.getMonth(), day), 'yyyy-MM-dd');
+                  const isAvailable = dateSet.has(dateStr);
                   const isSelected = selectedDate === dateStr;
-
                   return (
                     <button
                       key={day}
                       onClick={() => handleDateClick(day)}
                       disabled={!isAvailable}
-                      className={`
-                        py-2 rounded-lg text-sm font-body transition-colors
+                      className={`py-2 rounded-lg text-sm font-body transition-colors
                         ${isSelected ? 'bg-primary text-primary-foreground font-bold' : ''}
                         ${isAvailable && !isSelected ? 'hover:bg-primary/20 text-foreground cursor-pointer' : ''}
-                        ${!isAvailable ? 'text-muted-foreground/30 cursor-default' : ''}
-                      `}
+                        ${!isAvailable ? 'text-muted-foreground/30 cursor-default' : ''}`}
                     >
                       {day}
                     </button>
@@ -242,34 +280,84 @@ const KawaiiScheduling = () => {
                 })}
               </div>
 
-              {/* Available times */}
-              {selectedDate && (
-                <div>
-                  <h4 className="font-heading font-bold text-sm mb-3">
-                    Available times for {format(parseISO(selectedDate), 'MMMM d, yyyy')}
-                  </h4>
-                  {timesLoading ? (
-                    <div className="flex justify-center py-4">
-                      <Loader2 className="w-6 h-6 animate-spin text-primary" />
+              {/* Times */}
+              <AnimatePresence mode="wait">
+                {selectedDate && (
+                  <motion.div key="times" initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }}>
+                    <h4 className="font-heading font-bold text-sm mb-3">
+                      Available times for {format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}
+                    </h4>
+                    {timesLoading ? (
+                      <div className="flex justify-center py-4"><Loader2 className="w-6 h-6 animate-spin text-primary" /></div>
+                    ) : availableTimes && availableTimes.length > 0 ? (
+                      <div className="grid grid-cols-3 sm:grid-cols-4 gap-2 mb-6">
+                        {availableTimes.map((slot) => (
+                          <Button
+                            key={slot.time}
+                            variant={selectedTime?.time === slot.time ? 'default' : 'outline'}
+                            size="sm"
+                            onClick={() => setSelectedTime(slot)}
+                            className="rounded-bubble font-body text-sm"
+                          >
+                            {formatTimeDisplay(slot.time)}
+                          </Button>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-muted-foreground text-sm font-body mb-6">No times available 😢</p>
+                    )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+
+              {/* Booking form */}
+              <AnimatePresence mode="wait">
+                {selectedTime && (
+                  <motion.div key="form" initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                    <div className="border-t border-border pt-6 mt-2">
+                      <h4 className="font-heading font-bold text-sm mb-4">Your Details 💌</h4>
+                      <div className="grid sm:grid-cols-2 gap-4 mb-4">
+                        <Input
+                          placeholder="Your name *"
+                          value={formData.name}
+                          onChange={(e) => setFormData(p => ({ ...p, name: e.target.value }))}
+                          className="rounded-bubble font-body"
+                        />
+                        <Input
+                          placeholder="Email address *"
+                          type="email"
+                          value={formData.email}
+                          onChange={(e) => setFormData(p => ({ ...p, email: e.target.value }))}
+                          className="rounded-bubble font-body"
+                        />
+                        <Input
+                          placeholder="Phone number"
+                          type="tel"
+                          value={formData.phone}
+                          onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))}
+                          className="rounded-bubble font-body"
+                        />
+                        <Input
+                          placeholder="Notes (optional)"
+                          value={formData.notes}
+                          onChange={(e) => setFormData(p => ({ ...p, notes: e.target.value }))}
+                          className="rounded-bubble font-body"
+                        />
+                      </div>
+                      <Button
+                        onClick={() => bookMutation.mutate()}
+                        disabled={!formData.name || !formData.email || bookMutation.isPending}
+                        className="w-full rounded-bubble font-heading kawaii-shadow text-base py-5"
+                      >
+                        {bookMutation.isPending ? (
+                          <Loader2 className="w-5 h-5 animate-spin mr-2" />
+                        ) : null}
+                        Confirm Booking ✨
+                      </Button>
                     </div>
-                  ) : availableTimes && availableTimes.length > 0 ? (
-                    <div className="grid grid-cols-3 sm:grid-cols-4 gap-2">
-                      {availableTimes.map((slot) => (
-                        <Button
-                          key={slot.time}
-                          variant="outline"
-                          size="sm"
-                          className="rounded-bubble font-body text-sm hover:bg-primary hover:text-primary-foreground"
-                        >
-                          {format(new Date(slot.time), 'h:mm a')}
-                        </Button>
-                      ))}
-                    </div>
-                  ) : (
-                    <p className="text-muted-foreground text-sm font-body">No times available 😢</p>
-                  )}
-                </div>
-              )}
+                  </motion.div>
+                )}
+              </AnimatePresence>
             </div>
           </motion.div>
         )}
