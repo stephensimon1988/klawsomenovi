@@ -8,6 +8,7 @@ import { format, addMonths, subMonths, startOfMonth, getDaysInMonth, getDay } fr
 import { toast } from 'sonner';
 
 const BASE_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/scheduling`;
+const SYNC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/sync-acuity`;
 const PRISMIC_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/prismic`;
 const headers = {
   'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
@@ -27,10 +28,11 @@ interface PrismicSchedulingItem {
   id: string;
   event_title: string;
   event_description: string;
-  event_day: string | null;
-  event_time: string | null;
+  event_price: string;
+  event_length: string;
   event_image: string | null;
   event_image_alt: string;
+  availability: Record<string, string>;
 }
 
 interface TimeSlot {
@@ -38,7 +40,14 @@ interface TimeSlot {
   endTime: string;
 }
 
-const fetchTypes = async (): Promise<AppointmentType[]> => {
+// Sync Prismic → DB first, then fetch types
+const syncAndFetchTypes = async (): Promise<AppointmentType[]> => {
+  // Trigger sync from Prismic to DB (updates availability_slots + appointment_types)
+  try {
+    await fetch(SYNC_URL, { method: 'POST', headers });
+  } catch (e) {
+    console.warn('Prismic sync failed, using existing DB data:', e);
+  }
   const res = await fetch(`${BASE_URL}?action=types`, { headers });
   if (!res.ok) throw new Error('Failed to fetch');
   const json = await res.json();
