@@ -78,33 +78,31 @@
   .kawaii-gradient {
     background: linear-gradient(
       135deg,
-      hsl(var(--kawaii-pink)) 0%,
-      hsl(var(--kawaii-lavender)) 50%,
-      hsl(var(--kawaii-sky)) 100%
+      hsl(var(--kawaii-baby-blue)) 0%,
+      hsl(var(--kawaii-baby-pink)) 100%
     );
   }
 
   .kawaii-gradient-soft {
     background: linear-gradient(
       135deg,
-      hsl(var(--kawaii-peach)) 0%,
-      hsl(var(--kawaii-pink) / 0.5) 50%,
-      hsl(var(--kawaii-lavender) / 0.5) 100%
+      hsl(var(--kawaii-baby-blue) / 0.15) 0%,
+      hsl(var(--kawaii-baby-pink) / 0.15) 100%
     );
   }
 
   .kawaii-shadow {
-    box-shadow: 0 8px 30px hsl(var(--kawaii-pink) / 0.2),
-                0 4px 10px hsl(var(--kawaii-lavender) / 0.15);
+    box-shadow: 0 8px 30px hsl(var(--kawaii-baby-blue) / 0.15),
+                0 4px 10px hsl(var(--kawaii-baby-pink) / 0.1);
   }
 
   .kawaii-shadow-lg {
-    box-shadow: 0 15px 50px hsl(var(--kawaii-pink) / 0.25),
-                0 8px 20px hsl(var(--kawaii-lavender) / 0.2);
+    box-shadow: 0 15px 50px hsl(var(--kawaii-baby-blue) / 0.2),
+                0 8px 20px hsl(var(--kawaii-baby-pink) / 0.15);
   }
 
   .kawaii-text-gradient {
-    background: linear-gradient(135deg, hsl(var(--kawaii-pink)), hsl(var(--kawaii-lavender)));
+    background: linear-gradient(135deg, hsl(var(--kawaii-baby-blue)), hsl(var(--kawaii-baby-pink)));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
