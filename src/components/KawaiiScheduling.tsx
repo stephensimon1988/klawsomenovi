@@ -195,13 +195,13 @@ const KawaiiScheduling = () => {
             <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
               <Check className="w-8 h-8 text-white" />
             </div>
-            <h2 className="text-3xl font-heading font-bold mb-3">Booking Confirmed! 🎉</h2>
-            <p className="text-muted-foreground font-body mb-2">
+            <h2 className="text-3xl font-heading font-bold mb-3 text-white">Booking Confirmed! 🎉</h2>
+            <p className="text-white/80 font-body mb-2">
               <strong>{selectedType?.name}</strong> on{' '}
               <strong>{selectedDate && format(new Date(selectedDate + 'T00:00:00'), 'MMMM d, yyyy')}</strong> at{' '}
               <strong>{selectedTime && formatTimeDisplay(selectedTime.time)}</strong>
             </p>
-            <p className="text-muted-foreground font-body text-sm mb-6">
+            <p className="text-white/60 font-body text-sm mb-6">
               A confirmation will be sent to <strong>{formData.email}</strong>
             </p>
             <Button onClick={resetAll} className="rounded-bubble font-heading kawaii-shadow">
