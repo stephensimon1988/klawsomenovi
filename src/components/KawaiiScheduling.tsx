@@ -398,7 +398,7 @@ const KawaiiScheduling = () => {
                           type="tel"
                           value={formData.phone}
                           onChange={(e) => setFormData(p => ({ ...p, phone: e.target.value }))}
-                          className="rounded-bubble font-body"
+                          className="rounded-bubble font-body bg-white/20 border-white/30 text-white placeholder:text-white/40"
                         />
                         <Input
                           placeholder="Notes (optional)"
