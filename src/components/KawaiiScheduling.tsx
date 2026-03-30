@@ -192,8 +192,8 @@ const KawaiiScheduling = () => {
             initial={{ scale: 0.9, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
           >
-            <div className="w-16 h-16 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Check className="w-8 h-8 text-primary" />
+            <div className="w-16 h-16 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-6">
+              <Check className="w-8 h-8 text-white" />
             </div>
             <h2 className="text-3xl font-heading font-bold mb-3">Booking Confirmed! 🎉</h2>
             <p className="text-muted-foreground font-body mb-2">
