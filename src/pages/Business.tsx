@@ -428,6 +428,7 @@ const Business = () => {
             </div>
           </div>
         </TabsContent>
+        </div>{/* end tabsSectionRef */}
       </Tabs>
 
       {/* ══════ HOW IT WORKS ══════ */}
