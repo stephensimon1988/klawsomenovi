@@ -17,11 +17,6 @@ const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React
   </motion.div>
 );
 
-const opportunityNav = [
-  { label: '🎰 Host a Machine', href: '#hosted' },
-  { label: '⭐ Become a Partner', href: '#partner' },
-  { label: '🧸 Custom Plushies', href: '#plushie' },
-];
 
 const klawsomeHandles = [
   'Machine delivery & installation',
