@@ -37,7 +37,7 @@ const venues = [
 
 const partnerIncludes = [
   { icon: '🎰', title: 'Machines', desc: 'Full fleet of Klawsome machines customized for your space.' },
-  { icon: '🧸', title: 'Prizes', desc: 'Licensed plushies, anime collectibles, and more — supplied by us.' },
+  { icon: '🧸', title: 'Prizes', desc: 'Licensed plushies, anime collectibles, and more -- supplied by us.' },
   { icon: '📱', title: 'Tech', desc: 'Remote monitoring, cashless payments, and real-time analytics.' },
   { icon: '🎓', title: 'Training', desc: 'Full onboarding so you're confident from day one.' },
   { icon: '📣', title: 'Marketing', desc: 'Brand assets, social media support, and launch help.' },
@@ -45,16 +45,16 @@ const partnerIncludes = [
 ];
 
 const pricingTiers = [
-  { label: 'Simple Design', title: 'Standard Plushie', price: '$4–6', per: 'per unit', desc: 'Clean shapes, minimal detail. Great for branded giveaways and simple mascots.', variant: 'light' as const },
-  { label: 'Complex Design', title: 'Detailed Plushie', price: '$6–8', per: 'per unit', desc: 'Highly detailed characters with accessories, facial features, and layered textures.', variant: 'accent' as const },
-  { label: 'XL / Life-Size', title: 'Oversized Plushie', price: '$15–40', per: 'per unit', desc: 'Statement-making XL and life-size plushies. Perfect for displays, events, and premium prizes.', variant: 'dark' as const },
+  { label: 'Simple Design', title: 'Standard Plushie', price: '$4-6', per: 'per unit', desc: 'Clean shapes, minimal detail. Great for branded giveaways and simple mascots.', variant: 'light' as const },
+  { label: 'Complex Design', title: 'Detailed Plushie', price: '$6-8', per: 'per unit', desc: 'Highly detailed characters with accessories, facial features, and layered textures.', variant: 'accent' as const },
+  { label: 'XL / Life-Size', title: 'Oversized Plushie', price: '$15-40', per: 'per unit', desc: 'Statement-making XL and life-size plushies. Perfect for displays, events, and premium prizes.', variant: 'dark' as const },
 ];
 
 const howSteps = [
   { num: 1, title: 'Reach Out', desc: 'Fill out the form below and tell us about yourself, your business, and which opportunity interests you.' },
-  { num: 2, title: 'We Connect', desc: 'Our team follows up within 1–2 business days to learn more and answer your questions.' },
+  { num: 2, title: 'We Connect', desc: 'Our team follows up within 1-2 business days to learn more and answer your questions.' },
   { num: 3, title: 'Review & Plan', desc: 'We review your location or concept together and map out the right path forward.' },
-  { num: 4, title: 'Launch!', desc: 'Machines installed, plushies stocked, partners trained — you're ready to go.' },
+  { num: 4, title: 'Launch!', desc: 'Machines installed, plushies stocked, partners trained -- you're ready to go.' },
 ];
 
 const plushieSteps = [
@@ -70,7 +70,7 @@ const Business = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    toast.success('Thanks! We'll be in touch within 1–2 business days.');
+    toast.success('Thanks! We'll be in touch within 1-2 business days.');
   };
 
   return (
@@ -102,7 +102,7 @@ const Business = () => {
             transition={{ delay: 0.2 }}
             className="text-white/75 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-10 leading-relaxed"
           >
-            Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator. Pick your path below.
+            Three ways to bring the magic of Klawsome into your world -- whether you're a business owner, entrepreneur, or creator. Pick your path below.
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
             <Button asChild size="lg" className="rounded-full px-10 text-lg kawaii-shadow">
@@ -139,7 +139,7 @@ const Business = () => {
               <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
             </div>
             <p className="text-white/80 font-body font-semibold text-base max-w-xl mx-auto mb-8 leading-relaxed">
-              We place a machine in your space, handle everything, and you earn a share of every token played — no upfront cost, no hassle.
+              We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.
             </p>
             <Button asChild className="rounded-full px-10 bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
               <a href="#contact">Apply for a Hosted Machine</a>
@@ -154,7 +154,7 @@ const Business = () => {
               <div>
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-2">You earn 10% of every token played.</h3>
                 <p className="text-white/70 font-body font-semibold text-sm leading-relaxed max-w-md">
-                  We handle the machine, the prizes, the repairs — everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.
+                  We handle the machine, the prizes, the repairs -- everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.
                 </p>
               </div>
               <span className="font-heading text-6xl md:text-7xl font-bold text-klawsome-yellow whitespace-nowrap">🎯 10%</span>
@@ -211,7 +211,7 @@ const Business = () => {
             <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-white/80 mb-3">Opportunity 02</p>
             <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">Become a<br />Klawsome Partner</h2>
             <p className="text-white/80 font-body font-semibold text-base max-w-xl mx-auto mb-8 leading-relaxed">
-              Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training — you bring the space and the hustle.
+              Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training -- you bring the space and the hustle.
             </p>
             <Button asChild className="rounded-full px-10 bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-bold">
               <a href="#contact">Apply to Be a Partner</a>
@@ -226,7 +226,7 @@ const Business = () => {
             <div className="bg-background rounded-2xl p-8 mb-8 kawaii-shadow">
               <h3 className="font-heading text-xl md:text-2xl font-bold text-klawsome-navy mb-3">Why partner with Klawsome?</h3>
               <p className="text-muted-foreground font-body font-semibold leading-relaxed">
-                We're not a franchise — we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.
+                We're not a franchise -- we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.
               </p>
             </div>
 
@@ -249,7 +249,7 @@ const Business = () => {
               <div>
                 <h4 className="font-heading text-xl font-bold text-klawsome-yellow mb-2">Build your own brand. Keep your freedom.</h4>
                 <p className="text-white/75 font-body font-semibold text-sm leading-relaxed">
-                  You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks — just guidance, support, and winning prizes.
+                  You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks -- just guidance, support, and winning prizes.
                 </p>
               </div>
             </div>
@@ -271,7 +271,7 @@ const Business = () => {
             <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-white/80 mb-3">Opportunity 03</p>
             <h2 className="font-heading text-3xl md:text-5xl font-bold mb-4">Custom Plushie<br />Orders</h2>
             <p className="text-white/80 font-body font-semibold text-base max-w-xl mx-auto mb-8 leading-relaxed">
-              Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery — from concept to cuddly reality.
+              Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery -- from concept to cuddly reality.
             </p>
             <Button asChild className="rounded-full px-10 bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
               <a href="#contact">Start a Custom Order</a>
@@ -369,7 +369,7 @@ const Business = () => {
               animate={{ opacity: 1, scale: 1 }}
               className="bg-kawaii-mint/10 border-2 border-kawaii-mint rounded-xl p-6 text-kawaii-mint font-heading font-bold text-lg"
             >
-              🎉 Thanks! We'll be in touch within 1–2 business days.
+              🎉 Thanks! We'll be in touch within 1-2 business days.
             </motion.div>
           ) : (
             <form onSubmit={handleSubmit} className="text-left">
@@ -430,7 +430,7 @@ const Business = () => {
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-sm font-heading font-bold">Tell us more</label>
                   <textarea
-                    placeholder="Share your idea, location, concept — anything that helps us understand what you're looking for…"
+                    placeholder="Share your idea, location, concept -- anything that helps us understand what you're looking for…"
                     value={formData.message}
                     onChange={(e) => setFormData({ ...formData, message: e.target.value })}
                     rows={5}
@@ -443,7 +443,7 @@ const Business = () => {
                   Send Message →
                 </Button>
                 <p className="text-xs text-muted-foreground font-body font-bold mt-3">
-                  We'll reply within 1–2 business days · hello@klawsomenovi.com
+                  We'll reply within 1-2 business days · hello@klawsomenovi.com
                 </p>
               </div>
             </form>
