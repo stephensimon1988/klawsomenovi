@@ -70,7 +70,7 @@ const Business = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    toast.success('Thanks! We'll be in touch within 1-2 business days.');
+    toast.success("Thanks! We'll be in touch within 1-2 business days.");
   };
 
   return (
