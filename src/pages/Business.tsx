@@ -54,7 +54,7 @@ const howSteps = [
   { num: 1, title: 'Reach Out', desc: 'Fill out the form below and tell us about yourself, your business, and which opportunity interests you.' },
   { num: 2, title: 'We Connect', desc: 'Our team follows up within 1-2 business days to learn more and answer your questions.' },
   { num: 3, title: 'Review & Plan', desc: 'We review your location or concept together and map out the right path forward.' },
-  { num: 4, title: 'Launch!', desc: 'Machines installed, plushies stocked, partners trained -- you're ready to go.' },
+  { num: 4, title: 'Launch!', desc: "Machines installed, plushies stocked, partners trained -- you're ready to go." },
 ];
 
 const plushieSteps = [
