@@ -134,16 +134,16 @@ const Business = () => {
 
       {/* ══════ OPPORTUNITIES TABS ══════ */}
       <Tabs defaultValue="hosted" className="w-full">
-        <div className="bg-primary py-8 px-4 text-center">
+        <div className="bg-primary pt-8 px-4 text-center">
           <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
-          <TabsList className="bg-transparent gap-3 h-auto flex-wrap">
-            <TabsTrigger value="hosted" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+          <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
+            <TabsTrigger value="hosted" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
               🎰 Host a Machine
             </TabsTrigger>
-            <TabsTrigger value="partner" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+            <TabsTrigger value="partner" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
               ⭐ Become a Partner
             </TabsTrigger>
-            <TabsTrigger value="plushie" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+            <TabsTrigger value="plushie" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
               🧸 Custom Plushies
             </TabsTrigger>
           </TabsList>
