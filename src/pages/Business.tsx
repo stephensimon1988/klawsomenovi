@@ -172,10 +172,36 @@ const Business = () => {
       </section>
 
       {/* ══════ OPPORTUNITIES TABS ══════ */}
-      <Tabs defaultValue="hosted" className="w-full">
-        <div className="bg-primary pt-8 px-4 text-center">
-          <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
-          <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div ref={tabsSectionRef}>
+          {/* Sticky floating tab bar */}
+          <AnimatePresence>
+            {showStickyTabs && (
+              <motion.div
+                initial={{ y: -60, opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                exit={{ y: -60, opacity: 0 }}
+                transition={{ duration: 0.25, ease: 'easeOut' }}
+                className="fixed top-16 left-0 right-0 z-40 bg-primary/95 backdrop-blur-md shadow-lg px-4 py-3 text-center border-b border-white/10"
+              >
+                <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
+                  <TabsTrigger value="hosted" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
+                    🎰 Host a Machine
+                  </TabsTrigger>
+                  <TabsTrigger value="partner" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
+                    ⭐ Become a Partner
+                  </TabsTrigger>
+                  <TabsTrigger value="plushie" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
+                    🧸 Custom Plushies
+                  </TabsTrigger>
+                </TabsList>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          <div ref={tabsNavRef} className="bg-primary pt-8 px-4 text-center">
+            <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
+            <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
             <TabsTrigger value="hosted" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
               🎰 Host a Machine
             </TabsTrigger>
