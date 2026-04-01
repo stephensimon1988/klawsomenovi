@@ -72,6 +72,45 @@ const plushieSteps = [
 const Business = () => {
   const [formData, setFormData] = useState({ name: '', email: '', opportunity: '', business_type: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState('hosted');
+  const [showStickyTabs, setShowStickyTabs] = useState(false);
+  const tabsSectionRef = useRef<HTMLDivElement>(null);
+  const tabsNavRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const section = tabsSectionRef.current;
+    const nav = tabsNavRef.current;
+    if (!section || !nav) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        // Check if the inline tab nav is above viewport (scrolled past)
+        const navRect = nav.getBoundingClientRect();
+        const navIsAboveViewport = navRect.bottom < 64; // 64px = main nav height
+        // Section is still partially visible
+        const sectionVisible = entry.isIntersecting;
+        setShowStickyTabs(navIsAboveViewport && sectionVisible);
+      },
+      { threshold: 0, rootMargin: '-64px 0px 0px 0px' }
+    );
+
+    observer.observe(section);
+
+    // Also listen to scroll for more responsive updates
+    const handleScroll = () => {
+      const navRect = nav.getBoundingClientRect();
+      const sectionRect = section.getBoundingClientRect();
+      const navIsAboveViewport = navRect.bottom < 64;
+      const sectionVisible = sectionRect.bottom > 64 && sectionRect.top < window.innerHeight;
+      setShowStickyTabs(navIsAboveViewport && sectionVisible);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
