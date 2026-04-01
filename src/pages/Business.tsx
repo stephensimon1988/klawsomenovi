@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Check, Heart, Star, Sparkles, Coins } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { toast } from 'sonner';
@@ -16,11 +17,6 @@ const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React
   </motion.div>
 );
 
-const opportunityNav = [
-  { label: '🎰 Host a Machine', href: '#hosted' },
-  { label: '⭐ Become a Partner', href: '#partner' },
-  { label: '🧸 Custom Plushies', href: '#plushie' },
-];
 
 const klawsomeHandles = [
   'Machine delivery & installation',
@@ -136,236 +132,238 @@ const Business = () => {
         </div>
       </section>
 
-      {/* ══════ OPPORTUNITY NAV ══════ */}
-      <div className="bg-primary py-8 px-4 text-center">
-        <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
-        <div className="flex flex-wrap gap-3 justify-center">
-          {opportunityNav.map((item) => (
-            <a
-              key={item.label}
-              href={item.href}
-              className="inline-block bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105"
-            >
-              {item.label}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* ══════ OPPORTUNITY 1: HOST A MACHINE ══════ */}
-      <div id="hosted">
-        <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
-          <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">01</span>
-          <div className="container mx-auto relative z-10">
-            <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 01</p>
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Host a Klawsome Machine<br />in Your Business</h2>
-            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-bold text-sm px-5 py-2.5 rounded-bubble mb-7">
-              <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
-            </div>
-            <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.
-            </p>
-            <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
-              <a href="#contact">Apply for a Hosted Machine</a>
-            </Button>
-          </div>
+      {/* ══════ OPPORTUNITIES TABS ══════ */}
+      <Tabs defaultValue="hosted" className="w-full">
+        <div className="bg-primary py-8 px-4 text-center">
+          <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
+          <TabsList className="bg-transparent gap-3 h-auto flex-wrap">
+            <TabsTrigger value="hosted" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+              🎰 Host a Machine
+            </TabsTrigger>
+            <TabsTrigger value="partner" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+              ⭐ Become a Partner
+            </TabsTrigger>
+            <TabsTrigger value="plushie" className="bg-white/10 backdrop-blur-sm text-white font-heading font-bold text-sm px-5 py-2.5 rounded-bubble border border-white/20 transition-all hover:bg-white/20 hover:scale-105 data-[state=active]:bg-white/30 data-[state=active]:border-klawsome-yellow data-[state=active]:text-white data-[state=active]:shadow-none">
+              🧸 Custom Plushies
+            </TabsTrigger>
+          </TabsList>
         </div>
 
-        <div className="bg-primary py-16 px-4">
-          <div className="container mx-auto max-w-4xl">
-            {/* Profit Banner */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border border-white/20">
-              <div>
-                <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-2">You earn 10% of every token played.</h3>
-                <p className="text-white/70 font-body font-semibold text-sm leading-relaxed max-w-md">
-                  We handle the machine, the prizes, the repairs -- everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.
-                </p>
+        {/* ══════ TAB 1: HOST A MACHINE ══════ */}
+        <TabsContent value="hosted" className="mt-0">
+          <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
+            <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">01</span>
+            <div className="container mx-auto relative z-10">
+              <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 01</p>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Host a Klawsome Machine<br />in Your Business</h2>
+              <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-bold text-sm px-5 py-2.5 rounded-bubble mb-7">
+                <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
               </div>
-              <span className="font-heading text-6xl md:text-7xl font-bold text-klawsome-yellow whitespace-nowrap">🎯 10%</span>
-            </div>
-
-            {/* Responsibility Cards */}
-            <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">What each side handles</h3>
-            <p className="text-white/60 font-body font-semibold mb-7">A truly hands-off opportunity for your business.</p>
-            <div className="grid md:grid-cols-2 gap-6 mb-12">
-              <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20">
-                <h4 className="font-heading text-xl font-bold text-white mb-1">Klawsome Takes Care Of</h4>
-                <p className="text-sm text-white/60 font-bold mb-5">We do the heavy lifting</p>
-                <ul className="space-y-3">
-                  {klawsomeHandles.map((item) => (
-                    <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-white/80">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-klawsome-yellow/20 text-klawsome-yellow flex items-center justify-center text-xs mt-0.5"><Check className="w-3 h-3" /></span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20">
-                <h4 className="font-heading text-xl font-bold text-white mb-1">Your Business Provides</h4>
-                <p className="text-sm text-white/60 font-bold mb-5">That's really it</p>
-                <ul className="space-y-3">
-                  {businessProvides.map((item) => (
-                    <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-white/80">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-klawsome-yellow/20 text-klawsome-yellow flex items-center justify-center text-xs mt-0.5"><Check className="w-3 h-3" /></span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-
-            {/* Venues */}
-            <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-5">Perfect for high-traffic spots</h3>
-            <div className="flex flex-wrap gap-3 mb-8">
-              {venues.map((v) => (
-                <span key={v} className="bg-white/10 border border-white/20 rounded-bubble px-5 py-2.5 font-heading font-bold text-sm text-white/80 hover:bg-klawsome-yellow/20 hover:border-klawsome-yellow/40 transition-all cursor-default">
-                  {v}
-                </span>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ══════ OPPORTUNITY 2: PARTNER ══════ */}
-      <div id="partner">
-        <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
-          <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">02</span>
-          <div className="container mx-auto relative z-10">
-            <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 02</p>
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Become a<br /><span className="kawaii-text-gradient">Klawsome Partner</span></h2>
-            <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training -- you bring the space and the hustle.
-            </p>
-            <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
-              <a href="#contact">Apply to Be a Partner ⭐</a>
-            </Button>
-          </div>
-        </div>
-
-        <div className="bg-primary py-16 px-4">
-          <div className="container mx-auto max-w-4xl">
-            <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-bold text-base px-7 py-3 rounded-bubble mb-6">Everything you need, provided.</span>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-8 border border-white/20">
-              <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-3">Why partner with Klawsome?</h3>
-              <p className="text-white/70 font-body font-semibold leading-relaxed">
-                We're not a franchise -- we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.
+              <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+                We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.
               </p>
-            </div>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mb-8">
-              {partnerIncludes.map((item, index) => (
-                <motion.div
-                  key={item.title}
-                  className="bg-white/10 backdrop-blur-sm rounded-kawaii p-6 border border-white/20 text-center"
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.1 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <span className="text-3xl mb-3 block">{item.icon}</span>
-                  <h5 className="font-heading text-base font-bold text-white mb-1">{item.title}</h5>
-                  <p className="text-xs text-white/60 font-body font-semibold leading-snug">{item.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="bg-klawsome-navy rounded-kawaii p-8 md:p-10 flex flex-col md:flex-row gap-6 items-start mb-10 border border-white/10">
-              <span className="text-4xl flex-shrink-0">🏗️</span>
-              <div>
-                <h4 className="font-heading text-xl font-bold text-klawsome-yellow mb-2">Build your own brand. Keep your freedom.</h4>
-                <p className="text-white/60 font-body font-semibold text-sm leading-relaxed">
-                  You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks -- just guidance, support, and winning prizes.
-                </p>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
-                <a href="#contact">Become a Partner →</a>
+              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+                <a href="#contact">Apply for a Hosted Machine</a>
               </Button>
             </div>
           </div>
-        </div>
-      </div>
 
-      {/* ══════ OPPORTUNITY 3: CUSTOM PLUSHIES ══════ */}
-      <div id="plushie">
-        <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
-          <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
-          <div className="container mx-auto relative z-10">
-            <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 03</p>
-            <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Custom Plushie<br /><span className="kawaii-text-gradient">Orders</span></h2>
-            <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery -- from concept to cuddly reality 🧸
-            </p>
-            <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
-              <a href="#contact">Start a Custom Order</a>
-            </Button>
-          </div>
-        </div>
+          <div className="bg-primary py-16 px-4">
+            <div className="container mx-auto max-w-4xl">
+              {/* Profit Banner */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border border-white/20">
+                <div>
+                  <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-2">You earn 10% of every token played.</h3>
+                  <p className="text-white/70 font-body font-semibold text-sm leading-relaxed max-w-md">
+                    We handle the machine, the prizes, the repairs -- everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.
+                  </p>
+                </div>
+                <span className="font-heading text-6xl md:text-7xl font-bold text-klawsome-yellow whitespace-nowrap">🎯 10%</span>
+              </div>
 
-        <div className="bg-primary py-16 px-4">
-          <div className="container mx-auto max-w-4xl">
-            {/* Min order callout */}
-            <div className="bg-white/10 backdrop-blur-sm border-l-4 border-klawsome-yellow rounded-r-kawaii p-5 flex items-center gap-4 mb-10">
-              <span className="text-3xl flex-shrink-0">📦</span>
-              <p className="font-body font-bold text-sm text-white">
-                Minimum order: <span className="text-klawsome-yellow">100 units</span>. Pricing varies by size, complexity, and quantity.
-              </p>
-            </div>
+              {/* Responsibility Cards */}
+              <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">What each side handles</h3>
+              <p className="text-white/60 font-body font-semibold mb-7">A truly hands-off opportunity for your business.</p>
+              <div className="grid md:grid-cols-2 gap-6 mb-12">
+                <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20">
+                  <h4 className="font-heading text-xl font-bold text-white mb-1">Klawsome Takes Care Of</h4>
+                  <p className="text-sm text-white/60 font-bold mb-5">We do the heavy lifting</p>
+                  <ul className="space-y-3">
+                    {klawsomeHandles.map((item) => (
+                      <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-white/80">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-klawsome-yellow/20 text-klawsome-yellow flex items-center justify-center text-xs mt-0.5"><Check className="w-3 h-3" /></span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20">
+                  <h4 className="font-heading text-xl font-bold text-white mb-1">Your Business Provides</h4>
+                  <p className="text-sm text-white/60 font-bold mb-5">That's really it</p>
+                  <ul className="space-y-3">
+                    {businessProvides.map((item) => (
+                      <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-white/80">
+                        <span className="flex-shrink-0 w-5 h-5 rounded-full bg-klawsome-yellow/20 text-klawsome-yellow flex items-center justify-center text-xs mt-0.5"><Check className="w-3 h-3" /></span>
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
 
-            <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">Pricing by complexity</h3>
-            <p className="text-white/60 font-body font-semibold mb-7">All prices are per unit, based on minimum 100-unit orders.</p>
-
-            <div className="grid md:grid-cols-3 gap-5 mb-10">
-              {pricingTiers.map((tier, index) => (
-                <motion.div
-                  key={tier.title}
-                  className={`rounded-kawaii p-8 text-center border ${
-                    tier.variant === 'dark'
-                      ? 'bg-klawsome-navy border-klawsome-yellow/30'
-                      : 'bg-white/10 backdrop-blur-sm border-white/20'
-                  }`}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: index * 0.15 }}
-                  whileHover={{ y: -5, transition: { duration: 0.2 } }}
-                >
-                  <p className="text-xs font-bold tracking-widest uppercase mb-2 text-klawsome-yellow">{tier.label}</p>
-                  <h5 className="font-heading text-lg font-bold mb-2 text-white">{tier.title}</h5>
-                  <p className="font-heading text-4xl font-bold mb-1 text-klawsome-yellow">{tier.price}</p>
-                  <p className="text-sm font-bold mb-3 text-white/60">{tier.per}</p>
-                  <p className="text-sm font-semibold leading-snug text-white/60">{tier.desc}</p>
-                </motion.div>
-              ))}
-            </div>
-
-            {/* How it works - plushie */}
-            <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-10 border border-white/20">
-              <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-6">How it works</h3>
-              <div className="grid md:grid-cols-3 gap-6">
-                {plushieSteps.map((step) => (
-                  <div key={step.title} className="text-center">
-                    <span className="text-3xl mb-2 block">{step.icon}</span>
-                    <h6 className="font-heading text-base font-bold text-white mb-1">{step.title}</h6>
-                    <p className="text-sm text-white/60 font-body font-semibold leading-snug">{step.desc}</p>
-                  </div>
+              {/* Venues */}
+              <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-5">Perfect for high-traffic spots</h3>
+              <div className="flex flex-wrap gap-3 mb-8">
+                {venues.map((v) => (
+                  <span key={v} className="bg-white/10 border border-white/20 rounded-bubble px-5 py-2.5 font-heading font-bold text-sm text-white/80 hover:bg-klawsome-yellow/20 hover:border-klawsome-yellow/40 transition-all cursor-default">
+                    {v}
+                  </span>
                 ))}
               </div>
             </div>
+          </div>
+        </TabsContent>
 
-            <div className="text-center">
+        {/* ══════ TAB 2: PARTNER ══════ */}
+        <TabsContent value="partner" className="mt-0">
+          <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
+            <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">02</span>
+            <div className="container mx-auto relative z-10">
+              <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 02</p>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Become a<br /><span className="kawaii-text-gradient">Klawsome Partner</span></h2>
+              <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+                Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training -- you bring the space and the hustle.
+              </p>
               <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
-                <a href="#contact">Start Your Custom Order →</a>
+                <a href="#contact">Apply to Be a Partner ⭐</a>
               </Button>
             </div>
           </div>
-        </div>
-      </div>
+
+          <div className="bg-primary py-16 px-4">
+            <div className="container mx-auto max-w-4xl">
+              <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-bold text-base px-7 py-3 rounded-bubble mb-6">Everything you need, provided.</span>
+
+              <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-8 border border-white/20">
+                <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-3">Why partner with Klawsome?</h3>
+                <p className="text-white/70 font-body font-semibold leading-relaxed">
+                  We're not a franchise -- we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.
+                </p>
+              </div>
+
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-5 mb-8">
+                {partnerIncludes.map((item, index) => (
+                  <motion.div
+                    key={item.title}
+                    className="bg-white/10 backdrop-blur-sm rounded-kawaii p-6 border border-white/20 text-center"
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.1 }}
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                  >
+                    <span className="text-3xl mb-3 block">{item.icon}</span>
+                    <h5 className="font-heading text-base font-bold text-white mb-1">{item.title}</h5>
+                    <p className="text-xs text-white/60 font-body font-semibold leading-snug">{item.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="bg-klawsome-navy rounded-kawaii p-8 md:p-10 flex flex-col md:flex-row gap-6 items-start mb-10 border border-white/10">
+                <span className="text-4xl flex-shrink-0">🏗️</span>
+                <div>
+                  <h4 className="font-heading text-xl font-bold text-klawsome-yellow mb-2">Build your own brand. Keep your freedom.</h4>
+                  <p className="text-white/60 font-body font-semibold text-sm leading-relaxed">
+                    You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks -- just guidance, support, and winning prizes.
+                  </p>
+                </div>
+              </div>
+
+              <div className="text-center">
+                <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+                  <a href="#contact">Become a Partner →</a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+
+        {/* ══════ TAB 3: CUSTOM PLUSHIES ══════ */}
+        <TabsContent value="plushie" className="mt-0">
+          <div className="relative overflow-hidden bg-klawsome-navy py-20 px-4 text-center">
+            <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
+            <div className="container mx-auto relative z-10">
+              <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 03</p>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Custom Plushie<br /><span className="kawaii-text-gradient">Orders</span></h2>
+              <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
+                Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery -- from concept to cuddly reality 🧸
+              </p>
+              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+                <a href="#contact">Start a Custom Order</a>
+              </Button>
+            </div>
+          </div>
+
+          <div className="bg-primary py-16 px-4">
+            <div className="container mx-auto max-w-4xl">
+              {/* Min order callout */}
+              <div className="bg-white/10 backdrop-blur-sm border-l-4 border-klawsome-yellow rounded-r-kawaii p-5 flex items-center gap-4 mb-10">
+                <span className="text-3xl flex-shrink-0">📦</span>
+                <p className="font-body font-bold text-sm text-white">
+                  Minimum order: <span className="text-klawsome-yellow">100 units</span>. Pricing varies by size, complexity, and quantity.
+                </p>
+              </div>
+
+              <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">Pricing by complexity</h3>
+              <p className="text-white/60 font-body font-semibold mb-7">All prices are per unit, based on minimum 100-unit orders.</p>
+
+              <div className="grid md:grid-cols-3 gap-5 mb-10">
+                {pricingTiers.map((tier, index) => (
+                  <motion.div
+                    key={tier.title}
+                    className={`rounded-kawaii p-8 text-center border ${
+                      tier.variant === 'dark'
+                        ? 'bg-klawsome-navy border-klawsome-yellow/30'
+                        : 'bg-white/10 backdrop-blur-sm border-white/20'
+                    }`}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5, delay: index * 0.15 }}
+                    whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                  >
+                    <p className="text-xs font-bold tracking-widest uppercase mb-2 text-klawsome-yellow">{tier.label}</p>
+                    <h5 className="font-heading text-lg font-bold mb-2 text-white">{tier.title}</h5>
+                    <p className="font-heading text-4xl font-bold mb-1 text-klawsome-yellow">{tier.price}</p>
+                    <p className="text-sm font-bold mb-3 text-white/60">{tier.per}</p>
+                    <p className="text-sm font-semibold leading-snug text-white/60">{tier.desc}</p>
+                  </motion.div>
+                ))}
+              </div>
+
+              {/* How it works - plushie */}
+              <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-10 border border-white/20">
+                <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-6">How it works</h3>
+                <div className="grid md:grid-cols-3 gap-6">
+                  {plushieSteps.map((step) => (
+                    <div key={step.title} className="text-center">
+                      <span className="text-3xl mb-2 block">{step.icon}</span>
+                      <h6 className="font-heading text-base font-bold text-white mb-1">{step.title}</h6>
+                      <p className="text-sm text-white/60 font-body font-semibold leading-snug">{step.desc}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="text-center">
+                <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+                  <a href="#contact">Start Your Custom Order →</a>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* ══════ HOW IT WORKS ══════ */}
       <section className="bg-klawsome-navy py-20 px-4 text-center">
