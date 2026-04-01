@@ -39,7 +39,7 @@ const partnerIncludes = [
   { icon: '🎰', title: 'Machines', desc: 'Full fleet of Klawsome machines customized for your space.' },
   { icon: '🧸', title: 'Prizes', desc: 'Licensed plushies, anime collectibles, and more -- supplied by us.' },
   { icon: '📱', title: 'Tech', desc: 'Remote monitoring, cashless payments, and real-time analytics.' },
-  { icon: '🎓', title: 'Training', desc: 'Full onboarding so you're confident from day one.' },
+  { icon: '🎓', title: 'Training', desc: "Full onboarding so you're confident from day one." },
   { icon: '📣', title: 'Marketing', desc: 'Brand assets, social media support, and launch help.' },
   { icon: '🔧', title: 'Support', desc: 'Ongoing maintenance support and prize restocking guidance.' },
 ];
