@@ -78,7 +78,7 @@ const KawaiiReviews = () => {
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col"
+                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col glow-hover glow-pink"
                 >
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
