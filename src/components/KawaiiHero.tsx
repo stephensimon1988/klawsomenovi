@@ -14,10 +14,10 @@ const KawaiiHero = () => {
       <div className="absolute inset-0 bg-black/50" />
 
       <div className="relative z-10 w-full px-4">
-        <div className="grid md:grid-cols-2 gap-8 items-center">
+        <div className="flex flex-col md:flex-row gap-8 items-center">
           {/* Left — Logo */}
           <motion.div
-            className="flex justify-center md:justify-end md:pr-8"
+            className="flex justify-center md:justify-start shrink-0"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
