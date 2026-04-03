@@ -67,7 +67,7 @@ const KawaiiProducts = () => {
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
-                className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group"
+                className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group glow-hover glow-blue"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
