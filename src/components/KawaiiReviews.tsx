@@ -107,7 +107,7 @@ const KawaiiReviews = () => {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30 glow-hover glow-pink"
           >
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
