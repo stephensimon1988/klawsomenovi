@@ -69,16 +69,16 @@ const KawaiiReviews = () => {
         </motion.div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden px-4">
             <motion.div
-              className="flex gap-6"
-              animate={{ x: `-${currentIndex * (100 / visibleCount + 2)}%` }}
+              className="flex gap-8"
+              animate={{ x: `-${currentIndex * (100 / visibleCount + 2.5)}%` }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col glow-hover glow-pink"
+                  className="min-w-[calc(33.333%-1.5rem)] bg-background border border-border rounded-kawaii p-8 flex flex-col glow-hover glow-pink"
                 >
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
