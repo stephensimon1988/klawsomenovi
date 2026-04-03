@@ -118,4 +118,43 @@
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
+
+  /* Glow pulse ring on hover for all interactive elements */
+  .glow-hover {
+    position: relative;
+    transition: box-shadow 0.3s ease, transform 0.2s ease;
+  }
+
+  .glow-hover:hover {
+    box-shadow: 0 0 15px 4px hsl(var(--primary) / 0.45),
+                0 0 30px 8px hsl(var(--primary) / 0.2);
+    transform: scale(1.03);
+  }
+
+  .glow-hover::after {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    border-radius: inherit;
+    opacity: 0;
+    background: transparent;
+    box-shadow: 0 0 20px 6px hsl(var(--primary) / 0.35);
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .glow-hover:hover::after {
+    opacity: 1;
+    animation: glow-pulse 1.5s ease-in-out infinite;
+  }
+}
+
+@keyframes glow-pulse {
+  0%, 100% {
+    box-shadow: 0 0 20px 6px hsl(var(--primary) / 0.35);
+  }
+  50% {
+    box-shadow: 0 0 30px 10px hsl(var(--primary) / 0.5);
+  }
 }
