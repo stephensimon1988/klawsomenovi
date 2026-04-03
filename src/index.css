@@ -82,7 +82,16 @@
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
-}
+  }
+
+  /* Auto-apply glow hover to all interactive elements */
+  button,
+  a,
+  [role="button"],
+  input[type="submit"],
+  .interactive {
+    @apply glow-hover;
+  }
 
 @layer utilities {
   .kawaii-gradient {
