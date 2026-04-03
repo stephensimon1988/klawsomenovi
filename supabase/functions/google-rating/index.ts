@@ -5,9 +5,6 @@ const corsHeaders = {
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
 };
 
-// Klawsome's Google Place ID
-const PLACE_ID = "ChIJH2diAOqvJIgRrC5PMBUy8Pk";
-
 serve(async (req) => {
   if (req.method === "OPTIONS") {
     return new Response(null, { headers: corsHeaders });
@@ -16,39 +13,50 @@ serve(async (req) => {
   try {
     const apiKey = Deno.env.get("GOOGLE_MAPS_API_KEY");
     if (!apiKey) {
-      // Return fallback when no API key configured
       return new Response(
         JSON.stringify({ rating: 4.9, reviewCount: null, source: "fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    // Use Places API (New) to get rating
-    const url = `https://places.googleapis.com/v1/places/${PLACE_ID}?fields=rating,userRatingCount&key=${apiKey}`;
-    const res = await fetch(url, {
-      headers: { "X-Goog-FieldMask": "rating,userRatingCount" },
-    });
+    // Use Places API (New) text search to find Klawsome
+    const searchRes = await fetch(
+      "https://places.googleapis.com/v1/places:searchText",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-Goog-Api-Key": apiKey,
+          "X-Goog-FieldMask": "places.rating,places.userRatingCount",
+        },
+        body: JSON.stringify({
+          textQuery: "Klawsome 42768 Grand River Ave Novi MI",
+        }),
+      }
+    );
 
-    if (!res.ok) {
-      console.error("Google Places API error:", await res.text());
+    if (!searchRes.ok) {
+      console.error("Google Places API error:", await searchRes.text());
       return new Response(
         JSON.stringify({ rating: 4.9, reviewCount: null, source: "fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
       );
     }
 
-    const data = await res.json();
+    const data = await searchRes.json();
+    const place = data.places?.[0];
+
     return new Response(
       JSON.stringify({
-        rating: data.rating || 4.9,
-        reviewCount: data.userRatingCount || null,
-        source: "google",
+        rating: place?.rating || 4.9,
+        reviewCount: place?.userRatingCount || null,
+        source: place ? "google" : "fallback",
       }),
       {
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
-          "Cache-Control": "public, max-age=86400", // Cache for 24h
+          "Cache-Control": "public, max-age=86400",
         },
       }
     );
