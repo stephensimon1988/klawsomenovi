@@ -13,7 +13,7 @@ const KawaiiHero = () => {
       />
       <div className="absolute inset-0 bg-black/50" />
 
-      <div className="container relative z-10 px-4 mx-auto">
+      <div className="relative z-10 w-full px-4">
         <div className="grid md:grid-cols-2 gap-8 items-center">
           {/* Left — Logo */}
           <motion.div
