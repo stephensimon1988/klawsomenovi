@@ -51,10 +51,10 @@ const KawaiiVisit = () => {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline" className="rounded-full font-heading border-foreground text-foreground hover:bg-foreground hover:text-background">
+              <Button variant="outline" className="rounded-full font-heading border-foreground text-foreground hover:bg-foreground hover:text-background glow-hover glow-pink">
                 Directions
               </Button>
-              <Button variant="ghost" className="rounded-full font-heading text-foreground underline">
+              <Button variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
                 Call →
               </Button>
             </div>

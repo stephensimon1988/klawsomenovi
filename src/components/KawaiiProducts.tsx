@@ -67,7 +67,7 @@ const KawaiiProducts = () => {
             {products.map((product, index) => (
               <motion.div
                 key={product.id}
-                className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group"
+                className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group glow-hover glow-blue"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -92,7 +92,7 @@ const KawaiiProducts = () => {
                   <p className="text-white/50 text-sm font-body mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-heading font-bold text-xl text-klawsome-yellow">{product.price}</span>
-                    <Button size="sm" className="rounded-bubble font-heading text-sm bg-primary hover:bg-primary/90 text-white">
+                    <Button size="sm" className="rounded-bubble font-heading text-sm bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
                       Buy
                     </Button>
                   </div>

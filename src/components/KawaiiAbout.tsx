@@ -68,10 +68,10 @@ const KawaiiAbout = () => {
           viewport={{ once: true }}
           transition={{ delay: 0.4 }}
         >
-          <Button className="rounded-full px-8 font-heading font-bold bg-foreground text-background hover:bg-foreground/90">
+          <Button className="rounded-full px-8 font-heading font-bold bg-foreground text-background hover:bg-foreground/90 glow-hover glow-pink">
             Play
           </Button>
-          <Button variant="ghost" className="rounded-full font-heading text-foreground underline">
+          <Button variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
             Visit →
           </Button>
         </motion.div>

@@ -78,7 +78,7 @@ const KawaiiReviews = () => {
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col"
+                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col glow-hover glow-pink"
                 >
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
@@ -107,14 +107,14 @@ const KawaiiReviews = () => {
           <button
             onClick={prev}
             disabled={currentIndex === 0}
-            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30"
+            className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30 glow-hover glow-pink"
           >
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
           <button
             onClick={next}
             disabled={currentIndex >= maxIndex}
-            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30"
+            className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30 glow-hover glow-pink"
           >
             <ChevronRight className="w-5 h-5 text-foreground" />
           </button>

@@ -48,7 +48,7 @@ const KawaiiHero = () => {
               Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes. Open Tuesday through Sunday, 11 a.m. to 9 p.m. at Sakura Novi in Michigan.
             </p>
 
-            <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-4 max-w-sm mb-6 border border-white/20 mx-auto md:mx-0">
+            <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-4 max-w-sm mb-6 border border-white/20 mx-auto md:mx-0 glow-hover glow-blue">
               <p className="text-white font-heading font-semibold text-sm">Spring break hours:</p>
               <p className="text-white/70 font-body text-sm">Monday March 30, 11 a.m. to 9 p.m.</p>
               <p className="text-white/70 font-body text-sm">Closed Easter Sunday April 5</p>
@@ -57,10 +57,10 @@ const KawaiiHero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center md:items-start gap-3">
-              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
                 Play
               </Button>
-              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-klawsome-navy text-white hover:bg-klawsome-navy/90 hover:scale-105 transition-all duration-300">
+              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-klawsome-navy text-white hover:bg-klawsome-navy/90 glow-hover glow-blue">
                 Reserve
               </Button>
             </div>
