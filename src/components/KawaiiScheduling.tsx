@@ -251,7 +251,7 @@ const KawaiiScheduling = () => {
                 <motion.button
                   key={type.id}
                   onClick={() => setSelectedType(type)}
-                  className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 text-left hover:border-white/40 transition-colors overflow-hidden flex flex-col"
+                  className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 text-left hover:border-white/40 transition-colors overflow-hidden flex flex-col glow-hover glow-coral"
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
