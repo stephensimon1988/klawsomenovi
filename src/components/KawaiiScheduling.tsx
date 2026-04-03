@@ -204,7 +204,7 @@ const KawaiiScheduling = () => {
             <p className="text-white/60 font-body text-sm mb-6">
               A confirmation will be sent to <strong>{formData.email}</strong>
             </p>
-            <Button onClick={resetAll} className="rounded-bubble font-heading bg-klawsome-navy hover:bg-klawsome-navy/90 text-white">
+            <Button onClick={resetAll} className="rounded-bubble font-heading bg-klawsome-navy hover:bg-klawsome-navy/90 text-white glow-hover glow-blue">
               Book Another ✨
             </Button>
           </motion.div>
