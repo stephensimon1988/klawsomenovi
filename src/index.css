@@ -127,19 +127,19 @@
   }
 
   .glow-hover:hover {
-    box-shadow: 0 0 15px 4px hsl(var(--glow-color) / 0.45),
-                0 0 30px 8px hsl(var(--glow-color) / 0.2);
-    transform: scale(1.03);
+    box-shadow: 0 0 10px 2px hsl(var(--glow-color) / 0.3),
+                0 0 20px 4px hsl(var(--glow-color) / 0.12);
+    transform: scale(1.02);
   }
 
   .glow-hover::after {
     content: '';
     position: absolute;
-    inset: -4px;
+    inset: -3px;
     border-radius: inherit;
     opacity: 0;
     background: transparent;
-    box-shadow: 0 0 20px 6px hsl(var(--glow-color) / 0.35);
+    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.2);
     transition: opacity 0.3s ease;
     pointer-events: none;
     z-index: -1;
@@ -159,9 +159,9 @@
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 20px 6px hsl(var(--glow-color) / 0.35);
+    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.2);
   }
   50% {
-    box-shadow: 0 0 30px 10px hsl(var(--glow-color) / 0.5);
+    box-shadow: 0 0 18px 5px hsl(var(--glow-color) / 0.3);
   }
 }

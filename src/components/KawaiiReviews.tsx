@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
 const reviews = [
   {
@@ -42,11 +43,32 @@ const reviews = [
 
 const KawaiiReviews = () => {
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [rating, setRating] = useState(4.9);
+  const [reviewCount, setReviewCount] = useState<number | null>(null);
   const visibleCount = 3;
   const maxIndex = Math.max(0, reviews.length - visibleCount);
 
   const next = () => setCurrentIndex((i) => Math.min(i + 1, maxIndex));
   const prev = () => setCurrentIndex((i) => Math.max(i - 1, 0));
+
+  useEffect(() => {
+    const fetchRating = async () => {
+      try {
+        const { data, error } = await supabase.functions.invoke('google-rating');
+        if (!error && data) {
+          if (data.rating) setRating(data.rating);
+          if (data.reviewCount) setReviewCount(data.reviewCount);
+        }
+      } catch (e) {
+        console.warn('Could not fetch Google rating:', e);
+      }
+    };
+    fetchRating();
+  }, []);
+
+  const fullStars = Math.floor(rating);
+  const hasHalf = rating - fullStars >= 0.25 && rating - fullStars < 0.75;
+  const displayStars = hasHalf ? fullStars + 1 : (rating - fullStars >= 0.75 ? fullStars + 1 : fullStars);
 
   return (
     <section className="py-20 px-4 bg-background">
@@ -62,23 +84,29 @@ const KawaiiReviews = () => {
           </h2>
           <div className="flex items-center justify-center gap-1 mb-1">
             {[...Array(5)].map((_, i) => (
-              <Star key={i} className="w-5 h-5 text-accent fill-accent" />
+              <Star
+                key={i}
+                className={`w-5 h-5 ${i < displayStars ? 'text-accent fill-accent' : 'text-border'}`}
+              />
             ))}
           </div>
-          <p className="text-muted-foreground font-body">Rated 4.9 out of 5 stars</p>
+          <p className="text-muted-foreground font-body">
+            Rated {rating} out of 5 stars
+            {reviewCount && ` · ${reviewCount} reviews`}
+          </p>
         </motion.div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="overflow-hidden">
+          <div className="overflow-hidden px-4">
             <motion.div
-              className="flex gap-6"
-              animate={{ x: `-${currentIndex * (100 / visibleCount + 2)}%` }}
+              className="flex gap-8"
+              animate={{ x: `-${currentIndex * (100 / visibleCount + 2.5)}%` }}
               transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             >
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-kawaii p-6 flex flex-col glow-hover glow-pink"
+                  className="min-w-[calc(33.333%-1.5rem)] bg-background border border-border rounded-kawaii p-8 flex flex-col glow-hover glow-pink"
                 >
                   <div className="flex items-center gap-1 mb-3">
                     {[...Array(5)].map((_, i) => (
