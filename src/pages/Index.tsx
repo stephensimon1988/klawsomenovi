@@ -1,18 +1,28 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiHero from '@/components/KawaiiHero';
+import KawaiiVisit from '@/components/KawaiiVisit';
 import KawaiiAbout from '@/components/KawaiiAbout';
-import KawaiiProducts from '@/components/KawaiiProducts';
-import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiTokenPrices from '@/components/KawaiiTokenPrices';
+import KawaiiReviews from '@/components/KawaiiReviews';
+import KawaiiNews from '@/components/KawaiiNews';
+import KawaiiGiftCards from '@/components/KawaiiGiftCards';
+import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiScheduling from '@/components/KawaiiScheduling';
+import KawaiiFooter from '@/components/KawaiiFooter';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
       <KawaiiHero />
+      <KawaiiVisit />
       <KawaiiAbout />
-      <KawaiiProducts />
+      <KawaiiTokenPrices />
+      <KawaiiReviews />
+      <KawaiiNews />
+      <KawaiiGiftCards />
       <KawaiiScheduling />
+      <KawaiiStory />
       <KawaiiFooter />
     </div>
   );
