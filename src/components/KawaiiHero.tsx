@@ -17,7 +17,7 @@ const KawaiiHero = () => {
         <div className="grid md:grid-cols-2 gap-8 items-center w-full">
           {/* Left — Logo */}
           <motion.div
-            className="flex justify-center md:justify-start"
+            className="flex justify-center"
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.6 }}
@@ -25,7 +25,7 @@ const KawaiiHero = () => {
             <img
               src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f907dbc8-8a5c-43a3-8224-1729d43956bb/CircularLogo_Klawsome_RGB.png"
               alt="Klawsome Logo"
-              className="w-56 h-56 md:w-72 md:h-72 lg:w-80 lg:h-80 object-contain"
+              className="w-full h-auto object-contain"
             />
           </motion.div>
 
