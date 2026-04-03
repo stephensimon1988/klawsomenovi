@@ -97,7 +97,7 @@ const KawaiiReviews = () => {
         </motion.div>
 
         <div className="relative max-w-5xl mx-auto">
-          <div className="overflow-hidden px-4">
+          <div className="overflow-hidden px-6 py-6">
             <motion.div
               className="flex gap-8"
               animate={{ x: `-${currentIndex * (100 / visibleCount + 2.5)}%` }}
