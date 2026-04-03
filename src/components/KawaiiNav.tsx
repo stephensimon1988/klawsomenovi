@@ -63,7 +63,7 @@ const KawaiiNav = () => {
                   {link.label}
                 </a>
               ))}
-              <Button size="sm" className="rounded-full px-5 font-heading font-bold bg-primary hover:bg-primary/90 text-white w-full">
+              <Button size="sm" className="rounded-full px-5 font-heading font-bold bg-primary hover:bg-primary/90 text-white w-full glow-hover glow-coral">
                 Book Your Visit
               </Button>
             </div>

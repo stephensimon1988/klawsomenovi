@@ -46,7 +46,7 @@ const KawaiiNews = () => {
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-kawaii overflow-hidden border border-border hover:shadow-lg transition-shadow"
+              className="group block rounded-kawaii overflow-hidden border border-border hover:shadow-lg transition-shadow glow-hover glow-pink"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}

@@ -60,7 +60,7 @@ const KawaiiTokenPrices = () => {
                 key={tier.price}
                 className={`grid grid-cols-3 gap-px text-center py-3 border-t border-white/10 font-body ${
                   tier.highlight
-                    ? 'bg-klawsome-yellow/20 border border-klawsome-yellow/40 rounded-lg text-klawsome-yellow font-bold'
+                    ? 'bg-klawsome-yellow/20 border border-klawsome-yellow/40 rounded-lg text-klawsome-yellow font-bold glow-hover glow-yellow'
                     : 'text-white'
                 }`}
                 initial={{ opacity: 0, x: 20 }}

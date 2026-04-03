@@ -22,7 +22,7 @@ const KawaiiGiftCards = () => {
             </p>
             <Button
               asChild
-              className="rounded-full px-8 font-heading font-bold bg-primary hover:bg-primary/90 text-white"
+              className="rounded-full px-8 font-heading font-bold bg-primary hover:bg-primary/90 text-white glow-hover glow-coral"
             >
               <a href="https://app.squareup.com/gift/ML1R35ZH9VKRW/order" target="_blank" rel="noopener noreferrer">
                 Purchase
