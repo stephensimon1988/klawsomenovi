@@ -1,8 +1,8 @@
-import { motion } from 'framer-motion';
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
+import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 
 interface SquareProduct {
   id: string;
@@ -26,23 +26,20 @@ const KawaiiProducts = () => {
     queryFn: fetchProducts,
   });
 
+  const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp', distance: 60 });
+  const gridRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.1, distance: 50 });
+
   return (
     <section id="products" className="py-20 px-4 bg-klawsome-navy">
       <div className="container mx-auto">
-        <motion.div
-          className="text-center mb-16"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.6 }}
-        >
+        <div ref={headerRef} className="text-center mb-16" style={{ opacity: 0 }}>
           <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4 text-white">
             <span className="kawaii-text-gradient">Four simple steps</span> to winning big
           </h2>
           <p className="text-white/60 text-lg max-w-2xl mx-auto font-body">
             Grab tokens for the klaw machines! More tokens = more bonus coins! ✨
           </p>
-        </motion.div>
+        </div>
 
         {isLoading && (
           <div className="flex justify-center items-center py-20">
@@ -63,30 +60,20 @@ const KawaiiProducts = () => {
         )}
 
         {products && products.length > 0 && (
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
-            {products.map((product, index) => (
-              <motion.div
+          <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
+            {products.map((product) => (
+              <div
                 key={product.id}
                 className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group glow-hover glow-blue"
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                whileHover={{ y: -5, transition: { duration: 0.2 } }}
+                style={{ opacity: 0 }}
               >
                 <div className="h-40 bg-gradient-to-br from-primary/30 via-klawsome-yellow/20 to-klawsome-baby-pink/20 flex items-center justify-center overflow-hidden">
                   {product.imageUrl ? (
-                    <img
-                      src={product.imageUrl}
-                      alt={product.name}
-                      className="w-full h-full object-cover"
-                      loading="lazy"
-                    />
+                    <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
                     <div className="text-5xl">🪙</div>
                   )}
                 </div>
-
                 <div className="p-5">
                   <h3 className="font-heading font-bold text-lg text-white mb-1">{product.name}</h3>
                   <p className="text-white/50 text-sm font-body mb-3 line-clamp-2">{product.description}</p>
@@ -97,7 +84,7 @@ const KawaiiProducts = () => {
                     </Button>
                   </div>
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
         )}

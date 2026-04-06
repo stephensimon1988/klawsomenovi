@@ -1,16 +1,18 @@
-import { motion } from 'framer-motion';
 import { Button } from './ui/button';
+import { useGsapScroll } from '@/hooks/useGsapScroll';
+import LottieAccent from './LottieAccent';
 
 const KawaiiGiftCards = () => {
+  const textRef = useGsapScroll<HTMLDivElement>({ type: 'slideLeft', distance: 80, duration: 1 });
+  const imagesRef = useGsapScroll<HTMLDivElement>({ type: 'slideRight', distance: 80, duration: 1, delay: 0.15 });
+
   return (
-    <section className="py-20 px-4 bg-kawaii-lavender/40">
+    <section className="py-20 px-4 bg-kawaii-lavender/40 relative overflow-hidden">
+      <LottieAccent type="heart" className="absolute top-10 right-10 opacity-30" size={70} />
+
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, x: -30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <div ref={textRef} style={{ opacity: 0 }}>
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
               Buy a Klawsome gift card here!
             </h2>
@@ -28,14 +30,9 @@ const KawaiiGiftCards = () => {
                 Purchase
               </a>
             </Button>
-          </motion.div>
+          </div>
 
-          <motion.div
-            className="grid grid-cols-2 gap-4"
-            initial={{ opacity: 0, x: 30 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-          >
+          <div ref={imagesRef} className="grid grid-cols-2 gap-4" style={{ opacity: 0 }}>
             <img
               src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/53ec5cfa-3e70-4278-95c0-3ab584efdb9a/CVday+gift+cards.png"
               alt="Valentine's Day Klawsome gift card"
@@ -48,7 +45,7 @@ const KawaiiGiftCards = () => {
               className="rounded-kawaii w-full"
               loading="lazy"
             />
-          </motion.div>
+          </div>
         </div>
       </div>
     </section>
