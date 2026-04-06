@@ -204,9 +204,9 @@
 
     "@playwright/test": ["@playwright/test@1.59.1", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@playwright/test/-/test-1.59.1.tgz", { "dependencies": { "playwright": "1.59.1" }, "bin": { "playwright": "cli.js" } }, "sha512-PG6q63nQg5c9rIi4/Z5lR5IVF7yU5MqmKaPOe0HSc0O2cX1fPi96sUQu5j7eo4gKCkB2AnNGoWt7y4/Xx3Kcqg=="],
 
-    "@prismicio/client": ["@prismicio/client@7.21.7", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@prismicio/client/-/client-7.21.7.tgz", { "dependencies": { "imgix-url-builder": "^0.0.6" } }, "sha512-gMaRiVTgArtNTkNQctUVYmi/YMqFOj48vWT1EluL9OVgh+sKKzOgzD1tuOX/Iyde2QPUfcqj7tH+3YQCvosvIw=="],
+    "@prismicio/client": ["@prismicio/client@7.21.8", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@prismicio/client/-/client-7.21.8.tgz", { "dependencies": { "imgix-url-builder": "^0.0.6" } }, "sha512-HFXrV/XdbVy/AL7V5K/976gr4SEa7WA7xuZuSNuseLK5VSl0DlMSgy7GTUk+ngjz9QvN0Xu3nxWzUGFxnD8RIA=="],
 
-    "@prismicio/react": ["@prismicio/react@3.4.0", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@prismicio/react/-/react-3.4.0.tgz", { "dependencies": { "esm-env": "^1.2.2" }, "peerDependencies": { "@prismicio/client": "^7", "react": "^18 || ^19" } }, "sha512-OYLAkIK2mYPTxV45cYfreZnvb+nimX92QhlRKdjAHyz3pPGLUWjFrJKMk3meaCIRk/Q1STCgezkF30XHEbWBNw=="],
+    "@prismicio/react": ["@prismicio/react@3.4.1", "https://europe-west4-npm.pkg.dev/lovable-core-prod/sandbox-npm-cache/@prismicio/react/-/react-3.4.1.tgz", { "dependencies": { "esm-env": "^1.2.2" }, "peerDependencies": { "@prismicio/client": "^7", "react": "^18 || ^19" } }, "sha512-OR/F1+B6tlPMGm5YCE7Ir0FXXfobyQDQvNGl22TUYVbyCMc7qyY4VtPIxyEbKJBQNRRM22UYc8a4THS49Fwetg=="],
 
     "@radix-ui/number": ["@radix-ui/number@1.1.1", "", {}, "sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g=="],
 
