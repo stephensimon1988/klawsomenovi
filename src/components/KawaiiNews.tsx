@@ -1,4 +1,4 @@
-import { motion } from 'framer-motion';
+import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 
 const articles = [
   {
@@ -19,15 +19,13 @@ const articles = [
 ];
 
 const KawaiiNews = () => {
+  const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp' });
+  const gridRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.15, distance: 50 });
+
   return (
     <section className="py-20 px-4 bg-background">
       <div className="container mx-auto">
-        <motion.div
-          className="text-center mb-6"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-        >
+        <div ref={headerRef} className="text-center mb-6" style={{ opacity: 0 }}>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">
             In The News
           </h2>
@@ -37,20 +35,17 @@ const KawaiiNews = () => {
             className="max-w-md mx-auto w-full mt-4 mb-8"
             loading="lazy"
           />
-        </motion.div>
+        </div>
 
-        <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {articles.map((article, index) => (
-            <motion.a
-              key={index}
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+          {articles.map((article) => (
+            <a
+              key={article.url}
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
               className="group block rounded-kawaii overflow-hidden border border-border hover:shadow-lg transition-shadow glow-hover glow-pink"
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ delay: index * 0.1 }}
+              style={{ opacity: 0 }}
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
@@ -64,7 +59,7 @@ const KawaiiNews = () => {
                 <h3 className="font-heading font-bold text-foreground text-sm leading-snug mb-2">{article.title}</h3>
                 <span className="text-primary text-sm font-heading font-semibold">Read Here →</span>
               </div>
-            </motion.a>
+            </a>
           ))}
         </div>
       </div>
