@@ -23,7 +23,7 @@ const KawaiiNews = () => {
   const gridRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.15, distance: 50 });
 
   return (
-    <section className="py-20 px-4 bg-background">
+    <section id="news" className="py-20 px-4 bg-background">
       <div className="container mx-auto">
         <div ref={headerRef} className="text-center mb-6" style={{ opacity: 0 }}>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">

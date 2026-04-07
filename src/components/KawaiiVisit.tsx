@@ -8,7 +8,7 @@ const KawaiiVisit = () => {
   const iconsRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.15 });
 
   return (
-    <section className="py-20 px-4 bg-background">
+    <section id="visit" className="py-20 px-4 bg-background">
       <div className="container mx-auto">
         <div className="grid md:grid-cols-2 gap-12 items-center max-w-5xl mx-auto">
           {/* Image — slides in from left with parallax feel */}
@@ -45,11 +45,11 @@ const KawaiiVisit = () => {
             </div>
 
             <div className="flex gap-3">
-              <Button variant="outline" className="rounded-full font-heading border-foreground text-foreground hover:bg-foreground hover:text-background glow-hover glow-pink">
-                Directions
+              <Button asChild variant="outline" className="rounded-full font-heading border-foreground text-foreground hover:bg-foreground hover:text-background glow-hover glow-pink">
+                <a href="https://www.google.com/maps/place/41768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375" target="_blank" rel="noopener noreferrer">Directions</a>
               </Button>
-              <Button variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
-                Call →
+              <Button asChild variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
+                <a href="tel:+12489196529">Call →</a>
               </Button>
             </div>
           </div>

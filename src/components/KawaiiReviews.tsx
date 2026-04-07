@@ -46,7 +46,7 @@ const KawaiiReviews = () => {
   const displayStars = hasHalf ? fullStars + 1 : (rating - fullStars >= 0.75 ? fullStars + 1 : fullStars);
 
   return (
-    <section className="py-20 px-4 bg-background">
+    <section id="reviews" className="py-20 px-4 bg-background">
       <div className="container mx-auto">
         <div ref={headerRef} className="text-center mb-12" style={{ opacity: 0 }}>
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">

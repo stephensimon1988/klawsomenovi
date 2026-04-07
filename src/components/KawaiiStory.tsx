@@ -5,7 +5,7 @@ const KawaiiStory = () => {
   const ref = useGsapScroll<HTMLDivElement>({ type: 'scaleIn', duration: 1 });
 
   return (
-    <section className="py-20 px-4 bg-background relative overflow-hidden">
+    <section id="story" className="py-20 px-4 bg-background relative overflow-hidden">
       <LottieAccent type="sparkle" className="absolute bottom-6 right-10 opacity-25" size={90} />
 
       <div className="container mx-auto max-w-3xl">

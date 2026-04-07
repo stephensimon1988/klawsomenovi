@@ -48,7 +48,7 @@ const KawaiiHero = () => {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative min-h-[85vh] flex items-center overflow-hidden">
+    <section id="hero" ref={sectionRef} className="relative min-h-[85vh] flex items-center overflow-hidden pt-16">
       {/* Background image with parallax */}
       <div
         ref={bgRef}
@@ -99,10 +99,10 @@ const KawaiiHero = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row items-center md:items-start gap-3" style={{ opacity: 0 }}>
-              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
+              <Button size="lg" onClick={() => document.getElementById('tokens')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
                 Play
               </Button>
-              <Button size="lg" className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-klawsome-navy text-white hover:bg-klawsome-navy/90 glow-hover glow-blue">
+              <Button size="lg" onClick={() => document.getElementById('scheduling')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full px-10 py-6 text-lg font-heading font-bold bg-klawsome-navy text-white hover:bg-klawsome-navy/90 glow-hover glow-blue">
                 Reserve
               </Button>
             </div>
