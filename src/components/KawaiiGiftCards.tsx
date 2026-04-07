@@ -7,7 +7,7 @@ const KawaiiGiftCards = () => {
   const imagesRef = useGsapScroll<HTMLDivElement>({ type: 'slideRight', distance: 80, duration: 1, delay: 0.15 });
 
   return (
-    <section className="py-20 px-4 bg-kawaii-lavender/40 relative overflow-hidden">
+    <section id="giftcards" className="py-20 px-4 bg-kawaii-lavender/40 relative overflow-hidden">
       <LottieAccent type="heart" className="absolute top-10 right-10 opacity-30" size={70} />
 
       <div className="container mx-auto">

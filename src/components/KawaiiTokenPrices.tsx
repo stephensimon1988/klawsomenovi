@@ -17,7 +17,7 @@ const KawaiiTokenPrices = () => {
   const catRef = useGsapScroll<HTMLImageElement>({ type: 'parallax', scrub: 1, parallaxSpeed: 0.2, start: 'top bottom', end: 'bottom top' });
 
   return (
-    <section id="products" className="py-20 px-4 bg-klawsome-navy relative overflow-hidden">
+    <section id="tokens" className="py-20 px-4 bg-klawsome-navy relative overflow-hidden">
       {/* Decorative cat with parallax */}
       <img
         ref={catRef}
