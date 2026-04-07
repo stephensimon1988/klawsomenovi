@@ -57,10 +57,10 @@ const KawaiiAbout = () => {
         </div>
 
         <div ref={ctaRef} className="flex items-center justify-center gap-4 mt-12" style={{ opacity: 0 }}>
-          <Button className="rounded-full px-8 font-heading font-bold bg-foreground text-background hover:bg-foreground/90 glow-hover glow-pink">
+          <Button onClick={() => document.getElementById('tokens')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full px-8 font-heading font-bold bg-foreground text-background hover:bg-foreground/90 glow-hover glow-pink">
             Play
           </Button>
-          <Button variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
+          <Button variant="ghost" onClick={() => document.getElementById('visit')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
             Visit →
           </Button>
         </div>
