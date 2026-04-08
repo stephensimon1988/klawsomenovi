@@ -28,7 +28,7 @@ const KawaiiVisit = () => {
               Find us at Sakura Novi in Novi, Michigan
             </h2>
             <p className="text-muted-foreground font-body mb-8 leading-relaxed">
-              Klawsome sits at 41768 Grand River Avenue, Suite C-140, Novi, MI 48375. Open Tuesday through Sunday, 11 a.m. to 9 p.m., closed Mondays.
+              Klawsome sits at 42768 Grand River Avenue, Suite C-140, Novi, MI 48375. Open Tuesday through Sunday, 11 a.m. to 9 p.m., closed Mondays.
             </p>
 
             <div ref={iconsRef} className="grid grid-cols-2 gap-6 mb-8">
@@ -46,10 +46,10 @@ const KawaiiVisit = () => {
 
             <div className="flex gap-3">
               <Button asChild variant="outline" className="rounded-full font-heading border-foreground text-foreground hover:bg-foreground hover:text-background glow-hover glow-pink">
-                <a href="https://www.google.com/maps/place/41768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375" target="_blank" rel="noopener noreferrer">Directions</a>
+                <a href="https://www.google.com/maps/place/42768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375" target="_blank" rel="noopener noreferrer">Directions</a>
               </Button>
               <Button asChild variant="ghost" className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
-                <a href="tel:+12489196529">Call →</a>
+                <a href="tel:+12489384093">Call →</a>
               </Button>
             </div>
           </div>
