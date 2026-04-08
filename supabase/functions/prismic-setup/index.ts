@@ -737,7 +737,7 @@ serve(async (req) => {
         // Try insert first, then update if it exists
         let res = await fetch(`${CUSTOM_TYPES_API}/customtypes/insert`, {
           method: "POST",
-          headers,
+          headers: typesHeaders,
           body: JSON.stringify(payload),
         });
 
@@ -745,7 +745,7 @@ serve(async (req) => {
           // Already exists, update it
           res = await fetch(`${CUSTOM_TYPES_API}/customtypes/update`, {
             method: "POST",
-            headers,
+            headers: typesHeaders,
             body: JSON.stringify(payload),
           });
         }
