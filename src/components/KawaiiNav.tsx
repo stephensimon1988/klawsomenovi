@@ -7,10 +7,10 @@ import { Button } from './ui/button';
 
 const navLinks = [
   { label: 'Home', href: '#hero' },
-  { label: 'About us', href: '#about' },
-  { label: 'Birthdays', href: '#scheduling' },
-  { label: 'Rentals', href: '/business' },
-  { label: 'Contact Us', href: '#contact' },
+  { label: 'Birthdays', href: '/birthdays' },
+  { label: 'Gift Cards', href: '#giftcards' },
+  { label: 'Careers', href: '/careers' },
+  { label: 'News', href: '/news' },
 ];
 
 const smoothScroll = (id: string) => {
