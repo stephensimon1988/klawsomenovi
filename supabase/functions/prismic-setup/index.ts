@@ -696,6 +696,7 @@ serve(async (req) => {
 
   try {
     const accessToken = Deno.env.get("PRISMIC_ACCESS_TOKEN");
+    const customTypesToken = Deno.env.get("PRISMIC_CUSTOM_TYPES_TOKEN") || accessToken;
     const repoName = Deno.env.get("PRISMIC_REPOSITORY_NAME");
 
     if (!accessToken || !repoName) {
@@ -708,7 +709,13 @@ serve(async (req) => {
     const url = new URL(req.url);
     const action = url.searchParams.get("action") || "all";
 
-    const headers = {
+    const typesHeaders = {
+      Authorization: `Bearer ${customTypesToken}`,
+      repository: repoName,
+      "Content-Type": "application/json",
+    };
+
+    const migrationHeaders = {
       Authorization: `Bearer ${accessToken}`,
       repository: repoName,
       "Content-Type": "application/json",
@@ -730,7 +737,7 @@ serve(async (req) => {
         // Try insert first, then update if it exists
         let res = await fetch(`${CUSTOM_TYPES_API}/customtypes/insert`, {
           method: "POST",
-          headers,
+          headers: typesHeaders,
           body: JSON.stringify(payload),
         });
 
@@ -738,7 +745,7 @@ serve(async (req) => {
           // Already exists, update it
           res = await fetch(`${CUSTOM_TYPES_API}/customtypes/update`, {
             method: "POST",
-            headers,
+            headers: typesHeaders,
             body: JSON.stringify(payload),
           });
         }
@@ -762,7 +769,7 @@ serve(async (req) => {
 
         const res = await fetch(`${MIGRATION_API}/documents`, {
           method: "POST",
-          headers,
+          headers: migrationHeaders,
           body: JSON.stringify(payload),
         });
 
