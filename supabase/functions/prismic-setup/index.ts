@@ -709,7 +709,13 @@ serve(async (req) => {
     const url = new URL(req.url);
     const action = url.searchParams.get("action") || "all";
 
-    const headers = {
+    const typesHeaders = {
+      Authorization: `Bearer ${customTypesToken}`,
+      repository: repoName,
+      "Content-Type": "application/json",
+    };
+
+    const migrationHeaders = {
       Authorization: `Bearer ${accessToken}`,
       repository: repoName,
       "Content-Type": "application/json",
