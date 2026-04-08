@@ -696,6 +696,7 @@ serve(async (req) => {
 
   try {
     const accessToken = Deno.env.get("PRISMIC_ACCESS_TOKEN");
+    const customTypesToken = Deno.env.get("PRISMIC_CUSTOM_TYPES_TOKEN") || accessToken;
     const repoName = Deno.env.get("PRISMIC_REPOSITORY_NAME");
 
     if (!accessToken || !repoName) {
