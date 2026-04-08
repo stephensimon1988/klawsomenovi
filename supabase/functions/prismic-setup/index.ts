@@ -769,7 +769,7 @@ serve(async (req) => {
 
         const res = await fetch(`${MIGRATION_API}/documents`, {
           method: "POST",
-          headers,
+          headers: migrationHeaders,
           body: JSON.stringify(payload),
         });
 
