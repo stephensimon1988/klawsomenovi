@@ -65,7 +65,7 @@ const KawaiiHero = () => {
       <LottieAccent type="sparkle" className="absolute top-16 right-12 opacity-50 z-10" size={100} />
       <LottieAccent type="star" className="absolute bottom-20 left-8 opacity-40 z-10" size={70} />
 
-      <div className="relative z-10 w-full px-4 py-16">
+      <div className="relative z-10 container mx-auto px-4 py-16">
         <div className="grid md:grid-cols-2 gap-8 items-center w-full">
           {/* Left — Logo */}
           <div ref={logoRef} className="flex justify-center p-[10%]" style={{ opacity: 0 }}>
