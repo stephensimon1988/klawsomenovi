@@ -15,42 +15,34 @@ const KawaiiTokenPrices = () => {
   const coinRef = useGsapScroll<HTMLImageElement>({ type: 'slideLeft', distance: 80, duration: 1.2 });
   const tableRef = useGsapStagger<HTMLDivElement>({ type: 'slideRight', stagger: 0.1, distance: 40 });
   const animalsRef = useGsapScroll<HTMLImageElement>({ type: 'slideRight', distance: 80, duration: 1.2, delay: 0.2 });
-  const catRef = useGsapScroll<HTMLImageElement>({ type: 'parallax', scrub: 1, parallaxSpeed: 0.2, start: 'top bottom', end: 'bottom top' });
 
   const { data: dbTiers } = useCmsTable<TokenTier>('token_tiers');
   const tiers = dbTiers && dbTiers.length > 0 ? dbTiers : fallbackTiers;
 
   return (
-    <section id="tokens" className="py-20 px-4 bg-klawsome-navy relative overflow-hidden">
-      <img
-        ref={catRef}
-        src="https://images.squarespace-cdn.com/content/679927505e618d391ae386e6/4cbcbf12-71e1-4365-b552-c20f2d2c949d/Klawsome_cat.png?content-type=image%2Fpng"
-        alt=""
-        className="absolute right-0 top-0 h-64 opacity-30 pointer-events-none will-change-transform"
-        loading="lazy"
-      />
-
-      <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-30" size={80} />
+    <section id="tokens" className="py-28 px-6 lg:px-12 bg-klawsome-navy relative overflow-hidden">
+      <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-20" size={70} />
 
       <div className="container mx-auto relative z-10">
-        <div ref={headerRef} className="text-center mb-12" style={{ opacity: 0 }}>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
+        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+          <p className="text-xs font-heading font-bold text-klawsome-yellow uppercase tracking-[0.2em] mb-4">Pricing</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight">
             Token Prices
           </h2>
         </div>
 
-        <div className="flex flex-col md:flex-row items-center justify-center gap-8 max-w-5xl mx-auto">
+        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto">
           <img
             ref={coinRef}
             src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef608b3b-4731-45e2-a37e-250a45e15d52/coinstack-klawsome.png"
             alt="Stack of Klawsome tokens"
-            className="w-48 md:w-56 object-contain will-change-transform"
+            className="w-40 lg:w-52 object-contain will-change-transform"
             loading="lazy"
             style={{ opacity: 0 }}
           />
 
           <div ref={tableRef} className="flex-1 w-full max-w-lg">
-            <div className="grid grid-cols-3 gap-px text-center font-heading font-bold text-white/60 text-sm mb-2" style={{ opacity: 0 }}>
+            <div className="grid grid-cols-3 gap-px text-center font-heading font-bold text-white/40 text-xs tracking-wider uppercase mb-4" style={{ opacity: 0 }}>
               <span>Price</span>
               <span>Tokens</span>
               <span>Bonus</span>
@@ -58,9 +50,9 @@ const KawaiiTokenPrices = () => {
             {tiers.map((tier: any) => (
               <div
                 key={tier.price}
-                className={`grid grid-cols-3 gap-px text-center py-3 border-t border-white/10 font-body ${
+                className={`grid grid-cols-3 gap-px text-center py-4 border-t border-white/10 font-body ${
                   tier.is_highlight
-                    ? 'bg-klawsome-yellow/20 border border-klawsome-yellow/40 rounded-lg text-klawsome-yellow font-bold glow-hover glow-yellow'
+                    ? 'bg-klawsome-yellow/15 border border-klawsome-yellow/30 rounded-xl text-klawsome-yellow font-bold'
                     : 'text-white'
                 }`}
                 style={{ opacity: 0 }}
@@ -71,7 +63,7 @@ const KawaiiTokenPrices = () => {
               </div>
             ))}
             {tiers.some((t: any) => t.is_highlight) && (
-              <p className="text-klawsome-yellow/70 text-xs font-body text-center mt-3">⭐ Top Pick — Best value!</p>
+              <p className="text-klawsome-yellow/60 text-xs font-body text-center mt-4">⭐ Top Pick — Best value!</p>
             )}
           </div>
 
@@ -79,7 +71,7 @@ const KawaiiTokenPrices = () => {
             ref={animalsRef}
             src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b3785d35-704f-459b-be7a-69ddb204602a/klawsome+animals.png"
             alt="Klawsome kawaii animals"
-            className="w-48 md:w-56 object-contain hidden md:block will-change-transform"
+            className="w-40 lg:w-52 object-contain hidden lg:block will-change-transform"
             loading="lazy"
             style={{ opacity: 0 }}
           />
