@@ -1,18 +1,19 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
+import { useCmsTable, type NewsArticle } from '@/hooks/useCmsContent';
 
-const articles = [
+const fallbackArticles = [
   {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg',
+    image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg',
     title: "Check Out Klawsome In Novi – Michigan's Only Stand-Alone Claw Machine Arcade",
     url: 'https://littleguidedetroit.com/check-out-klawsome-in-novi-michigans-only-stand-alone-claw-machine-arcade/',
   },
   {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.png',
+    image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.png',
     title: "Klawsome! Sakura Novi Kicks Off with Michigan's First 'Clawcade'",
     url: 'https://www.hourdetroit.com/development-topics/klawsome-sakura-novi-kicks-off-with-michigans-first-clawcade/',
   },
   {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg',
+    image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg',
     title: 'Sakura Novi Launches with the Grand Opening of Klawsome!',
     url: 'https://michiganmamanews.com/2025/08/28/sakura-novi-launches-with-the-grand-opening-of-klawsome-on-friday-august-29/',
   },
@@ -21,6 +22,8 @@ const articles = [
 const KawaiiNews = () => {
   const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp' });
   const gridRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.15, distance: 50 });
+  const { data: dbArticles } = useCmsTable<NewsArticle>('news_articles');
+  const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
 
   return (
     <section id="news" className="py-20 px-4 bg-background">
@@ -38,7 +41,7 @@ const KawaiiNews = () => {
         </div>
 
         <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {articles.map((article) => (
+          {articles.slice(0, 3).map((article: any) => (
             <a
               key={article.url}
               href={article.url}
@@ -49,7 +52,7 @@ const KawaiiNews = () => {
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
-                  src={article.image}
+                  src={article.image_url}
                   alt={article.title}
                   className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
