@@ -14,71 +14,6 @@ export type Database = {
   }
   public: {
     Tables: {
-      appointment_types: {
-        Row: {
-          created_at: string
-          description: string | null
-          duration_minutes: number
-          id: string
-          is_active: boolean
-          name: string
-          price: number | null
-        }
-        Insert: {
-          created_at?: string
-          description?: string | null
-          duration_minutes?: number
-          id?: string
-          is_active?: boolean
-          name: string
-          price?: number | null
-        }
-        Update: {
-          created_at?: string
-          description?: string | null
-          duration_minutes?: number
-          id?: string
-          is_active?: boolean
-          name?: string
-          price?: number | null
-        }
-        Relationships: []
-      }
-      availability_slots: {
-        Row: {
-          appointment_type_id: string
-          day_of_week: number
-          end_time: string
-          id: string
-          is_active: boolean
-          start_time: string
-        }
-        Insert: {
-          appointment_type_id: string
-          day_of_week: number
-          end_time: string
-          id?: string
-          is_active?: boolean
-          start_time: string
-        }
-        Update: {
-          appointment_type_id?: string
-          day_of_week?: number
-          end_time?: string
-          id?: string
-          is_active?: boolean
-          start_time?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "availability_slots_appointment_type_id_fkey"
-            columns: ["appointment_type_id"]
-            isOneToOne: false
-            referencedRelation: "appointment_types"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       birthdays_content: {
         Row: {
           booking_email: string | null
@@ -114,56 +49,6 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
-      }
-      bookings: {
-        Row: {
-          appointment_type_id: string
-          booking_date: string
-          created_at: string
-          customer_email: string
-          customer_name: string
-          customer_phone: string | null
-          end_time: string
-          id: string
-          notes: string | null
-          start_time: string
-          status: string
-        }
-        Insert: {
-          appointment_type_id: string
-          booking_date: string
-          created_at?: string
-          customer_email: string
-          customer_name: string
-          customer_phone?: string | null
-          end_time: string
-          id?: string
-          notes?: string | null
-          start_time: string
-          status?: string
-        }
-        Update: {
-          appointment_type_id?: string
-          booking_date?: string
-          created_at?: string
-          customer_email?: string
-          customer_name?: string
-          customer_phone?: string | null
-          end_time?: string
-          id?: string
-          notes?: string | null
-          start_time?: string
-          status?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "bookings_appointment_type_id_fkey"
-            columns: ["appointment_type_id"]
-            isOneToOne: false
-            referencedRelation: "appointment_types"
-            referencedColumns: ["id"]
-          },
-        ]
       }
       business_how_steps: {
         Row: {
