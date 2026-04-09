@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -6,11 +6,11 @@ import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { Button } from './ui/button';
 
 const navLinks = [
-  { label: 'Home', href: '#hero' },
-  { label: 'Birthdays', href: '/birthdays' },
-  { label: 'Gift Cards', href: '#giftcards' },
-  { label: 'Careers', href: '/careers' },
-  { label: 'News', href: '/news' },
+  { label: 'HOME', href: '#hero' },
+  { label: 'BIRTHDAYS', href: '/birthdays' },
+  { label: 'GIFT CARDS', href: '#giftcards' },
+  { label: 'CAREERS', href: '/careers' },
+  { label: 'NEWS', href: '/news' },
 ];
 
 const smoothScroll = (id: string) => {
@@ -20,8 +20,15 @@ const smoothScroll = (id: string) => {
 
 const KawaiiNav = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 60);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleNav = useCallback((href: string) => {
     setIsOpen(false);
@@ -39,29 +46,35 @@ const KawaiiNav = () => {
   }, [navigate, location.pathname]);
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-klawsome-navy">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
+    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
+      <div className="container mx-auto px-6 lg:px-12">
+        <div className="flex items-center justify-between h-20">
           <button onClick={() => handleNav('#hero')} className="flex items-center">
             <img src={klawsomeLogo} alt="Klawsome" className="h-10 w-auto" />
           </button>
 
-          <div className="hidden md:flex items-center gap-8">
+          <div className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
               <button
                 key={link.label}
                 onClick={() => handleNav(link.href)}
-                className="font-heading font-semibold text-sm text-white/70 hover:text-white transition-colors duration-200"
+                className={`font-heading font-bold text-xs tracking-[0.15em] transition-colors duration-200 ${
+                  scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
+                }`}
               >
                 {link.label}
               </button>
             ))}
-            <Button size="sm" onClick={() => handleNav('#scheduling')} className="rounded-full px-5 font-heading font-bold bg-primary hover:bg-primary/90 text-white text-sm glow-hover glow-coral">
-              Book Your Visit
+            <Button
+              size="sm"
+              onClick={() => handleNav('#scheduling')}
+              className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white"
+            >
+              BOOK NOW
             </Button>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-white">
+          <button onClick={() => setIsOpen(!isOpen)} className={`md:hidden p-2 ${scrolled ? 'text-foreground' : 'text-white'}`}>
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
@@ -73,20 +86,20 @@ const KawaiiNav = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-klawsome-navy border-b border-white/10 overflow-hidden"
+            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden"
           >
-            <div className="px-4 py-4 space-y-3">
+            <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
                 <button
                   key={link.label}
                   onClick={() => handleNav(link.href)}
-                  className="block font-heading font-semibold text-white/70 hover:text-white py-2 transition-colors w-full text-left"
+                  className="block font-heading font-bold text-xs tracking-[0.15em] text-foreground/60 hover:text-foreground py-2 transition-colors w-full text-left"
                 >
                   {link.label}
                 </button>
               ))}
-              <Button size="sm" onClick={() => handleNav('#scheduling')} className="rounded-full px-5 font-heading font-bold bg-primary hover:bg-primary/90 text-white w-full glow-hover glow-coral">
-                Book Your Visit
+              <Button size="sm" onClick={() => handleNav('#scheduling')} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white w-full">
+                BOOK NOW
               </Button>
             </div>
           </motion.div>
