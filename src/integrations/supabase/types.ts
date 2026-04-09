@@ -79,6 +79,42 @@ export type Database = {
           },
         ]
       }
+      birthdays_content: {
+        Row: {
+          booking_email: string | null
+          booking_phone: string | null
+          hero_headline: string | null
+          hero_image_url: string | null
+          hero_subheadline: string | null
+          id: string
+          promo_text: string | null
+          rules_text: string | null
+          updated_at: string
+        }
+        Insert: {
+          booking_email?: string | null
+          booking_phone?: string | null
+          hero_headline?: string | null
+          hero_image_url?: string | null
+          hero_subheadline?: string | null
+          id?: string
+          promo_text?: string | null
+          rules_text?: string | null
+          updated_at?: string
+        }
+        Update: {
+          booking_email?: string | null
+          booking_phone?: string | null
+          hero_headline?: string | null
+          hero_image_url?: string | null
+          hero_subheadline?: string | null
+          id?: string
+          promo_text?: string | null
+          rules_text?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bookings: {
         Row: {
           appointment_type_id: string
@@ -128,6 +164,414 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      business_how_steps: {
+        Row: {
+          description: string | null
+          icon: string | null
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Update: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      business_pricing_tiers: {
+        Row: {
+          features: string[] | null
+          id: string
+          is_highlight: boolean
+          name: string
+          price: string
+          sort_order: number
+        }
+        Insert: {
+          features?: string[] | null
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+        }
+        Update: {
+          features?: string[] | null
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      business_sections: {
+        Row: {
+          bullet_points: string[] | null
+          description: string | null
+          id: string
+          image_url: string | null
+          section_key: string
+          sort_order: number
+          subtitle: string | null
+          title: string
+        }
+        Insert: {
+          bullet_points?: string[] | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          section_key: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+        }
+        Update: {
+          bullet_points?: string[] | null
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          section_key?: string
+          sort_order?: number
+          subtitle?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
+      faq_items: {
+        Row: {
+          answer: string
+          id: string
+          page: string
+          question: string
+          sort_order: number
+        }
+        Insert: {
+          answer?: string
+          id?: string
+          page?: string
+          question?: string
+          sort_order?: number
+        }
+        Update: {
+          answer?: string
+          id?: string
+          page?: string
+          question?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      homepage_content: {
+        Row: {
+          about_subtitle: string | null
+          about_title: string | null
+          hero_cta_text: string | null
+          hero_headline: string
+          hero_image_url: string | null
+          hero_subheadline: string | null
+          id: string
+          story_body: string | null
+          story_image_url: string | null
+          story_title: string | null
+          updated_at: string
+        }
+        Insert: {
+          about_subtitle?: string | null
+          about_title?: string | null
+          hero_cta_text?: string | null
+          hero_headline?: string
+          hero_image_url?: string | null
+          hero_subheadline?: string | null
+          id?: string
+          story_body?: string | null
+          story_image_url?: string | null
+          story_title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          about_subtitle?: string | null
+          about_title?: string | null
+          hero_cta_text?: string | null
+          hero_headline?: string
+          hero_image_url?: string | null
+          hero_subheadline?: string | null
+          id?: string
+          story_body?: string | null
+          story_image_url?: string | null
+          story_title?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homepage_steps: {
+        Row: {
+          description: string | null
+          icon: string | null
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Update: {
+          description?: string | null
+          icon?: string | null
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      invite_templates: {
+        Row: {
+          id: string
+          name: string
+          sort_order: number
+          thumbnail_url: string | null
+          url: string
+        }
+        Insert: {
+          id?: string
+          name?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          url?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          sort_order?: number
+          thumbnail_url?: string | null
+          url?: string
+        }
+        Relationships: []
+      }
+      job_listings: {
+        Row: {
+          apply_url: string | null
+          category: string
+          created_at: string
+          description: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          is_paid: boolean
+          job_desc_url: string | null
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          apply_url?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_paid?: boolean
+          job_desc_url?: string | null
+          sort_order?: number
+          title?: string
+        }
+        Update: {
+          apply_url?: string | null
+          category?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          is_paid?: boolean
+          job_desc_url?: string | null
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      news_articles: {
+        Row: {
+          created_at: string
+          date: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean
+          sort_order: number
+          source: string | null
+          title: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          sort_order?: number
+          source?: string | null
+          title?: string
+          url?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean
+          sort_order?: number
+          source?: string | null
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      party_options: {
+        Row: {
+          description: string | null
+          features: string[] | null
+          id: string
+          name: string
+          price: string | null
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          name?: string
+          price?: string | null
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          features?: string[] | null
+          id?: string
+          name?: string
+          price?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      site_settings: {
+        Row: {
+          address: string | null
+          business_name: string
+          email: string | null
+          facebook_url: string | null
+          gift_card_url: string | null
+          google_maps_url: string | null
+          id: string
+          instagram_url: string | null
+          newsletter_text: string | null
+          phone: string | null
+          tiktok_url: string | null
+          updated_at: string
+          youtube_url: string | null
+        }
+        Insert: {
+          address?: string | null
+          business_name?: string
+          email?: string | null
+          facebook_url?: string | null
+          gift_card_url?: string | null
+          google_maps_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          newsletter_text?: string | null
+          phone?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          youtube_url?: string | null
+        }
+        Update: {
+          address?: string | null
+          business_name?: string
+          email?: string | null
+          facebook_url?: string | null
+          gift_card_url?: string | null
+          google_maps_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          newsletter_text?: string | null
+          phone?: string | null
+          tiktok_url?: string | null
+          updated_at?: string
+          youtube_url?: string | null
+        }
+        Relationships: []
+      }
+      store_hours: {
+        Row: {
+          close_time: string | null
+          day_label: string
+          day_of_week: number
+          id: string
+          is_closed: boolean
+          open_time: string | null
+          sort_order: number
+        }
+        Insert: {
+          close_time?: string | null
+          day_label: string
+          day_of_week: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          sort_order?: number
+        }
+        Update: {
+          close_time?: string | null
+          day_label?: string
+          day_of_week?: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      token_tiers: {
+        Row: {
+          bonus: string | null
+          id: string
+          is_highlight: boolean
+          price: string
+          sort_order: number
+          tokens: string
+        }
+        Insert: {
+          bonus?: string | null
+          id?: string
+          is_highlight?: boolean
+          price?: string
+          sort_order?: number
+          tokens?: string
+        }
+        Update: {
+          bonus?: string | null
+          id?: string
+          is_highlight?: boolean
+          price?: string
+          sort_order?: number
+          tokens?: string
+        }
+        Relationships: []
       }
     }
     Views: {
