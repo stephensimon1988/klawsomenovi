@@ -237,7 +237,7 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
           </TableBody>
         </Table>
       </div>
-      <Button onClick={addRow} variant="outline" className="border-white/20 text-white hover:bg-white/10 font-heading">
+      <Button onClick={addRow} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
         <Plus className="w-4 h-4 mr-2" />Add Row
       </Button>
     </div>
