@@ -1,57 +1,19 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import { useCmsTable, type NewsArticle } from '@/hooks/useCmsContent';
 
-const articles = [
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg',
-    title: "Check Out Klawsome In Novi – Michigan's Only Stand-Alone Claw Machine Arcade",
-    source: 'Little Guide Detroit',
-    date: 'August 28th, 2025',
-    url: 'https://littleguidedetroit.com/check-out-klawsome-in-novi-michigans-only-stand-alone-claw-machine-arcade/',
-  },
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.png',
-    title: "Klawsome! Sakura Novi Kicks Off with Michigan's First 'Clawcade'",
-    source: 'Hour Detroit',
-    date: 'August 28th, 2025',
-    url: 'https://www.hourdetroit.com/development-topics/klawsome-sakura-novi-kicks-off-with-michigans-first-clawcade/',
-  },
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg',
-    title: 'Sakura Novi Launches with the Grand Opening of Klawsome!',
-    source: 'Michigan Mama News',
-    date: 'August 28th, 2025',
-    url: 'https://michiganmamanews.com/2025/08/28/sakura-novi-launches-with-the-grand-opening-of-klawsome-on-friday-august-29/',
-  },
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/fdbcfe32-94e1-4e84-bb54-e48754347867/klawsome+hometown+life.webp',
-    title: 'Klawsome!, featuring 40-plus claw arcade games, opening in Sakura Novi',
-    source: 'Hometown Life',
-    date: 'August 28th, 2025',
-    url: 'https://www.hometownlife.com/story/news/2025/08/25/klawsome-novi-opening-arcade-games/85760940007/',
-  },
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d8e28fdf-05d0-48a8-a4d0-dd11696cfb08/klawsome+clawcraziness.png',
-    title: "Couldn't stop winning from these claw machines!",
-    source: '@clawcraziness',
-    date: 'September 2nd, 2025',
-    url: 'https://www.tiktok.com/@clawcraziness/video/7545589134090358030',
-  },
-  {
-    image: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/7181dc67-e806-447f-a74f-1f5a6102a2a3/klawsome+zcaders.png',
-    title: 'Grand Opening of KLAWSOME Clawcade in Novi, MI.',
-    source: '@Zcaders',
-    date: 'August 29th, 2025',
-    url: 'https://www.youtube.com/watch?v=pd0E6-y9Yjk',
-  },
+const fallbackArticles = [
+  { image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg', title: "Check Out Klawsome In Novi – Michigan's Only Stand-Alone Claw Machine Arcade", source: 'Little Guide Detroit', date: 'August 28th, 2025', url: 'https://littleguidedetroit.com/check-out-klawsome-in-novi-michigans-only-stand-alone-claw-machine-arcade/' },
 ];
 
 const News = () => {
+  const { data: dbArticles } = useCmsTable<NewsArticle>('news_articles');
+  const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
+
   return (
     <div className="min-h-screen bg-klawsome-navy">
       <KawaiiNav />
 
-      {/* Hero */}
       <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-16">
         <div
           className="absolute inset-0 bg-cover bg-center"
@@ -77,11 +39,10 @@ const News = () => {
         </div>
       </section>
 
-      {/* Articles Grid */}
       <section className="py-20 px-4">
         <div className="container mx-auto max-w-5xl">
           <div className="grid md:grid-cols-3 gap-8">
-            {articles.map((article) => (
+            {articles.map((article: any) => (
               <a
                 key={article.url}
                 href={article.url}
@@ -91,7 +52,7 @@ const News = () => {
               >
                 <div className="aspect-[4/3] overflow-hidden">
                   <img
-                    src={article.image}
+                    src={article.image_url}
                     alt={article.title}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     loading="lazy"
@@ -99,7 +60,7 @@ const News = () => {
                 </div>
                 <div className="p-5">
                   <h3 className="font-heading font-bold text-white text-sm leading-snug mb-2">{article.title}</h3>
-                  <p className="text-white/50 text-xs font-body italic mb-2">{article.source} · {article.date}</p>
+                  {article.source && <p className="text-white/50 text-xs font-body italic mb-2">{article.source} · {article.date}</p>}
                   <span className="text-primary text-sm font-heading font-semibold">Read Here →</span>
                 </div>
               </a>
