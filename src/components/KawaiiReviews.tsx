@@ -46,42 +46,43 @@ const KawaiiReviews = () => {
   const displayStars = hasHalf ? fullStars + 1 : (rating - fullStars >= 0.75 ? fullStars + 1 : fullStars);
 
   return (
-    <section id="reviews" className="py-20 px-4 bg-background">
+    <section id="reviews" className="py-28 px-6 lg:px-12 bg-background">
       <div className="container mx-auto">
-        <div ref={headerRef} className="text-center mb-12" style={{ opacity: 0 }}>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">
+        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Testimonials</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-4">
             Guests love us
           </h2>
-          <div className="flex items-center justify-center gap-1 mb-1">
+          <div className="flex items-center gap-2 mb-2">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className={`w-5 h-5 ${i < displayStars ? 'text-accent fill-accent' : 'text-border'}`} />
             ))}
+            <span className="text-muted-foreground font-body text-sm ml-2">
+              {rating} out of 5{reviewCount && ` · ${reviewCount} reviews`}
+            </span>
           </div>
-          <p className="text-muted-foreground font-body">
-            Rated {rating} out of 5 stars{reviewCount && ` · ${reviewCount} reviews`}
-          </p>
         </div>
 
-        <div ref={carouselRef} className="relative max-w-5xl mx-auto" style={{ opacity: 0 }}>
-          <div className="overflow-hidden px-6 py-6">
+        <div ref={carouselRef} className="relative max-w-6xl mx-auto" style={{ opacity: 0 }}>
+          <div className="overflow-hidden px-2 py-4">
             <div
-              className="flex gap-8 transition-transform duration-700 ease-out"
-              style={{ transform: `translateX(-${currentIndex * (100 / visibleCount + 2.5)}%)` }}
+              className="flex gap-6 transition-transform duration-700 ease-out"
+              style={{ transform: `translateX(-${currentIndex * (100 / visibleCount + 2)}%)` }}
             >
               {reviews.map((review, index) => (
                 <div
                   key={index}
-                  className="min-w-[calc(33.333%-1.5rem)] bg-background border border-border rounded-kawaii px-8 py-[30px] flex flex-col glow-hover glow-pink"
+                  className="min-w-[calc(33.333%-1rem)] bg-background border border-border rounded-2xl px-8 py-8 flex flex-col glow-hover glow-pink"
                 >
-                  <div className="flex items-center gap-1 mb-3">
+                  <div className="flex items-center gap-1 mb-4">
                     {[...Array(5)].map((_, i) => (
                       <Star key={i} className="w-4 h-4 text-accent fill-accent" />
                     ))}
                   </div>
-                  <p className="text-foreground font-body text-sm leading-relaxed mb-4 flex-1">"{review.text}"</p>
+                  <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center">
-                      <span className="text-xs font-heading font-bold text-muted-foreground">{review.name.charAt(0)}</span>
+                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                      <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
                     </div>
                     <div>
                       <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
@@ -93,10 +94,10 @@ const KawaiiReviews = () => {
             </div>
           </div>
 
-          <button onClick={prev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30">
+          <button onClick={prev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
-          <button onClick={next} disabled={currentIndex >= maxIndex} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-muted transition-colors disabled:opacity-30">
+          <button onClick={next} disabled={currentIndex >= maxIndex} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
             <ChevronRight className="w-5 h-5 text-foreground" />
           </button>
 

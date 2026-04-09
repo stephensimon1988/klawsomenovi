@@ -26,41 +26,42 @@ const KawaiiNews = () => {
   const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
 
   return (
-    <section id="news" className="py-20 px-4 bg-background">
+    <section id="news" className="py-28 px-6 lg:px-12 bg-secondary/50">
       <div className="container mx-auto">
-        <div ref={headerRef} className="text-center mb-6" style={{ opacity: 0 }}>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-2">
+        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Press</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-6">
             In The News
           </h2>
           <img
             src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.png"
             alt="As seen on Michigan Mama News, Hour Detroit, Little Guide, Hometown Life"
-            className="max-w-md mx-auto w-full mt-4 mb-8"
+            className="max-w-sm w-full"
             loading="lazy"
           />
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-6xl">
           {articles.slice(0, 3).map((article: any) => (
             <a
               key={article.url}
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-kawaii overflow-hidden border border-border hover:shadow-lg transition-shadow glow-hover glow-pink"
+              className="group block rounded-2xl overflow-hidden bg-background border border-border hover:shadow-lg transition-all glow-hover glow-pink"
               style={{ opacity: 0 }}
             >
               <div className="aspect-[4/3] overflow-hidden">
                 <img
                   src={article.image_url}
                   alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
-              <div className="p-5">
-                <h3 className="font-heading font-bold text-foreground text-sm leading-snug mb-2">{article.title}</h3>
-                <span className="text-primary text-sm font-heading font-semibold">Read Here →</span>
+              <div className="p-6">
+                <h3 className="font-heading font-bold text-foreground leading-snug mb-3">{article.title}</h3>
+                <span className="text-primary text-sm font-heading font-bold tracking-wider uppercase">Read More →</span>
               </div>
             </a>
           ))}

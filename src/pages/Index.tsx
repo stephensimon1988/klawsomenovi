@@ -7,7 +7,6 @@ import KawaiiReviews from '@/components/KawaiiReviews';
 import KawaiiNews from '@/components/KawaiiNews';
 import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
-
 import KawaiiFooter from '@/components/KawaiiFooter';
 
 const Index = () => {
@@ -15,18 +14,19 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
       <KawaiiHero />
-      <KawaiiVisit />
       <KawaiiAbout />
+      <KawaiiVisit />
       <KawaiiTokenPrices />
       <KawaiiReviews />
       <KawaiiNews />
       <KawaiiGiftCards />
-      {/* Scheduling section placeholder — Acuity iframe will go here */}
-      <section id="scheduling" className="py-20 px-4 bg-gradient-to-b from-background to-kawaii-lavender/10">
-        <div className="max-w-4xl mx-auto text-center">
-          <h2 className="font-heading text-3xl md:text-4xl font-bold text-foreground mb-4">Book Your Visit 🗓️</h2>
-          <p className="text-muted-foreground mb-8">Schedule your next Klawsome adventure!</p>
-          <div className="rounded-2xl border border-border bg-card p-12 text-muted-foreground">
+      {/* Scheduling section */}
+      <section id="scheduling" className="py-28 px-6 lg:px-12 bg-secondary/50">
+        <div className="max-w-4xl mx-auto">
+          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Schedule</p>
+          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">Book Your Visit</h2>
+          <p className="text-muted-foreground font-body text-lg mb-10">Schedule your next Klawsome adventure!</p>
+          <div className="rounded-2xl border border-border bg-background p-16 text-muted-foreground text-center font-body">
             Acuity scheduling form coming soon
           </div>
         </div>

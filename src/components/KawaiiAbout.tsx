@@ -26,37 +26,37 @@ const KawaiiAbout = () => {
   ];
 
   return (
-    <section id="about" className="py-20 px-4 bg-kawaii-lavender/40 relative overflow-hidden">
-      <LottieAccent type="sparkle" className="absolute top-8 left-8 opacity-30" size={90} />
+    <section id="about" className="py-28 px-6 lg:px-12 bg-secondary/50 relative overflow-hidden">
+      <LottieAccent type="sparkle" className="absolute top-12 left-12 opacity-20" size={80} />
 
       <div className="container mx-auto">
-        <div ref={headerRef} className="text-center mb-4" style={{ opacity: 0 }}>
-          <p className="text-sm font-heading font-semibold text-muted-foreground uppercase tracking-wider mb-2">Grab</p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">
+        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">How It Works</p>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-6">
             {aboutTitle}
           </h2>
-          <p className="text-muted-foreground text-lg max-w-2xl mx-auto font-body">
+          <p className="text-muted-foreground text-lg font-body leading-relaxed">
             {aboutSubtitle}
           </p>
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto mt-12">
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-10 max-w-5xl">
           {displaySteps.map((step, index) => (
-            <div key={step.id} className="text-center flex flex-col items-center" style={{ opacity: 0 }}>
-              <div className="h-40 w-40 flex items-center justify-center mb-5">
+            <div key={step.id} className="flex flex-col" style={{ opacity: 0 }}>
+              <div className="h-36 w-36 flex items-center justify-center mb-6">
                 <img src={stepImages[index] || stepImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
               </div>
-              <h3 className="text-lg font-heading font-bold text-foreground mb-2">{step.title}</h3>
-              <p className="text-muted-foreground font-body text-sm leading-relaxed">{step.description}</p>
+              <h3 className="text-xl font-heading font-bold text-foreground mb-3">{step.title}</h3>
+              <p className="text-muted-foreground font-body leading-relaxed">{step.description}</p>
             </div>
           ))}
         </div>
 
-        <div ref={ctaRef} className="flex items-center justify-center gap-4 mt-12" style={{ opacity: 0 }}>
-          <Button onClick={() => document.getElementById('tokens')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full px-8 font-heading font-bold bg-foreground text-background hover:bg-foreground/90 glow-hover glow-pink">
+        <div ref={ctaRef} className="flex items-center gap-4 mt-14" style={{ opacity: 0 }}>
+          <Button onClick={() => document.getElementById('tokens')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
             Play
           </Button>
-          <Button variant="ghost" onClick={() => document.getElementById('visit')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full font-heading text-foreground underline glow-hover glow-pink">
+          <Button variant="ghost" onClick={() => document.getElementById('visit')?.scrollIntoView({ behavior: 'smooth' })} className="rounded-full font-heading font-bold text-xs tracking-wider text-foreground underline uppercase">
             Visit →
           </Button>
         </div>

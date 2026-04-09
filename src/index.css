@@ -12,24 +12,24 @@ html {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 216 50% 20%;
+    --foreground: 216 50% 15%;
 
     --card: 0 0% 100%;
-    --card-foreground: 216 50% 20%;
+    --card-foreground: 216 50% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 216 50% 20%;
+    --popover-foreground: 216 50% 15%;
 
     /* Coral red — main brand */
     --primary: 351 76% 62%;
     --primary-foreground: 0 0% 100%;
 
-    /* Baby pink */
-    --secondary: 340 60% 80%;
-    --secondary-foreground: 340 40% 25%;
+    /* Soft neutral */
+    --secondary: 220 14% 96%;
+    --secondary-foreground: 216 50% 15%;
 
-    --muted: 190 40% 93%;
-    --muted-foreground: 216 30% 40%;
+    --muted: 220 14% 96%;
+    --muted-foreground: 216 20% 46%;
 
     --accent: 50 84% 70%;
     --accent-foreground: 50 60% 20%;
@@ -37,11 +37,11 @@ html {
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 216 30% 80%;
-    --input: 216 30% 80%;
+    --border: 220 13% 91%;
+    --input: 220 13% 91%;
     --ring: 351 76% 62%;
 
-    --radius: 1rem;
+    --radius: 0.75rem;
 
     /* Logo colors — bold solids */
     --klawsome-red: 351 76% 62%;
@@ -51,7 +51,7 @@ html {
     --klawsome-baby-pink: 340 60% 85%;
     --klawsome-white: 0 0% 100%;
 
-    /* Legacy tokens */
+    /* Legacy tokens (kept for compatibility) */
     --kawaii-pink: 340 60% 82%;
     --kawaii-lavender: 260 50% 85%;
     --kawaii-mint: 160 45% 82%;
@@ -87,7 +87,7 @@ html {
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
   }
-  }
+}
 
 @layer utilities {
   .kawaii-gradient {
@@ -101,20 +101,20 @@ html {
   .kawaii-gradient-soft {
     background: linear-gradient(
       135deg,
-      hsl(var(--klawsome-baby-blue) / 0.4) 0%,
-      hsl(var(--klawsome-baby-pink) / 0.35) 40%,
-      hsl(var(--klawsome-yellow) / 0.3) 100%
+      hsl(var(--klawsome-baby-blue) / 0.15) 0%,
+      hsl(var(--klawsome-baby-pink) / 0.1) 40%,
+      hsl(var(--klawsome-yellow) / 0.08) 100%
     );
   }
 
   .kawaii-shadow {
-    box-shadow: 0 8px 30px hsl(var(--klawsome-navy) / 0.15),
-                0 4px 10px hsl(var(--klawsome-navy) / 0.08);
+    box-shadow: 0 8px 30px hsl(var(--klawsome-navy) / 0.08),
+                0 4px 10px hsl(var(--klawsome-navy) / 0.04);
   }
 
   .kawaii-shadow-lg {
-    box-shadow: 0 15px 50px hsl(var(--klawsome-navy) / 0.2),
-                0 8px 20px hsl(var(--klawsome-navy) / 0.1);
+    box-shadow: 0 15px 50px hsl(var(--klawsome-navy) / 0.12),
+                0 8px 20px hsl(var(--klawsome-navy) / 0.06);
   }
 
   .kawaii-text-gradient {
@@ -124,7 +124,7 @@ html {
     background-clip: text;
   }
 
-  /* Glow system — apply glow-hover + a color variant class */
+  /* Glow system */
   .glow-hover {
     --glow-color: var(--klawsome-baby-pink);
     position: relative;
@@ -132,8 +132,8 @@ html {
   }
 
   .glow-hover:hover {
-    box-shadow: 0 0 10px 2px hsl(var(--glow-color) / 0.3),
-                0 0 20px 4px hsl(var(--glow-color) / 0.12);
+    box-shadow: 0 0 10px 2px hsl(var(--glow-color) / 0.2),
+                0 0 20px 4px hsl(var(--glow-color) / 0.08);
     transform: scale(1.02);
   }
 
@@ -144,7 +144,7 @@ html {
     border-radius: inherit;
     opacity: 0;
     background: transparent;
-    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.2);
+    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.15);
     transition: opacity 0.3s ease;
     pointer-events: none;
     z-index: -1;
@@ -160,13 +160,29 @@ html {
   .glow-blue { --glow-color: var(--klawsome-baby-blue); }
   .glow-coral { --glow-color: var(--klawsome-red); }
   .glow-yellow { --glow-color: var(--klawsome-yellow); }
+
+  /* Manifest-style marquee */
+  .marquee-track {
+    display: flex;
+    animation: marquee-scroll 20s linear infinite;
+    width: max-content;
+  }
+
+  .marquee-track:hover {
+    animation-play-state: paused;
+  }
 }
 
 @keyframes glow-pulse {
   0%, 100% {
-    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.2);
+    box-shadow: 0 0 12px 3px hsl(var(--glow-color) / 0.15);
   }
   50% {
-    box-shadow: 0 0 18px 5px hsl(var(--glow-color) / 0.3);
+    box-shadow: 0 0 18px 5px hsl(var(--glow-color) / 0.25);
   }
+}
+
+@keyframes marquee-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
