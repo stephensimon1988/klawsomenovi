@@ -6,6 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { toast } from 'sonner';
+import { useCmsTable, type BusinessSection, type BusinessPricingTier, type BusinessHowStep } from '@/hooks/useCmsContent';
 
 const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => (
   <motion.div
@@ -17,13 +18,24 @@ const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React
   </motion.div>
 );
 
+// Fallback data
+const fallbackSections: BusinessSection[] = [
+  { id: '1', section_key: 'hosted', title: 'Host a Klawsome Machine in Your Business', subtitle: 'We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.', description: 'You earn 10% of every token played.', bullet_points: ['Machine delivery & installation', 'All prize stocking & restocking', 'All repairs & maintenance', 'Revenue tracking & monthly payouts', 'Ongoing machine operation'], image_url: '', sort_order: 0 },
+  { id: '2', section_key: 'partner', title: 'Become a Klawsome Partner', subtitle: 'Open your own Klawsome-powered arcade or claw machine corner.', description: "We're not a franchise -- we're a partnership.", bullet_points: ['Full fleet of Klawsome machines', 'Licensed plushies and anime collectibles', 'Remote monitoring and cashless payments', 'Full onboarding and training', 'Brand assets and marketing support', 'Ongoing maintenance support'], image_url: '', sort_order: 1 },
+  { id: '3', section_key: 'plushie', title: 'Custom Plushie Orders', subtitle: 'Turn your character, mascot, or idea into a real plushie.', description: 'Minimum order: 100 units.', bullet_points: ['Share your design', 'We send a quote', 'Approve & produce'], image_url: '', sort_order: 2 },
+];
 
-const klawsomeHandles = [
-  'Machine delivery & installation',
-  'All prize stocking & restocking',
-  'All repairs & maintenance',
-  'Revenue tracking & monthly payouts',
-  'Ongoing machine operation',
+const fallbackPricing: BusinessPricingTier[] = [
+  { id: '1', name: 'Standard Plushie', price: '$4-6', features: ['Simple Design', 'Clean shapes, minimal detail'], is_highlight: false, sort_order: 0 },
+  { id: '2', name: 'Detailed Plushie', price: '$6-8', features: ['Complex Design', 'Highly detailed characters'], is_highlight: false, sort_order: 1 },
+  { id: '3', name: 'Oversized Plushie', price: '$15-40', features: ['XL / Life-Size', 'Statement-making'], is_highlight: false, sort_order: 2 },
+];
+
+const fallbackHowSteps: BusinessHowStep[] = [
+  { id: '1', title: 'Reach Out', description: 'Fill out the form below.', icon: '1', sort_order: 0 },
+  { id: '2', title: 'We Connect', description: 'Our team follows up within 1-2 business days.', icon: '2', sort_order: 1 },
+  { id: '3', title: 'Review & Plan', description: 'We review your location or concept together.', icon: '3', sort_order: 2 },
+  { id: '4', title: 'Launch!', description: "Machines installed, plushies stocked -- you're ready to go.", icon: '4', sort_order: 3 },
 ];
 
 const businessProvides = [
@@ -33,12 +45,8 @@ const businessProvides = [
 ];
 
 const venues = [
-  '🍜 Restaurants',
-  '🧋 Bubble Tea Shops',
-  '🎳 Entertainment Venues',
-  '🛍️ Retail Stores',
-  '⏳ Waiting Areas',
-  '🏪 High Foot Traffic Spaces',
+  '🍜 Restaurants', '🧋 Bubble Tea Shops', '🎳 Entertainment Venues',
+  '🛍️ Retail Stores', '⏳ Waiting Areas', '🏪 High Foot Traffic Spaces',
 ];
 
 const partnerIncludes = [
@@ -50,25 +58,6 @@ const partnerIncludes = [
   { icon: '🔧', title: 'Support', desc: 'Ongoing maintenance support and prize restocking guidance.' },
 ];
 
-const pricingTiers = [
-  { label: 'Simple Design', title: 'Standard Plushie', price: '$4-6', per: 'per unit', desc: 'Clean shapes, minimal detail. Great for branded giveaways and simple mascots.', variant: 'light' as const },
-  { label: 'Complex Design', title: 'Detailed Plushie', price: '$6-8', per: 'per unit', desc: 'Highly detailed characters with accessories, facial features, and layered textures.', variant: 'accent' as const },
-  { label: 'XL / Life-Size', title: 'Oversized Plushie', price: '$15-40', per: 'per unit', desc: 'Statement-making XL and life-size plushies. Perfect for displays, events, and premium prizes.', variant: 'dark' as const },
-];
-
-const howSteps = [
-  { num: 1, title: 'Reach Out', desc: 'Fill out the form below and tell us about yourself, your business, and which opportunity interests you.' },
-  { num: 2, title: 'We Connect', desc: 'Our team follows up within 1-2 business days to learn more and answer your questions.' },
-  { num: 3, title: 'Review & Plan', desc: 'We review your location or concept together and map out the right path forward.' },
-  { num: 4, title: 'Launch!', desc: "Machines installed, plushies stocked, partners trained -- you're ready to go." },
-];
-
-const plushieSteps = [
-  { icon: '📝', title: 'Share your design', desc: 'Send us a sketch, image, or description of your plushie concept.' },
-  { icon: '💬', title: 'We send a quote', desc: 'We review complexity, size, and quantity then get back to you with pricing.' },
-  { icon: '✅', title: 'Approve & produce', desc: 'Once approved, we handle production and delivery of your custom order.' },
-];
-
 const Business = () => {
   const [formData, setFormData] = useState({ name: '', email: '', opportunity: '', business_type: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
@@ -77,6 +66,18 @@ const Business = () => {
   const tabsSectionRef = useRef<HTMLDivElement>(null);
   const tabsNavRef = useRef<HTMLDivElement>(null);
 
+  const { data: dbSections } = useCmsTable<BusinessSection>('business_sections');
+  const { data: dbPricing } = useCmsTable<BusinessPricingTier>('business_pricing_tiers');
+  const { data: dbHowSteps } = useCmsTable<BusinessHowStep>('business_how_steps');
+
+  const sections = dbSections?.length ? dbSections : fallbackSections;
+  const pricingTiers = dbPricing?.length ? dbPricing : fallbackPricing;
+  const howSteps = dbHowSteps?.length ? dbHowSteps : fallbackHowSteps;
+
+  const hosted = sections.find(s => s.section_key === 'hosted');
+  const partner = sections.find(s => s.section_key === 'partner');
+  const plushie = sections.find(s => s.section_key === 'plushie');
+
   useEffect(() => {
     const section = tabsSectionRef.current;
     const nav = tabsNavRef.current;
@@ -84,10 +85,8 @@ const Business = () => {
 
     const observer = new IntersectionObserver(
       ([entry]) => {
-        // Check if the inline tab nav is above viewport (scrolled past)
         const navRect = nav.getBoundingClientRect();
-        const navIsAboveViewport = navRect.bottom < 64; // 64px = main nav height
-        // Section is still partially visible
+        const navIsAboveViewport = navRect.bottom < 64;
         const sectionVisible = entry.isIntersecting;
         setShowStickyTabs(navIsAboveViewport && sectionVisible);
       },
@@ -96,7 +95,6 @@ const Business = () => {
 
     observer.observe(section);
 
-    // Also listen to scroll for more responsive updates
     const handleScroll = () => {
       const navRect = nav.getBoundingClientRect();
       const sectionRect = section.getBoundingClientRect();
@@ -117,6 +115,8 @@ const Business = () => {
     setSubmitted(true);
     toast.success("Thanks! We'll be in touch within 1-2 business days.");
   };
+
+  const tabTriggerClass = "relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80";
 
   return (
     <div className="min-h-screen bg-klawsome-navy">
@@ -163,7 +163,6 @@ const Business = () => {
           </motion.div>
         </div>
 
-        {/* Transition wave to coral */}
         <div className="absolute bottom-0 left-0 right-0">
           <svg viewBox="0 0 1440 100" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full">
             <path d="M0 50C360 100 720 0 1080 50C1260 75 1380 25 1440 50V100H0V50Z" fill="hsl(var(--klawsome-red))" />
@@ -174,7 +173,6 @@ const Business = () => {
       {/* ══════ OPPORTUNITIES TABS ══════ */}
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <div ref={tabsSectionRef}>
-          {/* Sticky floating tab bar */}
           <AnimatePresence>
             {showStickyTabs && (
               <motion.div
@@ -185,15 +183,9 @@ const Business = () => {
                 className="fixed top-16 left-0 right-0 z-40 bg-primary/95 backdrop-blur-md shadow-lg px-4 py-3 text-center border-b border-white/10"
               >
                 <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
-                  <TabsTrigger value="hosted" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-                    🎰 Host a Machine
-                  </TabsTrigger>
-                  <TabsTrigger value="partner" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-                    ⭐ Become a Partner
-                  </TabsTrigger>
-                  <TabsTrigger value="plushie" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-                    🧸 Custom Plushies
-                  </TabsTrigger>
+                  <TabsTrigger value="hosted" className={tabTriggerClass}>🎰 Host a Machine</TabsTrigger>
+                  <TabsTrigger value="partner" className={tabTriggerClass}>⭐ Become a Partner</TabsTrigger>
+                  <TabsTrigger value="plushie" className={tabTriggerClass}>🧸 Custom Plushies</TabsTrigger>
                 </TabsList>
               </motion.div>
             )}
@@ -202,17 +194,11 @@ const Business = () => {
           <div ref={tabsNavRef} className="bg-primary pt-8 px-4 text-center">
             <p className="text-xs font-heading font-bold text-white/70 tracking-widest uppercase mb-4">Our Opportunities</p>
             <TabsList className="bg-transparent h-auto gap-0 rounded-none border-b-2 border-white/20 pb-0 inline-flex">
-            <TabsTrigger value="hosted" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-              🎰 Host a Machine
-            </TabsTrigger>
-            <TabsTrigger value="partner" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-              ⭐ Become a Partner
-            </TabsTrigger>
-            <TabsTrigger value="plushie" className="relative font-heading font-bold text-sm px-8 py-3 rounded-t-lg rounded-b-none border border-b-0 border-transparent text-white/60 bg-transparent transition-all data-[state=active]:bg-klawsome-navy data-[state=active]:text-white data-[state=active]:border-white/20 data-[state=active]:border-b-klawsome-navy data-[state=active]:shadow-none data-[state=active]:mb-[-2px] data-[state=active]:border-t-2 data-[state=active]:border-t-klawsome-yellow hover:text-white/80">
-              🧸 Custom Plushies
-            </TabsTrigger>
-          </TabsList>
-        </div>
+              <TabsTrigger value="hosted" className={tabTriggerClass}>🎰 Host a Machine</TabsTrigger>
+              <TabsTrigger value="partner" className={tabTriggerClass}>⭐ Become a Partner</TabsTrigger>
+              <TabsTrigger value="plushie" className={tabTriggerClass}>🧸 Custom Plushies</TabsTrigger>
+            </TabsList>
+          </div>
 
         {/* ══════ TAB 1: HOST A MACHINE ══════ */}
         <TabsContent value="hosted" className="mt-0">
@@ -220,12 +206,12 @@ const Business = () => {
             <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">01</span>
             <div className="container mx-auto relative z-10">
               <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 01</p>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Host a Klawsome Machine<br />in Your Business</h2>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">{hosted?.title || 'Host a Klawsome Machine'}<br />in Your Business</h2>
               <div className="inline-flex items-center gap-2 bg-white/10 border border-white/20 text-white font-bold text-sm px-5 py-2.5 rounded-bubble mb-7">
                 <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
               </div>
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-                We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.
+                {hosted?.subtitle}
               </p>
               <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
                 <a href="#contact">Apply for a Hosted Machine</a>
@@ -235,18 +221,16 @@ const Business = () => {
 
           <div className="bg-primary py-16 px-4">
             <div className="container mx-auto max-w-4xl">
-              {/* Profit Banner */}
               <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border border-white/20">
                 <div>
                   <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-2">You earn 10% of every token played.</h3>
                   <p className="text-white/70 font-body font-semibold text-sm leading-relaxed max-w-md">
-                    We handle the machine, the prizes, the repairs -- everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.
+                    {hosted?.description}
                   </p>
                 </div>
                 <span className="font-heading text-6xl md:text-7xl font-bold text-klawsome-yellow whitespace-nowrap">🎯 10%</span>
               </div>
 
-              {/* Responsibility Cards */}
               <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2">What each side handles</h3>
               <p className="text-white/60 font-body font-semibold mb-7">A truly hands-off opportunity for your business.</p>
               <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -254,7 +238,7 @@ const Business = () => {
                   <h4 className="font-heading text-xl font-bold text-white mb-1">Klawsome Takes Care Of</h4>
                   <p className="text-sm text-white/60 font-bold mb-5">We do the heavy lifting</p>
                   <ul className="space-y-3">
-                    {klawsomeHandles.map((item) => (
+                    {(hosted?.bullet_points || []).map((item) => (
                       <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-white/80">
                         <span className="flex-shrink-0 w-5 h-5 rounded-full bg-klawsome-yellow/20 text-klawsome-yellow flex items-center justify-center text-xs mt-0.5"><Check className="w-3 h-3" /></span>
                         {item}
@@ -276,7 +260,6 @@ const Business = () => {
                 </div>
               </div>
 
-              {/* Venues */}
               <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-5">Perfect for high-traffic spots</h3>
               <div className="flex flex-wrap gap-3 mb-8">
                 {venues.map((v) => (
@@ -295,9 +278,9 @@ const Business = () => {
             <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">02</span>
             <div className="container mx-auto relative z-10">
               <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 02</p>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Become a<br /><span className="kawaii-text-gradient">Klawsome Partner</span></h2>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">{partner?.title || 'Become a'}<br /><span className="kawaii-text-gradient">Klawsome Partner</span></h2>
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-                Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training -- you bring the space and the hustle.
+                {partner?.subtitle}
               </p>
               <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                 <a href="#contact">Apply to Be a Partner ⭐</a>
@@ -312,7 +295,7 @@ const Business = () => {
               <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-8 border border-white/20">
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-3">Why partner with Klawsome?</h3>
                 <p className="text-white/70 font-body font-semibold leading-relaxed">
-                  We're not a franchise -- we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.
+                  {partner?.description}
                 </p>
               </div>
 
@@ -359,9 +342,9 @@ const Business = () => {
             <span className="absolute font-heading text-[220px] font-bold text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
             <div className="container mx-auto relative z-10">
               <p className="text-xs font-heading font-bold tracking-[3px] uppercase text-klawsome-yellow mb-3">Opportunity 03</p>
-              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">Custom Plushie<br /><span className="kawaii-text-gradient">Orders</span></h2>
+              <h2 className="font-heading text-4xl md:text-5xl font-bold text-white mb-4">{plushie?.title || 'Custom Plushie'}<br /><span className="kawaii-text-gradient">Orders</span></h2>
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-                Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery -- from concept to cuddly reality 🧸
+                {plushie?.subtitle}
               </p>
               <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
                 <a href="#contact">Start a Custom Order</a>
@@ -371,11 +354,10 @@ const Business = () => {
 
           <div className="bg-primary py-16 px-4">
             <div className="container mx-auto max-w-4xl">
-              {/* Min order callout */}
               <div className="bg-white/10 backdrop-blur-sm border-l-4 border-klawsome-yellow rounded-r-kawaii p-5 flex items-center gap-4 mb-10">
                 <span className="text-3xl flex-shrink-0">📦</span>
                 <p className="font-body font-bold text-sm text-white">
-                  Minimum order: <span className="text-klawsome-yellow">100 units</span>. Pricing varies by size, complexity, and quantity.
+                  {plushie?.description}
                 </p>
               </div>
 
@@ -385,9 +367,9 @@ const Business = () => {
               <div className="grid md:grid-cols-3 gap-5 mb-10">
                 {pricingTiers.map((tier, index) => (
                   <motion.div
-                    key={tier.title}
+                    key={tier.id}
                     className={`rounded-kawaii p-8 text-center border ${
-                      tier.variant === 'dark'
+                      index === pricingTiers.length - 1
                         ? 'bg-klawsome-navy border-klawsome-yellow/30'
                         : 'bg-white/10 backdrop-blur-sm border-white/20'
                     }`}
@@ -397,24 +379,22 @@ const Business = () => {
                     transition={{ duration: 0.5, delay: index * 0.15 }}
                     whileHover={{ y: -5, transition: { duration: 0.2 } }}
                   >
-                    <p className="text-xs font-bold tracking-widest uppercase mb-2 text-klawsome-yellow">{tier.label}</p>
-                    <h5 className="font-heading text-lg font-bold mb-2 text-white">{tier.title}</h5>
+                    <p className="text-xs font-bold tracking-widest uppercase mb-2 text-klawsome-yellow">{tier.features?.[0] || ''}</p>
+                    <h5 className="font-heading text-lg font-bold mb-2 text-white">{tier.name}</h5>
                     <p className="font-heading text-4xl font-bold mb-1 text-klawsome-yellow">{tier.price}</p>
-                    <p className="text-sm font-bold mb-3 text-white/60">{tier.per}</p>
-                    <p className="text-sm font-semibold leading-snug text-white/60">{tier.desc}</p>
+                    <p className="text-sm font-bold mb-3 text-white/60">per unit</p>
+                    <p className="text-sm font-semibold leading-snug text-white/60">{tier.features?.slice(1).join('. ') || ''}</p>
                   </motion.div>
                 ))}
               </div>
 
-              {/* How it works - plushie */}
               <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 mb-10 border border-white/20">
                 <h3 className="font-heading text-xl md:text-2xl font-bold text-white mb-6">How it works</h3>
                 <div className="grid md:grid-cols-3 gap-6">
-                  {plushieSteps.map((step) => (
-                    <div key={step.title} className="text-center">
-                      <span className="text-3xl mb-2 block">{step.icon}</span>
-                      <h6 className="font-heading text-base font-bold text-white mb-1">{step.title}</h6>
-                      <p className="text-sm text-white/60 font-body font-semibold leading-snug">{step.desc}</p>
+                  {(plushie?.bullet_points || []).map((step, i) => (
+                    <div key={i} className="text-center">
+                      <span className="text-3xl mb-2 block">{['📝', '💬', '✅'][i] || '📌'}</span>
+                      <h6 className="font-heading text-base font-bold text-white mb-1">{step}</h6>
                     </div>
                   ))}
                 </div>
@@ -428,7 +408,7 @@ const Business = () => {
             </div>
           </div>
         </TabsContent>
-        </div>{/* end tabsSectionRef */}
+        </div>
       </Tabs>
 
       {/* ══════ HOW IT WORKS ══════ */}
@@ -439,17 +419,17 @@ const Business = () => {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-7">
             {howSteps.map((step, index) => (
               <motion.div
-                key={step.num}
+                key={step.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.5, delay: index * 0.15 }}
               >
                 <div className="w-14 h-14 bg-klawsome-yellow text-klawsome-navy font-heading text-xl font-bold rounded-full flex items-center justify-center mx-auto mb-4 kawaii-shadow">
-                  {step.num}
+                  {step.icon}
                 </div>
                 <h4 className="font-heading text-base font-bold text-white mb-2">{step.title}</h4>
-                <p className="text-sm text-white/60 font-body font-semibold leading-snug">{step.desc}</p>
+                <p className="text-sm text-white/60 font-body font-semibold leading-snug">{step.description}</p>
               </motion.div>
             ))}
           </div>
@@ -476,33 +456,15 @@ const Business = () => {
               <div className="grid md:grid-cols-2 gap-4">
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-heading font-bold text-white">Your Name</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="Jane Smith"
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors"
-                  />
+                  <input type="text" required placeholder="Jane Smith" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors" />
                 </div>
                 <div className="flex flex-col gap-2">
                   <label className="text-sm font-heading font-bold text-white">Email Address</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="jane@yourbusiness.com"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors"
-                  />
+                  <input type="email" required placeholder="jane@yourbusiness.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors" />
                 </div>
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-sm font-heading font-bold text-white">I'm interested in...</label>
-                  <select
-                    value={formData.opportunity}
-                    onChange={(e) => setFormData({ ...formData, opportunity: e.target.value })}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white focus:border-klawsome-yellow outline-none transition-colors"
-                  >
+                  <select value={formData.opportunity} onChange={(e) => setFormData({ ...formData, opportunity: e.target.value })} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white focus:border-klawsome-yellow outline-none transition-colors">
                     <option value="" className="text-klawsome-navy">Select an opportunity...</option>
                     <option className="text-klawsome-navy">Host a Klawsome machine in my business</option>
                     <option className="text-klawsome-navy">Become a Klawsome Partner (open my own arcade)</option>
@@ -512,11 +474,7 @@ const Business = () => {
                 </div>
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-sm font-heading font-bold text-white">I am a...</label>
-                  <select
-                    value={formData.business_type}
-                    onChange={(e) => setFormData({ ...formData, business_type: e.target.value })}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white focus:border-klawsome-yellow outline-none transition-colors"
-                  >
+                  <select value={formData.business_type} onChange={(e) => setFormData({ ...formData, business_type: e.target.value })} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white focus:border-klawsome-yellow outline-none transition-colors">
                     <option value="" className="text-klawsome-navy">Select...</option>
                     <option className="text-klawsome-navy">Restaurant owner</option>
                     <option className="text-klawsome-navy">Bubble Tea / Cafe owner</option>
@@ -529,13 +487,7 @@ const Business = () => {
                 </div>
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-sm font-heading font-bold text-white">Tell us more</label>
-                  <textarea
-                    placeholder="Share your idea, location, concept -- anything that helps us understand what you're looking for..."
-                    value={formData.message}
-                    onChange={(e) => setFormData({ ...formData, message: e.target.value })}
-                    rows={5}
-                    className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors resize-y"
-                  />
+                  <textarea placeholder="Share your idea, location, concept -- anything that helps us understand what you're looking for..." value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={5} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors resize-y" />
                 </div>
               </div>
               <div className="text-center mt-7">
