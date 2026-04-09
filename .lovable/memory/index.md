@@ -1,13 +1,14 @@
 # Project Memory
 
 ## Core
-Klawsome brand — klaw machine arcade. Primary: coral red #e9546b. Tertiary: navy #24416c, yellow #f2dc72. Baby blue #d7f5fb, baby pink, white.
-Quicksand headings, Nunito body. Prismic CMS + Square payments (sandbox). Logo top-left nav (original colors, no tint).
-Card grids: fixed-height image/icon containers so titles+descriptions align across columns.
+Kawaii Sanrio theme. Pastel palette with pink/lavender/sky/mint/peach tokens.
+Quicksand headings, Nunito body. Square payments (sandbox).
+Square App ID: sandbox-sq0idb-odBIf_MpySp0OxgocdsyEw
+DB is single source of truth for all site content. Never change content only in code — update DB too.
 
 ## Memories
 - [Square integration](mem://features/square) — Sandbox env, catalog edge function, access token stored as secret
 - [Acuity integration](mem://features/acuity) — Scheduling API, availability edge function, calendar UI
-- [Design tokens](mem://design/kawaii-tokens) — Coral red primary, navy+yellow tertiary, baby blue/pink/white palette
-- [Prismic integration](mem://features/prismic) — Prismic repo with product_pages and scheduling types, per-day availability fields sync to DB
-- [Card grid alignment](mem://design/card-grid-alignment) — Fixed-height containers for images/icons so text aligns across card columns
+- [Design tokens](mem://design/kawaii-tokens) — Pastel color system, kawaii animations, rounded borders
+- [CMS Command Center](mem://features/cms) — Self-hosted CMS at /klawsome-admin, 14 content tables, useCmsTable/useCmsSingle hooks
+- [CMS content sync](mem://constraint/cms-content-sync) — Never change site content only in code; always update DB record too
