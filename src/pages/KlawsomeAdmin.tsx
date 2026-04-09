@@ -5,11 +5,12 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+// Table/Badge also used by multi-row editor
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Calendar, RefreshCw, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
-import { format } from 'date-fns';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
+
 import { toast } from 'sonner';
 
 // ─── CMS helpers ────────────────────────────────────────────
@@ -301,80 +302,8 @@ function StoreHoursEditor({ password }: { password: string }) {
   );
 }
 
-// ─── Appointments Tab (existing) ────────────────────────────
-function AppointmentsTab() {
-  const [bookings, setBookings] = useState<any[]>([]);
-  const [appointmentTypes, setAppointmentTypes] = useState<Record<string, string>>({});
-  const [fetching, setFetching] = useState(false);
 
-  const fetchBookings = async () => {
-    setFetching(true);
-    try {
-      const [bookingsRes, typesRes] = await Promise.all([
-        supabase.from('bookings').select('*').order('booking_date', { ascending: false }),
-        supabase.from('appointment_types').select('*'),
-      ]);
-      if (bookingsRes.data) setBookings(bookingsRes.data);
-      if (typesRes.data) {
-        const map: Record<string, string> = {};
-        typesRes.data.forEach((t) => (map[t.id] = t.name));
-        setAppointmentTypes(map);
-      }
-    } catch (err) { console.error('Failed to fetch bookings', err); }
-    setFetching(false);
-  };
 
-  useEffect(() => { fetchBookings(); }, []);
-
-  const statusColor = (status: string) => {
-    switch (status) {
-      case 'confirmed': return 'bg-green-500/20 text-green-300 border-green-500/30';
-      case 'cancelled': return 'bg-red-500/20 text-red-300 border-red-500/30';
-      default: return 'bg-white/10 text-white/60 border-white/20';
-    }
-  };
-
-  return (
-    <div className="space-y-4">
-      <div className="flex justify-end">
-        <Button onClick={fetchBookings} disabled={fetching} variant="outline" className="border-white/20 text-white hover:bg-white/10">
-          <RefreshCw className={`w-4 h-4 mr-2 ${fetching ? 'animate-spin' : ''}`} />Refresh
-        </Button>
-      </div>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardContent className="p-0 overflow-x-auto">
-          <Table>
-            <TableHeader>
-              <TableRow className="border-white/10 hover:bg-transparent">
-                <TableHead className="text-white/60 font-heading">Date</TableHead>
-                <TableHead className="text-white/60 font-heading">Time</TableHead>
-                <TableHead className="text-white/60 font-heading">Type</TableHead>
-                <TableHead className="text-white/60 font-heading">Customer</TableHead>
-                <TableHead className="text-white/60 font-heading">Email</TableHead>
-                <TableHead className="text-white/60 font-heading">Status</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {bookings.length === 0 ? (
-                <TableRow className="border-white/10"><TableCell colSpan={6} className="text-center text-white/40 py-12">{fetching ? 'Loading…' : 'No appointments found'}</TableCell></TableRow>
-              ) : bookings.map((b) => (
-                <TableRow key={b.id} className="border-white/10 hover:bg-white/5">
-                  <TableCell className="text-white font-medium">{format(new Date(b.booking_date), 'MMM d, yyyy')}</TableCell>
-                  <TableCell className="text-white/80">{b.start_time?.slice(0, 5)} – {b.end_time?.slice(0, 5)}</TableCell>
-                  <TableCell className="text-white/80">{appointmentTypes[b.appointment_type_id] || '—'}</TableCell>
-                  <TableCell className="text-white font-medium">{b.customer_name}</TableCell>
-                  <TableCell className="text-white/70 text-sm">{b.customer_email}</TableCell>
-                  <TableCell><Badge variant="outline" className={statusColor(b.status)}>{b.status}</Badge></TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-      <p className="text-white/30 text-sm text-center">{bookings.length} appointment{bookings.length !== 1 ? 's' : ''} total</p>
-    </div>
-  );
-}
 
 // ─── Main Admin Component ───────────────────────────────────
 const KlawsomeAdmin = () => {
@@ -456,7 +385,7 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
             <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            <TabsTrigger value="appointments" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Calendar className="w-3 h-3 mr-1" />Appointments</TabsTrigger>
+            
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -668,10 +597,8 @@ const KlawsomeAdmin = () => {
             </Card>
           </TabsContent>
 
-          {/* ─── Appointments ─── */}
-          <TabsContent value="appointments">
-            <AppointmentsTab />
-          </TabsContent>
+
+
         </Tabs>
       </div>
     </div>
