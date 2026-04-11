@@ -1,92 +1,101 @@
 
 
-# Restructure All Pages to Be Fully CMS-Driven
+# Fool-Proof Standardized Section Layout Engine
 
-## Problem
+## Core Idea
 
-There are two parallel systems fighting each other:
+Replace the current 7 ad-hoc template functions with a single **universal layout engine** that sorts ANY combination of blocks into 3 guaranteed zones. No AI. No guessing. Every section looks like a proper Bootstrap/Stripe-style section regardless of what the user puts in.
 
-1. **Hardcoded "Kawaii" components** (`KawaiiStory`, `KawaiiAbout`, `KawaiiHero`, `KawaiiVisit`, etc.) — they have their own `<section>` tags, padding, backgrounds, and hardcoded labels like "Our Story" / "How It Works". They render via `fullControl={true}`, which bypasses `SectionWrapper`'s layout rules entirely.
+```text
+┌──────────────────── 100vw SECTION ────────────────────────┐
+│                                                            │
+│  ┌──────── container (1200px, centered) ────────────┐     │
+│  │                                                    │     │
+│  │  ╔══ HEADER ZONE (max-w-3xl, text-center) ═════╗ │     │
+│  │  ║  heading  →  always h2, text-3xl/4xl         ║ │     │
+│  │  ║  text/richtext  →  always text-lg, opacity-80║ │     │
+│  │  ╚══════════════════════════════════════════════╝ │     │
+│  │                    ↕ space-y-10                    │     │
+│  │  ╔══ CONTENT ZONE (full width) ═════════════════╗ │     │
+│  │  ║  images → auto-grid (1=full, 2=2col, 3+=3col)║ │     │
+│  │  ║  video/iframe → max-w-4xl centered            ║ │     │
+│  │  ║  widgets → full width                         ║ │     │
+│  │  ║  cards → auto-grid                            ║ │     │
+│  │  ╚══════════════════════════════════════════════╝ │     │
+│  │                    ↕ space-y-8                     │     │
+│  │  ╔══ CTA ZONE (flex justify-center) ════════════╗ │     │
+│  │  ║  buttons → always centered, gap-4             ║ │     │
+│  │  ╚══════════════════════════════════════════════╝ │     │
+│  │                                                    │     │
+│  └────────────────────────────────────────────────────┘     │
+│                                                            │
+└────────────────────────────────────────────────────────────┘
+```
 
-2. **CMS-driven DynamicSection** — uses `SectionWrapper` properly with the section/hero/small type system and priority-based block layout.
+## Block Classification (every block type accounted for)
 
-The result: the admin CMS shows sections but half of them say "no editable content" or only edit a few fields in a separate table. The frontend ignores the section type/background settings for built-in sections because `fullControl` skips `SectionWrapper`. Labels like "Our Story" are baked into component code, not the CMS.
+| Block Type | Zone | Rendering Rule |
+|---|---|---|
+| `heading` | HEADER | `h2`, `text-3xl md:text-4xl`, `font-bold`, centered |
+| `text` | HEADER | `p`, `text-lg`, `opacity-80`, centered |
+| `richtext` | HEADER | `div`, `text-lg`, prose styles, centered |
+| `image` | CONTENT | Auto-grid: 1 img = full width rounded, 2 = 2-col, 3+ = 3-col |
+| `video` | CONTENT | `max-w-4xl mx-auto`, aspect-video |
+| `iframe` | CONTENT | `max-w-4xl mx-auto`, aspect-video |
+| `button` | CTA | Always `flex justify-center gap-4` |
+| `spacer` | (inline) | Renders in place between zones |
+| `divider` | (inline) | Renders in place between zones |
+| `code` | CONTENT | `max-w-3xl mx-auto`, monospace block |
+| `list` | HEADER | Centered list under text |
+| `cards` | CONTENT | Auto-grid based on item count |
+| `pricing` | CONTENT | Full-width grid widget |
+| `hours` | CONTENT | Centered `max-w-md` widget |
+| `reviews` | CONTENT | Centered widget |
+| `news` | CONTENT | 3-col grid widget |
+| `faq` | CONTENT | `max-w-3xl` centered accordion |
+| `jobs` | CONTENT | Full-width stacked cards |
+| `party_options` | CONTENT | 2-col grid widget |
+| `templates` | CONTENT | 2-col grid widget |
 
-## Solution
+## Hero Override
 
-Convert all built-in sections to use `DynamicSection` + `SectionWrapper` so every section on the site is controlled the same way: section type, background, and content blocks — all from the admin.
+When `sectionType === 'hero'`, the engine makes two adjustments:
+1. Header zone gets larger type: `text-4xl md:text-5xl lg:text-6xl` for headings
+2. If there's exactly 1 image block, it becomes a background (rendered behind content via absolute positioning) instead of going into the content zone — so hero images always look full-bleed
 
 ## What Changes
 
-### 1. Database Migration
-- Seed `section_content_blocks` rows for each existing built-in section (hero, about, visit, story, tokens, etc.) so they have content blocks matching what's currently hardcoded.
-- These blocks will pull their default content from the existing CMS tables (`homepage_content`, `homepage_steps`, `site_settings`, etc.) during migration.
+### 1. `DynamicSection.tsx` — Full Rewrite
 
-### 2. Remove Hardcoded Components
-Delete or deprecate these files (their content moves into CMS blocks):
-- `KawaiiStory.tsx` — "Our Story" label + story_title/story_body → heading + richtext blocks
-- `KawaiiAbout.tsx` — "How It Works" + steps → heading + text + card blocks
-- `KawaiiHero.tsx` — hero headline/subheadline/CTA → heading + text + button blocks on a hero section with bg image
-- `KawaiiVisit.tsx` — address/hours/map → structured blocks
-- `KawaiiTokenPrices.tsx` — token tiers → card blocks or a dedicated "pricing" block type
-- `KawaiiReviews.tsx` — Google reviews → embed or dedicated block
-- `KawaiiNews.tsx` — news articles grid → card blocks
-- `KawaiiGiftCards.tsx` — gift card CTA → heading + button blocks
+**Delete** all 7 template functions (`ImageLedHero`, `HeroSplit`, `TextWithGallery`, `VideoEmbed`, `CTAStrip`, `CardsLayout`, `StackedLayout`).
 
-### 3. Add New Block Types to DynamicSection
-Add a few specialized block types so structured data renders well:
-- **`pricing`** — renders a pricing tier grid (pulls from `token_tiers` or inline content)
-- **`hours`** — renders store hours (pulls from `store_hours`)
-- **`reviews`** — renders Google reviews widget
-- **`cards`** — renders a grid of cards with icon/title/description (for "How It Works" steps, news articles, etc.)
+**Replace** with a single `UniversalLayout` that:
+1. Classifies every block into `header`, `content`, or `cta` zone
+2. Renders the 3 zones in order with consistent spacing
+3. Auto-grids images/media based on count
+4. Centers text blocks with `max-w-3xl mx-auto text-center`
 
-### 4. Simplify Page Files
-All page files (`Index.tsx`, `Birthdays.tsx`, `Careers.tsx`, `Business.tsx`, `News.tsx`) reduce to the same pattern:
+**Keep** all specialized widgets (`PricingWidget`, `HoursWidget`, etc.) unchanged — they already look good.
 
-```typescript
-const Page = () => {
-  const { data: sections } = usePageSections('home');
-  return (
-    <div className="min-h-screen bg-background">
-      <KawaiiNav />
-      {sections?.map(s => (
-        <SectionWrapper key={s.id} config={s}>
-          <DynamicSection sectionId={s.id} sectionType={s.section_type} />
-        </SectionWrapper>
-      ))}
-      <KawaiiFooter />
-    </div>
-  );
-};
-```
+**Fix `BlockRenderer`**: Remove priority-based font sizing. Every heading is `text-3xl md:text-4xl`. Every body text is `text-lg`. Consistency over variety.
 
-No more `SECTION_MAP`, no more `fullControl`, no more `FALLBACK_SECTIONS`. Every section is a `DynamicSection`.
+### 2. `SectionWrapper.tsx` — Minor Tweak
 
-### 5. Remove `BuiltInEditor` from Admin
-Since all sections now use `ContentBlockEditor`, the `BuiltInEditor` routing and all individual editors (`HomeHeroEditor`, `HomeStoryEditor`, `HomeAboutEditor`, etc.) are removed. Every section gets the same block editor experience.
+Add `text-center` as default on the container div so all inherited text is centered. Already handles the section/container hierarchy correctly.
 
-### 6. Keep Existing Data Tables
-Tables like `homepage_content`, `token_tiers`, `store_hours`, `news_articles` stay as data sources. Some block types (pricing, hours, reviews) will reference these tables to render structured data. The admin's Settings tab still edits `site_settings`.
+### 3. Accessibility Hardened
 
-## Files Changed
+- All headings use `<h2>` (already done)
+- Images get fallback `alt="Section image"` if none provided
+- Buttons wrapped in `<a>` with visible text
+- Auto text color + text shadow on bg images (already in SectionWrapper)
+- Focus-visible from Tailwind defaults
 
-| File | Change |
-|------|--------|
-| Migration SQL | Seed content blocks for all existing built-in sections |
-| `DynamicSection.tsx` | Add pricing, hours, reviews, cards block types |
-| `SectionWrapper.tsx` | Remove `fullControl` prop entirely |
-| `Index.tsx` | Simplify to universal section loop |
-| `Birthdays.tsx` | Same universal loop |
-| `Business.tsx` | Same universal loop |
-| `Careers.tsx` | Same universal loop |
-| `News.tsx` | Same universal loop |
-| `KlawsomeAdmin.tsx` | Remove `BuiltInEditor` and all individual editors; all sections use `ContentBlockEditor` |
-| Delete `KawaiiStory.tsx`, `KawaiiAbout.tsx`, `KawaiiHero.tsx`, `KawaiiVisit.tsx`, `KawaiiTokenPrices.tsx`, `KawaiiReviews.tsx`, `KawaiiNews.tsx`, `KawaiiGiftCards.tsx` | Content now lives in CMS blocks |
+## Cost
 
-## Result
-- Every section on every page is controlled identically from the admin
-- No more "no editable content" messages
-- No more hardcoded labels like "Our Story"
-- Section type, background, and content blocks all work consistently
-- The admin CMS is the single source of truth for everything on the site
+**Zero AI calls.** Pure deterministic zone-sorting logic. The "smartness" is in the rigid classification rules — every block type maps to exactly one zone, always.
+
+## Why This Is Fool-Proof
+
+The current system fails because it tries to pick between 7 templates using heuristics (count of images, priority of first block, etc.). Those heuristics create edge cases. The new system has **no template selection** — there's only one layout, and it handles every combination by sorting blocks into zones. There are no edge cases because every block type has a predetermined zone.
 
