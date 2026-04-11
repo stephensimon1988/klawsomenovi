@@ -134,6 +134,42 @@ export type Database = {
         }
         Relationships: []
       }
+      custom_blocks: {
+        Row: {
+          block_key: string
+          body: string
+          cta_text: string
+          cta_url: string
+          headline: string
+          id: string
+          image_position: string
+          image_url: string
+          sort_order: number
+        }
+        Insert: {
+          block_key: string
+          body?: string
+          cta_text?: string
+          cta_url?: string
+          headline?: string
+          id?: string
+          image_position?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Update: {
+          block_key?: string
+          body?: string
+          cta_text?: string
+          cta_url?: string
+          headline?: string
+          id?: string
+          image_position?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       faq_items: {
         Row: {
           answer: string
@@ -323,6 +359,51 @@ export type Database = {
           source?: string | null
           title?: string
           url?: string
+        }
+        Relationships: []
+      }
+      page_sections: {
+        Row: {
+          bg_color: string
+          bg_image_url: string
+          custom_css_class: string
+          id: string
+          is_visible: boolean
+          label: string
+          padding_y: string
+          page: string
+          section_height: string
+          section_key: string
+          sort_order: number
+          wrapper_max_width: string
+        }
+        Insert: {
+          bg_color?: string
+          bg_image_url?: string
+          custom_css_class?: string
+          id?: string
+          is_visible?: boolean
+          label?: string
+          padding_y?: string
+          page: string
+          section_height?: string
+          section_key: string
+          sort_order?: number
+          wrapper_max_width?: string
+        }
+        Update: {
+          bg_color?: string
+          bg_image_url?: string
+          custom_css_class?: string
+          id?: string
+          is_visible?: boolean
+          label?: string
+          padding_y?: string
+          page?: string
+          section_height?: string
+          section_key?: string
+          sort_order?: number
+          wrapper_max_width?: string
         }
         Relationships: []
       }
