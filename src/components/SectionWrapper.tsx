@@ -25,6 +25,7 @@ export interface PageSectionConfig {
 interface SectionWrapperProps {
   config: PageSectionConfig;
   children: React.ReactNode;
+  /** When true, the wrapper is a transparent pass-through — the child manages its own layout/bg. */
   fullControl?: boolean;
 }
 
@@ -70,27 +71,40 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     text_color,
     section_type = 'section',
     hero_height = '100vh',
-    // Legacy fallbacks
     section_height,
-    wrapper_max_width,
-    padding_y,
   } = config;
 
-  // Use section_type system if available, otherwise fall back to legacy fields
   const typeStyles = SECTION_TYPE_STYLES[section_type] || SECTION_TYPE_STYLES.section;
-  
-  const sectionStyle: React.CSSProperties = {};
   const hasBgImage = !!bg_image_url;
+  const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
 
-  // Height: hero uses hero_height, others are auto
+  // ── Full-control sections (e.g. KawaiiHero) manage their own bg/layout ──
+  // Wrapper is just a transparent 100vw shell for ordering/visibility.
+  if (fullControl) {
+    return (
+      <div id={`section-${section_key}`} data-section-id={id} style={{ width: '100%' }}>
+        {children}
+      </div>
+    );
+  }
+
+  // ── Standard CMS sections ──
+  // OUTER: <section> = 100vw, holds background color/image/overlay
+  // INNER: <div> = capped container (1200px / 1000px), centered, holds content
+
+  const sectionStyle: React.CSSProperties = {
+    position: 'relative',
+    width: '100%',
+  };
+
   if (section_type === 'hero') {
     sectionStyle.minHeight = hero_height || '100vh';
   } else if (section_height && section_height !== 'auto') {
     sectionStyle.minHeight = section_height;
   }
 
+  // Background goes on the SECTION (full-width)
   if (bg_color) sectionStyle.backgroundColor = bg_color;
-
   if (hasBgImage) {
     sectionStyle.backgroundImage = `url('${bg_image_url}')`;
     sectionStyle.backgroundSize = 'cover';
@@ -100,30 +114,27 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
   const computedTextColor = text_color || (hasBgImage ? '#ffffff' : getAutoTextColor(bg_color));
   if (computedTextColor) sectionStyle.color = computedTextColor;
 
-  // Text shadow for readability over images
   const textShadowStyle: React.CSSProperties = hasBgImage
     ? { textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)' }
     : {};
 
-  const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
-
-  const SAFE_PAD_X = '1.5rem';
-  const heroMinPadY = '3rem';
+  // Container styles
   const containerMax = typeStyles.containerMax;
   const paddingY = typeStyles.paddingY;
-  const effectivePadY = paddingY === '0' ? heroMinPadY : paddingY;
+  const effectivePadY = paddingY === '0' ? (section_type === 'hero' ? '3rem' : '0') : paddingY;
+  const SAFE_PAD_X = '1.5rem';
 
-  // ── Outer section: always 100vw, holds bg color/image/overlay ──
-  // ── Inner container: capped width, centered, holds content ──
   return (
     <section
       id={`section-${section_key}`}
       data-section-id={id}
-      style={{ ...sectionStyle, position: 'relative', width: '100%' }}
+      style={sectionStyle}
       className={custom_css_class || undefined}
     >
+      {/* Dark overlay for readability — on the section, not the container */}
       {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" aria-hidden="true" />}
 
+      {/* Centered content container */}
       <div
         style={{
           position: 'relative',
