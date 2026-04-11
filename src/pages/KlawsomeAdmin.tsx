@@ -386,7 +386,8 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
             <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            
+            <TabsTrigger value="layout" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><LayoutGrid className="w-3 h-3 mr-1" />Page Layout</TabsTrigger>
+            <TabsTrigger value="blocks" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Blocks className="w-3 h-3 mr-1" />Custom Blocks</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
