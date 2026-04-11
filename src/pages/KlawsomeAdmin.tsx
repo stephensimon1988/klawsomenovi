@@ -15,6 +15,7 @@ import {
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
+import { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
@@ -645,6 +646,25 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
               </div>
             </div>
           )}
+
+          {/* Layout Template Picker */}
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Layout Template</label>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+              {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => (
+                <Button key={key} size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'layout_template', key)}
+                  className={`text-xs h-auto py-2 px-3 border flex flex-col items-start gap-0.5 ${
+                    (section.layout_template || 'stacked') === key
+                      ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                      : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'
+                  }`}>
+                  <span>{tmpl.label}</span>
+                  <span className="text-[10px] opacity-60 font-normal text-left leading-tight">{tmpl.description}</span>
+                </Button>
+              ))}
+            </div>
+          </div>
 
           {/* Background controls */}
           <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />

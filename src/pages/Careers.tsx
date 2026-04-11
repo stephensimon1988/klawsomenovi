@@ -12,7 +12,7 @@ const Careers = () => {
       <KawaiiNav />
       {sections?.map((s) => (
         <SectionWrapper key={s.id} config={s}>
-          <DynamicSection sectionId={s.id} sectionType={s.section_type} />
+          <DynamicSection sectionId={s.id} sectionType={s.section_type} layoutTemplate={(s as any).layout_template} />
         </SectionWrapper>
       ))}
       <KawaiiFooter />

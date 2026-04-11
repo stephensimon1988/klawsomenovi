@@ -21,6 +21,7 @@ export interface PageSectionConfig {
   layout_json?: Record<string, any>;
   section_type?: 'hero' | 'section' | 'small';
   hero_height?: '50vh' | '100vh';
+  layout_template?: string;
 }
 
 interface SectionWrapperProps {
