@@ -80,38 +80,67 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
   const typeStyles = SECTION_TYPE_STYLES[section_type] || SECTION_TYPE_STYLES.section;
   
   const sectionStyle: React.CSSProperties = {};
+  const hasBgImage = !!bg_image_url;
 
   // Height: hero uses hero_height, others are auto
   if (section_type === 'hero') {
     sectionStyle.minHeight = hero_height || '100vh';
   } else if (section_height && section_height !== 'auto') {
-    // Legacy fallback
     sectionStyle.minHeight = section_height;
   }
 
   if (bg_color) sectionStyle.backgroundColor = bg_color;
 
-  if (bg_image_url) {
+  if (hasBgImage) {
     sectionStyle.backgroundImage = `url('${bg_image_url}')`;
     sectionStyle.backgroundSize = 'cover';
     sectionStyle.backgroundPosition = 'center';
   }
 
-  const computedTextColor = text_color || getAutoTextColor(bg_color);
+  const computedTextColor = text_color || (hasBgImage ? '#ffffff' : getAutoTextColor(bg_color));
   if (computedTextColor) sectionStyle.color = computedTextColor;
+
+  // Text shadow for readability over images
+  const textShadowStyle: React.CSSProperties = hasBgImage
+    ? { textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)' }
+    : {};
 
   const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
 
-  // Derive container styles from section_type
+  // Always enforce safe minimum padding — even heroes need horizontal breathing room
+  const SAFE_HORIZONTAL_PAD = '1.5rem';
+  const SAFE_MIN_PAD_Y = section_type === 'hero' ? '3rem' : '0';
+
   const maxWidth = typeStyles.maxWidth;
   const paddingValue = typeStyles.padding;
 
   if (fullControl) {
     return (
-      <div id={`section-${section_key}`} data-section-id={id} style={sectionStyle} className={custom_css_class || undefined}>
-        {children}
+      <div id={`section-${section_key}`} data-section-id={id} style={{ ...sectionStyle, position: 'relative' }} className={custom_css_class || undefined}>
+        {/* Dark overlay for image backgrounds */}
+        {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" />}
+        <div
+          style={{
+            position: 'relative',
+            zIndex: 1,
+            maxWidth: '1200px',
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            paddingLeft: SAFE_HORIZONTAL_PAD,
+            paddingRight: SAFE_HORIZONTAL_PAD,
+            paddingTop: SAFE_MIN_PAD_Y,
+            paddingBottom: SAFE_MIN_PAD_Y,
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            minHeight: 'inherit',
+            ...textShadowStyle,
+          }}
+        >
+          {children}
+        </div>
         {photoArray.length > 0 && (
-          <div style={{ maxWidth: maxWidth === '100%' ? '100%' : maxWidth, marginLeft: 'auto', marginRight: 'auto', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingBottom: '2rem' }}>
+          <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: SAFE_HORIZONTAL_PAD, paddingRight: SAFE_HORIZONTAL_PAD, paddingBottom: '2rem' }}>
             <SectionPhotoGallery photos={photoArray} />
           </div>
         )}
@@ -119,7 +148,6 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     );
   }
 
-  // Parse padding into top/bottom
   const paddingParts = paddingValue.split(' ');
   const paddingTop = paddingParts[0];
   const paddingBottom = paddingParts.length > 1 ? paddingParts[1] : paddingParts[0];
@@ -128,18 +156,23 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     <div
       id={`section-${section_key}`}
       data-section-id={id}
-      style={sectionStyle}
+      style={{ ...sectionStyle, position: 'relative' }}
       className={custom_css_class || undefined}
     >
+      {/* Dark overlay for image backgrounds */}
+      {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" />}
       <div
         style={{
-          maxWidth: maxWidth === '100%' ? '100%' : maxWidth,
+          position: 'relative',
+          zIndex: 1,
+          maxWidth: maxWidth === '100%' ? '1200px' : maxWidth,
           marginLeft: 'auto',
           marginRight: 'auto',
-          paddingTop,
-          paddingBottom: photoArray.length > 0 ? '2rem' : paddingBottom,
-          paddingLeft: maxWidth === '100%' ? '0' : '1.5rem',
-          paddingRight: maxWidth === '100%' ? '0' : '1.5rem',
+          paddingTop: paddingTop === '0' ? SAFE_MIN_PAD_Y : paddingTop,
+          paddingBottom: photoArray.length > 0 ? '2rem' : (paddingBottom === '0' ? SAFE_MIN_PAD_Y : paddingBottom),
+          paddingLeft: SAFE_HORIZONTAL_PAD,
+          paddingRight: SAFE_HORIZONTAL_PAD,
+          ...textShadowStyle,
         }}
       >
         {children}
@@ -147,11 +180,13 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
       {photoArray.length > 0 && (
         <div
           style={{
-            maxWidth: maxWidth === '100%' ? '100%' : maxWidth,
+            position: 'relative',
+            zIndex: 1,
+            maxWidth: maxWidth === '100%' ? '1200px' : maxWidth,
             marginLeft: 'auto',
             marginRight: 'auto',
-            paddingLeft: '1.5rem',
-            paddingRight: '1.5rem',
+            paddingLeft: SAFE_HORIZONTAL_PAD,
+            paddingRight: SAFE_HORIZONTAL_PAD,
             paddingBottom,
           }}
         >
