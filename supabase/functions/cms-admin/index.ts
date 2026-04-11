@@ -10,7 +10,7 @@ const TABLES_ALLOWED = [
   'site_settings', 'store_hours', 'homepage_content', 'homepage_steps',
   'token_tiers', 'news_articles', 'birthdays_content', 'party_options',
   'faq_items', 'invite_templates', 'job_listings', 'business_sections',
-  'business_pricing_tiers', 'business_how_steps',
+  'business_pricing_tiers', 'business_how_steps', 'page_sections', 'custom_blocks',
 ];
 
 serve(async (req) => {
