@@ -60,6 +60,7 @@ function getAutoTextColor(bgColor: string): string {
 }
 
 const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
+  const globalContainerMax = useContainerMaxWidth();
   const {
     id,
     section_key,
