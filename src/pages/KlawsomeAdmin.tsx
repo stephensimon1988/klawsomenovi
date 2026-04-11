@@ -14,6 +14,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
+import ColorPickerField from '@/components/ColorPickerField';
+import MultiImageUpload from '@/components/MultiImageUpload';
 
 // ─── CMS helpers ────────────────────────────────────────────
 const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
