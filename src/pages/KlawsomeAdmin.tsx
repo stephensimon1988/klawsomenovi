@@ -791,13 +791,20 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
 
   const updateLayout = async (id: string, field: string, value: string) => {
     // Update local state immediately for responsiveness
-    setSections(prev => prev.map(s => s.id === id ? { ...s, [field]: field === 'columns' ? parseInt(value) || 1 : value } : s));
+    setSections(prev => prev.map(s => {
+      if (s.id !== id) return s;
+      if (field === 'columns') return { ...s, [field]: parseInt(value) || 1 };
+      if (field === 'photos') return { ...s, [field]: JSON.parse(value as string) };
+      return { ...s, [field]: value };
+    }));
 
-    // Debounced save
+    // Save to DB
     setSavingLayout(true);
     try {
-      const data: any = { [field]: field === 'columns' ? parseInt(value) || 1 : value };
-      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data });
+      let dbValue: any = value;
+      if (field === 'columns') dbValue = parseInt(value) || 1;
+      if (field === 'photos') dbValue = JSON.parse(value as string);
+      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data: { [field]: dbValue } });
     } catch (e: any) { toast.error(e.message); }
     setSavingLayout(false);
   };
