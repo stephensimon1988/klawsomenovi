@@ -187,48 +187,6 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
   );
 }
 
-// ─── Single-row content loader (for site_settings, homepage_content, etc.) ─
-function useSingleRow(password: string, table: string, fields: string[]) {
-  const [row, setRow] = useState<Record<string, string>>({});
-  const [originalId, setOriginalId] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [dirty, setDirty] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table });
-      const r = res.rows?.[0] || {};
-      const mapped: Record<string, string> = {};
-      fields.forEach((f) => (mapped[f] = r[f] ?? ''));
-      setRow(mapped);
-      setOriginalId(r.id || '');
-      setDirty(false);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [table, password]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const update = (key: string, value: string) => {
-    setRow(prev => ({ ...prev, [key]: value }));
-    setDirty(true);
-  };
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await cmsInvoke(password, { action: 'upsert', table, data: { ...row, id: originalId } });
-      toast.success('Saved!');
-      setDirty(false);
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(false);
-  };
-
-  return { row, update, save, loading, saving, dirty };
-}
-
 // ─── Store Hours Editor ─────────────────────────────────────
 function StoreHoursEditor({ password }: { password: string }) {
   const [hours, setHours] = useState<any[]>([]);
@@ -287,7 +245,7 @@ function StoreHoursEditor({ password }: { password: string }) {
   );
 }
 
-// ─── Content Block Editor (simplified — just add items, auto-layout handles the rest) ─
+// ─── Content Block Editor ───────────────────────────────────
 const BLOCK_TYPES = [
   { type: 'heading', icon: 'H', label: 'Heading' },
   { type: 'richtext', icon: '📝', label: 'Rich Text' },
@@ -299,6 +257,15 @@ const BLOCK_TYPES = [
   { type: 'button', icon: '▶', label: 'Button' },
   { type: 'divider', icon: '—', label: 'Divider' },
   { type: 'spacer', icon: '↕', label: 'Spacer' },
+  { type: 'pricing', icon: '💰', label: 'Token Prices' },
+  { type: 'hours', icon: '🕐', label: 'Store Hours' },
+  { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
+  { type: 'news', icon: '📰', label: 'News Articles' },
+  { type: 'faq', icon: '❓', label: 'FAQ' },
+  { type: 'jobs', icon: '💼', label: 'Job Listings' },
+  { type: 'party_options', icon: '🎂', label: 'Party Options' },
+  { type: 'templates', icon: '📄', label: 'Invite Templates' },
+  { type: 'cards', icon: '🃏', label: 'Cards Grid' },
 ];
 
 function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
@@ -333,7 +300,10 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
         blockType === 'list' ? { items: ['Item 1', 'Item 2', 'Item 3'] } :
         blockType === 'button' ? { text: 'Learn More', url: '/' } :
         blockType === 'divider' ? {} :
-        { height: '2rem' };
+        blockType === 'faq' ? { page: 'general' } :
+        blockType === 'jobs' ? { category: '' } :
+        blockType === 'cards' ? { items: [{ icon: '⭐', title: 'Card 1', description: 'Description' }] } :
+        {};
       await cmsInvoke(password, {
         action: 'insert', table: 'section_content_blocks',
         data: { section_id: sectionId, column_index: 0, row_order: blocks.length, block_type: blockType, content: defaultContent }
@@ -380,7 +350,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
   return (
     <div className="space-y-3">
       <p className="text-white/30 text-[10px] italic">↑↓ Items at the top are most prominent on the page.</p>
-      {/* Block list with priority numbers */}
       {blocks.map((block, idx) => (
         <div key={block.id} className="flex gap-2 items-start">
           <span className="text-klawsome-yellow/60 text-xs font-mono pt-3 w-5 text-right flex-shrink-0">{idx + 1}</span>
@@ -392,7 +361,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
         </div>
       ))}
 
-      {/* Add block buttons */}
       <div className="flex flex-wrap gap-1.5 pt-1">
         <span className="text-white/30 text-xs self-center mr-1">Add:</span>
         {BLOCK_TYPES.map(item => (
@@ -421,6 +389,9 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
 
   const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
 
+  // Specialized blocks that pull from DB tables — no inline editing needed
+  const isDataBlock = ['pricing', 'hours', 'reviews', 'news', 'party_options', 'templates'].includes(block.block_type);
+
   return (
     <div className="bg-white/5 rounded-lg p-3 space-y-2 border border-white/10">
       <div className="flex items-center gap-2">
@@ -431,11 +402,18 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
           className="text-white/40 h-6 w-6 p-0"><ArrowUp className="w-3 h-3" /></Button>
         <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'down')} disabled={isLast}
           className="text-white/40 h-6 w-6 p-0"><ArrowDown className="w-3 h-3" /></Button>
-        <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-          className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />{saving === block.id ? '…' : 'Save'}</Button>
+        {!isDataBlock && (
+          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
+            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />{saving === block.id ? '…' : 'Save'}</Button>
+        )}
         <Button size="sm" variant="ghost" onClick={() => onDelete(block.id)}
           className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
       </div>
+
+      {/* Data blocks — auto-pull from DB */}
+      {isDataBlock && (
+        <p className="text-white/30 text-xs italic">This block automatically pulls data from the database. Edit it in the Settings tab or dedicated data tables.</p>
+      )}
 
       {/* Heading */}
       {block.block_type === 'heading' && (
@@ -450,7 +428,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
         </Suspense>
       )}
 
-      {/* Plain text fallback */}
+      {/* Plain text */}
       {block.block_type === 'text' && (
         <Textarea value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
           placeholder="Body text" className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
@@ -470,12 +448,6 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
         <div className="space-y-1">
           <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
             placeholder="YouTube, Vimeo, or direct video URL" className="bg-white/10 border-white/20 text-white text-sm h-9" />
-          {localContent.url && (
-            <p className="text-white/30 text-[10px]">
-              {localContent.url.includes('youtube') || localContent.url.includes('youtu.be') ? '▶ YouTube detected' :
-               localContent.url.includes('vimeo') ? '▶ Vimeo detected' : '▶ Direct video file'}
-            </p>
-          )}
         </div>
       )}
 
@@ -534,260 +506,65 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
           placeholder="Height (e.g. 2rem)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
       )}
 
-      {/* Divider — no editable content */}
+      {/* Divider */}
       {block.block_type === 'divider' && (
         <p className="text-white/20 text-xs italic">Horizontal divider line</p>
       )}
+
+      {/* FAQ — page filter */}
+      {block.block_type === 'faq' && (
+        <div className="space-y-1">
+          <Input value={localContent.page || 'general'} onChange={e => setLocalContent({ ...localContent, page: e.target.value })}
+            placeholder="Page filter (e.g. birthdays, general)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
+            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
+        </div>
+      )}
+
+      {/* Jobs — category filter */}
+      {block.block_type === 'jobs' && (
+        <div className="space-y-1">
+          <Input value={localContent.category || ''} onChange={e => setLocalContent({ ...localContent, category: e.target.value })}
+            placeholder="Category filter (e.g. in-store, hybrid, unpaid — leave empty for all)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
+            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
+        </div>
+      )}
+
+      {/* Cards — inline JSON editor */}
+      {block.block_type === 'cards' && (
+        <div className="space-y-2">
+          {(localContent.items || []).map((card: any, i: number) => (
+            <div key={i} className="grid grid-cols-3 gap-1 items-center">
+              <Input value={card.icon || ''} onChange={e => {
+                const items = [...(localContent.items || [])];
+                items[i] = { ...items[i], icon: e.target.value };
+                setLocalContent({ ...localContent, items });
+              }} placeholder="Icon" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+              <Input value={card.title || ''} onChange={e => {
+                const items = [...(localContent.items || [])];
+                items[i] = { ...items[i], title: e.target.value };
+                setLocalContent({ ...localContent, items });
+              }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+              <div className="flex gap-1">
+                <Input value={card.description || ''} onChange={e => {
+                  const items = [...(localContent.items || [])];
+                  items[i] = { ...items[i], description: e.target.value };
+                  setLocalContent({ ...localContent, items });
+                }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+                <Button size="sm" variant="ghost" onClick={() => {
+                  const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
+                  setLocalContent({ ...localContent, items });
+                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, items: [...(localContent.items || []), { icon: '⭐', title: '', description: '' }] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add card</Button>
+        </div>
+      )}
     </div>
-  );
-}
-
-// ─── Built-in section content editors ───────────────────────
-// Maps section_key → inline content editor
-function BuiltInEditor({ sectionKey, password, page }: { sectionKey: string; password: string; page: string }) {
-  // HOME PAGE
-  if (page === 'home') {
-    if (sectionKey === 'hero') return <HomeHeroEditor password={password} />;
-    if (sectionKey === 'about') return <HomeAboutEditor password={password} />;
-    if (sectionKey === 'visit') return <HomeVisitEditor password={password} />;
-    if (sectionKey === 'tokens') return <TokensEditor password={password} />;
-    if (sectionKey === 'news') return <NewsEditor password={password} />;
-    if (sectionKey === 'story') return <HomeStoryEditor password={password} />;
-    if (sectionKey === 'reviews' || sectionKey === 'giftcards' || sectionKey === 'scheduling')
-      return <p className="text-white/30 text-xs italic">This section has no editable content.</p>;
-  }
-  // BIRTHDAYS
-  if (page === 'birthdays') {
-    if (sectionKey === 'hero') return <BirthdaysHeroEditor password={password} />;
-    if (sectionKey === 'rules') return <BirthdaysRulesEditor password={password} />;
-    if (sectionKey === 'options') return <PartyOptionsEditor password={password} />;
-    if (sectionKey === 'faq') return <FaqEditor password={password} filterPage="birthdays" />;
-    if (sectionKey === 'templates') return <TemplatesEditor password={password} />;
-  }
-  // CAREERS
-  if (page === 'careers') {
-    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
-    if (sectionKey === 'instore' || sectionKey === 'hybrid' || sectionKey === 'unpaid')
-      return <JobsEditor password={password} />;
-  }
-  // BUSINESS
-  if (page === 'business') {
-    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
-    if (sectionKey === 'opportunities') return <BusinessSectionsEditor password={password} />;
-    if (sectionKey === 'howitworks') return <BusinessHowEditor password={password} />;
-    if (sectionKey === 'contact') return <p className="text-white/30 text-xs italic">Static contact form — no editable content.</p>;
-  }
-  // NEWS
-  if (page === 'news') {
-    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
-    if (sectionKey === 'articles') return <NewsEditor password={password} />;
-  }
-
-  return null;
-}
-
-// ─── Individual content editors ─────────────────────────────
-
-function HomeHeroEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
-    ['hero_headline', 'hero_subheadline', 'hero_cta_text', 'hero_image_url']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="Headline" value={row.hero_headline} onChange={v => update('hero_headline', v)} />
-      <InlineField label="Subheadline" value={row.hero_subheadline} onChange={v => update('hero_subheadline', v)} />
-      <InlineField label="CTA Button Text" value={row.hero_cta_text} onChange={v => update('hero_cta_text', v)} />
-      <ImageUploadField value={row.hero_image_url} onChange={v => update('hero_image_url', v)} label="Hero Image" />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />{saving ? '…' : 'Save'}</Button>}
-    </div>
-  );
-}
-
-function HomeAboutEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
-    ['about_title', 'about_subtitle']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="About Title" value={row.about_title} onChange={v => update('about_title', v)} />
-      <InlineField label="About Subtitle" value={row.about_subtitle} onChange={v => update('about_subtitle', v)} />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
-      <p className="text-white/50 text-xs font-heading mt-2">Steps:</p>
-      <MiniTableEditor password={password} table="homepage_steps" columns={[
-        { key: 'icon', label: 'Icon', width: '50px' },
-        { key: 'title', label: 'Title' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        { key: 'sort_order', label: '#', width: '40px' },
-      ]} />
-    </div>
-  );
-}
-
-function HomeVisitEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'site_settings',
-    ['address', 'google_maps_url', 'phone']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="Address" value={row.address} onChange={v => update('address', v)} />
-      <InlineField label="Google Maps URL" value={row.google_maps_url} onChange={v => update('google_maps_url', v)} />
-      <InlineField label="Phone" value={row.phone} onChange={v => update('phone', v)} />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
-      <p className="text-white/50 text-xs font-heading mt-2">Store Hours:</p>
-      <StoreHoursEditor password={password} />
-    </div>
-  );
-}
-
-function HomeStoryEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
-    ['story_title', 'story_body', 'story_image_url']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="Story Title" value={row.story_title} onChange={v => update('story_title', v)} />
-      <InlineField label="Story Body" value={row.story_body} onChange={v => update('story_body', v)} multiline />
-      <ImageUploadField value={row.story_image_url} onChange={v => update('story_image_url', v)} label="Story Image" />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
-    </div>
-  );
-}
-
-function TokensEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="token_tiers" columns={[
-      { key: 'tokens', label: 'Tokens' },
-      { key: 'price', label: 'Price' },
-      { key: 'bonus', label: 'Bonus' },
-      { key: 'is_highlight', label: '⭐', type: 'bool' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
-  );
-}
-
-function NewsEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="news_articles" columns={[
-      { key: 'title', label: 'Title' },
-      { key: 'source', label: 'Source' },
-      { key: 'date', label: 'Date' },
-      { key: 'url', label: 'URL' },
-      { key: 'image_url', label: 'Image' },
-      { key: 'is_active', label: 'Active', type: 'bool' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
-  );
-}
-
-function BirthdaysHeroEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'birthdays_content',
-    ['hero_headline', 'hero_subheadline', 'hero_image_url']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="Headline" value={row.hero_headline} onChange={v => update('hero_headline', v)} />
-      <InlineField label="Subheadline" value={row.hero_subheadline} onChange={v => update('hero_subheadline', v)} />
-      <ImageUploadField value={row.hero_image_url} onChange={v => update('hero_image_url', v)} label="Hero Image" />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
-    </div>
-  );
-}
-
-function BirthdaysRulesEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'birthdays_content',
-    ['promo_text', 'rules_text', 'booking_email', 'booking_phone']);
-  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
-  return (
-    <div className="space-y-2">
-      <InlineField label="Promo Text" value={row.promo_text} onChange={v => update('promo_text', v)} multiline />
-      <InlineField label="Rules Text" value={row.rules_text} onChange={v => update('rules_text', v)} multiline />
-      <InlineField label="Booking Email" value={row.booking_email} onChange={v => update('booking_email', v)} />
-      <InlineField label="Booking Phone" value={row.booking_phone} onChange={v => update('booking_phone', v)} />
-      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
-    </div>
-  );
-}
-
-function PartyOptionsEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="party_options" columns={[
-      { key: 'name', label: 'Name' },
-      { key: 'price', label: 'Price' },
-      { key: 'description', label: 'Description', type: 'textarea' },
-      { key: 'features', label: 'Features', type: 'array' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
-  );
-}
-
-function FaqEditor({ password, filterPage }: { password: string; filterPage: string }) {
-  return (
-    <MiniTableEditor password={password} table="faq_items" columns={[
-      { key: 'question', label: 'Question' },
-      { key: 'answer', label: 'Answer', type: 'textarea' },
-      { key: 'page', label: 'Page' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} filterFn={(row) => row.page === filterPage} defaultRow={{ page: filterPage }} />
-  );
-}
-
-function TemplatesEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="invite_templates" columns={[
-      { key: 'name', label: 'Name' },
-      { key: 'url', label: 'Download URL' },
-      { key: 'thumbnail_url', label: 'Thumbnail' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
-  );
-}
-
-function JobsEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="job_listings" columns={[
-      { key: 'title', label: 'Title' },
-      { key: 'category', label: 'Category' },
-      { key: 'description', label: 'Description', type: 'textarea' },
-      { key: 'is_paid', label: 'Paid', type: 'bool' },
-      { key: 'is_active', label: 'Active', type: 'bool' },
-      { key: 'apply_url', label: 'Apply URL' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
-  );
-}
-
-function BusinessSectionsEditor({ password }: { password: string }) {
-  return (
-    <div className="space-y-3">
-      <p className="text-white/50 text-xs font-heading">Opportunity Sections:</p>
-      <MiniTableEditor password={password} table="business_sections" columns={[
-        { key: 'section_key', label: 'Key' },
-        { key: 'title', label: 'Title' },
-        { key: 'subtitle', label: 'Subtitle' },
-        { key: 'description', label: 'Description', type: 'textarea' },
-        { key: 'bullet_points', label: 'Bullets', type: 'array' },
-        { key: 'sort_order', label: '#', width: '40px' },
-      ]} />
-      <p className="text-white/50 text-xs font-heading mt-3">Pricing Tiers:</p>
-      <MiniTableEditor password={password} table="business_pricing_tiers" columns={[
-        { key: 'name', label: 'Name' },
-        { key: 'price', label: 'Price' },
-        { key: 'features', label: 'Features', type: 'array' },
-        { key: 'is_highlight', label: '⭐', type: 'bool' },
-        { key: 'sort_order', label: '#', width: '40px' },
-      ]} />
-    </div>
-  );
-}
-
-function BusinessHowEditor({ password }: { password: string }) {
-  return (
-    <MiniTableEditor password={password} table="business_how_steps" columns={[
-      { key: 'icon', label: 'Icon', width: '50px' },
-      { key: 'title', label: 'Title' },
-      { key: 'description', label: 'Description', type: 'textarea' },
-      { key: 'sort_order', label: '#', width: '40px' },
-    ]} />
   );
 }
 
@@ -802,7 +579,6 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   onDelete: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-  const isCustom = section.section_key.startsWith('custom:');
 
   return (
     <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
@@ -811,7 +587,6 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
         <GripVertical className="w-4 h-4 text-white/20 flex-shrink-0" />
         <span className="text-white/40 text-xs font-mono w-6">{section.sort_order}</span>
         <span className="font-heading font-bold text-white text-sm flex-1">{section.label || section.section_key}</span>
-        {isCustom && <Badge variant="outline" className="text-xs text-purple-300 border-purple-500/30">Custom</Badge>}
         <Badge variant="outline" className="text-xs text-white/40 border-white/10">{section.section_key}</Badge>
 
         <div className="flex items-center gap-1 ml-2" onClick={e => e.stopPropagation()}>
@@ -829,6 +604,9 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
       {/* Expanded content */}
       {expanded && (
         <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
+          {/* Label */}
+          <InlineField label="Label" value={section.label || ''} onChange={v => onUpdateLayout(section.id, 'label', v)} />
+
           {/* Section Type Toggle */}
           <div className="space-y-2">
             <label className="text-white/60 text-xs font-heading">Section Type</label>
@@ -845,7 +623,7 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
             </div>
           </div>
 
-          {/* Hero Height Toggle (only for hero type) */}
+          {/* Hero Height Toggle */}
           {(section.section_type === 'hero') && (
             <div className="space-y-2">
               <label className="text-white/60 text-xs font-heading">Hero Height</label>
@@ -872,14 +650,10 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
           <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
           <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
 
-          {/* Content editor */}
+          {/* Content editor — always ContentBlockEditor */}
           <div className="border-t border-white/10 pt-3">
-            <p className="text-white/50 text-xs font-heading mb-2">Content</p>
-            {isCustom ? (
-              <ContentBlockEditor password={password} sectionId={section.id} />
-            ) : (
-              <BuiltInEditor sectionKey={section.section_key} password={password} page={page} />
-            )}
+            <p className="text-white/50 text-xs font-heading mb-2">Content Blocks</p>
+            <ContentBlockEditor password={password} sectionId={section.id} />
           </div>
         </div>
       )}
@@ -887,7 +661,7 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   );
 }
 
-// ─── Page Builder (shows all sections for a page) ───────────
+// ─── Page Builder ───────────────────────────────────────────
 function PageBuilder({ page, password }: { page: string; password: string }) {
   const [sections, setSections] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -930,7 +704,6 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   };
 
   const updateLayout = async (id: string, field: string, value: string) => {
-    // Update local state immediately for responsiveness
     setSections(prev => prev.map(s => {
       if (s.id !== id) return s;
       if (field === 'columns') return { ...s, [field]: parseInt(value) || 1 };
@@ -938,7 +711,6 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
       return { ...s, [field]: value };
     }));
 
-    // Save to DB
     setSavingLayout(true);
     try {
       let dbValue: any = value;
@@ -958,15 +730,15 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
     } catch (e: any) { toast.error(e.message); }
   };
 
-  const addSection = async (type: 'custom' | 'builtin', key?: string) => {
+  const addSection = async () => {
     try {
-      const sectionKey = type === 'custom' ? `custom:new-${Date.now()}` : (key || 'new');
+      const sectionKey = `custom:new-${Date.now()}`;
       await cmsInvoke(password, {
         action: 'insert', table: 'page_sections',
         data: {
           page,
           section_key: sectionKey,
-          label: type === 'custom' ? 'New Custom Section' : key,
+          label: 'New Section',
           sort_order: sections.length + 1,
           is_visible: true,
           section_type: 'section',
@@ -998,19 +770,57 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
         />
       ))}
       <div className="flex gap-2 pt-2">
-        <Button onClick={() => addSection('custom')} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-          <Plus className="w-3 h-3 mr-1" />Add Custom Section
+        <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+          <Plus className="w-3 h-3 mr-1" />Add Section
         </Button>
       </div>
     </div>
   );
 }
 
-// ─── Settings Tab (global, not page-specific) ───────────────
+// ─── Settings Tab ───────────────────────────────────────────
 function SettingsEditor({ password }: { password: string }) {
-  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'site_settings',
-    ['business_name', 'phone', 'email', 'address', 'google_maps_url', 'instagram_url', 'tiktok_url', 'facebook_url', 'youtube_url', 'gift_card_url', 'newsletter_text']);
+  const [row, setRow] = useState<Record<string, string>>({});
+  const [originalId, setOriginalId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [dirty, setDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const fields = ['business_name', 'phone', 'email', 'address', 'google_maps_url', 'instagram_url', 'tiktok_url', 'facebook_url', 'youtube_url', 'gift_card_url', 'newsletter_text'];
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table: 'site_settings' });
+      const r = res.rows?.[0] || {};
+      const mapped: Record<string, string> = {};
+      fields.forEach((f) => (mapped[f] = r[f] ?? ''));
+      setRow(mapped);
+      setOriginalId(r.id || '');
+      setDirty(false);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [password]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const update = (key: string, value: string) => {
+    setRow(prev => ({ ...prev, [key]: value }));
+    setDirty(true);
+  };
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await cmsInvoke(password, { action: 'upsert', table: 'site_settings', data: { ...row, id: originalId } });
+      toast.success('Saved!');
+      setDirty(false);
+    } catch (e: any) { toast.error(e.message); }
+    setSaving(false);
+  };
+
   if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
+
   return (
     <div className="space-y-6">
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
@@ -1041,6 +851,82 @@ function SettingsEditor({ password }: { password: string }) {
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
         <CardHeader><CardTitle className="text-white font-heading text-lg">Store Hours</CardTitle></CardHeader>
         <CardContent><StoreHoursEditor password={password} /></CardContent>
+      </Card>
+
+      {/* Data Table Editors */}
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Token Tiers</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="token_tiers" columns={[
+            { key: 'tokens', label: 'Tokens' },
+            { key: 'price', label: 'Price' },
+            { key: 'bonus', label: 'Bonus' },
+            { key: 'is_highlight', label: '⭐', type: 'bool' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">News Articles</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="news_articles" columns={[
+            { key: 'title', label: 'Title' },
+            { key: 'source', label: 'Source' },
+            { key: 'date', label: 'Date' },
+            { key: 'url', label: 'URL' },
+            { key: 'image_url', label: 'Image' },
+            { key: 'is_active', label: 'Active', type: 'bool' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Job Listings</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="job_listings" columns={[
+            { key: 'title', label: 'Title' },
+            { key: 'category', label: 'Category' },
+            { key: 'description', label: 'Description', type: 'textarea' },
+            { key: 'is_paid', label: 'Paid', type: 'bool' },
+            { key: 'is_active', label: 'Active', type: 'bool' },
+            { key: 'apply_url', label: 'Apply URL' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Party Options</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="party_options" columns={[
+            { key: 'name', label: 'Name' },
+            { key: 'price', label: 'Price' },
+            { key: 'description', label: 'Description', type: 'textarea' },
+            { key: 'features', label: 'Features', type: 'array' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">FAQ Items</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="faq_items" columns={[
+            { key: 'question', label: 'Question' },
+            { key: 'answer', label: 'Answer', type: 'textarea' },
+            { key: 'page', label: 'Page' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Invite Templates</CardTitle></CardHeader>
+        <CardContent>
+          <MiniTableEditor password={password} table="invite_templates" columns={[
+            { key: 'name', label: 'Name' },
+            { key: 'url', label: 'Download URL' },
+            { key: 'thumbnail_url', label: 'Thumbnail' },
+            { key: 'sort_order', label: '#', width: '40px' },
+          ]} />
+        </CardContent>
       </Card>
     </div>
   );

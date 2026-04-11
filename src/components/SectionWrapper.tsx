@@ -25,8 +25,6 @@ export interface PageSectionConfig {
 interface SectionWrapperProps {
   config: PageSectionConfig;
   children: React.ReactNode;
-  /** When true, the wrapper is a transparent pass-through — the child manages its own layout/bg. */
-  fullControl?: boolean;
 }
 
 /** Fixed styles per section type */
@@ -60,7 +58,7 @@ function getAutoTextColor(bgColor: string): string {
   return '';
 }
 
-const SectionWrapper = ({ config, children, fullControl = false }: SectionWrapperProps) => {
+const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
   const {
     id,
     section_key,
@@ -78,17 +76,6 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
   const hasBgImage = !!bg_image_url;
   const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
 
-  // ── Full-control sections (e.g. KawaiiHero) manage their own bg/layout ──
-  // Wrapper is just a transparent 100vw shell for ordering/visibility.
-  if (fullControl) {
-    return (
-      <div id={`section-${section_key}`} data-section-id={id} style={{ width: '100%' }}>
-        {children}
-      </div>
-    );
-  }
-
-  // ── Standard CMS sections ──
   // OUTER: <section> = 100vw, holds background color/image/overlay
   // INNER: <div> = capped container (1200px / 1000px), centered, holds content
 
