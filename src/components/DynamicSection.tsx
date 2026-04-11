@@ -175,7 +175,8 @@ function SplitTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, med
 // TEMPLATE: Card Grid
 // Heading on top, then equal cards below
 // ═══════════════════════════════════════════════════════════
-function CardGridTemplate({ headerBlocks, ctaBlocks, contentBlocks, blocks, isHero }: TemplateProps & { contentBlocks: SectionContentBlock[]; blocks: SectionContentBlock[] }) {
+function CardGridTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, isHero, blocks }: TemplateProps & { blocks: SectionContentBlock[] }) {
+  const contentBlocks = [...mediaBlocks, ...widgetBlocks];
   // For card grid, treat text blocks after the first heading as individual cards
   const headings = headerBlocks.filter(b => b.block_type === 'heading');
   const bodyBlocks = headerBlocks.filter(b => b.block_type !== 'heading');
