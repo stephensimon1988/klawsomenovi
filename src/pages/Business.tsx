@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import SectionWrapper from '@/components/SectionWrapper';
-import CustomBlock from '@/components/CustomBlock';
+import DynamicSection from '@/components/DynamicSection';
 import { toast } from 'sonner';
 import { useCmsTable, usePageSections, type BusinessSection, type BusinessPricingTier, type BusinessHowStep, type PageSection } from '@/hooks/useCmsContent';
 
