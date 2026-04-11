@@ -144,6 +144,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           } : {}),
           ...textShadowStyle,
         }}
+        className="text-center"
       >
         {children}
       </div>
