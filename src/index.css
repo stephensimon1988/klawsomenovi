@@ -186,3 +186,32 @@ html {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
 }
+
+/* WYSIWYG Editor (Quill) dark theme overrides for admin */
+.rich-text-editor .ql-toolbar {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0.5rem 0.5rem 0 0;
+}
+.rich-text-editor .ql-toolbar .ql-stroke { stroke: rgba(255, 255, 255, 0.6); }
+.rich-text-editor .ql-toolbar .ql-fill { fill: rgba(255, 255, 255, 0.6); }
+.rich-text-editor .ql-toolbar .ql-picker-label { color: rgba(255, 255, 255, 0.6); }
+.rich-text-editor .ql-toolbar button:hover .ql-stroke { stroke: #fbbf24; }
+.rich-text-editor .ql-toolbar button:hover .ql-fill { fill: #fbbf24; }
+.rich-text-editor .ql-container {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.15) !important;
+  border-radius: 0 0 0.5rem 0.5rem;
+  color: white;
+  font-family: var(--font-body), sans-serif;
+  min-height: 100px;
+}
+.rich-text-editor .ql-editor.ql-blank::before {
+  color: rgba(255, 255, 255, 0.3);
+  font-style: italic;
+}
+.rich-text-editor .ql-picker-options {
+  background: #1e293b !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.rich-text-editor .ql-picker-item { color: white !important; }
