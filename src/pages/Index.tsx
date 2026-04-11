@@ -39,15 +39,15 @@ const SchedulingPlaceholder = () => (
 
 // Fallback sections when DB hasn't loaded yet
 const FALLBACK_SECTIONS: PageSection[] = [
-  { id: 'f1', page: 'home', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '100vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f2', page: 'home', section_key: 'about', label: 'About', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f3', page: 'home', section_key: 'visit', label: 'Visit', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f4', page: 'home', section_key: 'tokens', label: 'Tokens', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f5', page: 'home', section_key: 'reviews', label: 'Reviews', sort_order: 5, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f6', page: 'home', section_key: 'news', label: 'News', sort_order: 6, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f7', page: 'home', section_key: 'giftcards', label: 'Gift Cards', sort_order: 7, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
+  { id: 'f1', page: 'home', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '100vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f2', page: 'home', section_key: 'about', label: 'About', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f3', page: 'home', section_key: 'visit', label: 'Visit', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f4', page: 'home', section_key: 'tokens', label: 'Tokens', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f5', page: 'home', section_key: 'reviews', label: 'Reviews', sort_order: 5, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f6', page: 'home', section_key: 'news', label: 'News', sort_order: 6, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f7', page: 'home', section_key: 'giftcards', label: 'Gift Cards', sort_order: 7, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
   { id: 'f8', page: 'home', section_key: 'scheduling', label: 'Scheduling', sort_order: 8, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: 'bg-secondary/50' },
-  { id: 'f9', page: 'home', section_key: 'story', label: 'Story', sort_order: 9, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
+  { id: 'f9', page: 'home', section_key: 'story', label: 'Story', sort_order: 9, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
 ];
 
 const Index = () => {
