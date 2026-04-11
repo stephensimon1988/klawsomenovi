@@ -969,13 +969,10 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
           label: type === 'custom' ? 'New Custom Section' : key,
           sort_order: sections.length + 1,
           is_visible: true,
-          section_height: 'auto',
-          wrapper_max_width: '1200px',
-          padding_y: '7rem',
+          section_type: 'section',
+          hero_height: '100vh',
           bg_color: '',
           bg_image_url: '',
-          custom_css_class: '',
-          columns: 1,
         }
       });
       toast.success('Section added');
