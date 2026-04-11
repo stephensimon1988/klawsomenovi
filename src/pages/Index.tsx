@@ -9,7 +9,7 @@ import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import SectionWrapper from '@/components/SectionWrapper';
-import CustomBlock from '@/components/CustomBlock';
+import DynamicSection from '@/components/DynamicSection';
 import { usePageSections, type PageSection } from '@/hooks/useCmsContent';
 
 const SECTION_MAP: Record<string, React.ComponentType> = {
@@ -67,7 +67,6 @@ const Index = () => {
               <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
             </SectionWrapper>
           );
-        }
         }
 
         if (s.section_key === 'scheduling') {
