@@ -50,24 +50,26 @@ const DynamicSection = ({ sectionId, sectionType = 'section', layoutTemplate = '
 
   const template = layoutTemplate as LayoutTemplateKey;
 
+  const allProps: TemplateProps = { headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, isHero };
+
   switch (template) {
     case 'hero-cover':
-      return <HeroCoverTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} mediaBlocks={mediaBlocks} widgetBlocks={widgetBlocks} />;
+      return <HeroCoverTemplate {...allProps} />;
     case 'split-left':
-      return <SplitTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} mediaBlocks={mediaBlocks} widgetBlocks={widgetBlocks} mediaFirst={false} isHero={isHero} />;
+      return <SplitTemplate {...allProps} mediaFirst={false} />;
     case 'split-right':
-      return <SplitTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} mediaBlocks={mediaBlocks} widgetBlocks={widgetBlocks} mediaFirst={true} isHero={isHero} />;
+      return <SplitTemplate {...allProps} mediaFirst={true} />;
     case 'card-grid':
-      return <CardGridTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} contentBlocks={[...mediaBlocks, ...widgetBlocks]} blocks={blocks} isHero={isHero} />;
+      return <CardGridTemplate {...allProps} blocks={blocks} />;
     case 'cta-banner':
-      return <CTABannerTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} isHero={isHero} />;
+      return <CTABannerTemplate {...allProps} />;
     case 'feature-list':
-      return <FeatureListTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} blocks={blocks} isHero={isHero} />;
+      return <FeatureListTemplate {...allProps} blocks={blocks} />;
     case 'pricing-grid':
-      return <PricingGridTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} widgetBlocks={widgetBlocks} isHero={isHero} />;
+      return <PricingGridTemplate {...allProps} />;
     case 'stacked':
     default:
-      return <StackedTemplate headerBlocks={headerBlocks} ctaBlocks={ctaBlocks} mediaBlocks={mediaBlocks} widgetBlocks={widgetBlocks} isHero={isHero} />;
+      return <StackedTemplate {...allProps} />;
   }
 };
 
