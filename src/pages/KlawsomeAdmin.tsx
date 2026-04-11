@@ -289,10 +289,24 @@ function StoreHoursEditor({ password }: { password: string }) {
 }
 
 // ─── Content Block Editor (simplified — just add items, auto-layout handles the rest) ─
+const BLOCK_TYPES = [
+  { type: 'heading', icon: 'H', label: 'Heading' },
+  { type: 'richtext', icon: '📝', label: 'Rich Text' },
+  { type: 'image', icon: '🖼', label: 'Image' },
+  { type: 'video', icon: '🎬', label: 'Video' },
+  { type: 'iframe', icon: '🔗', label: 'Embed/iFrame' },
+  { type: 'code', icon: '💻', label: 'Code' },
+  { type: 'list', icon: '📋', label: 'List' },
+  { type: 'button', icon: '▶', label: 'Button' },
+  { type: 'divider', icon: '—', label: 'Divider' },
+  { type: 'spacer', icon: '↕', label: 'Spacer' },
+];
+
 function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
+  const [aiGenerating, setAiGenerating] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -312,9 +326,15 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
     try {
       const defaultContent: Record<string, any> =
         blockType === 'heading' ? { text: 'New Heading' } :
+        blockType === 'richtext' ? { html: '<p>Your text here...</p>' } :
         blockType === 'text' ? { text: 'Your text here...' } :
         blockType === 'image' ? { url: '', alt: '' } :
+        blockType === 'video' ? { url: '', alt: '' } :
+        blockType === 'iframe' ? { url: '', title: '' } :
+        blockType === 'code' ? { code: '// Your code here', language: 'javascript' } :
+        blockType === 'list' ? { items: ['Item 1', 'Item 2', 'Item 3'] } :
         blockType === 'button' ? { text: 'Learn More', url: '/' } :
+        blockType === 'divider' ? {} :
         { height: '2rem' };
       await cmsInvoke(password, {
         action: 'insert', table: 'section_content_blocks',
@@ -344,45 +364,49 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
     } catch (e: any) { toast.error(e.message); }
   };
 
+  const moveBlock = async (id: string, direction: 'up' | 'down') => {
+    const idx = blocks.findIndex(b => b.id === id);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= blocks.length) return;
+    try {
+      const a = blocks[idx];
+      const b = blocks[swapIdx];
+      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: a.id, data: { row_order: b.row_order } });
+      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: b.id, data: { row_order: a.row_order } });
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const generateAILayout = async () => {
+    setAiGenerating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: { password, section_id: sectionId },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Layout generated (${data.source === 'ai' ? 'AI' : 'auto'})! Refresh the page to see changes.`);
+    } catch (e: any) {
+      toast.error('Layout generation failed: ' + e.message);
+    }
+    setAiGenerating(false);
+  };
+
   if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading…</p>;
-
-  // Count content types for template preview
-  const headingCount = blocks.filter(b => b.block_type === 'heading').length;
-  const textCount = blocks.filter(b => b.block_type === 'text').length;
-  const imageCount = blocks.filter(b => b.block_type === 'image').length;
-  const buttonCount = blocks.filter(b => b.block_type === 'button').length;
-
-  const templateName =
-    imageCount === 1 && (headingCount > 0 || textCount > 0) ? '📐 Hero Split (text + image side by side)' :
-    imageCount > 1 ? '🖼 Gallery (header + image grid)' :
-    imageCount === 1 && headingCount === 0 && textCount === 0 ? '🌅 Full-Width Banner' :
-    headingCount > 0 && buttonCount > 0 && textCount === 0 ? '📣 CTA Strip (heading + button)' :
-    textCount > 2 ? '🃏 Cards Grid' :
-    '📝 Centered Content';
 
   return (
     <div className="space-y-3">
-      <div className="bg-white/5 border border-white/10 rounded-lg px-3 py-2">
-        <span className="text-white/40 text-[10px] font-heading uppercase tracking-wider">Auto-layout: </span>
-        <span className="text-klawsome-yellow text-xs font-heading font-bold">{templateName}</span>
-        <p className="text-white/30 text-[10px] mt-0.5">Just add your content below — the layout adjusts automatically.</p>
-      </div>
-
-      {blocks.map(block => (
+      {/* Block list */}
+      {blocks.map((block, idx) => (
         <BlockItem key={block.id} block={block} saving={saving}
-          blockTypes={['heading', 'text', 'image', 'button', 'spacer']}
-          onUpdate={updateBlock} onDelete={deleteBlock} />
+          onUpdate={updateBlock} onDelete={deleteBlock}
+          onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
       ))}
 
+      {/* Add block buttons */}
       <div className="flex flex-wrap gap-1.5 pt-1">
         <span className="text-white/30 text-xs self-center mr-1">Add:</span>
-        {[
-          { type: 'heading', icon: 'H', label: 'Heading' },
-          { type: 'text', icon: '¶', label: 'Text' },
-          { type: 'image', icon: '🖼', label: 'Image' },
-          { type: 'button', icon: '▶', label: 'Button' },
-          { type: 'spacer', icon: '↕', label: 'Space' },
-        ].map(item => (
+        {BLOCK_TYPES.map(item => (
           <Button key={item.type} size="sm" variant="ghost"
             onClick={() => addBlock(item.type)}
             className="text-white/60 hover:text-klawsome-yellow text-xs h-7 px-2 border border-white/10 hover:border-klawsome-yellow/30">
@@ -390,51 +414,135 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
           </Button>
         ))}
       </div>
+
+      {/* AI Layout button */}
+      {blocks.length > 0 && (
+        <Button
+          onClick={generateAILayout}
+          disabled={aiGenerating}
+          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-heading font-bold text-sm h-10 mt-2"
+        >
+          <Wand2 className="w-4 h-4 mr-2" />
+          {aiGenerating ? 'AI is arranging your layout…' : '✨ Save & Auto-Layout with AI'}
+        </Button>
+      )}
     </div>
   );
 }
 
-function BlockItem({ block, saving, blockTypes, onUpdate, onDelete }: {
-  block: any; saving: string | null; blockTypes: string[];
+function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast }: {
+  block: any; saving: string | null;
   onUpdate: (id: string, data: any) => void; onDelete: (id: string) => void;
+  onMove: (id: string, direction: 'up' | 'down') => void;
+  isFirst: boolean; isLast: boolean;
 }) {
   const [localContent, setLocalContent] = useState(block.content || {});
-  const [localType, setLocalType] = useState(block.block_type);
 
   const handleSave = () => {
-    onUpdate(block.id, { block_type: localType, content: localContent });
+    onUpdate(block.id, { block_type: block.block_type, content: localContent });
   };
 
+  const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
+
   return (
-    <div className="bg-white/5 rounded p-2 mb-2 space-y-1.5">
+    <div className="bg-white/5 rounded-lg p-3 space-y-2 border border-white/10">
       <div className="flex items-center gap-2">
-        <select value={localType} onChange={e => setLocalType(e.target.value)}
-          className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1">
-          {blockTypes.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
-        <span className="text-white/30 text-xs">Row {block.row_order + 1}</span>
+        <span className="text-lg">{typeLabel?.icon || '?'}</span>
+        <span className="text-white/60 text-xs font-heading font-bold uppercase">{typeLabel?.label || block.block_type}</span>
         <div className="flex-1" />
+        <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'up')} disabled={isFirst}
+          className="text-white/40 h-6 w-6 p-0"><ArrowUp className="w-3 h-3" /></Button>
+        <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'down')} disabled={isLast}
+          className="text-white/40 h-6 w-6 p-0"><ArrowDown className="w-3 h-3" /></Button>
         <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-          className="text-green-400 text-xs h-6 px-2">{saving === block.id ? '…' : 'Save'}</Button>
+          className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />{saving === block.id ? '…' : 'Save'}</Button>
         <Button size="sm" variant="ghost" onClick={() => onDelete(block.id)}
           className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
       </div>
-      {localType === 'heading' && (
+
+      {/* Heading */}
+      {block.block_type === 'heading' && (
         <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
-          placeholder="Heading text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          placeholder="Heading text" className="bg-white/10 border-white/20 text-white text-sm h-9" />
       )}
-      {localType === 'text' && (
+
+      {/* Rich Text (WYSIWYG) */}
+      {block.block_type === 'richtext' && (
+        <Suspense fallback={<p className="text-white/30 text-xs">Loading editor…</p>}>
+          <RichTextEditor value={localContent.html || ''} onChange={html => setLocalContent({ ...localContent, html })} />
+        </Suspense>
+      )}
+
+      {/* Plain text fallback */}
+      {block.block_type === 'text' && (
         <Textarea value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
-          placeholder="Body text" className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" />
+          placeholder="Body text" className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
       )}
-      {localType === 'image' && (
+
+      {/* Image */}
+      {block.block_type === 'image' && (
         <div className="space-y-1">
           <ImageUploadField value={localContent.url || ''} onChange={url => setLocalContent({ ...localContent, url })} />
           <Input value={localContent.alt || ''} onChange={e => setLocalContent({ ...localContent, alt: e.target.value })}
-            placeholder="Alt text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+            placeholder="Alt text (for accessibility)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
         </div>
       )}
-      {localType === 'button' && (
+
+      {/* Video */}
+      {block.block_type === 'video' && (
+        <div className="space-y-1">
+          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
+            placeholder="YouTube, Vimeo, or direct video URL" className="bg-white/10 border-white/20 text-white text-sm h-9" />
+          {localContent.url && (
+            <p className="text-white/30 text-[10px]">
+              {localContent.url.includes('youtube') || localContent.url.includes('youtu.be') ? '▶ YouTube detected' :
+               localContent.url.includes('vimeo') ? '▶ Vimeo detected' : '▶ Direct video file'}
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* iFrame / Embed */}
+      {block.block_type === 'iframe' && (
+        <div className="space-y-1">
+          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
+            placeholder="Embed URL (Google Maps, Calendly, etc.)" className="bg-white/10 border-white/20 text-white text-sm h-9" />
+          <Input value={localContent.title || ''} onChange={e => setLocalContent({ ...localContent, title: e.target.value })}
+            placeholder="Title (optional)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+        </div>
+      )}
+
+      {/* Code */}
+      {block.block_type === 'code' && (
+        <Textarea value={localContent.code || ''} onChange={e => setLocalContent({ ...localContent, code: e.target.value })}
+          placeholder="Paste your code here" className="bg-white/10 border-white/20 text-white text-sm min-h-[80px] font-mono" />
+      )}
+
+      {/* List */}
+      {block.block_type === 'list' && (
+        <div className="space-y-1">
+          {(localContent.items || []).map((item: string, i: number) => (
+            <div key={i} className="flex gap-1">
+              <span className="text-white/30 text-xs self-center w-4">{i + 1}.</span>
+              <Input value={item} onChange={e => {
+                const newItems = [...(localContent.items || [])];
+                newItems[i] = e.target.value;
+                setLocalContent({ ...localContent, items: newItems });
+              }} className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+              <Button size="sm" variant="ghost" onClick={() => {
+                const newItems = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
+                setLocalContent({ ...localContent, items: newItems });
+              }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, items: [...(localContent.items || []), ''] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add item</Button>
+        </div>
+      )}
+
+      {/* Button */}
+      {block.block_type === 'button' && (
         <div className="grid grid-cols-2 gap-1">
           <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
             placeholder="Button text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
@@ -442,9 +550,16 @@ function BlockItem({ block, saving, blockTypes, onUpdate, onDelete }: {
             placeholder="URL" className="bg-white/10 border-white/20 text-white text-xs h-8" />
         </div>
       )}
-      {localType === 'spacer' && (
+
+      {/* Spacer */}
+      {block.block_type === 'spacer' && (
         <Input value={localContent.height || '2rem'} onChange={e => setLocalContent({ ...localContent, height: e.target.value })}
           placeholder="Height (e.g. 2rem)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+      )}
+
+      {/* Divider — no editable content */}
+      {block.block_type === 'divider' && (
+        <p className="text-white/20 text-xs italic">Horizontal divider line</p>
       )}
     </div>
   );
