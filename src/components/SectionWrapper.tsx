@@ -1,4 +1,5 @@
 import React from 'react';
+import SectionPhotoGallery from './SectionPhotoGallery';
 
 export interface PageSectionConfig {
   id: string;
@@ -14,12 +15,13 @@ export interface PageSectionConfig {
   bg_image_url: string;
   custom_css_class: string;
   columns?: number;
+  photos?: string[];
+  text_color?: string;
 }
 
 interface SectionWrapperProps {
   config: PageSectionConfig;
   children: React.ReactNode;
-  /** If true, the wrapper applies no inner container (for heroes that manage their own layout) */
   fullControl?: boolean;
 }
 
@@ -29,6 +31,32 @@ const COLUMN_GRID: Record<number, string> = {
   3: 'grid-cols-1 md:grid-cols-3',
   4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
 };
+
+/** Determine contrasting text color based on background */
+function getAutoTextColor(bgColor: string): string {
+  if (!bgColor) return '';
+  // Parse hex
+  if (bgColor.startsWith('#')) {
+    const hex = bgColor.replace('#', '');
+    if (hex.length < 6) return '';
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+    const luminance = (r * 299 + g * 587 + b * 114) / 1000;
+    if (luminance < 80) return '#ffffff';     // white on very dark
+    if (luminance < 150) return '#f0ebe3';    // beige on medium-dark
+    return '#1a1a2e';                          // dark on light
+  }
+  // Parse hsl
+  const match = bgColor.match(/hsl\(\s*[\d.]+\s*,\s*[\d.]+%?\s*,\s*([\d.]+)%?\s*\)/);
+  if (match) {
+    const l = parseFloat(match[1]);
+    if (l < 30) return '#ffffff';
+    if (l < 50) return '#f0ebe3';
+    return '#1a1a2e';
+  }
+  return '';
+}
 
 const SectionWrapper = ({ config, children, fullControl = false }: SectionWrapperProps) => {
   const {
@@ -41,6 +69,8 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     bg_image_url,
     custom_css_class,
     columns = 1,
+    photos = [],
+    text_color,
   } = config;
 
   const sectionStyle: React.CSSProperties = {};
@@ -59,10 +89,23 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     sectionStyle.backgroundPosition = 'center';
   }
 
+  // Auto-contrast text color
+  const computedTextColor = text_color || getAutoTextColor(bg_color);
+  if (computedTextColor) {
+    sectionStyle.color = computedTextColor;
+  }
+
+  const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
+
   if (fullControl) {
     return (
       <div id={`section-${section_key}`} data-section-id={id} style={sectionStyle} className={custom_css_class || undefined}>
         {children}
+        {photoArray.length > 0 && (
+          <div style={{ maxWidth: wrapper_max_width === 'full' ? '100%' : (wrapper_max_width || '1200px'), marginLeft: 'auto', marginRight: 'auto', paddingLeft: '1.5rem', paddingRight: '1.5rem', paddingBottom: padding_y || '7rem' }}>
+            <SectionPhotoGallery photos={photoArray} />
+          </div>
+        )}
       </div>
     );
   }
@@ -84,7 +127,7 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
           marginLeft: 'auto',
           marginRight: 'auto',
           paddingTop: paddingValue,
-          paddingBottom: paddingValue,
+          paddingBottom: photoArray.length > 0 ? '2rem' : paddingValue,
           paddingLeft: '1.5rem',
           paddingRight: '1.5rem',
         }}
@@ -92,6 +135,20 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
       >
         {children}
       </div>
+      {photoArray.length > 0 && (
+        <div
+          style={{
+            maxWidth,
+            marginLeft: 'auto',
+            marginRight: 'auto',
+            paddingLeft: '1.5rem',
+            paddingRight: '1.5rem',
+            paddingBottom: paddingValue,
+          }}
+        >
+          <SectionPhotoGallery photos={photoArray} />
+        </div>
+      )}
     </div>
   );
 };
