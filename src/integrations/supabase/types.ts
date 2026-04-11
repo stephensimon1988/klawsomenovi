@@ -373,9 +373,11 @@ export type Database = {
           label: string
           padding_y: string
           page: string
+          photos: Json
           section_height: string
           section_key: string
           sort_order: number
+          text_color: string
           wrapper_max_width: string
         }
         Insert: {
@@ -388,9 +390,11 @@ export type Database = {
           label?: string
           padding_y?: string
           page: string
+          photos?: Json
           section_height?: string
           section_key: string
           sort_order?: number
+          text_color?: string
           wrapper_max_width?: string
         }
         Update: {
@@ -403,9 +407,11 @@ export type Database = {
           label?: string
           padding_y?: string
           page?: string
+          photos?: Json
           section_height?: string
           section_key?: string
           sort_order?: number
+          text_color?: string
           wrapper_max_width?: string
         }
         Relationships: []
