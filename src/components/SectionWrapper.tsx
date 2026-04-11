@@ -107,8 +107,8 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
     ? { textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)' }
     : {};
 
-  // Container styles
-  const containerMax = typeStyles.containerMax;
+  // Container styles — global max width from site_settings
+  const containerMax = globalContainerMax;
   const paddingY = typeStyles.paddingY;
   const effectivePadY = paddingY === '0' ? (section_type === 'hero' ? '3rem' : '0') : paddingY;
   const SAFE_PAD_X = '1.5rem';
