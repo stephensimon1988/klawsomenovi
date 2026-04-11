@@ -194,6 +194,16 @@ export interface PageSection {
   bg_color: string;
   bg_image_url: string;
   custom_css_class: string;
+  columns: number;
+}
+
+export interface SectionContentBlock {
+  id: string;
+  section_id: string;
+  column_index: number;
+  row_order: number;
+  block_type: string;
+  content: Record<string, any>;
 }
 
 export interface CustomBlock {
