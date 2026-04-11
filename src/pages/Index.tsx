@@ -46,7 +46,7 @@ const FALLBACK_SECTIONS: PageSection[] = [
   { id: 'f5', page: 'home', section_key: 'reviews', label: 'Reviews', sort_order: 5, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
   { id: 'f6', page: 'home', section_key: 'news', label: 'News', sort_order: 6, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
   { id: 'f7', page: 'home', section_key: 'giftcards', label: 'Gift Cards', sort_order: 7, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
-  { id: 'f8', page: 'home', section_key: 'scheduling', label: 'Scheduling', sort_order: 8, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: 'bg-secondary/50' },
+  { id: 'f8', page: 'home', section_key: 'scheduling', label: 'Scheduling', sort_order: 8, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: 'bg-secondary/50', columns: 1 },
   { id: 'f9', page: 'home', section_key: 'story', label: 'Story', sort_order: 9, is_visible: true, section_height: 'auto', wrapper_max_width: '900px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
 ];
 
