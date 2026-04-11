@@ -9,8 +9,8 @@ const fallbackArticles = [
 ];
 
 const FALLBACK_SECTIONS: PageSection[] = [
-  { id: 'f1', page: 'news', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f2', page: 'news', section_key: 'articles', label: 'Articles', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
+  { id: 'f1', page: 'news', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f2', page: 'news', section_key: 'articles', label: 'Articles', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
 ];
 
 const NewsHero = () => (

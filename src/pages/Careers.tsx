@@ -99,10 +99,10 @@ const SECTION_MAP: Record<string, React.ComponentType> = {
 };
 
 const FALLBACK_SECTIONS: PageSection[] = [
-  { id: 'f1', page: 'careers', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f2', page: 'careers', section_key: 'instore', label: 'In-Store', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f3', page: 'careers', section_key: 'hybrid', label: 'Hybrid', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: 'bg-secondary/50' },
-  { id: 'f4', page: 'careers', section_key: 'unpaid', label: 'Unpaid', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' },
+  { id: 'f1', page: 'careers', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f2', page: 'careers', section_key: 'instore', label: 'In-Store', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f3', page: 'careers', section_key: 'hybrid', label: 'Hybrid', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: 'bg-secondary/50', columns: 1 },
+  { id: 'f4', page: 'careers', section_key: 'unpaid', label: 'Unpaid', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
 ];
 
 const Careers = () => {

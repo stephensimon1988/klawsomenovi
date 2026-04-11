@@ -13,6 +13,7 @@ export interface PageSectionConfig {
   bg_color: string;
   bg_image_url: string;
   custom_css_class: string;
+  columns?: number;
 }
 
 interface SectionWrapperProps {
@@ -21,6 +22,13 @@ interface SectionWrapperProps {
   /** If true, the wrapper applies no inner container (for heroes that manage their own layout) */
   fullControl?: boolean;
 }
+
+const COLUMN_GRID: Record<number, string> = {
+  1: 'grid-cols-1',
+  2: 'grid-cols-1 md:grid-cols-2',
+  3: 'grid-cols-1 md:grid-cols-3',
+  4: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4',
+};
 
 const SectionWrapper = ({ config, children, fullControl = false }: SectionWrapperProps) => {
   const {
@@ -32,6 +40,7 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
     bg_color,
     bg_image_url,
     custom_css_class,
+    columns = 1,
   } = config;
 
   const sectionStyle: React.CSSProperties = {};
@@ -60,6 +69,7 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
 
   const paddingValue = padding_y || '7rem';
   const maxWidth = wrapper_max_width === 'full' ? '100%' : (wrapper_max_width || '1200px');
+  const useGrid = columns > 1;
 
   return (
     <div
@@ -78,6 +88,7 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
           paddingLeft: '1.5rem',
           paddingRight: '1.5rem',
         }}
+        className={useGrid ? `grid ${COLUMN_GRID[columns] || 'grid-cols-1'} gap-8` : undefined}
       >
         {children}
       </div>

@@ -304,10 +304,10 @@ const SECTION_MAP: Record<string, React.ComponentType> = {
 };
 
 const FALLBACK_SECTIONS: PageSection[] = [
-  { id: 'f1', page: 'business', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f2', page: 'business', section_key: 'opportunities', label: 'Opportunities', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f3', page: 'business', section_key: 'howitworks', label: 'How It Works', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
-  { id: 'f4', page: 'business', section_key: 'contact', label: 'Contact', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '' },
+  { id: 'f1', page: 'business', section_key: 'hero', label: 'Hero', sort_order: 1, is_visible: true, section_height: '70vh', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f2', page: 'business', section_key: 'opportunities', label: 'Opportunities', sort_order: 2, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f3', page: 'business', section_key: 'howitworks', label: 'How It Works', sort_order: 3, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
+  { id: 'f4', page: 'business', section_key: 'contact', label: 'Contact', sort_order: 4, is_visible: true, section_height: 'auto', wrapper_max_width: 'full', padding_y: '0', bg_color: '', bg_image_url: '', custom_css_class: '', columns: 1 },
 ];
 
 const Business = () => {

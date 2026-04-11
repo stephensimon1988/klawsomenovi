@@ -366,6 +366,7 @@ export type Database = {
         Row: {
           bg_color: string
           bg_image_url: string
+          columns: number
           custom_css_class: string
           id: string
           is_visible: boolean
@@ -380,6 +381,7 @@ export type Database = {
         Insert: {
           bg_color?: string
           bg_image_url?: string
+          columns?: number
           custom_css_class?: string
           id?: string
           is_visible?: boolean
@@ -394,6 +396,7 @@ export type Database = {
         Update: {
           bg_color?: string
           bg_image_url?: string
+          columns?: number
           custom_css_class?: string
           id?: string
           is_visible?: boolean
@@ -433,6 +436,41 @@ export type Database = {
           sort_order?: number
         }
         Relationships: []
+      }
+      section_content_blocks: {
+        Row: {
+          block_type: string
+          column_index: number
+          content: Json
+          id: string
+          row_order: number
+          section_id: string
+        }
+        Insert: {
+          block_type?: string
+          column_index?: number
+          content?: Json
+          id?: string
+          row_order?: number
+          section_id: string
+        }
+        Update: {
+          block_type?: string
+          column_index?: number
+          content?: Json
+          id?: string
+          row_order?: number
+          section_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "section_content_blocks_section_id_fkey"
+            columns: ["section_id"]
+            isOneToOne: false
+            referencedRelation: "page_sections"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       site_settings: {
         Row: {

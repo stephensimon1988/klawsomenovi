@@ -5,14 +5,15 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-// Table/Badge also used by multi-row editor
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, LayoutGrid, Blocks } from 'lucide-react';
-import ImageUploadField from '@/components/ImageUploadField';
-
+import {
+  Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Upload
+} from 'lucide-react';
 import { toast } from 'sonner';
+import ImageUploadField from '@/components/ImageUploadField';
 
 // ─── CMS helpers ────────────────────────────────────────────
 const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
@@ -24,82 +25,29 @@ const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
   return data;
 };
 
-// ─── Reusable field editor ──────────────────────────────────
-function FieldRow({ label, value, onChange, multiline = false }: {
-  label: string; value: string; onChange: (v: string) => void; multiline?: boolean;
+// ─── Reusable inline field ──────────────────────────────────
+function InlineField({ label, value, onChange, multiline = false, type = 'text' }: {
+  label: string; value: string; onChange: (v: string) => void; multiline?: boolean; type?: string;
 }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
-      <label className="text-white/70 text-sm font-heading pt-2 md:text-right pr-4">{label}</label>
-      <div className="md:col-span-2">
-        {multiline ? (
-          <Textarea value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30 min-h-[80px]" />
-        ) : (
-          <Input value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30" />
-        )}
-      </div>
+    <div className="space-y-1">
+      <label className="text-white/60 text-xs font-heading">{label}</label>
+      {multiline ? (
+        <Textarea value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
+      ) : (
+        <Input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white text-sm" />
+      )}
     </div>
   );
 }
 
-// ─── Single-row editor (site_settings, homepage_content, birthdays_content) ─
-function SingleRowEditor({ table, password, fields }: {
-  table: string; password: string;
-  fields: { key: string; label: string; multiline?: boolean }[];
-}) {
-  const [row, setRow] = useState<Record<string, string>>({});
-  const [original, setOriginal] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table });
-      const r = res.rows?.[0] || {};
-      const mapped: Record<string, string> = {};
-      fields.forEach((f) => (mapped[f.key] = r[f.key] ?? ''));
-      setRow(mapped);
-      setOriginal({ ...mapped, id: r.id });
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [table, password, fields]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await cmsInvoke(password, { action: 'upsert', table, data: { ...row, id: original.id } });
-      toast.success('Saved!');
-      setOriginal({ ...row, id: original.id });
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(false);
-  };
-
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
-
-  const dirty = fields.some((f) => row[f.key] !== original[f.key]);
-
-  return (
-    <div className="space-y-4">
-      {fields.map((f) => (
-        <FieldRow key={f.key} label={f.label} value={row[f.key] || ''} onChange={(v) => setRow({ ...row, [f.key]: v })} multiline={f.multiline} />
-      ))}
-      <div className="flex justify-end pt-2">
-        <Button onClick={save} disabled={saving || !dirty} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
-          <Save className="w-4 h-4 mr-2" />{saving ? 'Saving…' : 'Save Changes'}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Multi-row editor (token_tiers, news_articles, etc.) ────
-function MultiRowEditor({ table, password, columns, defaultRow }: {
-  table: string; password: string;
+// ─── Mini table editor (reusable for steps, tiers, articles, etc.) ─
+function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
+  password: string;
+  table: string;
   columns: { key: string; label: string; type?: 'text' | 'textarea' | 'bool' | 'array'; width?: string }[];
   defaultRow?: Record<string, unknown>;
+  filterFn?: (row: any) => boolean;
 }) {
   const [rows, setRows] = useState<any[]>([]);
   const [editing, setEditing] = useState<Record<string, any>>({});
@@ -110,7 +58,9 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
     setLoading(true);
     try {
       const res = await cmsInvoke(password, { action: 'read', table });
-      setRows(res.rows || []);
+      let r = res.rows || [];
+      if (filterFn) r = r.filter(filterFn);
+      setRows(r);
     } catch (e: any) { toast.error(e.message); }
     setLoading(false);
   }, [table, password]);
@@ -118,11 +68,7 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
   useEffect(() => { load(); }, [load]);
 
   const startEdit = (row: any) => setEditing({ ...editing, [row.id]: { ...row } });
-  const cancelEdit = (id: string) => {
-    const next = { ...editing };
-    delete next[id];
-    setEditing(next);
-  };
+  const cancelEdit = (id: string) => { const next = { ...editing }; delete next[id]; setEditing(next); };
   const updateField = (id: string, key: string, value: any) => {
     setEditing({ ...editing, [id]: { ...editing[id], [key]: value } });
   };
@@ -133,7 +79,7 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
       const edited = editing[id];
       const { id: _, ...data } = edited;
       await cmsInvoke(password, { action: 'update', table, id, data });
-      toast.success('Row saved');
+      toast.success('Saved');
       cancelEdit(id);
       load();
     } catch (e: any) { toast.error(e.message); }
@@ -142,9 +88,9 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
 
   const addRow = async () => {
     try {
-      const newData = defaultRow || {};
+      const newData = { ...(defaultRow || {}) };
       columns.forEach((c) => {
-        if (!(c.key in (newData as any))) {
+        if (!(c.key in newData)) {
           if (c.type === 'bool') (newData as any)[c.key] = true;
           else if (c.type === 'array') (newData as any)[c.key] = [];
           else (newData as any)[c.key] = '';
@@ -152,7 +98,7 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
       });
       (newData as any).sort_order = rows.length;
       await cmsInvoke(password, { action: 'insert', table, data: newData });
-      toast.success('Row added');
+      toast.success('Added');
       load();
     } catch (e: any) { toast.error(e.message); }
   };
@@ -166,18 +112,18 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
     } catch (e: any) { toast.error(e.message); }
   };
 
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
+  if (loading) return <p className="text-white/40 py-4 text-center text-sm">Loading…</p>;
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
               {columns.map((c) => (
-                <TableHead key={c.key} className="text-white/60 font-heading" style={{ width: c.width }}>{c.label}</TableHead>
+                <TableHead key={c.key} className="text-white/60 font-heading text-xs" style={{ width: c.width }}>{c.label}</TableHead>
               ))}
-              <TableHead className="text-white/60 font-heading w-[120px]">Actions</TableHead>
+              <TableHead className="text-white/60 font-heading text-xs w-[100px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -186,48 +132,41 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
               return (
                 <TableRow key={row.id} className="border-white/10 hover:bg-white/5">
                   {columns.map((c) => (
-                    <TableCell key={c.key} className="text-white/80 align-top">
+                    <TableCell key={c.key} className="text-white/80 align-top py-1.5">
                       {isEditing ? (
                         c.type === 'bool' ? (
                           <Switch checked={!!isEditing[c.key]} onCheckedChange={(v) => updateField(row.id, c.key, v)} />
                         ) : c.type === 'array' ? (
-                          <Textarea
-                            value={(isEditing[c.key] || []).join('\n')}
-                            onChange={(e) => updateField(row.id, c.key, e.target.value.split('\n'))}
-                            className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]"
-                            placeholder="One per line"
-                          />
+                          <Textarea value={(isEditing[c.key] || []).join('\n')} onChange={(e) => updateField(row.id, c.key, e.target.value.split('\n'))} className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" placeholder="One per line" />
                         ) : c.type === 'textarea' ? (
-                          <Textarea value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
+                          <Textarea value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" />
                         ) : (
-                          <Input value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm" />
+                          <Input value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-xs h-8" />
                         )
                       ) : (
                         c.type === 'bool' ? (
-                          <Badge variant="outline" className={row[c.key] ? 'text-green-300 border-green-500/30' : 'text-red-300 border-red-500/30'}>
+                          <Badge variant="outline" className={`text-xs ${row[c.key] ? 'text-green-300 border-green-500/30' : 'text-red-300 border-red-500/30'}`}>
                             {row[c.key] ? 'Yes' : 'No'}
                           </Badge>
                         ) : c.type === 'array' ? (
-                          <span className="text-sm">{(row[c.key] || []).join(', ') || '—'}</span>
+                          <span className="text-xs">{(row[c.key] || []).join(', ') || '—'}</span>
                         ) : (
-                          <span className="text-sm line-clamp-2">{row[c.key] || '—'}</span>
+                          <span className="text-xs line-clamp-2">{row[c.key] || '—'}</span>
                         )
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="align-top">
+                  <TableCell className="align-top py-1.5">
                     <div className="flex gap-1">
                       {isEditing ? (
                         <>
-                          <Button size="sm" onClick={() => saveRow(row.id)} disabled={saving === row.id} className="bg-green-600 hover:bg-green-700 text-white text-xs h-7 px-2">
-                            {saving === row.id ? '…' : 'Save'}
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={() => cancelEdit(row.id)} className="text-white/50 text-xs h-7 px-2">Cancel</Button>
+                          <Button size="sm" onClick={() => saveRow(row.id)} disabled={saving === row.id} className="bg-green-600 hover:bg-green-700 text-white text-xs h-6 px-2">{saving === row.id ? '…' : 'Save'}</Button>
+                          <Button size="sm" variant="ghost" onClick={() => cancelEdit(row.id)} className="text-white/50 text-xs h-6 px-1">✕</Button>
                         </>
                       ) : (
                         <>
-                          <Button size="sm" variant="ghost" onClick={() => startEdit(row)} className="text-klawsome-yellow text-xs h-7 px-2">Edit</Button>
-                          <Button size="sm" variant="ghost" onClick={() => deleteRow(row.id)} className="text-red-400 text-xs h-7 px-2"><Trash2 className="w-3 h-3" /></Button>
+                          <Button size="sm" variant="ghost" onClick={() => startEdit(row)} className="text-klawsome-yellow text-xs h-6 px-2">Edit</Button>
+                          <Button size="sm" variant="ghost" onClick={() => deleteRow(row.id)} className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
                         </>
                       )}
                     </div>
@@ -238,11 +177,53 @@ function MultiRowEditor({ table, password, columns, defaultRow }: {
           </TableBody>
         </Table>
       </div>
-      <Button onClick={addRow} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
-        <Plus className="w-4 h-4 mr-2" />Add Row
+      <Button onClick={addRow} size="sm" className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs h-7">
+        <Plus className="w-3 h-3 mr-1" />Add Row
       </Button>
     </div>
   );
+}
+
+// ─── Single-row content loader (for site_settings, homepage_content, etc.) ─
+function useSingleRow(password: string, table: string, fields: string[]) {
+  const [row, setRow] = useState<Record<string, string>>({});
+  const [originalId, setOriginalId] = useState('');
+  const [loading, setLoading] = useState(true);
+  const [dirty, setDirty] = useState(false);
+  const [saving, setSaving] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table });
+      const r = res.rows?.[0] || {};
+      const mapped: Record<string, string> = {};
+      fields.forEach((f) => (mapped[f] = r[f] ?? ''));
+      setRow(mapped);
+      setOriginalId(r.id || '');
+      setDirty(false);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [table, password]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const update = (key: string, value: string) => {
+    setRow(prev => ({ ...prev, [key]: value }));
+    setDirty(true);
+  };
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await cmsInvoke(password, { action: 'upsert', table, data: { ...row, id: originalId } });
+      toast.success('Saved!');
+      setDirty(false);
+    } catch (e: any) { toast.error(e.message); }
+    setSaving(false);
+  };
+
+  return { row, update, save, loading, saving, dirty };
 }
 
 // ─── Store Hours Editor ─────────────────────────────────────
@@ -279,32 +260,640 @@ function StoreHoursEditor({ password }: { password: string }) {
     setSaving(false);
   };
 
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
+  if (loading) return <p className="text-white/40 py-4 text-center text-sm">Loading…</p>;
 
   return (
-    <div className="space-y-3">
+    <div className="space-y-2">
       {hours.map((h, i) => (
-        <div key={h.id} className="grid grid-cols-4 gap-3 items-center">
-          <span className="text-white font-heading text-sm">{h.day_label}</span>
-          <Input value={h.open_time || ''} onChange={(e) => update(i, 'open_time', e.target.value)} disabled={h.is_closed} placeholder="10:00 AM" className="bg-white/10 border-white/20 text-white text-sm" />
-          <Input value={h.close_time || ''} onChange={(e) => update(i, 'close_time', e.target.value)} disabled={h.is_closed} placeholder="8:00 PM" className="bg-white/10 border-white/20 text-white text-sm" />
-          <div className="flex items-center gap-2">
+        <div key={h.id} className="grid grid-cols-4 gap-2 items-center">
+          <span className="text-white font-heading text-xs">{h.day_label}</span>
+          <Input value={h.open_time || ''} onChange={(e) => update(i, 'open_time', e.target.value)} disabled={h.is_closed} placeholder="10:00 AM" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <Input value={h.close_time || ''} onChange={(e) => update(i, 'close_time', e.target.value)} disabled={h.is_closed} placeholder="8:00 PM" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <div className="flex items-center gap-1">
             <Switch checked={h.is_closed} onCheckedChange={(v) => update(i, 'is_closed', v)} />
             <span className="text-white/50 text-xs">Closed</span>
           </div>
         </div>
       ))}
-      <div className="flex justify-end pt-2">
-        <Button onClick={saveAll} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
-          <Save className="w-4 h-4 mr-2" />{saving ? 'Saving…' : 'Save Hours'}
+      <div className="flex justify-end pt-1">
+        <Button onClick={saveAll} disabled={saving} size="sm" className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs h-7">
+          <Save className="w-3 h-3 mr-1" />{saving ? 'Saving…' : 'Save Hours'}
         </Button>
       </div>
     </div>
   );
 }
 
+// ─── Content Block Editor (for custom sections) ─────────────
+function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
+  const [blocks, setBlocks] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState<string | null>(null);
 
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table: 'section_content_blocks' });
+      const filtered = (res.rows || [])
+        .filter((b: any) => b.section_id === sectionId)
+        .sort((a: any, b: any) => (a.column_index - b.column_index) || (a.row_order - b.row_order));
+      setBlocks(filtered);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [password, sectionId]);
 
+  useEffect(() => { load(); }, [load]);
+
+  const addBlock = async (colIndex: number) => {
+    try {
+      const colBlocks = blocks.filter(b => b.column_index === colIndex);
+      await cmsInvoke(password, {
+        action: 'insert', table: 'section_content_blocks',
+        data: { section_id: sectionId, column_index: colIndex, row_order: colBlocks.length, block_type: 'text', content: { text: '' } }
+      });
+      toast.success('Block added');
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const updateBlock = async (id: string, updates: Record<string, any>) => {
+    setSaving(id);
+    try {
+      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id, data: updates });
+      toast.success('Saved');
+      load();
+    } catch (e: any) { toast.error(e.message); }
+    setSaving(null);
+  };
+
+  const deleteBlock = async (id: string) => {
+    if (!confirm('Delete this block?')) return;
+    try {
+      await cmsInvoke(password, { action: 'delete', table: 'section_content_blocks', id });
+      toast.success('Deleted');
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading blocks…</p>;
+
+  const blockTypes = ['heading', 'text', 'image', 'button', 'spacer'];
+
+  return (
+    <div className="space-y-3">
+      <p className="text-white/40 text-xs">Add content blocks to columns. Each block has a type and content.</p>
+      {[0, 1, 2, 3].map(colIdx => {
+        const colBlocks = blocks.filter(b => b.column_index === colIdx);
+        if (colBlocks.length === 0 && colIdx > 0) return null; // Only show columns with blocks + col 0
+
+        return (
+          <div key={colIdx} className="border border-white/10 rounded-lg p-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-white/60 text-xs font-heading">Column {colIdx + 1}</span>
+              <Button size="sm" variant="ghost" onClick={() => addBlock(colIdx)} className="text-klawsome-yellow text-xs h-6 px-2">
+                <Plus className="w-3 h-3 mr-1" />Add Block
+              </Button>
+            </div>
+            {colBlocks.map(block => (
+              <BlockItem key={block.id} block={block} saving={saving} blockTypes={blockTypes}
+                onUpdate={updateBlock} onDelete={deleteBlock} />
+            ))}
+          </div>
+        );
+      })}
+      <Button size="sm" variant="ghost" onClick={() => addBlock(blocks.length > 0 ? Math.max(...blocks.map(b => b.column_index)) + 1 : 0)}
+        className="text-white/40 text-xs h-6 px-2">
+        <Plus className="w-3 h-3 mr-1" />Add Column
+      </Button>
+    </div>
+  );
+}
+
+function BlockItem({ block, saving, blockTypes, onUpdate, onDelete }: {
+  block: any; saving: string | null; blockTypes: string[];
+  onUpdate: (id: string, data: any) => void; onDelete: (id: string) => void;
+}) {
+  const [localContent, setLocalContent] = useState(block.content || {});
+  const [localType, setLocalType] = useState(block.block_type);
+
+  const handleSave = () => {
+    onUpdate(block.id, { block_type: localType, content: localContent });
+  };
+
+  return (
+    <div className="bg-white/5 rounded p-2 mb-2 space-y-1.5">
+      <div className="flex items-center gap-2">
+        <select value={localType} onChange={e => setLocalType(e.target.value)}
+          className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1">
+          {blockTypes.map(t => <option key={t} value={t}>{t}</option>)}
+        </select>
+        <span className="text-white/30 text-xs">Row {block.row_order + 1}</span>
+        <div className="flex-1" />
+        <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
+          className="text-green-400 text-xs h-6 px-2">{saving === block.id ? '…' : 'Save'}</Button>
+        <Button size="sm" variant="ghost" onClick={() => onDelete(block.id)}
+          className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
+      </div>
+      {localType === 'heading' && (
+        <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
+          placeholder="Heading text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+      )}
+      {localType === 'text' && (
+        <Textarea value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
+          placeholder="Body text" className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" />
+      )}
+      {localType === 'image' && (
+        <div className="space-y-1">
+          <ImageUploadField value={localContent.url || ''} onChange={url => setLocalContent({ ...localContent, url })} />
+          <Input value={localContent.alt || ''} onChange={e => setLocalContent({ ...localContent, alt: e.target.value })}
+            placeholder="Alt text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+        </div>
+      )}
+      {localType === 'button' && (
+        <div className="grid grid-cols-2 gap-1">
+          <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
+            placeholder="Button text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
+            placeholder="URL" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+        </div>
+      )}
+      {localType === 'spacer' && (
+        <Input value={localContent.height || '2rem'} onChange={e => setLocalContent({ ...localContent, height: e.target.value })}
+          placeholder="Height (e.g. 2rem)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+      )}
+    </div>
+  );
+}
+
+// ─── Built-in section content editors ───────────────────────
+// Maps section_key → inline content editor
+function BuiltInEditor({ sectionKey, password, page }: { sectionKey: string; password: string; page: string }) {
+  // HOME PAGE
+  if (page === 'home') {
+    if (sectionKey === 'hero') return <HomeHeroEditor password={password} />;
+    if (sectionKey === 'about') return <HomeAboutEditor password={password} />;
+    if (sectionKey === 'visit') return <HomeVisitEditor password={password} />;
+    if (sectionKey === 'tokens') return <TokensEditor password={password} />;
+    if (sectionKey === 'news') return <NewsEditor password={password} />;
+    if (sectionKey === 'story') return <HomeStoryEditor password={password} />;
+    if (sectionKey === 'reviews' || sectionKey === 'giftcards' || sectionKey === 'scheduling')
+      return <p className="text-white/30 text-xs italic">This section has no editable content.</p>;
+  }
+  // BIRTHDAYS
+  if (page === 'birthdays') {
+    if (sectionKey === 'hero') return <BirthdaysHeroEditor password={password} />;
+    if (sectionKey === 'rules') return <BirthdaysRulesEditor password={password} />;
+    if (sectionKey === 'options') return <PartyOptionsEditor password={password} />;
+    if (sectionKey === 'faq') return <FaqEditor password={password} filterPage="birthdays" />;
+    if (sectionKey === 'templates') return <TemplatesEditor password={password} />;
+  }
+  // CAREERS
+  if (page === 'careers') {
+    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
+    if (sectionKey === 'instore' || sectionKey === 'hybrid' || sectionKey === 'unpaid')
+      return <JobsEditor password={password} />;
+  }
+  // BUSINESS
+  if (page === 'business') {
+    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
+    if (sectionKey === 'opportunities') return <BusinessSectionsEditor password={password} />;
+    if (sectionKey === 'howitworks') return <BusinessHowEditor password={password} />;
+    if (sectionKey === 'contact') return <p className="text-white/30 text-xs italic">Static contact form — no editable content.</p>;
+  }
+  // NEWS
+  if (page === 'news') {
+    if (sectionKey === 'hero') return <p className="text-white/30 text-xs italic">Static hero — no editable content.</p>;
+    if (sectionKey === 'articles') return <NewsEditor password={password} />;
+  }
+
+  return null;
+}
+
+// ─── Individual content editors ─────────────────────────────
+
+function HomeHeroEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
+    ['hero_headline', 'hero_subheadline', 'hero_cta_text', 'hero_image_url']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="Headline" value={row.hero_headline} onChange={v => update('hero_headline', v)} />
+      <InlineField label="Subheadline" value={row.hero_subheadline} onChange={v => update('hero_subheadline', v)} />
+      <InlineField label="CTA Button Text" value={row.hero_cta_text} onChange={v => update('hero_cta_text', v)} />
+      <ImageUploadField value={row.hero_image_url} onChange={v => update('hero_image_url', v)} label="Hero Image" />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />{saving ? '…' : 'Save'}</Button>}
+    </div>
+  );
+}
+
+function HomeAboutEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
+    ['about_title', 'about_subtitle']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="About Title" value={row.about_title} onChange={v => update('about_title', v)} />
+      <InlineField label="About Subtitle" value={row.about_subtitle} onChange={v => update('about_subtitle', v)} />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
+      <p className="text-white/50 text-xs font-heading mt-2">Steps:</p>
+      <MiniTableEditor password={password} table="homepage_steps" columns={[
+        { key: 'icon', label: 'Icon', width: '50px' },
+        { key: 'title', label: 'Title' },
+        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'sort_order', label: '#', width: '40px' },
+      ]} />
+    </div>
+  );
+}
+
+function HomeVisitEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'site_settings',
+    ['address', 'google_maps_url', 'phone']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="Address" value={row.address} onChange={v => update('address', v)} />
+      <InlineField label="Google Maps URL" value={row.google_maps_url} onChange={v => update('google_maps_url', v)} />
+      <InlineField label="Phone" value={row.phone} onChange={v => update('phone', v)} />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
+      <p className="text-white/50 text-xs font-heading mt-2">Store Hours:</p>
+      <StoreHoursEditor password={password} />
+    </div>
+  );
+}
+
+function HomeStoryEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'homepage_content',
+    ['story_title', 'story_body', 'story_image_url']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="Story Title" value={row.story_title} onChange={v => update('story_title', v)} />
+      <InlineField label="Story Body" value={row.story_body} onChange={v => update('story_body', v)} multiline />
+      <ImageUploadField value={row.story_image_url} onChange={v => update('story_image_url', v)} label="Story Image" />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
+    </div>
+  );
+}
+
+function TokensEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="token_tiers" columns={[
+      { key: 'tokens', label: 'Tokens' },
+      { key: 'price', label: 'Price' },
+      { key: 'bonus', label: 'Bonus' },
+      { key: 'is_highlight', label: '⭐', type: 'bool' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+function NewsEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="news_articles" columns={[
+      { key: 'title', label: 'Title' },
+      { key: 'source', label: 'Source' },
+      { key: 'date', label: 'Date' },
+      { key: 'url', label: 'URL' },
+      { key: 'image_url', label: 'Image' },
+      { key: 'is_active', label: 'Active', type: 'bool' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+function BirthdaysHeroEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'birthdays_content',
+    ['hero_headline', 'hero_subheadline', 'hero_image_url']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="Headline" value={row.hero_headline} onChange={v => update('hero_headline', v)} />
+      <InlineField label="Subheadline" value={row.hero_subheadline} onChange={v => update('hero_subheadline', v)} />
+      <ImageUploadField value={row.hero_image_url} onChange={v => update('hero_image_url', v)} label="Hero Image" />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
+    </div>
+  );
+}
+
+function BirthdaysRulesEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'birthdays_content',
+    ['promo_text', 'rules_text', 'booking_email', 'booking_phone']);
+  if (loading) return <p className="text-white/40 text-xs">Loading…</p>;
+  return (
+    <div className="space-y-2">
+      <InlineField label="Promo Text" value={row.promo_text} onChange={v => update('promo_text', v)} multiline />
+      <InlineField label="Rules Text" value={row.rules_text} onChange={v => update('rules_text', v)} multiline />
+      <InlineField label="Booking Email" value={row.booking_email} onChange={v => update('booking_email', v)} />
+      <InlineField label="Booking Phone" value={row.booking_phone} onChange={v => update('booking_phone', v)} />
+      {dirty && <Button size="sm" onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy text-xs h-7"><Save className="w-3 h-3 mr-1" />Save</Button>}
+    </div>
+  );
+}
+
+function PartyOptionsEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="party_options" columns={[
+      { key: 'name', label: 'Name' },
+      { key: 'price', label: 'Price' },
+      { key: 'description', label: 'Description', type: 'textarea' },
+      { key: 'features', label: 'Features', type: 'array' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+function FaqEditor({ password, filterPage }: { password: string; filterPage: string }) {
+  return (
+    <MiniTableEditor password={password} table="faq_items" columns={[
+      { key: 'question', label: 'Question' },
+      { key: 'answer', label: 'Answer', type: 'textarea' },
+      { key: 'page', label: 'Page' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} filterFn={(row) => row.page === filterPage} defaultRow={{ page: filterPage }} />
+  );
+}
+
+function TemplatesEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="invite_templates" columns={[
+      { key: 'name', label: 'Name' },
+      { key: 'url', label: 'Download URL' },
+      { key: 'thumbnail_url', label: 'Thumbnail' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+function JobsEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="job_listings" columns={[
+      { key: 'title', label: 'Title' },
+      { key: 'category', label: 'Category' },
+      { key: 'description', label: 'Description', type: 'textarea' },
+      { key: 'is_paid', label: 'Paid', type: 'bool' },
+      { key: 'is_active', label: 'Active', type: 'bool' },
+      { key: 'apply_url', label: 'Apply URL' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+function BusinessSectionsEditor({ password }: { password: string }) {
+  return (
+    <div className="space-y-3">
+      <p className="text-white/50 text-xs font-heading">Opportunity Sections:</p>
+      <MiniTableEditor password={password} table="business_sections" columns={[
+        { key: 'section_key', label: 'Key' },
+        { key: 'title', label: 'Title' },
+        { key: 'subtitle', label: 'Subtitle' },
+        { key: 'description', label: 'Description', type: 'textarea' },
+        { key: 'bullet_points', label: 'Bullets', type: 'array' },
+        { key: 'sort_order', label: '#', width: '40px' },
+      ]} />
+      <p className="text-white/50 text-xs font-heading mt-3">Pricing Tiers:</p>
+      <MiniTableEditor password={password} table="business_pricing_tiers" columns={[
+        { key: 'name', label: 'Name' },
+        { key: 'price', label: 'Price' },
+        { key: 'features', label: 'Features', type: 'array' },
+        { key: 'is_highlight', label: '⭐', type: 'bool' },
+        { key: 'sort_order', label: '#', width: '40px' },
+      ]} />
+    </div>
+  );
+}
+
+function BusinessHowEditor({ password }: { password: string }) {
+  return (
+    <MiniTableEditor password={password} table="business_how_steps" columns={[
+      { key: 'icon', label: 'Icon', width: '50px' },
+      { key: 'title', label: 'Title' },
+      { key: 'description', label: 'Description', type: 'textarea' },
+      { key: 'sort_order', label: '#', width: '40px' },
+    ]} />
+  );
+}
+
+// ─── Section Card (expandable) ──────────────────────────────
+function SectionCard({ section, password, page, onReorder, onToggleVisibility, onUpdateLayout, onDelete }: {
+  section: any;
+  password: string;
+  page: string;
+  onReorder: (id: string, direction: 'up' | 'down') => void;
+  onToggleVisibility: (id: string, visible: boolean) => void;
+  onUpdateLayout: (id: string, field: string, value: string) => void;
+  onDelete: (id: string) => void;
+}) {
+  const [expanded, setExpanded] = useState(false);
+  const isCustom = section.section_key.startsWith('custom:');
+
+  return (
+    <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
+      {/* Header */}
+      <div className="flex items-center gap-2 px-4 py-3 cursor-pointer" onClick={() => setExpanded(!expanded)}>
+        <GripVertical className="w-4 h-4 text-white/20 flex-shrink-0" />
+        <span className="text-white/40 text-xs font-mono w-6">{section.sort_order}</span>
+        <span className="font-heading font-bold text-white text-sm flex-1">{section.label || section.section_key}</span>
+        {isCustom && <Badge variant="outline" className="text-xs text-purple-300 border-purple-500/30">Custom</Badge>}
+        <Badge variant="outline" className="text-xs text-white/40 border-white/10">{section.section_key}</Badge>
+
+        <div className="flex items-center gap-1 ml-2" onClick={e => e.stopPropagation()}>
+          <Button size="sm" variant="ghost" onClick={() => onReorder(section.id, 'up')} className="text-white/40 h-6 w-6 p-0"><ChevronUp className="w-3 h-3" /></Button>
+          <Button size="sm" variant="ghost" onClick={() => onReorder(section.id, 'down')} className="text-white/40 h-6 w-6 p-0"><ChevronDown className="w-3 h-3" /></Button>
+          <Button size="sm" variant="ghost" onClick={() => onToggleVisibility(section.id, !section.is_visible)} className="h-6 w-6 p-0">
+            {section.is_visible ? <Eye className="w-3 h-3 text-green-400" /> : <EyeOff className="w-3 h-3 text-red-400" />}
+          </Button>
+          <Button size="sm" variant="ghost" onClick={() => onDelete(section.id)} className="text-red-400/60 h-6 w-6 p-0"><Trash2 className="w-3 h-3" /></Button>
+        </div>
+
+        {expanded ? <ChevronUp className="w-4 h-4 text-white/30" /> : <ChevronDown className="w-4 h-4 text-white/30" />}
+      </div>
+
+      {/* Expanded content */}
+      {expanded && (
+        <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
+          {/* Layout controls */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <InlineField label="Height" value={section.section_height || 'auto'} onChange={v => onUpdateLayout(section.id, 'section_height', v)} />
+            <InlineField label="Max Width" value={section.wrapper_max_width || '1200px'} onChange={v => onUpdateLayout(section.id, 'wrapper_max_width', v)} />
+            <InlineField label="Padding Y" value={section.padding_y || '7rem'} onChange={v => onUpdateLayout(section.id, 'padding_y', v)} />
+            <InlineField label="Columns" value={String(section.columns || 1)} onChange={v => onUpdateLayout(section.id, 'columns', v)} />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
+            <InlineField label="BG Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
+            <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="BG Image" />
+            <InlineField label="CSS Class" value={section.custom_css_class || ''} onChange={v => onUpdateLayout(section.id, 'custom_css_class', v)} />
+          </div>
+
+          {/* Content editor */}
+          <div className="border-t border-white/10 pt-3">
+            <p className="text-white/50 text-xs font-heading mb-2">Content</p>
+            {isCustom ? (
+              <ContentBlockEditor password={password} sectionId={section.id} />
+            ) : (
+              <BuiltInEditor sectionKey={section.section_key} password={password} page={page} />
+            )}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+// ─── Page Builder (shows all sections for a page) ───────────
+function PageBuilder({ page, password }: { page: string; password: string }) {
+  const [sections, setSections] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [savingLayout, setSavingLayout] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table: 'page_sections' });
+      const filtered = (res.rows || [])
+        .filter((s: any) => s.page === page)
+        .sort((a: any, b: any) => a.sort_order - b.sort_order);
+      setSections(filtered);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [page, password]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const reorder = async (id: string, direction: 'up' | 'down') => {
+    const idx = sections.findIndex(s => s.id === id);
+    if (idx < 0) return;
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sections.length) return;
+
+    try {
+      const a = sections[idx];
+      const b = sections[swapIdx];
+      await cmsInvoke(password, { action: 'update', table: 'page_sections', id: a.id, data: { sort_order: b.sort_order } });
+      await cmsInvoke(password, { action: 'update', table: 'page_sections', id: b.id, data: { sort_order: a.sort_order } });
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const toggleVisibility = async (id: string, visible: boolean) => {
+    try {
+      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data: { is_visible: visible } });
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const updateLayout = async (id: string, field: string, value: string) => {
+    // Update local state immediately for responsiveness
+    setSections(prev => prev.map(s => s.id === id ? { ...s, [field]: field === 'columns' ? parseInt(value) || 1 : value } : s));
+
+    // Debounced save
+    setSavingLayout(true);
+    try {
+      const data: any = { [field]: field === 'columns' ? parseInt(value) || 1 : value };
+      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data });
+    } catch (e: any) { toast.error(e.message); }
+    setSavingLayout(false);
+  };
+
+  const deleteSection = async (id: string) => {
+    if (!confirm('Delete this section? This cannot be undone.')) return;
+    try {
+      await cmsInvoke(password, { action: 'delete', table: 'page_sections', id });
+      toast.success('Section deleted');
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  const addSection = async (type: 'custom' | 'builtin', key?: string) => {
+    try {
+      const sectionKey = type === 'custom' ? `custom:new-${Date.now()}` : (key || 'new');
+      await cmsInvoke(password, {
+        action: 'insert', table: 'page_sections',
+        data: {
+          page,
+          section_key: sectionKey,
+          label: type === 'custom' ? 'New Custom Section' : key,
+          sort_order: sections.length + 1,
+          is_visible: true,
+          section_height: 'auto',
+          wrapper_max_width: '1200px',
+          padding_y: '7rem',
+          bg_color: '',
+          bg_image_url: '',
+          custom_css_class: '',
+          columns: 1,
+        }
+      });
+      toast.success('Section added');
+      load();
+    } catch (e: any) { toast.error(e.message); }
+  };
+
+  if (loading) return <p className="text-white/40 py-8 text-center">Loading page sections…</p>;
+
+  return (
+    <div className="space-y-3">
+      {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
+      {sections.map((s) => (
+        <SectionCard
+          key={s.id}
+          section={s}
+          password={password}
+          page={page}
+          onReorder={reorder}
+          onToggleVisibility={toggleVisibility}
+          onUpdateLayout={updateLayout}
+          onDelete={deleteSection}
+        />
+      ))}
+      <div className="flex gap-2 pt-2">
+        <Button onClick={() => addSection('custom')} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+          <Plus className="w-3 h-3 mr-1" />Add Custom Section
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Settings Tab (global, not page-specific) ───────────────
+function SettingsEditor({ password }: { password: string }) {
+  const { row, update, save, loading, saving, dirty } = useSingleRow(password, 'site_settings',
+    ['business_name', 'phone', 'email', 'address', 'google_maps_url', 'instagram_url', 'tiktok_url', 'facebook_url', 'youtube_url', 'gift_card_url', 'newsletter_text']);
+  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
+  return (
+    <div className="space-y-6">
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Vital Info</CardTitle></CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <InlineField label="Business Name" value={row.business_name} onChange={v => update('business_name', v)} />
+            <InlineField label="Phone" value={row.phone} onChange={v => update('phone', v)} />
+            <InlineField label="Email" value={row.email} onChange={v => update('email', v)} />
+            <InlineField label="Address" value={row.address} onChange={v => update('address', v)} />
+            <InlineField label="Google Maps URL" value={row.google_maps_url} onChange={v => update('google_maps_url', v)} />
+            <InlineField label="Gift Card URL" value={row.gift_card_url} onChange={v => update('gift_card_url', v)} />
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <InlineField label="Instagram" value={row.instagram_url} onChange={v => update('instagram_url', v)} />
+            <InlineField label="TikTok" value={row.tiktok_url} onChange={v => update('tiktok_url', v)} />
+            <InlineField label="Facebook" value={row.facebook_url} onChange={v => update('facebook_url', v)} />
+            <InlineField label="YouTube" value={row.youtube_url} onChange={v => update('youtube_url', v)} />
+          </div>
+          <InlineField label="Newsletter Text" value={row.newsletter_text} onChange={v => update('newsletter_text', v)} multiline />
+          {dirty && (
+            <Button onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+              <Save className="w-3 h-3 mr-1" />{saving ? 'Saving…' : 'Save Changes'}
+            </Button>
+          )}
+        </CardContent>
+      </Card>
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Store Hours</CardTitle></CardHeader>
+        <CardContent><StoreHoursEditor password={password} /></CardContent>
+      </Card>
+    </div>
+  );
+}
 
 // ─── Main Admin Component ───────────────────────────────────
 const KlawsomeAdmin = () => {
@@ -364,6 +953,14 @@ const KlawsomeAdmin = () => {
     );
   }
 
+  const pages = [
+    { key: 'home', label: 'Home', icon: Home },
+    { key: 'birthdays', label: 'Birthdays', icon: Cake },
+    { key: 'careers', label: 'Careers', icon: Briefcase },
+    { key: 'business', label: 'Business', icon: Building2 },
+    { key: 'news', label: 'News', icon: Newspaper },
+  ];
+
   return (
     <div className="min-h-screen bg-klawsome-navy p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
@@ -375,276 +972,27 @@ const KlawsomeAdmin = () => {
           <Button onClick={() => { sessionStorage.removeItem('klawsome-admin'); sessionStorage.removeItem('klawsome-admin-pw'); setAuthenticated(false); }} variant="ghost" className="text-white/60 hover:text-white hover:bg-white/10">Log out</Button>
         </div>
 
-        <Tabs defaultValue="vital" className="space-y-6">
+        <Tabs defaultValue="home" className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10 flex-wrap h-auto gap-1 p-1">
-            <TabsTrigger value="vital" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Settings className="w-3 h-3 mr-1" />Vital Info</TabsTrigger>
-            <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
-            <TabsTrigger value="homepage" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Home className="w-3 h-3 mr-1" />Homepage</TabsTrigger>
-            <TabsTrigger value="tokens" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Coins className="w-3 h-3 mr-1" />Tokens</TabsTrigger>
-            <TabsTrigger value="news" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Newspaper className="w-3 h-3 mr-1" />News</TabsTrigger>
-            <TabsTrigger value="birthdays" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Cake className="w-3 h-3 mr-1" />Birthdays</TabsTrigger>
-            <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
-            <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
-            <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            <TabsTrigger value="layout" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><LayoutGrid className="w-3 h-3 mr-1" />Page Layout</TabsTrigger>
-            <TabsTrigger value="blocks" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Blocks className="w-3 h-3 mr-1" />Custom Blocks</TabsTrigger>
+            {pages.map(p => (
+              <TabsTrigger key={p.key} value={p.key} className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">
+                <p.icon className="w-3 h-3 mr-1" />{p.label}
+              </TabsTrigger>
+            ))}
+            <TabsTrigger value="settings" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">
+              <Settings className="w-3 h-3 mr-1" />Settings
+            </TabsTrigger>
           </TabsList>
 
-          {/* ─── Vital Info ─── */}
-          <TabsContent value="vital">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Vital Info</CardTitle></CardHeader>
-              <CardContent>
-                <SingleRowEditor password={storedPassword} table="site_settings" fields={[
-                  { key: 'business_name', label: 'Business Name' },
-                  { key: 'phone', label: 'Phone' },
-                  { key: 'email', label: 'Email' },
-                  { key: 'address', label: 'Address' },
-                  { key: 'google_maps_url', label: 'Google Maps URL' },
-                  { key: 'instagram_url', label: 'Instagram URL' },
-                  { key: 'tiktok_url', label: 'TikTok URL' },
-                  { key: 'facebook_url', label: 'Facebook URL' },
-                  { key: 'youtube_url', label: 'YouTube URL' },
-                  { key: 'gift_card_url', label: 'Gift Card URL' },
-                  { key: 'newsletter_text', label: 'Newsletter Text', multiline: true },
-                ]} />
-              </CardContent>
-            </Card>
+          {pages.map(p => (
+            <TabsContent key={p.key} value={p.key}>
+              <PageBuilder page={p.key} password={storedPassword} />
+            </TabsContent>
+          ))}
+
+          <TabsContent value="settings">
+            <SettingsEditor password={storedPassword} />
           </TabsContent>
-
-          {/* ─── Store Hours ─── */}
-          <TabsContent value="hours">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Store Hours</CardTitle></CardHeader>
-              <CardContent><StoreHoursEditor password={storedPassword} /></CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Homepage ─── */}
-          <TabsContent value="homepage" className="space-y-6">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Hero & Story</CardTitle></CardHeader>
-              <CardContent>
-                <SingleRowEditor password={storedPassword} table="homepage_content" fields={[
-                  { key: 'hero_headline', label: 'Hero Headline' },
-                  { key: 'hero_subheadline', label: 'Hero Subheadline' },
-                  { key: 'hero_cta_text', label: 'Hero CTA Button' },
-                  { key: 'hero_image_url', label: 'Hero Image URL' },
-                  { key: 'story_title', label: 'Story Title' },
-                  { key: 'story_body', label: 'Story Body', multiline: true },
-                  { key: 'story_image_url', label: 'Story Image URL' },
-                  { key: 'about_title', label: 'About Title' },
-                  { key: 'about_subtitle', label: 'About Subtitle' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">How It Works Steps</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="homepage_steps" columns={[
-                  { key: 'icon', label: 'Icon', width: '60px' },
-                  { key: 'title', label: 'Title' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Tokens ─── */}
-          <TabsContent value="tokens">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Token Pricing Tiers</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="token_tiers" columns={[
-                  { key: 'tokens', label: 'Tokens' },
-                  { key: 'price', label: 'Price' },
-                  { key: 'bonus', label: 'Bonus' },
-                  { key: 'is_highlight', label: 'Highlight', type: 'bool' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── News ─── */}
-          <TabsContent value="news">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">News Articles</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="news_articles" columns={[
-                  { key: 'title', label: 'Title' },
-                  { key: 'source', label: 'Source' },
-                  { key: 'date', label: 'Date' },
-                  { key: 'url', label: 'URL' },
-                  { key: 'image_url', label: 'Image URL' },
-                  { key: 'is_active', label: 'Active', type: 'bool' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Birthdays ─── */}
-          <TabsContent value="birthdays" className="space-y-6">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Birthday Page Content</CardTitle></CardHeader>
-              <CardContent>
-                <SingleRowEditor password={storedPassword} table="birthdays_content" fields={[
-                  { key: 'hero_headline', label: 'Hero Headline' },
-                  { key: 'hero_subheadline', label: 'Hero Subheadline' },
-                  { key: 'hero_image_url', label: 'Hero Image URL' },
-                  { key: 'promo_text', label: 'Promo Text', multiline: true },
-                  { key: 'rules_text', label: 'Rules Text', multiline: true },
-                  { key: 'booking_email', label: 'Booking Email' },
-                  { key: 'booking_phone', label: 'Booking Phone' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Party Packages</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="party_options" columns={[
-                  { key: 'name', label: 'Name' },
-                  { key: 'price', label: 'Price' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'features', label: 'Features', type: 'array' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Invite Templates</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="invite_templates" columns={[
-                  { key: 'name', label: 'Name' },
-                  { key: 'url', label: 'Download URL' },
-                  { key: 'thumbnail_url', label: 'Thumbnail URL' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Careers ─── */}
-          <TabsContent value="careers">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Job Listings</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="job_listings" columns={[
-                  { key: 'title', label: 'Title' },
-                  { key: 'category', label: 'Category' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'is_paid', label: 'Paid', type: 'bool' },
-                  { key: 'is_active', label: 'Active', type: 'bool' },
-                  { key: 'apply_url', label: 'Apply URL' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Business ─── */}
-          <TabsContent value="business" className="space-y-6">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Business Page Sections</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="business_sections" columns={[
-                  { key: 'section_key', label: 'Key' },
-                  { key: 'title', label: 'Title' },
-                  { key: 'subtitle', label: 'Subtitle' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'bullet_points', label: 'Bullet Points', type: 'array' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Business Pricing Tiers</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="business_pricing_tiers" columns={[
-                  { key: 'name', label: 'Name' },
-                  { key: 'price', label: 'Price' },
-                  { key: 'features', label: 'Features', type: 'array' },
-                  { key: 'is_highlight', label: 'Highlight', type: 'bool' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">How It Works Steps</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="business_how_steps" columns={[
-                  { key: 'icon', label: 'Icon', width: '60px' },
-                  { key: 'title', label: 'Title' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── FAQ ─── */}
-          <TabsContent value="faq">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">FAQ Items</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="faq_items" columns={[
-                  { key: 'question', label: 'Question' },
-                  { key: 'answer', label: 'Answer', type: 'textarea' },
-                  { key: 'page', label: 'Page' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-
-          {/* ─── Page Layout ─── */}
-          <TabsContent value="layout" className="space-y-6">
-            {['home', 'birthdays', 'careers', 'business', 'news'].map((page) => (
-              <Card key={page} className="border-white/10 bg-white/5 backdrop-blur-sm">
-                <CardHeader><CardTitle className="text-white font-heading capitalize">{page} Page Sections</CardTitle></CardHeader>
-                <CardContent>
-                  <MultiRowEditor password={storedPassword} table="page_sections" columns={[
-                    { key: 'label', label: 'Section' },
-                    { key: 'section_key', label: 'Key' },
-                    { key: 'sort_order', label: 'Order', width: '60px' },
-                    { key: 'is_visible', label: 'Visible', type: 'bool' },
-                    { key: 'section_height', label: 'Height' },
-                    { key: 'wrapper_max_width', label: 'Max Width' },
-                    { key: 'padding_y', label: 'Padding Y' },
-                    { key: 'bg_color', label: 'BG Color' },
-                    { key: 'bg_image_url', label: 'BG Image URL' },
-                    { key: 'custom_css_class', label: 'CSS Class' },
-                  ]} defaultRow={{ page, section_key: '', label: '', sort_order: 0, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' }} />
-                </CardContent>
-              </Card>
-            ))}
-          </TabsContent>
-
-          {/* ─── Custom Blocks ─── */}
-          <TabsContent value="blocks">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader>
-                <CardTitle className="text-white font-heading">Custom Content Blocks</CardTitle>
-                <p className="text-white/50 text-sm font-body">Create freeform sections. Use section_key "custom:your-key" in Page Layout to place them on a page.</p>
-              </CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="custom_blocks" columns={[
-                  { key: 'block_key', label: 'Key' },
-                  { key: 'headline', label: 'Headline' },
-                  { key: 'body', label: 'Body', type: 'textarea' },
-                  { key: 'image_url', label: 'Image URL' },
-                  { key: 'image_position', label: 'Img Position' },
-                  { key: 'cta_text', label: 'CTA Text' },
-                  { key: 'cta_url', label: 'CTA URL' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} defaultRow={{ block_key: '', headline: '', body: '', image_url: '', image_position: 'right', cta_text: '', cta_url: '', sort_order: 0 }} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
         </Tabs>
       </div>
     </div>
