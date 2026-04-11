@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionPhotoGallery from './SectionPhotoGallery';
+import { useContainerMaxWidth } from '@/contexts/SiteSettingsContext';
 
 export interface PageSectionConfig {
   id: string;
@@ -27,11 +28,11 @@ interface SectionWrapperProps {
   children: React.ReactNode;
 }
 
-/** Fixed styles per section type */
-const SECTION_TYPE_STYLES: Record<string, { paddingY: string; containerMax: string }> = {
-  hero: { paddingY: '0', containerMax: '1200px' },
-  section: { paddingY: '60px', containerMax: '1200px' },
-  small: { paddingY: '30px', containerMax: '1000px' },
+/** Fixed styles per section type — containerMax now comes from global site_settings */
+const SECTION_TYPE_STYLES: Record<string, { paddingY: string }> = {
+  hero: { paddingY: '0' },
+  section: { paddingY: '60px' },
+  small: { paddingY: '30px' },
 };
 
 /** Determine contrasting text color based on background */
@@ -59,6 +60,7 @@ function getAutoTextColor(bgColor: string): string {
 }
 
 const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
+  const globalContainerMax = useContainerMaxWidth();
   const {
     id,
     section_key,
@@ -105,8 +107,8 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
     ? { textShadow: '0 2px 8px rgba(0,0,0,0.6), 0 1px 3px rgba(0,0,0,0.4)' }
     : {};
 
-  // Container styles
-  const containerMax = typeStyles.containerMax;
+  // Container styles — global max width from site_settings
+  const containerMax = globalContainerMax;
   const paddingY = typeStyles.paddingY;
   const effectivePadY = paddingY === '0' ? (section_type === 'hero' ? '3rem' : '0') : paddingY;
   const SAFE_PAD_X = '1.5rem';

@@ -51,6 +51,7 @@ export interface SiteSettings {
   youtube_url: string;
   gift_card_url: string;
   newsletter_text: string;
+  container_max_width: string;
 }
 
 export interface StoreHour {
