@@ -721,11 +721,16 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
             <InlineField label="Padding Y" value={section.padding_y || '7rem'} onChange={v => onUpdateLayout(section.id, 'padding_y', v)} />
             <InlineField label="Columns" value={String(section.columns || 1)} onChange={v => onUpdateLayout(section.id, 'columns', v)} />
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
-            <InlineField label="BG Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
-            <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="BG Image" />
+          <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+            <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
             <InlineField label="CSS Class" value={section.custom_css_class || ''} onChange={v => onUpdateLayout(section.id, 'custom_css_class', v)} />
           </div>
+          <MultiImageUpload
+            label="Section Photos (auto-layout)"
+            value={Array.isArray(section.photos) ? section.photos : []}
+            onChange={urls => onUpdateLayout(section.id, 'photos', JSON.stringify(urls))}
+          />
 
           {/* Content editor */}
           <div className="border-t border-white/10 pt-3">
