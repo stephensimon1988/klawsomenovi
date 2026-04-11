@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, LayoutGrid, Blocks } from 'lucide-react';
+import ImageUploadField from '@/components/ImageUploadField';
 
 import { toast } from 'sonner';
 
@@ -385,7 +386,8 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
             <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            
+            <TabsTrigger value="layout" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><LayoutGrid className="w-3 h-3 mr-1" />Page Layout</TabsTrigger>
+            <TabsTrigger value="blocks" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Blocks className="w-3 h-3 mr-1" />Custom Blocks</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -598,6 +600,50 @@ const KlawsomeAdmin = () => {
           </TabsContent>
 
 
+          {/* ─── Page Layout ─── */}
+          <TabsContent value="layout" className="space-y-6">
+            {['home', 'birthdays', 'careers', 'business', 'news'].map((page) => (
+              <Card key={page} className="border-white/10 bg-white/5 backdrop-blur-sm">
+                <CardHeader><CardTitle className="text-white font-heading capitalize">{page} Page Sections</CardTitle></CardHeader>
+                <CardContent>
+                  <MultiRowEditor password={storedPassword} table="page_sections" columns={[
+                    { key: 'label', label: 'Section' },
+                    { key: 'section_key', label: 'Key' },
+                    { key: 'sort_order', label: 'Order', width: '60px' },
+                    { key: 'is_visible', label: 'Visible', type: 'bool' },
+                    { key: 'section_height', label: 'Height' },
+                    { key: 'wrapper_max_width', label: 'Max Width' },
+                    { key: 'padding_y', label: 'Padding Y' },
+                    { key: 'bg_color', label: 'BG Color' },
+                    { key: 'bg_image_url', label: 'BG Image URL' },
+                    { key: 'custom_css_class', label: 'CSS Class' },
+                  ]} defaultRow={{ page, section_key: '', label: '', sort_order: 0, is_visible: true, section_height: 'auto', wrapper_max_width: '1200px', padding_y: '7rem', bg_color: '', bg_image_url: '', custom_css_class: '' }} />
+                </CardContent>
+              </Card>
+            ))}
+          </TabsContent>
+
+          {/* ─── Custom Blocks ─── */}
+          <TabsContent value="blocks">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white font-heading">Custom Content Blocks</CardTitle>
+                <p className="text-white/50 text-sm font-body">Create freeform sections. Use section_key "custom:your-key" in Page Layout to place them on a page.</p>
+              </CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="custom_blocks" columns={[
+                  { key: 'block_key', label: 'Key' },
+                  { key: 'headline', label: 'Headline' },
+                  { key: 'body', label: 'Body', type: 'textarea' },
+                  { key: 'image_url', label: 'Image URL' },
+                  { key: 'image_position', label: 'Img Position' },
+                  { key: 'cta_text', label: 'CTA Text' },
+                  { key: 'cta_url', label: 'CTA URL' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} defaultRow={{ block_key: '', headline: '', body: '', image_url: '', image_position: 'right', cta_text: '', cta_url: '', sort_order: 0 }} />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
         </Tabs>
       </div>
