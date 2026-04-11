@@ -390,9 +390,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       </div>
     </div>
   );
-}
-  );
-}
+
 
 function BlockItem({ block, saving, blockTypes, onUpdate, onDelete }: {
   block: any; saving: string | null; blockTypes: string[];
