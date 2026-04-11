@@ -29,10 +29,10 @@ interface SectionWrapperProps {
 }
 
 /** Fixed styles per section type */
-const SECTION_TYPE_STYLES: Record<string, { padding: string; maxWidth: string; minHeight?: string }> = {
-  hero: { padding: '0', maxWidth: '100%' },
-  section: { padding: '60px 0', maxWidth: '1200px' },
-  small: { padding: '30px 0', maxWidth: '1000px' },
+const SECTION_TYPE_STYLES: Record<string, { paddingY: string; containerMax: string }> = {
+  hero: { paddingY: '0', containerMax: '1200px' },
+  section: { paddingY: '60px', containerMax: '1200px' },
+  small: { paddingY: '30px', containerMax: '1000px' },
 };
 
 /** Determine contrasting text color based on background */
@@ -107,93 +107,64 @@ const SectionWrapper = ({ config, children, fullControl = false }: SectionWrappe
 
   const photoArray = Array.isArray(photos) ? photos.filter(Boolean) : [];
 
-  // Always enforce safe minimum padding — even heroes need horizontal breathing room
-  const SAFE_HORIZONTAL_PAD = '1.5rem';
-  const SAFE_MIN_PAD_Y = section_type === 'hero' ? '3rem' : '0';
+  const SAFE_PAD_X = '1.5rem';
+  const heroMinPadY = '3rem';
+  const containerMax = typeStyles.containerMax;
+  const paddingY = typeStyles.paddingY;
+  const effectivePadY = paddingY === '0' ? heroMinPadY : paddingY;
 
-  const maxWidth = typeStyles.maxWidth;
-  const paddingValue = typeStyles.padding;
-
-  if (fullControl) {
-    return (
-      <div id={`section-${section_key}`} data-section-id={id} style={{ ...sectionStyle, position: 'relative' }} className={custom_css_class || undefined}>
-        {/* Dark overlay for image backgrounds */}
-        {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" />}
-        <div
-          style={{
-            position: 'relative',
-            zIndex: 1,
-            maxWidth: '1200px',
-            marginLeft: 'auto',
-            marginRight: 'auto',
-            paddingLeft: SAFE_HORIZONTAL_PAD,
-            paddingRight: SAFE_HORIZONTAL_PAD,
-            paddingTop: SAFE_MIN_PAD_Y,
-            paddingBottom: SAFE_MIN_PAD_Y,
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            minHeight: 'inherit',
-            ...textShadowStyle,
-          }}
-        >
-          {children}
-        </div>
-        {photoArray.length > 0 && (
-          <div style={{ position: 'relative', zIndex: 1, maxWidth: '1200px', marginLeft: 'auto', marginRight: 'auto', paddingLeft: SAFE_HORIZONTAL_PAD, paddingRight: SAFE_HORIZONTAL_PAD, paddingBottom: '2rem' }}>
-            <SectionPhotoGallery photos={photoArray} />
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  const paddingParts = paddingValue.split(' ');
-  const paddingTop = paddingParts[0];
-  const paddingBottom = paddingParts.length > 1 ? paddingParts[1] : paddingParts[0];
-
+  // ── Outer section: always 100vw, holds bg color/image/overlay ──
+  // ── Inner container: capped width, centered, holds content ──
   return (
-    <div
+    <section
       id={`section-${section_key}`}
       data-section-id={id}
-      style={{ ...sectionStyle, position: 'relative' }}
+      style={{ ...sectionStyle, position: 'relative', width: '100%' }}
       className={custom_css_class || undefined}
     >
-      {/* Dark overlay for image backgrounds */}
-      {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" />}
+      {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" aria-hidden="true" />}
+
       <div
         style={{
           position: 'relative',
           zIndex: 1,
-          maxWidth: maxWidth === '100%' ? '1200px' : maxWidth,
+          width: '100%',
+          maxWidth: containerMax,
           marginLeft: 'auto',
           marginRight: 'auto',
-          paddingTop: paddingTop === '0' ? SAFE_MIN_PAD_Y : paddingTop,
-          paddingBottom: photoArray.length > 0 ? '2rem' : (paddingBottom === '0' ? SAFE_MIN_PAD_Y : paddingBottom),
-          paddingLeft: SAFE_HORIZONTAL_PAD,
-          paddingRight: SAFE_HORIZONTAL_PAD,
+          paddingLeft: SAFE_PAD_X,
+          paddingRight: SAFE_PAD_X,
+          paddingTop: effectivePadY,
+          paddingBottom: photoArray.length > 0 ? '2rem' : effectivePadY,
+          ...(section_type === 'hero' ? {
+            display: 'flex',
+            flexDirection: 'column' as const,
+            justifyContent: 'center',
+            minHeight: 'inherit',
+          } : {}),
           ...textShadowStyle,
         }}
       >
         {children}
       </div>
+
       {photoArray.length > 0 && (
         <div
           style={{
             position: 'relative',
             zIndex: 1,
-            maxWidth: maxWidth === '100%' ? '1200px' : maxWidth,
+            maxWidth: containerMax,
             marginLeft: 'auto',
             marginRight: 'auto',
-            paddingLeft: SAFE_HORIZONTAL_PAD,
-            paddingRight: SAFE_HORIZONTAL_PAD,
-            paddingBottom,
+            paddingLeft: SAFE_PAD_X,
+            paddingRight: SAFE_PAD_X,
+            paddingBottom: effectivePadY,
           }}
         >
           <SectionPhotoGallery photos={photoArray} />
         </div>
       )}
-    </div>
+    </section>
   );
 };
 
