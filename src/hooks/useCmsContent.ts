@@ -220,7 +220,7 @@ export function usePageSections(page: string) {
         .eq('is_visible', true)
         .order('sort_order', { ascending: true });
       if (error) throw new Error(error.message);
-      return (data || []) as PageSection[];
+      return (data || []) as unknown as PageSection[];
     },
     staleTime: 5 * 60 * 1000,
   });
