@@ -1,5 +1,6 @@
 import React from 'react';
 import SectionPhotoGallery from './SectionPhotoGallery';
+import { useContainerMaxWidth } from '@/contexts/SiteSettingsContext';
 
 export interface PageSectionConfig {
   id: string;
