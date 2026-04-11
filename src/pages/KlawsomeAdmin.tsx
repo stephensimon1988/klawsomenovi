@@ -286,7 +286,7 @@ function StoreHoursEditor({ password }: { password: string }) {
   );
 }
 
-// ─── Content Block Editor (for custom sections) ─────────────
+// ─── Content Block Editor (simplified — just add items, auto-layout handles the rest) ─
 function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
@@ -298,7 +298,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       const res = await cmsInvoke(password, { action: 'read', table: 'section_content_blocks' });
       const filtered = (res.rows || [])
         .filter((b: any) => b.section_id === sectionId)
-        .sort((a: any, b: any) => (a.column_index - b.column_index) || (a.row_order - b.row_order));
+        .sort((a: any, b: any) => a.row_order - b.row_order);
       setBlocks(filtered);
     } catch (e: any) { toast.error(e.message); }
     setLoading(false);
@@ -306,14 +306,19 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
 
   useEffect(() => { load(); }, [load]);
 
-  const addBlock = async (colIndex: number) => {
+  const addBlock = async (blockType: string) => {
     try {
-      const colBlocks = blocks.filter(b => b.column_index === colIndex);
+      const defaultContent: Record<string, any> =
+        blockType === 'heading' ? { text: 'New Heading' } :
+        blockType === 'text' ? { text: 'Your text here...' } :
+        blockType === 'image' ? { url: '', alt: '' } :
+        blockType === 'button' ? { text: 'Learn More', url: '/' } :
+        { height: '2rem' };
       await cmsInvoke(password, {
         action: 'insert', table: 'section_content_blocks',
-        data: { section_id: sectionId, column_index: colIndex, row_order: colBlocks.length, block_type: 'text', content: { text: '' } }
+        data: { section_id: sectionId, column_index: 0, row_order: blocks.length, block_type: blockType, content: defaultContent }
       });
-      toast.success('Block added');
+      toast.success('Added!');
       load();
     } catch (e: any) { toast.error(e.message); }
   };
@@ -329,44 +334,60 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
   };
 
   const deleteBlock = async (id: string) => {
-    if (!confirm('Delete this block?')) return;
+    if (!confirm('Remove this item?')) return;
     try {
       await cmsInvoke(password, { action: 'delete', table: 'section_content_blocks', id });
-      toast.success('Deleted');
+      toast.success('Removed');
       load();
     } catch (e: any) { toast.error(e.message); }
   };
 
-  if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading blocks…</p>;
+  if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading…</p>;
 
-  const blockTypes = ['heading', 'text', 'image', 'button', 'spacer'];
+  // Count content types for template preview
+  const headingCount = blocks.filter(b => b.block_type === 'heading').length;
+  const textCount = blocks.filter(b => b.block_type === 'text').length;
+  const imageCount = blocks.filter(b => b.block_type === 'image').length;
+  const buttonCount = blocks.filter(b => b.block_type === 'button').length;
+
+  const templateName =
+    imageCount === 1 && (headingCount > 0 || textCount > 0) ? '📐 Hero Split (text + image side by side)' :
+    imageCount > 1 ? '🖼 Gallery (header + image grid)' :
+    imageCount === 1 && headingCount === 0 && textCount === 0 ? '🌅 Full-Width Banner' :
+    headingCount > 0 && buttonCount > 0 && textCount === 0 ? '📣 CTA Strip (heading + button)' :
+    textCount > 2 ? '🃏 Cards Grid' :
+    '📝 Centered Content';
 
   return (
     <div className="space-y-3">
-      <p className="text-white/40 text-xs">Add content blocks to columns. Each block has a type and content.</p>
-      {[0, 1, 2, 3].map(colIdx => {
-        const colBlocks = blocks.filter(b => b.column_index === colIdx);
-        if (colBlocks.length === 0 && colIdx > 0) return null; // Only show columns with blocks + col 0
+      <div className="bg-white/5 border border-white/10 rounded-lg px-3 py-2">
+        <span className="text-white/40 text-[10px] font-heading uppercase tracking-wider">Auto-layout: </span>
+        <span className="text-klawsome-yellow text-xs font-heading font-bold">{templateName}</span>
+        <p className="text-white/30 text-[10px] mt-0.5">Just add your content below — the layout adjusts automatically.</p>
+      </div>
 
-        return (
-          <div key={colIdx} className="border border-white/10 rounded-lg p-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-white/60 text-xs font-heading">Column {colIdx + 1}</span>
-              <Button size="sm" variant="ghost" onClick={() => addBlock(colIdx)} className="text-klawsome-yellow text-xs h-6 px-2">
-                <Plus className="w-3 h-3 mr-1" />Add Block
-              </Button>
-            </div>
-            {colBlocks.map(block => (
-              <BlockItem key={block.id} block={block} saving={saving} blockTypes={blockTypes}
-                onUpdate={updateBlock} onDelete={deleteBlock} />
-            ))}
-          </div>
-        );
-      })}
-      <Button size="sm" variant="ghost" onClick={() => addBlock(blocks.length > 0 ? Math.max(...blocks.map(b => b.column_index)) + 1 : 0)}
-        className="text-white/40 text-xs h-6 px-2">
-        <Plus className="w-3 h-3 mr-1" />Add Column
-      </Button>
+      {blocks.map(block => (
+        <BlockItem key={block.id} block={block} saving={saving}
+          blockTypes={['heading', 'text', 'image', 'button', 'spacer']}
+          onUpdate={updateBlock} onDelete={deleteBlock} />
+      ))}
+
+      <div className="flex flex-wrap gap-1.5 pt-1">
+        <span className="text-white/30 text-xs self-center mr-1">Add:</span>
+        {[
+          { type: 'heading', icon: 'H', label: 'Heading' },
+          { type: 'text', icon: '¶', label: 'Text' },
+          { type: 'image', icon: '🖼', label: 'Image' },
+          { type: 'button', icon: '▶', label: 'Button' },
+          { type: 'spacer', icon: '↕', label: 'Space' },
+        ].map(item => (
+          <Button key={item.type} size="sm" variant="ghost"
+            onClick={() => addBlock(item.type)}
+            className="text-white/60 hover:text-klawsome-yellow text-xs h-7 px-2 border border-white/10 hover:border-klawsome-yellow/30">
+            <span className="mr-1">{item.icon}</span>{item.label}
+          </Button>
+        ))}
+      </div>
     </div>
   );
 }
