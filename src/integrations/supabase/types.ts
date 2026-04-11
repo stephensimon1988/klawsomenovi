@@ -371,6 +371,7 @@ export type Database = {
           id: string
           is_visible: boolean
           label: string
+          layout_json: Json
           padding_y: string
           page: string
           photos: Json
@@ -388,6 +389,7 @@ export type Database = {
           id?: string
           is_visible?: boolean
           label?: string
+          layout_json?: Json
           padding_y?: string
           page: string
           photos?: Json
@@ -405,6 +407,7 @@ export type Database = {
           id?: string
           is_visible?: boolean
           label?: string
+          layout_json?: Json
           padding_y?: string
           page?: string
           photos?: Json

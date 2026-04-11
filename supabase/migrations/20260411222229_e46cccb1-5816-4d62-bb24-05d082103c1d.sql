@@ -1,0 +1,1 @@
+ALTER TABLE public.page_sections ADD COLUMN IF NOT EXISTS layout_json jsonb NOT NULL DEFAULT '{}'::jsonb;

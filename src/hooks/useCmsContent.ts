@@ -197,6 +197,7 @@ export interface PageSection {
   columns: number;
   photos?: string[];
   text_color?: string;
+  layout_json?: Record<string, any>;
 }
 
 export interface SectionContentBlock {

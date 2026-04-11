@@ -17,6 +17,7 @@ export interface PageSectionConfig {
   columns?: number;
   photos?: string[];
   text_color?: string;
+  layout_json?: Record<string, any>;
 }
 
 interface SectionWrapperProps {

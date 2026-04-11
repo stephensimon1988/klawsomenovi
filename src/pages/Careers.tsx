@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import SectionWrapper from '@/components/SectionWrapper';
-import CustomBlock from '@/components/CustomBlock';
+import DynamicSection from '@/components/DynamicSection';
 import { useCmsTable, usePageSections, type JobListing, type PageSection } from '@/hooks/useCmsContent';
 
 const CareersHero = () => (
@@ -116,7 +116,7 @@ const Careers = () => {
         if (s.section_key.startsWith('custom:')) {
           return (
             <SectionWrapper key={s.id} config={s}>
-              <CustomBlock blockKey={s.section_key.replace('custom:', '')} />
+              <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
             </SectionWrapper>
           );
         }

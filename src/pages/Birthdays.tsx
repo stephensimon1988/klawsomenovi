@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import SectionWrapper from '@/components/SectionWrapper';
-import CustomBlock from '@/components/CustomBlock';
+import DynamicSection from '@/components/DynamicSection';
 import { useCmsSingle, useCmsTable, usePageSections, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate, type PageSection } from '@/hooks/useCmsContent';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
@@ -165,7 +165,7 @@ const Birthdays = () => {
         if (s.section_key.startsWith('custom:')) {
           return (
             <SectionWrapper key={s.id} config={s}>
-              <CustomBlock blockKey={s.section_key.replace('custom:', '')} />
+              <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
             </SectionWrapper>
           );
         }
