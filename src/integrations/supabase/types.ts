@@ -491,6 +491,7 @@ export type Database = {
         Row: {
           address: string | null
           business_name: string
+          container_max_width: string
           email: string | null
           facebook_url: string | null
           gift_card_url: string | null
@@ -506,6 +507,7 @@ export type Database = {
         Insert: {
           address?: string | null
           business_name?: string
+          container_max_width?: string
           email?: string | null
           facebook_url?: string | null
           gift_card_url?: string | null
@@ -521,6 +523,7 @@ export type Database = {
         Update: {
           address?: string | null
           business_name?: string
+          container_max_width?: string
           email?: string | null
           facebook_url?: string | null
           gift_card_url?: string | null
