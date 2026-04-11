@@ -829,23 +829,48 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
       {/* Expanded content */}
       {expanded && (
         <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
-          {/* Layout controls */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <InlineField label="Height" value={section.section_height || 'auto'} onChange={v => onUpdateLayout(section.id, 'section_height', v)} />
-            <InlineField label="Max Width" value={section.wrapper_max_width || '1200px'} onChange={v => onUpdateLayout(section.id, 'wrapper_max_width', v)} />
-            <InlineField label="Padding Y" value={section.padding_y || '7rem'} onChange={v => onUpdateLayout(section.id, 'padding_y', v)} />
-            <InlineField label="Columns" value={String(section.columns || 1)} onChange={v => onUpdateLayout(section.id, 'columns', v)} />
+          {/* Section Type Toggle */}
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Section Type</label>
+            <div className="flex gap-2">
+              {(['hero', 'section', 'small'] as const).map(type => (
+                <Button key={type} size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'section_type', type)}
+                  className={`text-xs h-8 px-4 border ${section.section_type === type || (!section.section_type && type === 'section')
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'}`}>
+                  {type === 'hero' ? '🖼 Hero Banner' : type === 'section' ? '📄 Section' : '📌 Small Section'}
+                </Button>
+              ))}
+            </div>
           </div>
+
+          {/* Hero Height Toggle (only for hero type) */}
+          {(section.section_type === 'hero') && (
+            <div className="space-y-2">
+              <label className="text-white/60 text-xs font-heading">Hero Height</label>
+              <div className="flex gap-2">
+                <Button size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'hero_height', '50vh')}
+                  className={`text-xs h-8 px-4 border ${section.hero_height === '50vh'
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20'}`}>
+                  Half Screen
+                </Button>
+                <Button size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'hero_height', '100vh')}
+                  className={`text-xs h-8 px-4 border ${section.hero_height !== '50vh'
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20'}`}>
+                  Full Screen
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Background controls */}
           <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
-            <InlineField label="CSS Class" value={section.custom_css_class || ''} onChange={v => onUpdateLayout(section.id, 'custom_css_class', v)} />
-          </div>
-          <MultiImageUpload
-            label="Section Photos (auto-layout)"
-            value={Array.isArray(section.photos) ? section.photos : []}
-            onChange={urls => onUpdateLayout(section.id, 'photos', JSON.stringify(urls))}
-          />
+          <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
 
           {/* Content editor */}
           <div className="border-t border-white/10 pt-3">
