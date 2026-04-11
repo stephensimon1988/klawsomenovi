@@ -650,19 +650,27 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
           {/* Layout Template Picker */}
           <div className="space-y-2">
             <label className="text-white/60 text-xs font-heading">Layout Template</label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-              {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => (
-                <Button key={key} size="sm" variant="ghost"
-                  onClick={() => onUpdateLayout(section.id, 'layout_template', key)}
-                  className={`text-xs h-auto py-2 px-3 border flex flex-col items-start gap-0.5 ${
-                    (section.layout_template || 'stacked') === key
-                      ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                      : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'
-                  }`}>
-                  <span>{tmpl.label}</span>
-                  <span className="text-[10px] opacity-60 font-normal text-left leading-tight">{tmpl.description}</span>
-                </Button>
-              ))}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+              {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => {
+                const isActive = (section.layout_template || 'stacked') === key;
+                return (
+                  <button key={key}
+                    onClick={() => onUpdateLayout(section.id, 'layout_template', key)}
+                    className={`rounded-xl border-2 overflow-hidden transition-all text-left ${
+                      isActive
+                        ? 'border-klawsome-yellow ring-2 ring-klawsome-yellow/30 bg-klawsome-yellow/10'
+                        : 'border-white/10 hover:border-white/30 bg-white/5'
+                    }`}>
+                    <div className="bg-white rounded-t-lg mx-2 mt-2">
+                      <img src={tmpl.preview} alt={tmpl.label} className="w-full h-24 object-contain" loading="lazy" />
+                    </div>
+                    <div className="px-3 py-2">
+                      <span className={`text-xs font-heading font-bold block ${isActive ? 'text-klawsome-yellow' : 'text-white/80'}`}>{tmpl.label}</span>
+                      <span className="text-[10px] text-white/40 leading-tight block mt-0.5">{tmpl.description}</span>
+                    </div>
+                  </button>
+                );
+              })}
             </div>
           </div>
 
