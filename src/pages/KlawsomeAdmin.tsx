@@ -10,12 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Upload, Wand2, ArrowUp, ArrowDown
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
-import MultiImageUpload from '@/components/MultiImageUpload';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
@@ -306,7 +305,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
-  const [aiGenerating, setAiGenerating] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -377,30 +375,21 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
     } catch (e: any) { toast.error(e.message); }
   };
 
-  const generateAILayout = async () => {
-    setAiGenerating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-layout', {
-        body: { password, section_id: sectionId },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      toast.success(`Layout generated (${data.source === 'ai' ? 'AI' : 'auto'})! Refresh the page to see changes.`);
-    } catch (e: any) {
-      toast.error('Layout generation failed: ' + e.message);
-    }
-    setAiGenerating(false);
-  };
-
   if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading…</p>;
 
   return (
     <div className="space-y-3">
-      {/* Block list */}
+      <p className="text-white/30 text-[10px] italic">↑↓ Items at the top are most prominent on the page.</p>
+      {/* Block list with priority numbers */}
       {blocks.map((block, idx) => (
-        <BlockItem key={block.id} block={block} saving={saving}
-          onUpdate={updateBlock} onDelete={deleteBlock}
-          onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
+        <div key={block.id} className="flex gap-2 items-start">
+          <span className="text-klawsome-yellow/60 text-xs font-mono pt-3 w-5 text-right flex-shrink-0">{idx + 1}</span>
+          <div className="flex-1">
+            <BlockItem block={block} saving={saving}
+              onUpdate={updateBlock} onDelete={deleteBlock}
+              onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
+          </div>
+        </div>
       ))}
 
       {/* Add block buttons */}
@@ -414,18 +403,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
           </Button>
         ))}
       </div>
-
-      {/* AI Layout button */}
-      {blocks.length > 0 && (
-        <Button
-          onClick={generateAILayout}
-          disabled={aiGenerating}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-heading font-bold text-sm h-10 mt-2"
-        >
-          <Wand2 className="w-4 h-4 mr-2" />
-          {aiGenerating ? 'AI is arranging your layout…' : '✨ Save & Auto-Layout with AI'}
-        </Button>
-      )}
     </div>
   );
 }
