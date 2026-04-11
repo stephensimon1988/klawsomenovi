@@ -1,84 +1,92 @@
 
 
-# Simplified CMS with Priority-Based Layout Engine
+# Restructure All Pages to Be Fully CMS-Driven
 
-## Summary
-Replace complex layout inputs with 3 section types (Hero Banner, Section, Small Section), add priority ordering to content blocks, and use a rule-based template engine that determines visual prominence based on user-defined block order. Zero AI cost.
+## Problem
 
-## Section Types
+There are two parallel systems fighting each other:
 
-| Type | Height | Padding | Container |
-|------|--------|---------|-----------|
-| **Hero Banner** | 50vh or 100vh (toggle) | 0 | Full-width |
-| **Section** | auto | 60px top/bottom | 1200px centered |
-| **Small Section** | auto | 30px top/bottom | 1000px centered |
+1. **Hardcoded "Kawaii" components** (`KawaiiStory`, `KawaiiAbout`, `KawaiiHero`, `KawaiiVisit`, etc.) — they have their own `<section>` tags, padding, backgrounds, and hardcoded labels like "Our Story" / "How It Works". They render via `fullControl={true}`, which bypasses `SectionWrapper`'s layout rules entirely.
 
-## Priority Ordering
+2. **CMS-driven DynamicSection** — uses `SectionWrapper` properly with the section/hero/small type system and priority-based block layout.
 
-Each content block within a section gets a `priority` value (its position in the list). Users drag/reorder blocks in the admin to set importance. The template engine uses this to determine:
+The result: the admin CMS shows sections but half of them say "no editable content" or only edit a few fields in a separate table. The frontend ignores the section type/background settings for built-in sections because `fullControl` skips `SectionWrapper`. Labels like "Our Story" are baked into component code, not the CMS.
 
-- **Priority 1-2**: Largest/most prominent — bigger font sizes, more space, featured placement (e.g. left side of hero split, full-width heading)
-- **Priority 3-4**: Secondary — medium sizing, supporting content
-- **Priority 5+**: Tertiary — smaller, grid items, tucked below
+## Solution
 
-Example: A section with Heading (priority 1), Image (priority 2), Text (priority 3), Button (priority 4) → Hero Split layout where Heading + Text stack on the left, Image fills the right, Button below text.
+Convert all built-in sections to use `DynamicSection` + `SectionWrapper` so every section on the site is controlled the same way: section type, background, and content blocks — all from the admin.
 
-If the user reorders Image to priority 1 and Heading to priority 2 → Image takes the hero position (left/top), heading overlays or sits beside it.
+## What Changes
 
-## Rule-Based Template Engine (No AI)
+### 1. Database Migration
+- Seed `section_content_blocks` rows for each existing built-in section (hero, about, visit, story, tokens, etc.) so they have content blocks matching what's currently hardcoded.
+- These blocks will pull their default content from the existing CMS tables (`homepage_content`, `homepage_steps`, `site_settings`, etc.) during migration.
 
-Client-side function in `DynamicSection.tsx`. Uses block types + their priority order:
+### 2. Remove Hardcoded Components
+Delete or deprecate these files (their content moves into CMS blocks):
+- `KawaiiStory.tsx` — "Our Story" label + story_title/story_body → heading + richtext blocks
+- `KawaiiAbout.tsx` — "How It Works" + steps → heading + text + card blocks
+- `KawaiiHero.tsx` — hero headline/subheadline/CTA → heading + text + button blocks on a hero section with bg image
+- `KawaiiVisit.tsx` — address/hours/map → structured blocks
+- `KawaiiTokenPrices.tsx` — token tiers → card blocks or a dedicated "pricing" block type
+- `KawaiiReviews.tsx` — Google reviews → embed or dedicated block
+- `KawaiiNews.tsx` — news articles grid → card blocks
+- `KawaiiGiftCards.tsx` — gift card CTA → heading + button blocks
 
-```text
-Rules (checked in order):
-1. Has image at priority 1        → Image-led hero (image dominant, text overlay or beside)
-2. Has heading + text + 1 image   → Hero Split (highest-priority item gets more space)
-3. Has heading + text + 2+ images → Text top, image grid below (priority sets grid order)
-4. Has video/iframe               → Full-width embed, text above if present
-5. Has heading + button only      → CTA strip centered
-6. Has 3+ text blocks             → Card grid (priority = card order, first card bigger)
-7. Everything else                → Centered stack in priority order
+### 3. Add New Block Types to DynamicSection
+Add a few specialized block types so structured data renders well:
+- **`pricing`** — renders a pricing tier grid (pulls from `token_tiers` or inline content)
+- **`hours`** — renders store hours (pulls from `store_hours`)
+- **`reviews`** — renders Google reviews widget
+- **`cards`** — renders a grid of cards with icon/title/description (for "How It Works" steps, news articles, etc.)
+
+### 4. Simplify Page Files
+All page files (`Index.tsx`, `Birthdays.tsx`, `Careers.tsx`, `Business.tsx`, `News.tsx`) reduce to the same pattern:
+
+```typescript
+const Page = () => {
+  const { data: sections } = usePageSections('home');
+  return (
+    <div className="min-h-screen bg-background">
+      <KawaiiNav />
+      {sections?.map(s => (
+        <SectionWrapper key={s.id} config={s}>
+          <DynamicSection sectionId={s.id} sectionType={s.section_type} />
+        </SectionWrapper>
+      ))}
+      <KawaiiFooter />
+    </div>
+  );
+};
 ```
 
-Priority 1 block always gets ~60% of the space in split layouts. Lower priority items share the remaining 40%.
+No more `SECTION_MAP`, no more `fullControl`, no more `FALLBACK_SECTIONS`. Every section is a `DynamicSection`.
 
-## Database Changes
+### 5. Remove `BuiltInEditor` from Admin
+Since all sections now use `ContentBlockEditor`, the `BuiltInEditor` routing and all individual editors (`HomeHeroEditor`, `HomeStoryEditor`, `HomeAboutEditor`, etc.) are removed. Every section gets the same block editor experience.
 
-**Migration:**
-```sql
-ALTER TABLE page_sections 
-  ADD COLUMN section_type text NOT NULL DEFAULT 'section',
-  ADD COLUMN hero_height text NOT NULL DEFAULT '100vh';
-
--- priority is just row_order on section_content_blocks (already exists)
--- No new column needed — reordering updates row_order
-```
-
-## Admin UI Changes
-
-**Per section — simplified to:**
-1. **Section type** — 3-button toggle (Hero Banner / Section / Small Section)
-2. **Hero height** — Half/Full toggle (only visible for Hero Banner)
-3. **Background color** — brand palette picker (auto-contrast text color)
-4. **Background image** — upload field
-5. **Content blocks** — drag-to-reorder list with ↑↓ buttons (order = priority)
-6. **Label** — text field for admin reference
-
-**Removed:** height, padding, max-width, columns, CSS class, photos multi-upload, AI Layout button.
-
-**Priority indicator:** Each block shows its priority number (1, 2, 3...) beside it. A small note: "Items at the top are most prominent on the page."
+### 6. Keep Existing Data Tables
+Tables like `homepage_content`, `token_tiers`, `store_hours`, `news_articles` stay as data sources. Some block types (pricing, hours, reviews) will reference these tables to render structured data. The admin's Settings tab still edits `site_settings`.
 
 ## Files Changed
 
 | File | Change |
 |------|--------|
-| `page_sections` migration | Add `section_type`, `hero_height` columns |
-| `SectionWrapper.tsx` | Apply fixed styles per section type instead of reading individual fields |
-| `DynamicSection.tsx` | Rewrite template engine to use priority-aware rules, remove AI layout dependency |
-| `KlawsomeAdmin.tsx` | Replace layout fields with type toggle + priority reordering UI |
-| `useCmsContent.ts` | Update `PageSection` type with new fields |
+| Migration SQL | Seed content blocks for all existing built-in sections |
+| `DynamicSection.tsx` | Add pricing, hours, reviews, cards block types |
+| `SectionWrapper.tsx` | Remove `fullControl` prop entirely |
+| `Index.tsx` | Simplify to universal section loop |
+| `Birthdays.tsx` | Same universal loop |
+| `Business.tsx` | Same universal loop |
+| `Careers.tsx` | Same universal loop |
+| `News.tsx` | Same universal loop |
+| `KlawsomeAdmin.tsx` | Remove `BuiltInEditor` and all individual editors; all sections use `ContentBlockEditor` |
+| Delete `KawaiiStory.tsx`, `KawaiiAbout.tsx`, `KawaiiHero.tsx`, `KawaiiVisit.tsx`, `KawaiiTokenPrices.tsx`, `KawaiiReviews.tsx`, `KawaiiNews.tsx`, `KawaiiGiftCards.tsx` | Content now lives in CMS blocks |
 
-## Cost Impact
-- **Before**: AI API call on every save
-- **After**: Zero API calls — all layout decisions are instant client-side rules
+## Result
+- Every section on every page is controlled identically from the admin
+- No more "no editable content" messages
+- No more hardcoded labels like "Our Story"
+- Section type, background, and content blocks all work consistently
+- The admin CMS is the single source of truth for everything on the site
 
