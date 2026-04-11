@@ -28,11 +28,11 @@ interface SectionWrapperProps {
   children: React.ReactNode;
 }
 
-/** Fixed styles per section type */
-const SECTION_TYPE_STYLES: Record<string, { paddingY: string; containerMax: string }> = {
-  hero: { paddingY: '0', containerMax: '1200px' },
-  section: { paddingY: '60px', containerMax: '1200px' },
-  small: { paddingY: '30px', containerMax: '1000px' },
+/** Fixed styles per section type — containerMax now comes from global site_settings */
+const SECTION_TYPE_STYLES: Record<string, { paddingY: string }> = {
+  hero: { paddingY: '0' },
+  section: { paddingY: '60px' },
+  small: { paddingY: '30px' },
 };
 
 /** Determine contrasting text color based on background */
