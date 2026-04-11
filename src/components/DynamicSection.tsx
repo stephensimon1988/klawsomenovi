@@ -12,10 +12,28 @@ interface DynamicSectionProps {
   sectionType?: 'hero' | 'section' | 'small';
 }
 
-/**
- * Priority-based rule engine: determines layout from block types + their order (priority).
- * Priority = row_order position. Lower = more prominent.
- */
+// ─── Zone Classification ────────────────────────────────────
+const HEADER_TYPES = new Set(['heading', 'text', 'richtext', 'list']);
+const CTA_TYPES = new Set(['button']);
+const INLINE_TYPES = new Set(['spacer', 'divider']);
+// Everything else → CONTENT zone
+
+function classifyBlock(blockType: string): 'header' | 'content' | 'cta' | 'inline' {
+  if (HEADER_TYPES.has(blockType)) return 'header';
+  if (CTA_TYPES.has(blockType)) return 'cta';
+  if (INLINE_TYPES.has(blockType)) return 'inline';
+  return 'content';
+}
+
+// ─── Auto-grid helper ───────────────────────────────────────
+function autoGridCols(count: number): string {
+  if (count === 1) return '';
+  if (count === 2) return 'grid grid-cols-1 md:grid-cols-2 gap-6';
+  if (count === 3) return 'grid grid-cols-1 md:grid-cols-3 gap-6';
+  return 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6';
+}
+
+// ─── Main Component ─────────────────────────────────────────
 const DynamicSection = ({ sectionId, sectionType = 'section' }: DynamicSectionProps) => {
   const { data: allBlocks } = useCmsTable<SectionContentBlock>('section_content_blocks');
   const blocks = (allBlocks || [])
@@ -24,198 +42,88 @@ const DynamicSection = ({ sectionId, sectionType = 'section' }: DynamicSectionPr
 
   if (blocks.length === 0) return null;
 
-  // Categorize blocks
-  const headings = blocks.filter(b => b.block_type === 'heading');
-  const texts = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
-  const images = blocks.filter(b => b.block_type === 'image');
-  const videos = blocks.filter(b => b.block_type === 'video');
-  const iframes = blocks.filter(b => b.block_type === 'iframe');
-  const buttons = blocks.filter(b => b.block_type === 'button');
-  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
-  const firstBlock = blocks[0];
+  // Sort blocks into zones
+  const headerBlocks: SectionContentBlock[] = [];
+  const contentBlocks: SectionContentBlock[] = [];
+  const ctaBlocks: SectionContentBlock[] = [];
+  const inlineBlocks: { index: number; block: SectionContentBlock }[] = [];
 
-  // Specialized block types — render dedicated widgets
-  const specialBlocks = blocks.filter(b => ['pricing', 'hours', 'reviews', 'news', 'cards', 'faq', 'jobs', 'party_options', 'templates'].includes(b.block_type));
-  if (specialBlocks.length > 0) {
-    return (
-      <div className="space-y-8">
-        {blocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-      </div>
-    );
-  }
+  blocks.forEach((b, i) => {
+    const zone = classifyBlock(b.block_type);
+    if (zone === 'header') headerBlocks.push(b);
+    else if (zone === 'cta') ctaBlocks.push(b);
+    else if (zone === 'inline') inlineBlocks.push({ index: i, block: b });
+    else contentBlocks.push(b);
+  });
 
-  // Rule 1: Image at priority 1 → Image-led hero
-  if (firstBlock.block_type === 'image' && sectionType === 'hero') {
-    return <ImageLedHero blocks={blocks} />;
-  }
+  const isHero = sectionType === 'hero';
 
-  // Rule 2: Has heading + text + 1 image → Hero Split
-  if (headings.length > 0 && texts.length > 0 && images.length === 1) {
-    return <HeroSplit blocks={blocks} />;
-  }
+  // Hero override: single image becomes background
+  const heroImageBlock = isHero && contentBlocks.length === 1 && contentBlocks[0].block_type === 'image'
+    ? contentBlocks[0] : null;
+  const visibleContentBlocks = heroImageBlock
+    ? contentBlocks.filter(b => b.id !== heroImageBlock.id)
+    : contentBlocks;
 
-  // Rule 3: Has heading + text + 2+ images → Text top, image grid below
-  if ((headings.length > 0 || texts.length > 0) && images.length >= 2) {
-    return <TextWithGallery blocks={blocks} />;
-  }
-
-  // Rule 4: Has video/iframe → Full-width embed
-  if (videos.length > 0 || iframes.length > 0) {
-    return <VideoEmbed blocks={blocks} />;
-  }
-
-  // Rule 5: Heading + button only → CTA strip
-  if (headings.length > 0 && buttons.length > 0 && texts.length === 0 && mediaBlocks.length === 0) {
-    return <CTAStrip blocks={blocks} />;
-  }
-
-  // Rule 6: 3+ text blocks → Card grid
-  if (texts.length >= 3) {
-    return <CardsLayout blocks={blocks} />;
-  }
-
-  // Rule 7: Everything else → Centered stack
-  return <StackedLayout blocks={blocks} />;
-};
-
-// ─── Template: Image-Led Hero ───────────────────────────────
-function ImageLedHero({ blocks }: { blocks: SectionContentBlock[] }) {
-  const imageBlock = blocks[0];
-  const rest = blocks.slice(1);
-  const c = imageBlock.content || {};
+  // Group content blocks by type for auto-grid
+  const imageBlocks = visibleContentBlocks.filter(b => b.block_type === 'image');
+  const nonImageContent = visibleContentBlocks.filter(b => b.block_type !== 'image');
 
   return (
-    <div className="relative w-full h-full min-h-[50vh] flex items-center justify-center">
-      <img src={c.url} alt={c.alt || ''} className="absolute inset-0 w-full h-full object-cover" />
-      <div className="absolute inset-0 bg-black/40" />
-      <div className="relative z-10 text-center space-y-4 px-6 max-w-3xl">
-        {rest.map(b => <BlockRenderer key={b.id} block={b} priority={blocks.indexOf(b)} />)}
-      </div>
-    </div>
-  );
-}
-
-// ─── Template: Hero Split ───────────────────────────────────
-function HeroSplit({ blocks }: { blocks: SectionContentBlock[] }) {
-  const textBlocks = blocks.filter(b => !['image', 'video'].includes(b.block_type));
-  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
-
-  const firstMedia = mediaBlocks[0];
-  const firstText = textBlocks[0];
-  const mediaFirst = firstMedia && firstText && blocks.indexOf(firstMedia) < blocks.indexOf(firstText);
-
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
-      <div className={`${mediaFirst ? 'md:col-span-7 order-1' : 'md:col-span-5 order-2 md:order-1'} space-y-4`}>
-        {mediaFirst
-          ? mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
-          : textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
-        }
-      </div>
-      <div className={`${mediaFirst ? 'md:col-span-5 order-2' : 'md:col-span-7 order-1 md:order-2'} space-y-4`}>
-        {mediaFirst
-          ? textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
-          : mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
-        }
-      </div>
-    </div>
-  );
-}
-
-// ─── Template: Text + Gallery Grid ──────────────────────────
-function TextWithGallery({ blocks }: { blocks: SectionContentBlock[] }) {
-  const textBlocks = blocks.filter(b => !['image', 'video'].includes(b.block_type));
-  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
-  const gridCols = mediaBlocks.length === 2 ? 'md:grid-cols-2'
-    : mediaBlocks.length === 3 ? 'md:grid-cols-3'
-    : 'md:grid-cols-2 lg:grid-cols-4';
-
-  return (
-    <div className="space-y-8">
-      {textBlocks.length > 0 && (
-        <div className="max-w-2xl mx-auto text-center space-y-4">
-          {textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-        </div>
+    <div className="relative">
+      {/* Hero background image */}
+      {heroImageBlock && (
+        <>
+          <img
+            src={(heroImageBlock.content as any)?.url}
+            alt={(heroImageBlock.content as any)?.alt || 'Section image'}
+            className="absolute inset-0 w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-black/40" aria-hidden="true" />
+        </>
       )}
-      <div className={`grid grid-cols-1 ${gridCols} gap-4`}>
-        {mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-      </div>
-    </div>
-  );
-}
 
-// ─── Template: Video/Embed ──────────────────────────────────
-function VideoEmbed({ blocks }: { blocks: SectionContentBlock[] }) {
-  const textBlocks = blocks.filter(b => !['video', 'iframe', 'image'].includes(b.block_type));
-  const embedBlocks = blocks.filter(b => ['video', 'iframe'].includes(b.block_type));
-  const otherBlocks = blocks.filter(b => !textBlocks.includes(b) && !embedBlocks.includes(b));
-
-  return (
-    <div className="space-y-6 max-w-4xl mx-auto">
-      {textBlocks.length > 0 && (
-        <div className="text-center space-y-3">
-          {textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-        </div>
-      )}
-      {embedBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-      {otherBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-    </div>
-  );
-}
-
-// ─── Template: CTA Strip ────────────────────────────────────
-function CTAStrip({ blocks }: { blocks: SectionContentBlock[] }) {
-  const headings = blocks.filter(b => b.block_type === 'heading');
-  const buttons = blocks.filter(b => b.block_type === 'button');
-  const others = blocks.filter(b => b.block_type !== 'heading' && b.block_type !== 'button');
-
-  return (
-    <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-center">
-      <div className="space-y-2">
-        {headings.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-        {others.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-      </div>
-      <div className="flex gap-3">
-        {buttons.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-      </div>
-    </div>
-  );
-}
-
-// ─── Template: Cards Grid ───────────────────────────────────
-function CardsLayout({ blocks }: { blocks: SectionContentBlock[] }) {
-  const headerBlocks = blocks.filter(b => b.block_type === 'heading');
-  const cardBlocks = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
-  const others = blocks.filter(b => !['heading', 'richtext', 'text'].includes(b.block_type));
-  const gridCols = cardBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
-
-  return (
-    <div className="space-y-8">
-      {headerBlocks.length > 0 && (
-        <div className="text-center">
-          {headerBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-        </div>
-      )}
-      <div className={`grid grid-cols-1 ${gridCols} gap-6`}>
-        {cardBlocks.map((b, i) => (
-          <div key={b.id} className={`bg-background/30 border border-border/30 rounded-2xl p-6 shadow-sm ${i === 0 ? 'md:col-span-1' : ''}`}>
-            <BlockRenderer block={b} priority={i} />
+      <div className={`relative z-10 space-y-10 ${heroImageBlock ? 'py-16' : ''}`}>
+        {/* ═══ HEADER ZONE ═══ */}
+        {headerBlocks.length > 0 && (
+          <div className="max-w-3xl mx-auto text-center space-y-4">
+            {headerBlocks.map(b => (
+              <BlockRenderer key={b.id} block={b} isHero={isHero} />
+            ))}
           </div>
-        ))}
-      </div>
-      {others.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
-    </div>
-  );
-}
+        )}
 
-// ─── Template: Stacked (default) ────────────────────────────
-function StackedLayout({ blocks }: { blocks: SectionContentBlock[] }) {
-  return (
-    <div className="max-w-3xl mx-auto text-center space-y-5">
-      {blocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+        {/* ═══ CONTENT ZONE ═══ */}
+        {/* Images auto-grid */}
+        {imageBlocks.length > 0 && (
+          <div className={autoGridCols(imageBlocks.length) || undefined}>
+            {imageBlocks.map(b => (
+              <BlockRenderer key={b.id} block={b} isHero={isHero} />
+            ))}
+          </div>
+        )}
+
+        {/* Non-image content (widgets, video, cards, etc.) */}
+        {nonImageContent.length > 0 && (
+          <div className="space-y-8">
+            {nonImageContent.map(b => (
+              <BlockRenderer key={b.id} block={b} isHero={isHero} />
+            ))}
+          </div>
+        )}
+
+        {/* ═══ CTA ZONE ═══ */}
+        {ctaBlocks.length > 0 && (
+          <div className="flex flex-wrap justify-center gap-4">
+            {ctaBlocks.map(b => (
+              <BlockRenderer key={b.id} block={b} isHero={isHero} />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
-}
+};
 
 // ─── Specialized: Pricing Tiers ─────────────────────────────
 function PricingWidget() {
@@ -413,18 +321,15 @@ function TemplatesWidget() {
   );
 }
 
-// ─── Universal Block Renderer (priority-aware sizing) ───────
-function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; priority?: number }) {
+// ─── Universal Block Renderer (consistent sizing) ───────────
+function BlockRenderer({ block, isHero = false }: { block: SectionContentBlock; isHero?: boolean }) {
   const c = block.content || {};
 
-  // Priority-based size classes
-  const headingSize = priority <= 1
+  // Consistent typography — hero gets bigger headings, that's the only variance
+  const headingSize = isHero
     ? 'text-4xl md:text-5xl lg:text-6xl'
-    : priority <= 3
-    ? 'text-3xl md:text-4xl'
-    : 'text-2xl md:text-3xl';
-
-  const textSize = priority <= 1 ? 'text-xl' : priority <= 3 ? 'text-lg' : 'text-base';
+    : 'text-3xl md:text-4xl';
+  const textSize = isHero ? 'text-xl' : 'text-lg';
 
   switch (block.block_type) {
     case 'heading':
@@ -444,7 +349,7 @@ function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; pr
     case 'image':
       return (
         <div className="overflow-hidden rounded-2xl">
-          <img src={c.url} alt={c.alt || ''} className="w-full h-auto object-cover" loading="lazy" />
+          <img src={c.url} alt={c.alt || 'Section image'} className="w-full h-auto object-cover" loading="lazy" />
         </div>
       );
 
@@ -454,7 +359,7 @@ function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; pr
           ? c.url.split('/').pop()
           : new URL(c.url).searchParams.get('v');
         return (
-          <div className="aspect-video rounded-2xl overflow-hidden">
+          <div className="aspect-video rounded-2xl overflow-hidden max-w-4xl mx-auto">
             <iframe
               src={`https://www.youtube.com/embed/${videoId}`}
               className="w-full h-full"
@@ -468,27 +373,27 @@ function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; pr
       if (c.url?.includes('vimeo')) {
         const vimeoId = c.url.split('/').pop();
         return (
-          <div className="aspect-video rounded-2xl overflow-hidden">
+          <div className="aspect-video rounded-2xl overflow-hidden max-w-4xl mx-auto">
             <iframe src={`https://player.vimeo.com/video/${vimeoId}`} className="w-full h-full" allowFullScreen title={c.alt || 'Video'} />
           </div>
         );
       }
       return (
-        <div className="aspect-video rounded-2xl overflow-hidden">
+        <div className="aspect-video rounded-2xl overflow-hidden max-w-4xl mx-auto">
           <video src={c.url} controls className="w-full h-full object-cover" />
         </div>
       );
 
     case 'iframe':
       return (
-        <div className="aspect-video rounded-2xl overflow-hidden border border-border/20">
+        <div className="aspect-video rounded-2xl overflow-hidden border border-border/20 max-w-4xl mx-auto">
           <iframe src={c.url} className="w-full h-full" title={c.title || 'Embedded content'} allowFullScreen />
         </div>
       );
 
     case 'code':
       return (
-        <pre className="bg-background/80 border border-border/30 rounded-xl p-5 overflow-x-auto text-sm font-mono">
+        <pre className="bg-background/80 border border-border/30 rounded-xl p-5 overflow-x-auto text-sm font-mono max-w-3xl mx-auto text-left">
           <code>{c.code || c.text}</code>
         </pre>
       );
@@ -517,30 +422,22 @@ function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; pr
     // ── Specialized block types ──
     case 'pricing':
       return <PricingWidget />;
-
     case 'hours':
       return <HoursWidget />;
-
     case 'reviews':
       return <ReviewsWidget />;
-
     case 'news':
       return <NewsWidget />;
-
     case 'faq':
       return <FaqWidget page={c.page} />;
-
     case 'jobs':
       return <JobsWidget category={c.category} />;
-
     case 'party_options':
       return <PartyOptionsWidget />;
-
     case 'templates':
       return <TemplatesWidget />;
 
     case 'cards':
-      // Inline cards from content JSON
       const cardItems = c.items || [];
       const cols = cardItems.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
       return (
