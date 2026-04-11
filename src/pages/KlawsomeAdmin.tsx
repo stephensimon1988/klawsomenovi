@@ -10,12 +10,11 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Upload, Wand2, ArrowUp, ArrowDown
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
-import MultiImageUpload from '@/components/MultiImageUpload';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
@@ -306,7 +305,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
-  const [aiGenerating, setAiGenerating] = useState(false);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -377,30 +375,21 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
     } catch (e: any) { toast.error(e.message); }
   };
 
-  const generateAILayout = async () => {
-    setAiGenerating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-layout', {
-        body: { password, section_id: sectionId },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      toast.success(`Layout generated (${data.source === 'ai' ? 'AI' : 'auto'})! Refresh the page to see changes.`);
-    } catch (e: any) {
-      toast.error('Layout generation failed: ' + e.message);
-    }
-    setAiGenerating(false);
-  };
-
   if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading…</p>;
 
   return (
     <div className="space-y-3">
-      {/* Block list */}
+      <p className="text-white/30 text-[10px] italic">↑↓ Items at the top are most prominent on the page.</p>
+      {/* Block list with priority numbers */}
       {blocks.map((block, idx) => (
-        <BlockItem key={block.id} block={block} saving={saving}
-          onUpdate={updateBlock} onDelete={deleteBlock}
-          onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
+        <div key={block.id} className="flex gap-2 items-start">
+          <span className="text-klawsome-yellow/60 text-xs font-mono pt-3 w-5 text-right flex-shrink-0">{idx + 1}</span>
+          <div className="flex-1">
+            <BlockItem block={block} saving={saving}
+              onUpdate={updateBlock} onDelete={deleteBlock}
+              onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
+          </div>
+        </div>
       ))}
 
       {/* Add block buttons */}
@@ -414,18 +403,6 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
           </Button>
         ))}
       </div>
-
-      {/* AI Layout button */}
-      {blocks.length > 0 && (
-        <Button
-          onClick={generateAILayout}
-          disabled={aiGenerating}
-          className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-heading font-bold text-sm h-10 mt-2"
-        >
-          <Wand2 className="w-4 h-4 mr-2" />
-          {aiGenerating ? 'AI is arranging your layout…' : '✨ Save & Auto-Layout with AI'}
-        </Button>
-      )}
     </div>
   );
 }
@@ -852,23 +829,48 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
       {/* Expanded content */}
       {expanded && (
         <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
-          {/* Layout controls */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <InlineField label="Height" value={section.section_height || 'auto'} onChange={v => onUpdateLayout(section.id, 'section_height', v)} />
-            <InlineField label="Max Width" value={section.wrapper_max_width || '1200px'} onChange={v => onUpdateLayout(section.id, 'wrapper_max_width', v)} />
-            <InlineField label="Padding Y" value={section.padding_y || '7rem'} onChange={v => onUpdateLayout(section.id, 'padding_y', v)} />
-            <InlineField label="Columns" value={String(section.columns || 1)} onChange={v => onUpdateLayout(section.id, 'columns', v)} />
+          {/* Section Type Toggle */}
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Section Type</label>
+            <div className="flex gap-2">
+              {(['hero', 'section', 'small'] as const).map(type => (
+                <Button key={type} size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'section_type', type)}
+                  className={`text-xs h-8 px-4 border ${section.section_type === type || (!section.section_type && type === 'section')
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'}`}>
+                  {type === 'hero' ? '🖼 Hero Banner' : type === 'section' ? '📄 Section' : '📌 Small Section'}
+                </Button>
+              ))}
+            </div>
           </div>
+
+          {/* Hero Height Toggle (only for hero type) */}
+          {(section.section_type === 'hero') && (
+            <div className="space-y-2">
+              <label className="text-white/60 text-xs font-heading">Hero Height</label>
+              <div className="flex gap-2">
+                <Button size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'hero_height', '50vh')}
+                  className={`text-xs h-8 px-4 border ${section.hero_height === '50vh'
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20'}`}>
+                  Half Screen
+                </Button>
+                <Button size="sm" variant="ghost"
+                  onClick={() => onUpdateLayout(section.id, 'hero_height', '100vh')}
+                  className={`text-xs h-8 px-4 border ${section.hero_height !== '50vh'
+                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                    : 'text-white/60 border-white/20'}`}>
+                  Full Screen
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Background controls */}
           <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-            <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
-            <InlineField label="CSS Class" value={section.custom_css_class || ''} onChange={v => onUpdateLayout(section.id, 'custom_css_class', v)} />
-          </div>
-          <MultiImageUpload
-            label="Section Photos (auto-layout)"
-            value={Array.isArray(section.photos) ? section.photos : []}
-            onChange={urls => onUpdateLayout(section.id, 'photos', JSON.stringify(urls))}
-          />
+          <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
 
           {/* Content editor */}
           <div className="border-t border-white/10 pt-3">
@@ -967,13 +969,10 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
           label: type === 'custom' ? 'New Custom Section' : key,
           sort_order: sections.length + 1,
           is_visible: true,
-          section_height: 'auto',
-          wrapper_max_width: '1200px',
-          padding_y: '7rem',
+          section_type: 'section',
+          hero_height: '100vh',
           bg_color: '',
           bg_image_url: '',
-          custom_css_class: '',
-          columns: 1,
         }
       });
       toast.success('Section added');

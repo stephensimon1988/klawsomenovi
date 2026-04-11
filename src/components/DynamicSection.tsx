@@ -6,9 +6,14 @@ interface DynamicSectionProps {
   sectionId: string;
   columns?: number;
   layoutJson?: Record<string, any>;
+  sectionType?: 'hero' | 'section' | 'small';
 }
 
-const DynamicSection = ({ sectionId, layoutJson }: DynamicSectionProps) => {
+/**
+ * Priority-based rule engine: determines layout from block types + their order (priority).
+ * Priority = row_order position. Lower = more prominent.
+ */
+const DynamicSection = ({ sectionId, sectionType = 'section' }: DynamicSectionProps) => {
   const { data: allBlocks } = useCmsTable<SectionContentBlock>('section_content_blocks');
   const blocks = (allBlocks || [])
     .filter(b => b.section_id === sectionId)
@@ -16,175 +21,156 @@ const DynamicSection = ({ sectionId, layoutJson }: DynamicSectionProps) => {
 
   if (blocks.length === 0) return null;
 
-  // If we have AI layout, use it
-  if (layoutJson && layoutJson.template && layoutJson.grid?.length > 0) {
-    return <AILayout blocks={blocks} layout={layoutJson} />;
-  }
-
-  // Fallback: auto-detect template
+  // Categorize blocks
   const headings = blocks.filter(b => b.block_type === 'heading');
   const texts = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
   const images = blocks.filter(b => b.block_type === 'image');
   const videos = blocks.filter(b => b.block_type === 'video');
-  const buttons = blocks.filter(b => b.block_type === 'button');
-  const spacers = blocks.filter(b => b.block_type === 'spacer');
   const iframes = blocks.filter(b => b.block_type === 'iframe');
-  const codeBlocks = blocks.filter(b => b.block_type === 'code');
-  const lists = blocks.filter(b => b.block_type === 'list');
-  const dividers = blocks.filter(b => b.block_type === 'divider');
-  const mediaCount = images.length + videos.length;
+  const buttons = blocks.filter(b => b.block_type === 'button');
+  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
+  const firstBlock = blocks[0];
 
-  if (mediaCount === 1 && (headings.length > 0 || texts.length > 0))
+  // Rule 1: Image at priority 1 → Image-led hero
+  if (firstBlock.block_type === 'image' && sectionType === 'hero') {
+    return <ImageLedHero blocks={blocks} />;
+  }
+
+  // Rule 2: Has heading + text + 1 image → Hero Split
+  if (headings.length > 0 && texts.length > 0 && images.length === 1) {
     return <HeroSplit blocks={blocks} />;
-  if (images.length > 1)
-    return <GalleryLayout blocks={blocks} />;
-  if (texts.length > 2)
+  }
+
+  // Rule 3: Has heading + text + 2+ images → Text top, image grid below
+  if ((headings.length > 0 || texts.length > 0) && images.length >= 2) {
+    return <TextWithGallery blocks={blocks} />;
+  }
+
+  // Rule 4: Has video/iframe → Full-width embed
+  if (videos.length > 0 || iframes.length > 0) {
+    return <VideoEmbed blocks={blocks} />;
+  }
+
+  // Rule 5: Heading + button only → CTA strip
+  if (headings.length > 0 && buttons.length > 0 && texts.length === 0 && mediaBlocks.length === 0) {
+    return <CTAStrip blocks={blocks} />;
+  }
+
+  // Rule 6: 3+ text blocks → Card grid
+  if (texts.length >= 3) {
     return <CardsLayout blocks={blocks} />;
+  }
+
+  // Rule 7: Everything else → Centered stack
   return <StackedLayout blocks={blocks} />;
 };
 
-// ─── AI-driven layout ───────────────────────────────────────
-function AILayout({ blocks, layout }: { blocks: SectionContentBlock[]; layout: any }) {
-  const { template, grid, gap = '2rem', verticalAlign = 'center' } = layout;
+// ─── Template: Image-Led Hero ───────────────────────────────
+function ImageLedHero({ blocks }: { blocks: SectionContentBlock[] }) {
+  const imageBlock = blocks[0];
+  const rest = blocks.slice(1);
+  const c = imageBlock.content || {};
 
-  // Group blocks by area
-  const areas = new Map<string, { block: SectionContentBlock; config: any }[]>();
-  (grid || []).forEach((g: any) => {
-    const block = blocks[g.blockIndex];
-    if (!block) return;
-    const area = g.area || 'full';
-    if (!areas.has(area)) areas.set(area, []);
-    areas.get(area)!.push({ block, config: g });
-  });
-
-  // Render based on template
-  if (template === 'hero-split' || template === 'two-column' || template === 'sidebar-content') {
-    const leftItems = areas.get('left') || [];
-    const rightItems = areas.get('right') || [];
-    const headerItems = areas.get('header') || [];
-    const footerItems = areas.get('footer') || [];
-    const fullItems = areas.get('full') || [];
-
-    return (
-      <div className="space-y-8">
-        {headerItems.length > 0 && (
-          <div className="text-center space-y-4">
-            {headerItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
-          </div>
-        )}
-        <div className="grid grid-cols-1 md:grid-cols-12 items-center" style={{ gap }}>
-          {leftItems.length > 0 && (
-            <div className={`md:col-span-${leftItems[0]?.config?.span || 6} space-y-4`}
-              style={{ textAlign: leftItems[0]?.config?.alignment || 'left' }}>
-              {leftItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
-            </div>
-          )}
-          {rightItems.length > 0 && (
-            <div className={`md:col-span-${rightItems[0]?.config?.span || 6} space-y-4`}
-              style={{ textAlign: rightItems[0]?.config?.alignment || 'center' }}>
-              {rightItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
-            </div>
-          )}
-        </div>
-        {fullItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
-        {footerItems.length > 0 && (
-          <div className="text-center space-y-4">
-            {footerItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
-          </div>
-        )}
-      </div>
-    );
-  }
-
-  if (template === 'gallery') {
-    const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
-    const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
-    const gridCols = mediaBlocks.length <= 2 ? 'md:grid-cols-2' :
-      mediaBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
-
-    return (
-      <div className="space-y-8">
-        {textBlocks.length > 0 && (
-          <div className="max-w-2xl mx-auto text-center space-y-4">
-            {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
-          </div>
-        )}
-        <div className={`grid grid-cols-1 ${gridCols}`} style={{ gap }}>
-          {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
-        </div>
-      </div>
-    );
-  }
-
-  if (template === 'cards') {
-    const headerBlocks = blocks.filter(b => b.block_type === 'heading');
-    const cardBlocks = blocks.filter(b => b.block_type !== 'heading' && b.block_type !== 'button' && b.block_type !== 'divider' && b.block_type !== 'spacer');
-    const footerBlocks = blocks.filter(b => b.block_type === 'button');
-    const gridCols = cardBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
-
-    return (
-      <div className="space-y-8">
-        {headerBlocks.length > 0 && (
-          <div className="text-center">{headerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
-        )}
-        <div className={`grid grid-cols-1 ${gridCols}`} style={{ gap }}>
-          {cardBlocks.map(b => (
-            <div key={b.id} className="bg-background/30 border border-border/30 rounded-2xl p-6">
-              <BlockRenderer block={b} />
-            </div>
-          ))}
-        </div>
-        {footerBlocks.length > 0 && (
-          <div className="flex justify-center gap-3 pt-4">{footerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
-        )}
-      </div>
-    );
-  }
-
-  // Default: stacked
   return (
-    <div className="space-y-6 max-w-3xl mx-auto" style={{ textAlign: 'center' }}>
-      {blocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+    <div className="relative w-full h-full min-h-[50vh] flex items-center justify-center">
+      <img src={c.url} alt={c.alt || ''} className="absolute inset-0 w-full h-full object-cover" />
+      <div className="absolute inset-0 bg-black/40" />
+      <div className="relative z-10 text-center space-y-4 px-6 max-w-3xl">
+        {rest.map(b => <BlockRenderer key={b.id} block={b} priority={blocks.indexOf(b)} />)}
+      </div>
     </div>
   );
 }
 
-// ─── Fallback templates ─────────────────────────────────────
+// ─── Template: Hero Split ───────────────────────────────────
 function HeroSplit({ blocks }: { blocks: SectionContentBlock[] }) {
-  const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
-  const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
+  const textBlocks = blocks.filter(b => !['image', 'video'].includes(b.block_type));
+  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
+
+  // Priority 1 block gets 60% — check if media is higher priority
+  const firstMedia = mediaBlocks[0];
+  const firstText = textBlocks[0];
+  const mediaFirst = firstMedia && firstText && blocks.indexOf(firstMedia) < blocks.indexOf(firstText);
+
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-      <div className="space-y-5 order-2 md:order-1">
-        {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+    <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-center">
+      <div className={`${mediaFirst ? 'md:col-span-7 order-1' : 'md:col-span-5 order-2 md:order-1'} space-y-4`}>
+        {mediaFirst
+          ? mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
+          : textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
+        }
       </div>
-      <div className="order-1 md:order-2 space-y-4">
-        {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+      <div className={`${mediaFirst ? 'md:col-span-5 order-2' : 'md:col-span-7 order-1 md:order-2'} space-y-4`}>
+        {mediaFirst
+          ? textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
+          : mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)
+        }
       </div>
     </div>
   );
 }
 
-function GalleryLayout({ blocks }: { blocks: SectionContentBlock[] }) {
-  const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
-  const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
-  const gridClass = mediaBlocks.length === 2 ? 'md:grid-cols-2' :
-    mediaBlocks.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+// ─── Template: Text + Gallery Grid ──────────────────────────
+function TextWithGallery({ blocks }: { blocks: SectionContentBlock[] }) {
+  const textBlocks = blocks.filter(b => !['image', 'video'].includes(b.block_type));
+  const mediaBlocks = blocks.filter(b => ['image', 'video'].includes(b.block_type));
+  const gridCols = mediaBlocks.length === 2 ? 'md:grid-cols-2'
+    : mediaBlocks.length === 3 ? 'md:grid-cols-3'
+    : 'md:grid-cols-2 lg:grid-cols-4';
 
   return (
     <div className="space-y-8">
       {textBlocks.length > 0 && (
-        <div className="max-w-2xl mx-auto text-center space-y-3">
-          {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+        <div className="max-w-2xl mx-auto text-center space-y-4">
+          {textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
         </div>
       )}
-      <div className={`grid grid-cols-1 ${gridClass} gap-4`}>
-        {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+      <div className={`grid grid-cols-1 ${gridCols} gap-4`}>
+        {mediaBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
       </div>
     </div>
   );
 }
 
+// ─── Template: Video/Embed ──────────────────────────────────
+function VideoEmbed({ blocks }: { blocks: SectionContentBlock[] }) {
+  const textBlocks = blocks.filter(b => !['video', 'iframe', 'image'].includes(b.block_type));
+  const embedBlocks = blocks.filter(b => ['video', 'iframe'].includes(b.block_type));
+  const otherBlocks = blocks.filter(b => !textBlocks.includes(b) && !embedBlocks.includes(b));
+
+  return (
+    <div className="space-y-6 max-w-4xl mx-auto">
+      {textBlocks.length > 0 && (
+        <div className="text-center space-y-3">
+          {textBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+        </div>
+      )}
+      {embedBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+      {otherBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+    </div>
+  );
+}
+
+// ─── Template: CTA Strip ────────────────────────────────────
+function CTAStrip({ blocks }: { blocks: SectionContentBlock[] }) {
+  const headings = blocks.filter(b => b.block_type === 'heading');
+  const buttons = blocks.filter(b => b.block_type === 'button');
+  const others = blocks.filter(b => b.block_type !== 'heading' && b.block_type !== 'button');
+
+  return (
+    <div className="flex flex-col md:flex-row items-center justify-center gap-6 text-center">
+      <div className="space-y-2">
+        {headings.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+        {others.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+      </div>
+      <div className="flex gap-3">
+        {buttons.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+      </div>
+    </div>
+  );
+}
+
+// ─── Template: Cards Grid ───────────────────────────────────
 function CardsLayout({ blocks }: { blocks: SectionContentBlock[] }) {
   const headerBlocks = blocks.filter(b => b.block_type === 'heading');
   const cardBlocks = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
@@ -194,43 +180,55 @@ function CardsLayout({ blocks }: { blocks: SectionContentBlock[] }) {
   return (
     <div className="space-y-8">
       {headerBlocks.length > 0 && (
-        <div className="text-center">{headerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
+        <div className="text-center">
+          {headerBlocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
+        </div>
       )}
       <div className={`grid grid-cols-1 ${gridCols} gap-6`}>
-        {cardBlocks.map(b => (
-          <div key={b.id} className="bg-background/30 border border-border/30 rounded-2xl p-6 shadow-sm">
-            <BlockRenderer block={b} />
+        {cardBlocks.map((b, i) => (
+          <div key={b.id} className={`bg-background/30 border border-border/30 rounded-2xl p-6 shadow-sm ${i === 0 ? 'md:col-span-1' : ''}`}>
+            <BlockRenderer block={b} priority={i} />
           </div>
         ))}
       </div>
-      {others.map(b => <BlockRenderer key={b.id} block={b} />)}
+      {others.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
     </div>
   );
 }
 
+// ─── Template: Stacked (default) ────────────────────────────
 function StackedLayout({ blocks }: { blocks: SectionContentBlock[] }) {
   return (
     <div className="max-w-3xl mx-auto text-center space-y-5">
-      {blocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+      {blocks.map((b, i) => <BlockRenderer key={b.id} block={b} priority={i} />)}
     </div>
   );
 }
 
-// ─── Universal Block Renderer ───────────────────────────────
-function BlockRenderer({ block }: { block: SectionContentBlock }) {
+// ─── Universal Block Renderer (priority-aware sizing) ───────
+function BlockRenderer({ block, priority = 0 }: { block: SectionContentBlock; priority?: number }) {
   const c = block.content || {};
+
+  // Priority-based size classes
+  const headingSize = priority <= 1
+    ? 'text-4xl md:text-5xl lg:text-6xl'
+    : priority <= 3
+    ? 'text-3xl md:text-4xl'
+    : 'text-2xl md:text-3xl';
+
+  const textSize = priority <= 1 ? 'text-xl' : priority <= 3 ? 'text-lg' : 'text-base';
 
   switch (block.block_type) {
     case 'heading':
-      return <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">{c.text}</h2>;
+      return <h2 className={`${headingSize} font-heading font-bold leading-tight`}>{c.text}</h2>;
 
     case 'text':
-      return <p className="font-body text-lg leading-relaxed opacity-80">{c.text}</p>;
+      return <p className={`font-body ${textSize} leading-relaxed opacity-80`}>{c.text}</p>;
 
     case 'richtext':
       return (
         <div
-          className="font-body text-lg leading-relaxed prose prose-invert max-w-none [&_a]:text-primary [&_a]:underline"
+          className={`font-body ${textSize} leading-relaxed prose prose-invert max-w-none [&_a]:text-primary [&_a]:underline`}
           dangerouslySetInnerHTML={{ __html: c.html || c.text || '' }}
         />
       );
@@ -290,7 +288,7 @@ function BlockRenderer({ block }: { block: SectionContentBlock }) {
     case 'list':
       const items = c.items || [];
       return (
-        <ul className="list-disc list-inside space-y-2 text-lg font-body opacity-80">
+        <ul className={`list-disc list-inside space-y-2 ${textSize} font-body opacity-80`}>
           {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
         </ul>
       );
@@ -311,14 +309,6 @@ function BlockRenderer({ block }: { block: SectionContentBlock }) {
     default:
       return null;
   }
-}
-
-interface TemplateProps {
-  headings: SectionContentBlock[];
-  texts: SectionContentBlock[];
-  images?: SectionContentBlock[];
-  buttons: SectionContentBlock[];
-  spacers?: SectionContentBlock[];
 }
 
 export default DynamicSection;

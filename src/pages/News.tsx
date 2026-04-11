@@ -65,7 +65,7 @@ const News = () => {
         if (s.section_key.startsWith('custom:')) {
           return (
             <SectionWrapper key={s.id} config={s}>
-              <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
+              <DynamicSection sectionId={s.id} sectionType={s.section_type} />
             </SectionWrapper>
           );
         }

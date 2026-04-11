@@ -368,6 +368,7 @@ export type Database = {
           bg_image_url: string
           columns: number
           custom_css_class: string
+          hero_height: string
           id: string
           is_visible: boolean
           label: string
@@ -377,6 +378,7 @@ export type Database = {
           photos: Json
           section_height: string
           section_key: string
+          section_type: string
           sort_order: number
           text_color: string
           wrapper_max_width: string
@@ -386,6 +388,7 @@ export type Database = {
           bg_image_url?: string
           columns?: number
           custom_css_class?: string
+          hero_height?: string
           id?: string
           is_visible?: boolean
           label?: string
@@ -395,6 +398,7 @@ export type Database = {
           photos?: Json
           section_height?: string
           section_key: string
+          section_type?: string
           sort_order?: number
           text_color?: string
           wrapper_max_width?: string
@@ -404,6 +408,7 @@ export type Database = {
           bg_image_url?: string
           columns?: number
           custom_css_class?: string
+          hero_height?: string
           id?: string
           is_visible?: boolean
           label?: string
@@ -413,6 +418,7 @@ export type Database = {
           photos?: Json
           section_height?: string
           section_key?: string
+          section_type?: string
           sort_order?: number
           text_color?: string
           wrapper_max_width?: string

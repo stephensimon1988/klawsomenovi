@@ -19,12 +19,12 @@ export function useCmsTable<T = Record<string, unknown>>(table: string, options?
       }
       return (data || []) as T[];
     },
-    staleTime: 5 * 60 * 1000, // 5 min cache
+    staleTime: 5 * 60 * 1000,
     enabled: options?.enabled !== false,
   });
 }
 
-// Single-row table hook (site_settings, homepage_content, birthdays_content)
+// Single-row table hook
 export function useCmsSingle<T = Record<string, unknown>>(table: string) {
   return useQuery<T | null>({
     queryKey: ['cms', table, 'single'],
@@ -198,6 +198,8 @@ export interface PageSection {
   photos?: string[];
   text_color?: string;
   layout_json?: Record<string, any>;
+  section_type?: 'hero' | 'section' | 'small';
+  hero_height?: '50vh' | '100vh';
 }
 
 export interface SectionContentBlock {
