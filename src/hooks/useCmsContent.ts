@@ -198,8 +198,8 @@ export interface PageSection {
   photos?: string[];
   text_color?: string;
   layout_json?: Record<string, any>;
-  section_type: 'hero' | 'section' | 'small';
-  hero_height: '50vh' | '100vh';
+  section_type?: 'hero' | 'section' | 'small';
+  hero_height?: '50vh' | '100vh';
 }
 
 export interface SectionContentBlock {
