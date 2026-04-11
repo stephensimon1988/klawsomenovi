@@ -15,14 +15,14 @@ interface DynamicSectionProps {
 
 // ─── Template Definitions ───────────────────────────────────
 export const LAYOUT_TEMPLATES = {
-  stacked: { label: '📄 Stacked', description: 'Centered heading + body + CTA, everything stacked vertically' },
-  'split-left': { label: '◧ Split Left', description: 'Text on left, image/media on right (50/50)' },
-  'split-right': { label: '◨ Split Right', description: 'Image/media on left, text on right (50/50)' },
-  'card-grid': { label: '▦ Card Grid', description: 'Heading above, content in equal card grid below' },
-  'hero-cover': { label: '🖼 Hero Cover', description: 'Full-bleed background image with centered text overlay' },
-  'cta-banner': { label: '📢 CTA Banner', description: 'Heading + buttons in a compact horizontal strip' },
-  'feature-list': { label: '☰ Feature List', description: 'Icon + title + description rows, left-aligned' },
-  'pricing-grid': { label: '💰 Pricing Grid', description: 'Equal pricing/tier cards in a row' },
+  stacked: { label: '📄 Stacked', description: 'Centered heading + body + CTA, everything stacked vertically', preview: '/templates/stacked.png' },
+  'split-left': { label: '◧ Split Left', description: 'Text on left, image/media on right (50/50)', preview: '/templates/split-left.png' },
+  'split-right': { label: '◨ Split Right', description: 'Image/media on left, text on right (50/50)', preview: '/templates/split-right.png' },
+  'card-grid': { label: '▦ Card Grid', description: 'Heading above, content in equal card grid below', preview: '/templates/card-grid.png' },
+  'hero-cover': { label: '🖼 Hero Cover', description: 'Full-bleed background image with centered text overlay', preview: '/templates/hero-cover.png' },
+  'cta-banner': { label: '📢 CTA Banner', description: 'Heading + buttons in a compact horizontal strip', preview: '/templates/cta-banner.png' },
+  'feature-list': { label: '☰ Feature List', description: 'Icon + title + description rows, left-aligned', preview: '/templates/feature-list.png' },
+  'pricing-grid': { label: '💰 Pricing Grid', description: 'Equal pricing/tier cards in a row', preview: '/templates/pricing-grid.png' },
 } as const;
 
 export type LayoutTemplateKey = keyof typeof LAYOUT_TEMPLATES;
