@@ -5,21 +5,10 @@ import type { SectionContentBlock } from '@/hooks/useCmsContent';
 interface DynamicSectionProps {
   sectionId: string;
   columns?: number;
+  layoutJson?: Record<string, any>;
 }
 
-/**
- * Auto-layout engine: users just add content items and the system
- * picks the best template based on what's present.
- *
- * Templates (inspired by Bootstrap component patterns):
- *  1. HERO SPLIT    — heading + text + 1 image + optional button → text left, image right
- *  2. CENTERED      — heading + text + optional button, no images → centered single column
- *  3. GALLERY       — heading/text + multiple images → text header + auto-grid gallery
- *  4. IMAGE BANNER  — 1 image only, no text → full-width banner
- *  5. CTA STRIP     — heading + button, minimal text → centered call-to-action
- *  6. CARDS         — multiple text blocks → card grid
- */
-const DynamicSection = ({ sectionId }: DynamicSectionProps) => {
+const DynamicSection = ({ sectionId, layoutJson }: DynamicSectionProps) => {
   const { data: allBlocks } = useCmsTable<SectionContentBlock>('section_content_blocks');
   const blocks = (allBlocks || [])
     .filter(b => b.section_id === sectionId)
@@ -27,180 +16,301 @@ const DynamicSection = ({ sectionId }: DynamicSectionProps) => {
 
   if (blocks.length === 0) return null;
 
-  // Categorize content
+  // If we have AI layout, use it
+  if (layoutJson && layoutJson.template && layoutJson.grid?.length > 0) {
+    return <AILayout blocks={blocks} layout={layoutJson} />;
+  }
+
+  // Fallback: auto-detect template
   const headings = blocks.filter(b => b.block_type === 'heading');
-  const texts = blocks.filter(b => b.block_type === 'text');
+  const texts = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
   const images = blocks.filter(b => b.block_type === 'image');
+  const videos = blocks.filter(b => b.block_type === 'video');
   const buttons = blocks.filter(b => b.block_type === 'button');
   const spacers = blocks.filter(b => b.block_type === 'spacer');
+  const iframes = blocks.filter(b => b.block_type === 'iframe');
+  const codeBlocks = blocks.filter(b => b.block_type === 'code');
+  const lists = blocks.filter(b => b.block_type === 'list');
+  const dividers = blocks.filter(b => b.block_type === 'divider');
+  const mediaCount = images.length + videos.length;
 
-  const hasHeading = headings.length > 0;
-  const hasText = texts.length > 0;
-  const hasImages = images.length > 0;
-  const hasButton = buttons.length > 0;
-  const imageCount = images.length;
-
-  // Pick template
-  if (imageCount === 1 && (hasHeading || hasText)) return <HeroSplit headings={headings} texts={texts} images={images} buttons={buttons} />;
-  if (imageCount > 1) return <GalleryLayout headings={headings} texts={texts} images={images} buttons={buttons} />;
-  if (imageCount === 1 && !hasHeading && !hasText) return <ImageBanner images={images} />;
-  if (hasHeading && hasButton && !hasText) return <CtaStrip headings={headings} buttons={buttons} />;
-  if (texts.length > 2) return <CardsLayout headings={headings} texts={texts} buttons={buttons} />;
-  return <CenteredLayout headings={headings} texts={texts} buttons={buttons} spacers={spacers} />;
+  if (mediaCount === 1 && (headings.length > 0 || texts.length > 0))
+    return <HeroSplit blocks={blocks} />;
+  if (images.length > 1)
+    return <GalleryLayout blocks={blocks} />;
+  if (texts.length > 2)
+    return <CardsLayout blocks={blocks} />;
+  return <StackedLayout blocks={blocks} />;
 };
 
-// ─── Template: Hero Split (text + single image) ─────────────
-function HeroSplit({ headings, texts, images, buttons }: TemplateProps) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
-      <div className="space-y-5 order-2 md:order-1">
-        {headings.map(b => <Heading key={b.id} block={b} />)}
-        {texts.map(b => <Text key={b.id} block={b} />)}
-        {buttons.length > 0 && (
-          <div className="flex flex-wrap gap-3 pt-2">
-            {buttons.map(b => <Btn key={b.id} block={b} />)}
+// ─── AI-driven layout ───────────────────────────────────────
+function AILayout({ blocks, layout }: { blocks: SectionContentBlock[]; layout: any }) {
+  const { template, grid, gap = '2rem', verticalAlign = 'center' } = layout;
+
+  // Group blocks by area
+  const areas = new Map<string, { block: SectionContentBlock; config: any }[]>();
+  (grid || []).forEach((g: any) => {
+    const block = blocks[g.blockIndex];
+    if (!block) return;
+    const area = g.area || 'full';
+    if (!areas.has(area)) areas.set(area, []);
+    areas.get(area)!.push({ block, config: g });
+  });
+
+  // Render based on template
+  if (template === 'hero-split' || template === 'two-column' || template === 'sidebar-content') {
+    const leftItems = areas.get('left') || [];
+    const rightItems = areas.get('right') || [];
+    const headerItems = areas.get('header') || [];
+    const footerItems = areas.get('footer') || [];
+    const fullItems = areas.get('full') || [];
+
+    return (
+      <div className="space-y-8">
+        {headerItems.length > 0 && (
+          <div className="text-center space-y-4">
+            {headerItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
+          </div>
+        )}
+        <div className="grid grid-cols-1 md:grid-cols-12 items-center" style={{ gap }}>
+          {leftItems.length > 0 && (
+            <div className={`md:col-span-${leftItems[0]?.config?.span || 6} space-y-4`}
+              style={{ textAlign: leftItems[0]?.config?.alignment || 'left' }}>
+              {leftItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
+            </div>
+          )}
+          {rightItems.length > 0 && (
+            <div className={`md:col-span-${rightItems[0]?.config?.span || 6} space-y-4`}
+              style={{ textAlign: rightItems[0]?.config?.alignment || 'center' }}>
+              {rightItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
+            </div>
+          )}
+        </div>
+        {fullItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
+        {footerItems.length > 0 && (
+          <div className="text-center space-y-4">
+            {footerItems.map(({ block }) => <BlockRenderer key={block.id} block={block} />)}
           </div>
         )}
       </div>
-      <div className="order-1 md:order-2">
-        {images.map(b => <Image key={b.id} block={b} className="aspect-[4/3]" />)}
+    );
+  }
+
+  if (template === 'gallery') {
+    const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
+    const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
+    const gridCols = mediaBlocks.length <= 2 ? 'md:grid-cols-2' :
+      mediaBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+
+    return (
+      <div className="space-y-8">
+        {textBlocks.length > 0 && (
+          <div className="max-w-2xl mx-auto text-center space-y-4">
+            {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+          </div>
+        )}
+        <div className={`grid grid-cols-1 ${gridCols}`} style={{ gap }}>
+          {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+        </div>
+      </div>
+    );
+  }
+
+  if (template === 'cards') {
+    const headerBlocks = blocks.filter(b => b.block_type === 'heading');
+    const cardBlocks = blocks.filter(b => b.block_type !== 'heading' && b.block_type !== 'button' && b.block_type !== 'divider' && b.block_type !== 'spacer');
+    const footerBlocks = blocks.filter(b => b.block_type === 'button');
+    const gridCols = cardBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+
+    return (
+      <div className="space-y-8">
+        {headerBlocks.length > 0 && (
+          <div className="text-center">{headerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
+        )}
+        <div className={`grid grid-cols-1 ${gridCols}`} style={{ gap }}>
+          {cardBlocks.map(b => (
+            <div key={b.id} className="bg-background/30 border border-border/30 rounded-2xl p-6">
+              <BlockRenderer block={b} />
+            </div>
+          ))}
+        </div>
+        {footerBlocks.length > 0 && (
+          <div className="flex justify-center gap-3 pt-4">{footerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
+        )}
+      </div>
+    );
+  }
+
+  // Default: stacked
+  return (
+    <div className="space-y-6 max-w-3xl mx-auto" style={{ textAlign: 'center' }}>
+      {blocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+    </div>
+  );
+}
+
+// ─── Fallback templates ─────────────────────────────────────
+function HeroSplit({ blocks }: { blocks: SectionContentBlock[] }) {
+  const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
+  const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
+  return (
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-center">
+      <div className="space-y-5 order-2 md:order-1">
+        {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+      </div>
+      <div className="order-1 md:order-2 space-y-4">
+        {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
       </div>
     </div>
   );
 }
 
-// ─── Template: Centered (text-only, centered) ───────────────
-function CenteredLayout({ headings, texts, buttons, spacers }: TemplateProps) {
-  return (
-    <div className="max-w-3xl mx-auto text-center space-y-5">
-      {headings.map(b => <Heading key={b.id} block={b} />)}
-      {texts.map(b => <Text key={b.id} block={b} />)}
-      {(spacers || []).map(b => <Spacer key={b.id} block={b} />)}
-      {buttons.length > 0 && (
-        <div className="flex flex-wrap justify-center gap-3 pt-2">
-          {buttons.map(b => <Btn key={b.id} block={b} />)}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Template: Gallery (text header + image grid) ───────────
-function GalleryLayout({ headings, texts, images, buttons }: TemplateProps) {
-  // Auto-pick grid based on image count
-  const gridClass =
-    images.length === 2 ? 'grid-cols-1 md:grid-cols-2' :
-    images.length === 3 ? 'grid-cols-1 md:grid-cols-3' :
-    images.length === 4 ? 'grid-cols-2 md:grid-cols-2' :
-    'grid-cols-2 md:grid-cols-3';
+function GalleryLayout({ blocks }: { blocks: SectionContentBlock[] }) {
+  const mediaBlocks = blocks.filter(b => b.block_type === 'image' || b.block_type === 'video');
+  const textBlocks = blocks.filter(b => b.block_type !== 'image' && b.block_type !== 'video');
+  const gridClass = mediaBlocks.length === 2 ? 'md:grid-cols-2' :
+    mediaBlocks.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
 
   return (
     <div className="space-y-8">
-      {(headings.length > 0 || texts.length > 0) && (
+      {textBlocks.length > 0 && (
         <div className="max-w-2xl mx-auto text-center space-y-3">
-          {headings.map(b => <Heading key={b.id} block={b} />)}
-          {texts.map(b => <Text key={b.id} block={b} />)}
+          {textBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
         </div>
       )}
-      <div className={`grid ${gridClass} gap-4`}>
-        {images.map((b, i) => (
-          <Image key={b.id} block={b} className={
-            images.length === 3 && i === 0 ? 'md:col-span-2 aspect-[16/9]' :
-            images.length === 3 ? 'aspect-square' :
-            'aspect-[4/3]'
-          } />
-        ))}
-      </div>
-      {buttons.length > 0 && (
-        <div className="flex justify-center gap-3 pt-2">
-          {buttons.map(b => <Btn key={b.id} block={b} />)}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Template: Image Banner (single image, no text) ─────────
-function ImageBanner({ images }: { images: SectionContentBlock[] }) {
-  return (
-    <div className="w-full">
-      {images.map(b => <Image key={b.id} block={b} className="aspect-[21/9]" />)}
-    </div>
-  );
-}
-
-// ─── Template: CTA Strip (heading + button, minimal) ────────
-function CtaStrip({ headings, buttons }: { headings: SectionContentBlock[]; buttons: SectionContentBlock[] }) {
-  return (
-    <div className="flex flex-col md:flex-row items-center justify-between gap-6 py-4">
-      <div>
-        {headings.map(b => <Heading key={b.id} block={b} />)}
-      </div>
-      <div className="flex gap-3">
-        {buttons.map(b => <Btn key={b.id} block={b} />)}
+      <div className={`grid grid-cols-1 ${gridClass} gap-4`}>
+        {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}
       </div>
     </div>
   );
 }
 
-// ─── Template: Cards (multiple text items → card grid) ──────
-function CardsLayout({ headings, texts, buttons }: TemplateProps) {
-  const gridClass = texts.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+function CardsLayout({ blocks }: { blocks: SectionContentBlock[] }) {
+  const headerBlocks = blocks.filter(b => b.block_type === 'heading');
+  const cardBlocks = blocks.filter(b => b.block_type === 'richtext' || b.block_type === 'text');
+  const others = blocks.filter(b => !['heading', 'richtext', 'text'].includes(b.block_type));
+  const gridCols = cardBlocks.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+
   return (
     <div className="space-y-8">
-      {headings.length > 0 && (
-        <div className="text-center">
-          {headings.map(b => <Heading key={b.id} block={b} />)}
-        </div>
+      {headerBlocks.length > 0 && (
+        <div className="text-center">{headerBlocks.map(b => <BlockRenderer key={b.id} block={b} />)}</div>
       )}
-      <div className={`grid grid-cols-1 ${gridClass} gap-6`}>
-        {texts.map(b => (
-          <div key={b.id} className="bg-background/50 border border-border rounded-2xl p-6 shadow-sm">
-            <Text block={b} />
+      <div className={`grid grid-cols-1 ${gridCols} gap-6`}>
+        {cardBlocks.map(b => (
+          <div key={b.id} className="bg-background/30 border border-border/30 rounded-2xl p-6 shadow-sm">
+            <BlockRenderer block={b} />
           </div>
         ))}
       </div>
-      {buttons.length > 0 && (
-        <div className="flex justify-center gap-3">
-          {buttons.map(b => <Btn key={b.id} block={b} />)}
+      {others.map(b => <BlockRenderer key={b.id} block={b} />)}
+    </div>
+  );
+}
+
+function StackedLayout({ blocks }: { blocks: SectionContentBlock[] }) {
+  return (
+    <div className="max-w-3xl mx-auto text-center space-y-5">
+      {blocks.map(b => <BlockRenderer key={b.id} block={b} />)}
+    </div>
+  );
+}
+
+// ─── Universal Block Renderer ───────────────────────────────
+function BlockRenderer({ block }: { block: SectionContentBlock }) {
+  const c = block.content || {};
+
+  switch (block.block_type) {
+    case 'heading':
+      return <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">{c.text}</h2>;
+
+    case 'text':
+      return <p className="font-body text-lg leading-relaxed opacity-80">{c.text}</p>;
+
+    case 'richtext':
+      return (
+        <div
+          className="font-body text-lg leading-relaxed prose prose-invert max-w-none [&_a]:text-primary [&_a]:underline"
+          dangerouslySetInnerHTML={{ __html: c.html || c.text || '' }}
+        />
+      );
+
+    case 'image':
+      return (
+        <div className="overflow-hidden rounded-2xl">
+          <img src={c.url} alt={c.alt || ''} className="w-full h-auto object-cover" loading="lazy" />
         </div>
-      )}
-    </div>
-  );
-}
+      );
 
-// ─── Primitive renderers ────────────────────────────────────
-function Heading({ block }: { block: SectionContentBlock }) {
-  return <h2 className="text-3xl md:text-4xl lg:text-5xl font-heading font-bold leading-tight">{block.content?.text}</h2>;
-}
+    case 'video':
+      if (c.url?.includes('youtube') || c.url?.includes('youtu.be')) {
+        const videoId = c.url.includes('youtu.be')
+          ? c.url.split('/').pop()
+          : new URL(c.url).searchParams.get('v');
+        return (
+          <div className="aspect-video rounded-2xl overflow-hidden">
+            <iframe
+              src={`https://www.youtube.com/embed/${videoId}`}
+              className="w-full h-full"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+              title={c.alt || 'Video'}
+            />
+          </div>
+        );
+      }
+      if (c.url?.includes('vimeo')) {
+        const vimeoId = c.url.split('/').pop();
+        return (
+          <div className="aspect-video rounded-2xl overflow-hidden">
+            <iframe src={`https://player.vimeo.com/video/${vimeoId}`} className="w-full h-full" allowFullScreen title={c.alt || 'Video'} />
+          </div>
+        );
+      }
+      return (
+        <div className="aspect-video rounded-2xl overflow-hidden">
+          <video src={c.url} controls className="w-full h-full object-cover" />
+        </div>
+      );
 
-function Text({ block }: { block: SectionContentBlock }) {
-  return <p className="font-body text-lg leading-relaxed opacity-80">{block.content?.text}</p>;
-}
+    case 'iframe':
+      return (
+        <div className="aspect-video rounded-2xl overflow-hidden border border-border/20">
+          <iframe src={c.url} className="w-full h-full" title={c.title || 'Embedded content'} allowFullScreen />
+        </div>
+      );
 
-function Image({ block, className = '' }: { block: SectionContentBlock; className?: string }) {
-  return (
-    <div className={`overflow-hidden rounded-2xl ${className}`}>
-      <img
-        src={block.content?.url}
-        alt={block.content?.alt || ''}
-        className="w-full h-full object-cover"
-        loading="lazy"
-      />
-    </div>
-  );
-}
+    case 'code':
+      return (
+        <pre className="bg-background/80 border border-border/30 rounded-xl p-5 overflow-x-auto text-sm font-mono">
+          <code>{c.code || c.text}</code>
+        </pre>
+      );
 
-function Btn({ block }: { block: SectionContentBlock }) {
-  return (
-    <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold">
-      <a href={block.content?.url}>{block.content?.text}</a>
-    </Button>
-  );
-}
+    case 'list':
+      const items = c.items || [];
+      return (
+        <ul className="list-disc list-inside space-y-2 text-lg font-body opacity-80">
+          {items.map((item: string, i: number) => <li key={i}>{item}</li>)}
+        </ul>
+      );
 
-function Spacer({ block }: { block: SectionContentBlock }) {
-  return <div style={{ height: block.content?.height || '2rem' }} />;
+    case 'divider':
+      return <hr className="border-current opacity-20 my-4" />;
+
+    case 'button':
+      return (
+        <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold">
+          <a href={c.url}>{c.text}</a>
+        </Button>
+      );
+
+    case 'spacer':
+      return <div style={{ height: c.height || '2rem' }} />;
+
+    default:
+      return null;
+  }
 }
 
 interface TemplateProps {
