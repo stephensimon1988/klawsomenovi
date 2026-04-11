@@ -1,123 +1,84 @@
 
 
-# Webpage Builder: Section Layout Controls via CMS
+# Simplified CMS with Priority-Based Layout Engine
 
-## What This Adds
+## Summary
+Replace complex layout inputs with 3 section types (Hero Banner, Section, Small Section), add priority ordering to content blocks, and use a rule-based template engine that determines visual prominence based on user-defined block order. Zero AI cost.
 
-Every section on every page gets a unique ID in the database. The admin can control **order, visibility, height, wrapper width, padding, and background** for each section — all from the Command Center using the same text-based editor pattern you already know.
+## Section Types
 
-Plus: a **storage bucket** for image uploads and a **custom blocks** system so the admin can add new content sections without code.
+| Type | Height | Padding | Container |
+|------|--------|---------|-----------|
+| **Hero Banner** | 50vh or 100vh (toggle) | 0 | Full-width |
+| **Section** | auto | 60px top/bottom | 1200px centered |
+| **Small Section** | auto | 30px top/bottom | 1000px centered |
+
+## Priority Ordering
+
+Each content block within a section gets a `priority` value (its position in the list). Users drag/reorder blocks in the admin to set importance. The template engine uses this to determine:
+
+- **Priority 1-2**: Largest/most prominent — bigger font sizes, more space, featured placement (e.g. left side of hero split, full-width heading)
+- **Priority 3-4**: Secondary — medium sizing, supporting content
+- **Priority 5+**: Tertiary — smaller, grid items, tucked below
+
+Example: A section with Heading (priority 1), Image (priority 2), Text (priority 3), Button (priority 4) → Hero Split layout where Heading + Text stack on the left, Image fills the right, Button below text.
+
+If the user reorders Image to priority 1 and Heading to priority 2 → Image takes the hero position (left/top), heading overlays or sits beside it.
+
+## Rule-Based Template Engine (No AI)
+
+Client-side function in `DynamicSection.tsx`. Uses block types + their priority order:
+
+```text
+Rules (checked in order):
+1. Has image at priority 1        → Image-led hero (image dominant, text overlay or beside)
+2. Has heading + text + 1 image   → Hero Split (highest-priority item gets more space)
+3. Has heading + text + 2+ images → Text top, image grid below (priority sets grid order)
+4. Has video/iframe               → Full-width embed, text above if present
+5. Has heading + button only      → CTA strip centered
+6. Has 3+ text blocks             → Card grid (priority = card order, first card bigger)
+7. Everything else                → Centered stack in priority order
+```
+
+Priority 1 block always gets ~60% of the space in split layouts. Lower priority items share the remaining 40%.
 
 ## Database Changes
 
-### 1. New table: `page_sections`
+**Migration:**
+```sql
+ALTER TABLE page_sections 
+  ADD COLUMN section_type text NOT NULL DEFAULT 'section',
+  ADD COLUMN hero_height text NOT NULL DEFAULT '100vh';
 
-One row per section per page. Controls layout.
-
-| Column | Type | Default | What it does |
-|---|---|---|---|
-| `id` | uuid | auto | Unique ID for each section |
-| `page` | text | — | `home`, `birthdays`, `careers`, `business`, `news` |
-| `section_key` | text | — | Maps to a React component (e.g. `hero`, `about`, `tokens`) |
-| `label` | text | — | Friendly name shown in admin (e.g. "Hero Banner") |
-| `sort_order` | int | 0 | Controls section order on page |
-| `is_visible` | bool | true | Show/hide toggle |
-| `section_height` | text | `auto` | CSS min-height (`auto`, `100vh`, `600px`) |
-| `wrapper_max_width` | text | `1200px` | Inner container max-width (`full`, `900px`, `1400px`) |
-| `padding_y` | text | `7rem` | Vertical padding |
-| `bg_color` | text | empty | Background color override |
-| `bg_image_url` | text | empty | Background image URL |
-| `custom_css_class` | text | empty | Extra Tailwind classes |
-
-RLS: public SELECT, no insert/update/delete (managed via edge function).
-
-**Seed data**: Pre-populate rows for all existing sections across all 5 pages (~25 rows).
-
-### 2. New table: `custom_blocks`
-
-For adding new freeform content sections without code changes.
-
-| Column | Type | Purpose |
-|---|---|---|
-| `id` | uuid | — |
-| `block_key` | text | Unique key, referenced by `page_sections.section_key` as `custom:key` |
-| `headline` | text | Section headline |
-| `body` | text | Body text |
-| `image_url` | text | Image |
-| `image_position` | text | `left`, `right`, `top`, `full-bg` |
-| `cta_text` | text | Optional button label |
-| `cta_url` | text | Optional button link |
-
-### 3. Storage bucket: `site-images`
-
-Public bucket for uploading images from the Command Center.
-
-## Frontend Changes
-
-### New component: `SectionWrapper`
-
-Wraps each section, applying layout values from `page_sections`:
-
-```text
-<SectionWrapper config={sectionConfig}>
-  <KawaiiAbout />
-</SectionWrapper>
+-- priority is just row_order on section_content_blocks (already exists)
+-- No new column needed — reordering updates row_order
 ```
 
-Applies `minHeight`, `paddingTop/Bottom`, `maxWidth` on the inner container, `backgroundColor`, and `backgroundImage`. Empty values = use component defaults.
+## Admin UI Changes
 
-### New component: `CustomBlock`
+**Per section — simplified to:**
+1. **Section type** — 3-button toggle (Hero Banner / Section / Small Section)
+2. **Hero height** — Half/Full toggle (only visible for Hero Banner)
+3. **Background color** — brand palette picker (auto-contrast text color)
+4. **Background image** — upload field
+5. **Content blocks** — drag-to-reorder list with ↑↓ buttons (order = priority)
+6. **Label** — text field for admin reference
 
-Generic renderer for `custom_blocks` data — renders headline, body, image, and optional CTA button. Used when `section_key` starts with `custom:`.
+**Removed:** height, padding, max-width, columns, CSS class, photos multi-upload, AI Layout button.
 
-### New component: `ImageUploadField`
+**Priority indicator:** Each block shows its priority number (1, 2, 3...) beside it. A small note: "Items at the top are most prominent on the page."
 
-Upload button in the Command Center that uploads to the `site-images` bucket and fills the URL text field. Used alongside existing URL text inputs.
+## Files Changed
 
-### Page refactors (Index, Birthdays, Careers, Business, News)
+| File | Change |
+|------|--------|
+| `page_sections` migration | Add `section_type`, `hero_height` columns |
+| `SectionWrapper.tsx` | Apply fixed styles per section type instead of reading individual fields |
+| `DynamicSection.tsx` | Rewrite template engine to use priority-aware rules, remove AI layout dependency |
+| `KlawsomeAdmin.tsx` | Replace layout fields with type toggle + priority reordering UI |
+| `useCmsContent.ts` | Update `PageSection` type with new fields |
 
-Each page will:
-1. Fetch `page_sections` filtered by `page`, sorted by `sort_order`, filtered to `is_visible = true`
-2. Map `section_key` to React component via a lookup object
-3. Render each component inside `<SectionWrapper>` in order
-
-```text
-// Conceptual flow in Index.tsx:
-const SECTION_MAP = {
-  hero: KawaiiHero,
-  about: KawaiiAbout,
-  visit: KawaiiVisit,
-  tokens: KawaiiTokenPrices,
-  reviews: KawaiiReviews,
-  news: KawaiiNews,
-  giftcards: KawaiiGiftCards,
-  scheduling: SchedulingPlaceholder,
-  story: KawaiiStory,
-};
-
-sections.map(s => {
-  const Component = SECTION_MAP[s.section_key] || CustomBlock;
-  return <SectionWrapper key={s.id} config={s}><Component /></SectionWrapper>;
-})
-```
-
-### Command Center updates
-
-1. Add `page_sections` and `custom_blocks` to `cms-admin` edge function's `TABLES_ALLOWED`
-2. New **"Page Layout"** tab with a `MultiRowEditor` per page showing: Section, Order, Visible, Height, Max Width, Padding, BG Color, BG Image URL
-3. New **"Custom Blocks"** sub-tab for adding freeform content blocks
-4. Add `ImageUploadField` to any image URL field in the admin
-
-## Implementation Order
-
-1. DB migration: create `page_sections`, `custom_blocks`, storage bucket, seed all existing sections
-2. Update `cms-admin` edge function with new tables
-3. Build `SectionWrapper`, `CustomBlock`, `ImageUploadField` components
-4. Refactor all 5 page files to use the dynamic `page_sections` loop
-5. Add "Page Layout" and "Custom Blocks" tabs to Command Center
-6. Update project memory
-
-## What the Admin Experiences
-
-Same text-based fields. To reorder sections: change the number. To hide: uncheck visible. To make wider: type `1400px`. To add a background image: paste a URL or click upload. To add a new content section: create a custom block, then add a `custom:key` row to the page layout.
+## Cost Impact
+- **Before**: AI API call on every save
+- **After**: Zero API calls — all layout decisions are instant client-side rules
 
