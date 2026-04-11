@@ -62,12 +62,12 @@ const Index = () => {
         const isFullControl = FULL_CONTROL_SECTIONS.includes(s.section_key);
 
         if (isCustom) {
-          const blockKey = s.section_key.replace('custom:', '');
           return (
             <SectionWrapper key={s.id} config={s}>
-              <CustomBlock blockKey={blockKey} />
+              <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
             </SectionWrapper>
           );
+        }
         }
 
         if (s.section_key === 'scheduling') {
