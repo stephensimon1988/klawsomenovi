@@ -195,8 +195,8 @@ export interface PageSection {
   bg_image_url: string;
   custom_css_class: string;
   columns: number;
-  photos: string[];
-  text_color: string;
+  photos?: string[];
+  text_color?: string;
 }
 
 export interface SectionContentBlock {
