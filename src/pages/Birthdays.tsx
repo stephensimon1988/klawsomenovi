@@ -165,7 +165,7 @@ const Birthdays = () => {
         if (s.section_key.startsWith('custom:')) {
           return (
             <SectionWrapper key={s.id} config={s}>
-              <CustomBlock blockKey={s.section_key.replace('custom:', '')} />
+              <DynamicSection sectionId={s.id} layoutJson={s.layout_json} />
             </SectionWrapper>
           );
         }
