@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -10,12 +10,14 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Upload
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, Upload, Wand2, ArrowUp, ArrowDown
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
 import MultiImageUpload from '@/components/MultiImageUpload';
+
+const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
 // ─── CMS helpers ────────────────────────────────────────────
 const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
