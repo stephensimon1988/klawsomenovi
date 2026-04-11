@@ -1,113 +1,123 @@
 
-# Prismic Content Architecture for Klawsome
 
-## Already in Prismic
-- **product_pages** — Square catalog items (name, description, image, price)
-- **scheduling** — Appointment types with per-day availability
+# Webpage Builder: Section Layout Controls via CMS
 
----
+## What This Adds
 
-## New Prismic Custom Types Needed
+Every section on every page gets a unique ID in the database. The admin can control **order, visibility, height, wrapper width, padding, and background** for each section — all from the Command Center using the same text-based editor pattern you already know.
 
-### 1. `homepage` (Single type)
-One document controlling the entire homepage. Fields:
-- **hero_headline** (rich text) — "Michigan's first stand-alone claw arcade"
-- **hero_description** (rich text) — paragraph below headline
-- **hero_background_image** (image) — the big hero photo
-- **hero_logo** (image) — circular logo
-- **hours_card** (group) — repeatable rows with `label` (text) + `value` (text) for hours display
-- **story_title** (rich text) — "The Klawsome Story"
-- **story_body** (rich text) — story paragraph
-- **about_steps** (group) — repeatable: `image` (image), `title` (text), `description` (text)
+Plus: a **storage bucket** for image uploads and a **custom blocks** system so the admin can add new content sections without code.
 
-### 2. `token_tier` (Repeatable type)
-One document per pricing tier:
-- **price** (text) — "$5"
-- **tokens** (text) — "25 Tokens"
-- **bonus** (text) — "" or "Best Value!"
-- **is_highlight** (boolean)
-- **sort_order** (number)
+## Database Changes
 
-### 3. `news_article` (Repeatable type)
-One document per press mention / media hit:
-- **title** (rich text)
-- **source** (text) — "Hour Detroit"
-- **date** (date)
-- **url** (text / link) — external article URL
-- **thumbnail** (image)
+### 1. New table: `page_sections`
 
-### 4. `birthday_page` (Single type)
-One document for the entire birthdays page:
-- **hero_image** (image) — background photo
-- **hero_badge** (image) — "klawsome birthday" badge
-- **hero_headline** (rich text)
-- **celebration_title** (rich text) — "Klawsome Wants To Celebrate You!"
-- **celebration_body** (rich text)
-- **celebration_gif** (image)
-- **hosting_rules** (rich text) — "Looking to Host" section
-- **contact_email** (text)
-- **party_options** (group) — repeatable: `title`, `image`, `features` (rich text)
-- **photography_note** (text) — "Photography Rental also available..."
-- **invite_templates** (group) — repeatable: `image` (image), `download_url` (text)
+One row per section per page. Controls layout.
 
-### 5. `faq_item` (Repeatable type)
-One document per FAQ (used on birthdays page, could be reused):
-- **question** (rich text)
-- **answer** (rich text)
-- **page** (text) — "birthdays" / "general" for filtering
-- **sort_order** (number)
+| Column | Type | Default | What it does |
+|---|---|---|---|
+| `id` | uuid | auto | Unique ID for each section |
+| `page` | text | — | `home`, `birthdays`, `careers`, `business`, `news` |
+| `section_key` | text | — | Maps to a React component (e.g. `hero`, `about`, `tokens`) |
+| `label` | text | — | Friendly name shown in admin (e.g. "Hero Banner") |
+| `sort_order` | int | 0 | Controls section order on page |
+| `is_visible` | bool | true | Show/hide toggle |
+| `section_height` | text | `auto` | CSS min-height (`auto`, `100vh`, `600px`) |
+| `wrapper_max_width` | text | `1200px` | Inner container max-width (`full`, `900px`, `1400px`) |
+| `padding_y` | text | `7rem` | Vertical padding |
+| `bg_color` | text | empty | Background color override |
+| `bg_image_url` | text | empty | Background image URL |
+| `custom_css_class` | text | empty | Extra Tailwind classes |
 
-### 6. `job_listing` (Repeatable type)
-One document per job/internship:
-- **title** (text) — "Store Associate"
-- **category** (select: "in_store" | "hybrid_paid" | "hybrid_unpaid")
-- **description** (rich text)
-- **image** (image) — optional
-- **job_description_url** (text / link)
-- **apply_url** (text / link)
-- **is_active** (boolean)
+RLS: public SELECT, no insert/update/delete (managed via edge function).
 
-### 7. `business_page` (Single type)
-One document for the Business / Rentals page:
-- **hero_headline** (rich text) — "Grow With Klawsome!"
-- **hero_description** (rich text)
-- **hosted_machine_section** (group of fields):
-  - `headline`, `description`, `revenue_share` (text), `klawsome_handles` (rich text), `business_provides` (rich text), `venues` (group: `label` text)
-- **partner_section** (group of fields):
-  - `headline`, `description`, `includes` (group: `icon`, `title`, `desc`)
-- **plushie_section** (group of fields):
-  - `headline`, `description`, `pricing_tiers` (group: `label`, `title`, `price`, `per`, `desc`), `steps` (group: `icon`, `title`, `desc`)
-- **how_it_works** (group) — repeatable: `step_number`, `title`, `description`
+**Seed data**: Pre-populate rows for all existing sections across all 5 pages (~25 rows).
 
-### 8. `site_settings` (Single type)
-Global settings used across all pages:
-- **address** (text) — "42768 Grand River Ave, Suite C-140, Novi, MI 48375"
-- **phone** (text) — "(248) 938-4093"
-- **general_email** (text) — "team@klawsomenovi.com"
-- **events_email** (text) — "events@klawsomenovi.com"
-- **instagram_url** (text)
-- **facebook_url** (text)
-- **tiktok_url** (text)
-- **google_maps_url** (text)
-- **tagline** (text) — "Michigan's first stand-alone claw machine arcade"
-- **regular_hours** (rich text) — "Tue–Sun 11am–9pm, Closed Mondays"
-- **special_hours** (group) — repeatable: `label` (text), `value` (text)
-- **as_seen_on_image** (image) — the "As Seen On" banner
-- **storefront_image** (image) — used in Visit section
-- **gift_card_url** (text) — Square gift card purchase link
-- **gift_card_images** (group) — repeatable image fields
-- **newsletter_signup_url** (text)
+### 2. New table: `custom_blocks`
 
----
+For adding new freeform content sections without code changes.
 
-## Implementation Approach
-1. Create these custom types in Prismic via the existing `prismic-write` edge function pattern (or manually in Prismic dashboard)
-2. Extend the `prismic` edge function to handle each new type with field mapping
-3. Update each component to fetch from the edge function instead of hardcoded data
-4. Add React Query caching so content loads fast
+| Column | Type | Purpose |
+|---|---|---|
+| `id` | uuid | — |
+| `block_key` | text | Unique key, referenced by `page_sections.section_key` as `custom:key` |
+| `headline` | text | Section headline |
+| `body` | text | Body text |
+| `image_url` | text | Image |
+| `image_position` | text | `left`, `right`, `top`, `full-bg` |
+| `cta_text` | text | Optional button label |
+| `cta_url` | text | Optional button link |
 
-## What stays hardcoded
-- Navigation links (structural, not content)
-- UI labels like "Read Here →", button text patterns
-- Animation/layout configuration
-- Design tokens and styling
+### 3. Storage bucket: `site-images`
+
+Public bucket for uploading images from the Command Center.
+
+## Frontend Changes
+
+### New component: `SectionWrapper`
+
+Wraps each section, applying layout values from `page_sections`:
+
+```text
+<SectionWrapper config={sectionConfig}>
+  <KawaiiAbout />
+</SectionWrapper>
+```
+
+Applies `minHeight`, `paddingTop/Bottom`, `maxWidth` on the inner container, `backgroundColor`, and `backgroundImage`. Empty values = use component defaults.
+
+### New component: `CustomBlock`
+
+Generic renderer for `custom_blocks` data — renders headline, body, image, and optional CTA button. Used when `section_key` starts with `custom:`.
+
+### New component: `ImageUploadField`
+
+Upload button in the Command Center that uploads to the `site-images` bucket and fills the URL text field. Used alongside existing URL text inputs.
+
+### Page refactors (Index, Birthdays, Careers, Business, News)
+
+Each page will:
+1. Fetch `page_sections` filtered by `page`, sorted by `sort_order`, filtered to `is_visible = true`
+2. Map `section_key` to React component via a lookup object
+3. Render each component inside `<SectionWrapper>` in order
+
+```text
+// Conceptual flow in Index.tsx:
+const SECTION_MAP = {
+  hero: KawaiiHero,
+  about: KawaiiAbout,
+  visit: KawaiiVisit,
+  tokens: KawaiiTokenPrices,
+  reviews: KawaiiReviews,
+  news: KawaiiNews,
+  giftcards: KawaiiGiftCards,
+  scheduling: SchedulingPlaceholder,
+  story: KawaiiStory,
+};
+
+sections.map(s => {
+  const Component = SECTION_MAP[s.section_key] || CustomBlock;
+  return <SectionWrapper key={s.id} config={s}><Component /></SectionWrapper>;
+})
+```
+
+### Command Center updates
+
+1. Add `page_sections` and `custom_blocks` to `cms-admin` edge function's `TABLES_ALLOWED`
+2. New **"Page Layout"** tab with a `MultiRowEditor` per page showing: Section, Order, Visible, Height, Max Width, Padding, BG Color, BG Image URL
+3. New **"Custom Blocks"** sub-tab for adding freeform content blocks
+4. Add `ImageUploadField` to any image URL field in the admin
+
+## Implementation Order
+
+1. DB migration: create `page_sections`, `custom_blocks`, storage bucket, seed all existing sections
+2. Update `cms-admin` edge function with new tables
+3. Build `SectionWrapper`, `CustomBlock`, `ImageUploadField` components
+4. Refactor all 5 page files to use the dynamic `page_sections` loop
+5. Add "Page Layout" and "Custom Blocks" tabs to Command Center
+6. Update project memory
+
+## What the Admin Experiences
+
+Same text-based fields. To reorder sections: change the number. To hide: uncheck visible. To make wider: type `1400px`. To add a background image: paste a URL or click upload. To add a new content section: create a custom block, then add a `custom:key` row to the page layout.
+
