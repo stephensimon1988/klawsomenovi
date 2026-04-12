@@ -677,16 +677,23 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
               <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
             </div>
 
-            {/* RIGHT: Template Preview Image */}
-            <div className="flex flex-col items-center justify-start">
-              <label className="text-white/60 text-xs font-heading mb-2 self-start">Layout Preview</label>
-              <div className="w-full rounded-xl border border-white/10 bg-white p-4">
-                <img
-                  src={LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.preview || '/templates/stacked.png'}
-                  alt={`${section.layout_template || 'stacked'} layout preview`}
-                  className="w-full h-auto object-contain"
-                  loading="lazy"
-                />
+            {/* RIGHT: Live Section Preview */}
+            <div className="flex flex-col items-start">
+              <div className="flex items-center justify-between w-full mb-2">
+                <label className="text-white/60 text-xs font-heading">Live Preview</label>
+                <Button size="sm" variant="ghost" onClick={refreshPreview} className="text-white/40 h-6 px-2 text-xs">
+                  <RefreshCw className="w-3 h-3 mr-1" />Refresh
+                </Button>
+              </div>
+              <div className="w-full rounded-xl border border-white/10 bg-white overflow-hidden">
+                <div className="origin-top-left" style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', maxHeight: '400px', overflow: 'hidden' }}>
+                  <DynamicSection
+                    key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
+                    sectionId={section.id}
+                    sectionType={section.section_type || 'section'}
+                    layoutTemplate={section.layout_template || 'stacked'}
+                  />
+                </div>
               </div>
               <span className="text-white/40 text-[11px] mt-2 font-heading">
                 {LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.description || ''}
@@ -694,10 +701,10 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
             </div>
           </div>
 
-          {/* Content editor — always ContentBlockEditor */}
+          {/* Content editor */}
           <div className="border-t border-white/10 pt-3">
             <p className="text-white/50 text-xs font-heading mb-2">Content Blocks</p>
-            <ContentBlockEditor password={password} sectionId={section.id} />
+            <ContentBlockEditor password={password} sectionId={section.id} onBlocksChanged={refreshPreview} />
           </div>
         </div>
       )}
