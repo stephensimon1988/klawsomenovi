@@ -521,6 +521,23 @@ interface DataCardItem {
   features?: string[];
   link?: string;
   highlight?: boolean;
+  media_type?: 'none' | 'image' | 'video';
+  media_url?: string;
+}
+
+function CardMedia({ item }: { item: DataCardItem }) {
+  const type = item.media_type || (item.image ? 'image' : 'none');
+  const url = item.media_url || item.image;
+  if (type === 'none' || !url) return null;
+  return (
+    <div className="aspect-video w-full overflow-hidden rounded-xl mb-4 bg-muted">
+      {type === 'video' ? (
+        <video src={url} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+      ) : (
+        <img src={url} alt={item.title || ''} className="w-full h-full object-cover" loading="lazy" />
+      )}
+    </div>
+  );
 }
 
 const DATA_CARD_PRESETS: Record<string, { source: string; mappings: Record<string, string>; display: string }> = {
@@ -565,11 +582,7 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
       <div className={`grid grid-cols-1 ${colsClass} gap-6`}>
         {items.map((item, i) => (
           <div key={i} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow flex flex-col">
-            {item.image && (
-              <div className="h-40 flex items-center justify-center mb-4 overflow-hidden rounded-xl">
-                <img src={item.image} alt={item.title || ''} className="max-h-full max-w-full object-contain" loading="lazy" />
-              </div>
-            )}
+            <CardMedia item={item} />
             {item.title && <h4 className="font-heading font-bold text-foreground text-lg mb-2">{item.title}</h4>}
             {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-3 flex-1">{item.description}</p>}
             {item.features && item.features.length > 0 && (
@@ -616,7 +629,17 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
       <div className="space-y-6">
         {items.map((item, i) => (
           <div key={i} className="rounded-2xl border border-border bg-background overflow-hidden md:flex hover:shadow-lg transition-shadow">
-            {item.image && <img src={item.image} alt={item.title || ''} className="w-full md:w-56 h-40 md:h-auto object-cover flex-shrink-0" loading="lazy" />}
+            {(item.media_url || item.image) && (
+              <div className="w-full md:w-56 flex-shrink-0">
+                <div className="aspect-video w-full overflow-hidden bg-muted">
+                  {(item.media_type === 'video') ? (
+                    <video src={item.media_url || item.image} className="w-full h-full object-cover" autoPlay muted loop playsInline />
+                  ) : (
+                    <img src={item.media_url || item.image} alt={item.title || ''} className="w-full h-full object-cover" loading="lazy" />
+                  )}
+                </div>
+              </div>
+            )}
             <div className="p-6 flex flex-col flex-1">
               {item.title && <h4 className="font-heading font-bold text-lg text-foreground mb-2">{item.title}</h4>}
               {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 flex-1">{item.description}</p>}
