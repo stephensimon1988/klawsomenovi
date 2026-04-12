@@ -732,14 +732,16 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
     case 'spacer':
       return <div style={{ height: c.height || '2rem' }} />;
 
-    case 'pricing': return <PricingWidget />;
     case 'hours': return <HoursWidget />;
     case 'reviews': return <ReviewsWidget />;
-    case 'news': return <NewsWidget />;
-    case 'faq': return <FaqWidget page={c.page} />;
-    case 'jobs': return <JobsWidget category={c.category} />;
-    case 'party_options': return <PartyOptionsWidget />;
-    case 'templates': return <TemplatesWidget />;
+
+    // All card-based widgets route through DataCardsWidget (legacy + new)
+    case 'pricing': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.token_tiers, ...c }} />;
+    case 'party_options': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.party_options, ...c }} />;
+    case 'faq': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.faq_items, ...c }} />;
+    case 'jobs': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.job_listings, ...c }} />;
+    case 'news': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.news_articles, ...c }} />;
+    case 'templates': return <DataCardsWidget content={{ ...DATA_CARD_PRESETS.invite_templates, ...c }} />;
     case 'data_cards': return <DataCardsWidget content={c} />;
 
     case 'cards':
