@@ -711,13 +711,13 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                   <RefreshCw className="w-3 h-3 mr-1" />Refresh
                 </Button>
               </div>
-              <div className="w-full rounded-xl border border-white/10 overflow-hidden">
-                <div className="origin-top-left" style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', maxHeight: '400px', overflow: 'hidden' }}>
+              <div className="w-full rounded-xl border border-white/10 overflow-hidden" style={{ height: '250px' }}>
+                <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', height: '500px' }}>
                   <SectionWrapper
                     key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
                     config={{
                       ...section,
-                      hero_height: '400px',
+                      hero_height: '500px',
                     }}
                   >
                     <DynamicSection
