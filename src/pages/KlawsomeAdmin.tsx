@@ -584,7 +584,8 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   onDelete: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-
+  const [previewKey, setPreviewKey] = useState(0);
+  const refreshPreview = useCallback(() => setPreviewKey(k => k + 1), []);
   return (
     <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
       {/* Header */}
