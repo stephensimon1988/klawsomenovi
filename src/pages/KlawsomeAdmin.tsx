@@ -269,7 +269,7 @@ const BLOCK_TYPES = [
   { type: 'cards', icon: '🃏', label: 'Cards Grid' },
 ];
 
-function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
+function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password: string; sectionId: string; onBlocksChanged?: () => void }) {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
