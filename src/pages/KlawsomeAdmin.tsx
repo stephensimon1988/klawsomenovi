@@ -751,20 +751,22 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                         }
                       }}
                     >
-                      <SectionWrapper
-                        key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
-                        config={{
-                          ...section,
-                          hero_height: sectionH as any,
-                          section_height: isHero ? undefined : sectionH,
-                        }}
-                      >
-                        <DynamicSection
-                          sectionId={section.id}
-                          sectionType={section.section_type || 'section'}
-                          layoutTemplate={section.layout_template || 'stacked'}
-                        />
-                      </SectionWrapper>
+                      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+                        <SectionWrapper
+                          key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
+                          config={{
+                            ...section,
+                            hero_height: sectionH as any,
+                            section_height: isHero ? undefined : sectionH,
+                          }}
+                        >
+                          <DynamicSection
+                            sectionId={section.id}
+                            sectionType={section.section_type || 'section'}
+                            layoutTemplate={section.layout_template || 'stacked'}
+                          />
+                        </SectionWrapper>
+                      </div>
                     </div>
                   </div>
                 );
