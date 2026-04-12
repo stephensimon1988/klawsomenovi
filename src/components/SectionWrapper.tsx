@@ -85,6 +85,8 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
   const sectionStyle: React.CSSProperties = {
     position: 'relative',
     width: '100%',
+    display: 'flex',
+    flexDirection: 'column',
   };
 
   if (section_type === 'hero') {
@@ -137,12 +139,10 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           paddingRight: SAFE_PAD_X,
           paddingTop: effectivePadY,
           paddingBottom: photoArray.length > 0 ? '2rem' : effectivePadY,
-          ...(section_type === 'hero' ? {
-            display: 'flex',
-            flexDirection: 'column' as const,
-            justifyContent: 'center',
-            minHeight: 'inherit',
-          } : {}),
+          display: 'flex',
+          flexDirection: 'column' as const,
+          justifyContent: 'center',
+          flex: '1 1 auto',
           ...textShadowStyle,
         }}
         className="text-center"
