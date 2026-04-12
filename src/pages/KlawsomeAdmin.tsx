@@ -260,15 +260,8 @@ const BLOCK_TYPES = [
   { type: 'button', icon: '▶', label: 'Button' },
   { type: 'divider', icon: '—', label: 'Divider' },
   
-  { type: 'pricing', icon: '💰', label: 'Token Prices' },
   { type: 'hours', icon: '🕐', label: 'Store Hours' },
   { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
-  { type: 'news', icon: '📰', label: 'News Articles' },
-  { type: 'faq', icon: '❓', label: 'FAQ' },
-  { type: 'jobs', icon: '💼', label: 'Job Listings' },
-  { type: 'party_options', icon: '🎂', label: 'Party Options' },
-  { type: 'templates', icon: '📄', label: 'Invite Templates' },
-  { type: 'cards', icon: '🃏', label: 'Cards Grid' },
   { type: 'data_cards', icon: '📊', label: 'Data Cards' },
 ];
 
