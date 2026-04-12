@@ -392,7 +392,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
   const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
 
   // Specialized blocks that pull from DB tables — no inline editing needed
-  const isDataBlock = ['pricing', 'hours', 'reviews', 'news', 'party_options', 'templates'].includes(block.block_type);
+  const isDataBlock = ['pricing', 'hours', 'reviews', 'news', 'party_options', 'templates', 'faq', 'jobs'].includes(block.block_type);
 
   return (
     <div className="bg-white/5 rounded-lg p-3 space-y-2 border border-white/10">
