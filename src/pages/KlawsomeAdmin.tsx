@@ -10,12 +10,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
-import { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
+import DynamicSection, { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
@@ -269,7 +269,7 @@ const BLOCK_TYPES = [
   { type: 'cards', icon: '🃏', label: 'Cards Grid' },
 ];
 
-function ContentBlockEditor({ password, sectionId }: { password: string; sectionId: string }) {
+function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password: string; sectionId: string; onBlocksChanged?: () => void }) {
   const [blocks, setBlocks] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState<string | null>(null);
@@ -311,6 +311,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       });
       toast.success('Added!');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
@@ -320,6 +321,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id, data: updates });
       toast.success('Saved');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
     setSaving(null);
   };
@@ -330,6 +332,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       await cmsInvoke(password, { action: 'delete', table: 'section_content_blocks', id });
       toast.success('Removed');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
@@ -343,6 +346,7 @@ function ContentBlockEditor({ password, sectionId }: { password: string; section
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: a.id, data: { row_order: b.row_order } });
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: b.id, data: { row_order: a.row_order } });
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
@@ -580,7 +584,8 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   onDelete: (id: string) => void;
 }) {
   const [expanded, setExpanded] = useState(false);
-
+  const [previewKey, setPreviewKey] = useState(0);
+  const refreshPreview = useCallback(() => setPreviewKey(k => k + 1), []);
   return (
     <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
       {/* Header */}
@@ -672,16 +677,23 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
               <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
             </div>
 
-            {/* RIGHT: Template Preview Image */}
-            <div className="flex flex-col items-center justify-start">
-              <label className="text-white/60 text-xs font-heading mb-2 self-start">Layout Preview</label>
-              <div className="w-full rounded-xl border border-white/10 bg-white p-4">
-                <img
-                  src={LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.preview || '/templates/stacked.png'}
-                  alt={`${section.layout_template || 'stacked'} layout preview`}
-                  className="w-full h-auto object-contain"
-                  loading="lazy"
-                />
+            {/* RIGHT: Live Section Preview */}
+            <div className="flex flex-col items-start">
+              <div className="flex items-center justify-between w-full mb-2">
+                <label className="text-white/60 text-xs font-heading">Live Preview</label>
+                <Button size="sm" variant="ghost" onClick={refreshPreview} className="text-white/40 h-6 px-2 text-xs">
+                  <RefreshCw className="w-3 h-3 mr-1" />Refresh
+                </Button>
+              </div>
+              <div className="w-full rounded-xl border border-white/10 bg-white overflow-hidden">
+                <div className="origin-top-left" style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', maxHeight: '400px', overflow: 'hidden' }}>
+                  <DynamicSection
+                    key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
+                    sectionId={section.id}
+                    sectionType={section.section_type || 'section'}
+                    layoutTemplate={section.layout_template || 'stacked'}
+                  />
+                </div>
               </div>
               <span className="text-white/40 text-[11px] mt-2 font-heading">
                 {LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.description || ''}
@@ -689,10 +701,10 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
             </div>
           </div>
 
-          {/* Content editor — always ContentBlockEditor */}
+          {/* Content editor */}
           <div className="border-t border-white/10 pt-3">
             <p className="text-white/50 text-xs font-heading mb-2">Content Blocks</p>
-            <ContentBlockEditor password={password} sectionId={section.id} />
+            <ContentBlockEditor password={password} sectionId={section.id} onBlocksChanged={refreshPreview} />
           </div>
         </div>
       )}
