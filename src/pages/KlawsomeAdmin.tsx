@@ -311,6 +311,7 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
       });
       toast.success('Added!');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
@@ -320,6 +321,7 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id, data: updates });
       toast.success('Saved');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
     setSaving(null);
   };
@@ -330,6 +332,7 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
       await cmsInvoke(password, { action: 'delete', table: 'section_content_blocks', id });
       toast.success('Removed');
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
@@ -343,6 +346,7 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: a.id, data: { row_order: b.row_order } });
       await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: b.id, data: { row_order: a.row_order } });
       load();
+      onBlocksChanged?.();
     } catch (e: any) { toast.error(e.message); }
   };
 
