@@ -31,7 +31,7 @@ export type LayoutTemplateKey = keyof typeof LAYOUT_TEMPLATES;
 const HEADER_TYPES = new Set(['heading', 'text', 'richtext', 'list']);
 const CTA_TYPES = new Set(['button']);
 const MEDIA_TYPES = new Set(['image', 'video', 'iframe']);
-const WIDGET_TYPES = new Set(['pricing', 'hours', 'reviews', 'news', 'cards', 'faq', 'jobs', 'party_options', 'templates']);
+const WIDGET_TYPES = new Set(['pricing', 'hours', 'reviews', 'news', 'cards', 'faq', 'jobs', 'party_options', 'templates', 'data_cards']);
 
 // ─── Main Component ─────────────────────────────────────────
 const DynamicSection = ({ sectionId, sectionType = 'section', layoutTemplate = 'stacked' }: DynamicSectionProps) => {
@@ -605,6 +605,7 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
     case 'jobs': return <JobsWidget category={c.category} />;
     case 'party_options': return <PartyOptionsWidget />;
     case 'templates': return <TemplatesWidget />;
+    case 'data_cards': return <DataCardsWidget content={c} />;
 
     case 'cards':
       const cardItems = c.items || [];
