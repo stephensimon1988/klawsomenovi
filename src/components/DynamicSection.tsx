@@ -325,8 +325,8 @@ function PricingWidget() {
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
       {tiers.map((tier) => (
         <div key={tier.id} className={`rounded-2xl p-6 text-center border transition-shadow hover:shadow-lg ${tier.is_highlight ? 'bg-primary/10 border-primary/30 ring-2 ring-primary/20' : 'bg-background border-border'}`}>
-          <p className="font-heading font-bold text-lg text-foreground">{tier.tokens}</p>
-          <p className="font-heading font-bold text-3xl text-primary my-2">{tier.price}</p>
+          <h4 className="font-heading font-bold text-foreground">{tier.tokens}</h4>
+          <h3 className="font-heading font-bold text-primary my-2">{tier.price}</h3>
           {tier.bonus && <p className="text-sm text-muted-foreground font-body">{tier.bonus}</p>}
           {tier.is_highlight && <span className="inline-block mt-2 text-xs font-heading font-bold text-primary bg-primary/10 rounded-full px-3 py-1">Top Pick</span>}
         </div>
@@ -402,7 +402,7 @@ function NewsWidget() {
             </div>
           )}
           <div className="p-6">
-            <h3 className="font-heading font-bold text-foreground leading-snug mb-2">{article.title}</h3>
+            <h4 className="font-heading font-bold text-foreground leading-snug mb-2">{article.title}</h4>
             {article.source && <p className="text-muted-foreground text-xs font-body mb-3">{article.source} · {article.date}</p>}
             <span className="text-primary text-sm font-heading font-bold tracking-wider uppercase">Read More →</span>
           </div>
@@ -452,7 +452,7 @@ function JobsWidget({ category }: { category?: string }) {
         <div key={job.id} className="rounded-2xl border border-border bg-background overflow-hidden md:flex hover:shadow-lg transition-shadow">
           {job.image_url && <img src={job.image_url} alt={job.title} className="w-full md:w-72 h-56 md:h-auto object-cover flex-shrink-0" loading="lazy" />}
           <div className="p-6 md:p-8 flex flex-col">
-            <h3 className="font-heading font-bold text-xl text-foreground mb-3">{job.title}</h3>
+            <h3 className="font-heading font-bold text-foreground mb-3">{job.title}</h3>
             {job.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>}
             <div className="flex gap-3">
               {job.job_desc_url && (
@@ -482,14 +482,14 @@ function PartyOptionsWidget() {
     <div className="grid md:grid-cols-2 gap-8">
       {options.map((opt) => (
         <div key={opt.id} className="rounded-2xl bg-background border border-border p-6 hover:shadow-lg transition-shadow">
-          <h3 className="font-heading font-bold text-2xl text-foreground mb-3">{opt.name}</h3>
+          <h3 className="font-heading font-bold text-foreground mb-3">{opt.name}</h3>
           {opt.description && <p className="text-muted-foreground font-body text-sm mb-3">{opt.description}</p>}
           {opt.features && opt.features.length > 0 && (
             <ul className="space-y-2 text-muted-foreground font-body text-sm mb-4">
               {opt.features.map((f, i) => <li key={i}>• {f}</li>)}
             </ul>
           )}
-          {opt.price && <p className="font-heading font-bold text-foreground text-lg">{opt.price}</p>}
+          {opt.price && <h4 className="font-heading font-bold text-foreground">{opt.price}</h4>}
         </div>
       ))}
     </div>
@@ -583,14 +583,14 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
         {items.map((item, i) => (
           <div key={i} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow flex flex-col">
             <CardMedia item={item} />
-            {item.title && <h4 className="font-heading font-bold text-foreground text-lg mb-2">{item.title}</h4>}
+            {item.title && <h4 className="font-heading font-bold text-foreground mb-2">{item.title}</h4>}
             {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-3 flex-1">{item.description}</p>}
             {item.features && item.features.length > 0 && (
               <ul className="text-muted-foreground font-body text-sm space-y-1 mb-3 text-left">
                 {item.features.map((f, j) => <li key={j}>• {f}</li>)}
               </ul>
             )}
-            {item.price && <p className="font-heading font-bold text-foreground text-lg">{item.price}</p>}
+            {item.price && <h4 className="font-heading font-bold text-foreground">{item.price}</h4>}
             {item.link && (
               <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-primary text-sm font-heading font-bold mt-2 inline-block">
                 View →
@@ -608,8 +608,8 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
       <div className={`grid grid-cols-2 ${colsClass} gap-4`}>
         {items.map((item, i) => (
           <div key={i} className={`rounded-2xl p-6 text-center border transition-shadow hover:shadow-lg ${item.highlight ? 'bg-primary/10 border-primary/30 ring-2 ring-primary/20' : 'bg-background border-border'}`}>
-            {item.title && <p className="font-heading font-bold text-lg text-foreground">{item.title}</p>}
-            {item.price && <p className="font-heading font-bold text-3xl text-primary my-2">{item.price}</p>}
+            {item.title && <h4 className="font-heading font-bold text-foreground">{item.title}</h4>}
+            {item.price && <h3 className="font-heading font-bold text-primary my-2">{item.price}</h3>}
             {item.description && <p className="text-sm text-muted-foreground font-body">{item.description}</p>}
             {item.features && item.features.length > 0 && (
               <ul className="text-muted-foreground font-body text-sm space-y-1 mt-3 text-left">
@@ -641,7 +641,7 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
               </div>
             )}
             <div className="p-6 flex flex-col flex-1">
-              {item.title && <h4 className="font-heading font-bold text-lg text-foreground mb-2">{item.title}</h4>}
+              {item.title && <h4 className="font-heading font-bold text-foreground mb-2">{item.title}</h4>}
               {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 flex-1">{item.description}</p>}
               {item.price && <p className="font-heading font-bold text-foreground mb-2">{item.price}</p>}
               {item.link && (
@@ -673,20 +673,20 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
 // ─── Universal Block Renderer ───────────────────────────────
 function BlockRenderer({ block, isHero = false, align = 'center' }: { block: SectionContentBlock; isHero?: boolean; align?: 'center' | 'left' }) {
   const c = block.content || {};
-  const headingSize = isHero ? 'text-4xl md:text-5xl lg:text-6xl' : 'text-3xl md:text-4xl';
-  const textSize = isHero ? 'text-xl' : 'text-lg';
 
   switch (block.block_type) {
     case 'heading':
-      return <h2 className={`${headingSize} font-heading font-bold leading-tight`}>{c.text}</h2>;
+      return isHero
+        ? <h1 className="font-heading font-bold leading-tight">{c.text}</h1>
+        : <h2 className="font-heading font-bold leading-tight">{c.text}</h2>;
 
     case 'text':
-      return <p className={`font-body ${textSize} leading-relaxed opacity-80`}>{c.text}</p>;
+      return <p className="font-body leading-relaxed opacity-80">{c.text}</p>;
 
     case 'richtext':
       return (
         <div
-          className={`font-body ${textSize} leading-relaxed prose prose-invert max-w-none [&_a]:text-primary [&_a]:underline ${align === 'left' ? 'text-left' : ''}`}
+          className={`font-body leading-relaxed prose prose-invert max-w-none [&_a]:text-primary [&_a]:underline ${align === 'left' ? 'text-left' : ''}`}
           dangerouslySetInnerHTML={{ __html: c.html || c.text || '' }}
         />
       );
@@ -737,7 +737,7 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
 
     case 'list':
       return (
-        <ul className={`list-disc list-inside space-y-2 ${textSize} font-body opacity-80 ${align === 'left' ? 'text-left' : ''}`}>
+        <ul className={`list-disc list-inside space-y-2 font-body opacity-80 ${align === 'left' ? 'text-left' : ''}`}>
           {(c.items || []).map((item: string, i: number) => <li key={i}>{item}</li>)}
         </ul>
       );
