@@ -605,78 +605,89 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
       {/* Expanded content */}
       {expanded && (
         <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
-          {/* Label */}
-          <InlineField label="Label" value={section.label || ''} onChange={v => onUpdateLayout(section.id, 'label', v)} />
+          {/* Two-column: Controls left, Template preview right */}
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
+            {/* LEFT: Controls */}
+            <div className="space-y-4">
+              {/* Label */}
+              <InlineField label="Label" value={section.label || ''} onChange={v => onUpdateLayout(section.id, 'label', v)} />
 
-          {/* Section Type Toggle */}
-          <div className="space-y-2">
-            <label className="text-white/60 text-xs font-heading">Section Type</label>
-            <div className="flex gap-2">
-              {(['hero', 'section', 'small'] as const).map(type => (
-                <Button key={type} size="sm" variant="ghost"
-                  onClick={() => onUpdateLayout(section.id, 'section_type', type)}
-                  className={`text-xs h-8 px-4 border ${section.section_type === type || (!section.section_type && type === 'section')
-                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                    : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'}`}>
-                  {type === 'hero' ? '🖼 Hero Banner' : type === 'section' ? '📄 Section' : '📌 Small Section'}
-                </Button>
-              ))}
-            </div>
-          </div>
-
-          {/* Hero Height Toggle */}
-          {(section.section_type === 'hero') && (
-            <div className="space-y-2">
-              <label className="text-white/60 text-xs font-heading">Hero Height</label>
-              <div className="flex gap-2">
-                <Button size="sm" variant="ghost"
-                  onClick={() => onUpdateLayout(section.id, 'hero_height', '50vh')}
-                  className={`text-xs h-8 px-4 border ${section.hero_height === '50vh'
-                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                    : 'text-white/60 border-white/20'}`}>
-                  Half Screen
-                </Button>
-                <Button size="sm" variant="ghost"
-                  onClick={() => onUpdateLayout(section.id, 'hero_height', '100vh')}
-                  className={`text-xs h-8 px-4 border ${section.hero_height !== '50vh'
-                    ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                    : 'text-white/60 border-white/20'}`}>
-                  Full Screen
-                </Button>
+              {/* Section Type Toggle */}
+              <div className="space-y-2">
+                <label className="text-white/60 text-xs font-heading">Section Type</label>
+                <div className="flex gap-2">
+                  {(['hero', 'section', 'small'] as const).map(type => (
+                    <Button key={type} size="sm" variant="ghost"
+                      onClick={() => onUpdateLayout(section.id, 'section_type', type)}
+                      className={`text-xs h-8 px-4 border ${section.section_type === type || (!section.section_type && type === 'section')
+                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                        : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'}`}>
+                      {type === 'hero' ? '🖼 Hero Banner' : type === 'section' ? '📄 Section' : '📌 Small Section'}
+                    </Button>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
 
-          {/* Layout Template Picker */}
-          <div className="space-y-2">
-            <label className="text-white/60 text-xs font-heading">Layout Template</label>
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-              {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => {
-                const isActive = (section.layout_template || 'stacked') === key;
-                return (
-                  <button key={key}
-                    onClick={() => onUpdateLayout(section.id, 'layout_template', key)}
-                    className={`rounded-xl border-2 overflow-hidden transition-all text-left ${
-                      isActive
-                        ? 'border-klawsome-yellow ring-2 ring-klawsome-yellow/30 bg-klawsome-yellow/10'
-                        : 'border-white/10 hover:border-white/30 bg-white/5'
-                    }`}>
-                    <div className="bg-white rounded-t-lg mx-2 mt-2">
-                      <img src={tmpl.preview} alt={tmpl.label} className="w-full h-24 object-contain" loading="lazy" />
-                    </div>
-                    <div className="px-3 py-2">
-                      <span className={`text-xs font-heading font-bold block ${isActive ? 'text-klawsome-yellow' : 'text-white/80'}`}>{tmpl.label}</span>
-                      <span className="text-[10px] text-white/40 leading-tight block mt-0.5">{tmpl.description}</span>
-                    </div>
-                  </button>
-                );
-              })}
+              {/* Hero Height Toggle */}
+              {(section.section_type === 'hero') && (
+                <div className="space-y-2">
+                  <label className="text-white/60 text-xs font-heading">Hero Height</label>
+                  <div className="flex gap-2">
+                    <Button size="sm" variant="ghost"
+                      onClick={() => onUpdateLayout(section.id, 'hero_height', '50vh')}
+                      className={`text-xs h-8 px-4 border ${section.hero_height === '50vh'
+                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                        : 'text-white/60 border-white/20'}`}>
+                      Half Screen
+                    </Button>
+                    <Button size="sm" variant="ghost"
+                      onClick={() => onUpdateLayout(section.id, 'hero_height', '100vh')}
+                      className={`text-xs h-8 px-4 border ${section.hero_height !== '50vh'
+                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
+                        : 'text-white/60 border-white/20'}`}>
+                      Full Screen
+                    </Button>
+                  </div>
+                </div>
+              )}
+
+              {/* Layout Template Dropdown */}
+              <div className="space-y-2">
+                <label className="text-white/60 text-xs font-heading">Layout Template</label>
+                <select
+                  value={section.layout_template || 'stacked'}
+                  onChange={e => onUpdateLayout(section.id, 'layout_template', e.target.value)}
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm font-heading focus:outline-none focus:border-klawsome-yellow"
+                >
+                  {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => (
+                    <option key={key} value={key} className="bg-[#1e293b] text-white">
+                      {tmpl.label} — {tmpl.description}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              {/* Background controls */}
+              <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
+              <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
+            </div>
+
+            {/* RIGHT: Template Preview Image */}
+            <div className="flex flex-col items-center justify-start">
+              <label className="text-white/60 text-xs font-heading mb-2 self-start">Layout Preview</label>
+              <div className="w-full rounded-xl border border-white/10 bg-white p-4">
+                <img
+                  src={LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.preview || '/templates/stacked.png'}
+                  alt={`${section.layout_template || 'stacked'} layout preview`}
+                  className="w-full h-auto object-contain"
+                  loading="lazy"
+                />
+              </div>
+              <span className="text-white/40 text-[11px] mt-2 font-heading">
+                {LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.description || ''}
+              </span>
             </div>
           </div>
-
-          {/* Background controls */}
-          <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
-          <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
 
           {/* Content editor — always ContentBlockEditor */}
           <div className="border-t border-white/10 pt-3">
