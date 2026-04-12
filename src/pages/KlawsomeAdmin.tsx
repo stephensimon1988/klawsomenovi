@@ -587,10 +587,30 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   const queryClient = useQueryClient();
   const [expanded, setExpanded] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
+  const [cleaningUp, setCleaningUp] = useState<string | null>(null);
   const refreshPreview = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['cms', 'section_content_blocks'] });
     setPreviewKey(k => k + 1);
   }, [queryClient]);
+
+  const handleCleanUp = async (sec: any) => {
+    setCleaningUp(sec.id);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: { password, section_id: sec.id },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (data?.template) {
+        onUpdateLayout(sec.id, 'layout_template', data.template);
+        toast.success(`Switched to "${data.template}" — ${data.reason || 'AI suggestion'}`);
+        setTimeout(refreshPreview, 300);
+      }
+    } catch (e: any) {
+      toast.error(e.message || 'Clean up failed');
+    }
+    setCleaningUp(null);
+  };
   return (
     <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
       {/* Header */}
