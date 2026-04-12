@@ -711,23 +711,64 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                   <RefreshCw className="w-3 h-3 mr-1" />Refresh
                 </Button>
               </div>
-              <div className="w-full rounded-xl border border-white/10 overflow-hidden" style={{ height: '250px' }}>
-                <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', height: '500px' }}>
-                  <SectionWrapper
-                    key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
-                    config={{
-                      ...section,
-                      hero_height: '500px',
-                    }}
+              {(() => {
+                // Treat preview as a virtual 1920×1080 browser window
+                // Outer container is 16:9, inner renders at 1920px wide then scales down to fit
+                const virtualW = 1920;
+                const virtualH = 1080;
+                const isHero = (section.section_type || 'section') === 'hero';
+                const isFullScreen = section.hero_height === '100vh' || !section.hero_height;
+                const sectionH = isHero
+                  ? (isFullScreen ? `${virtualH}px` : `${virtualH / 2}px`)
+                  : 'auto';
+
+                return (
+                  <div
+                    className="w-full rounded-xl border border-white/10 overflow-hidden relative"
+                    style={{ aspectRatio: '16 / 9' }}
                   >
-                    <DynamicSection
-                      sectionId={section.id}
-                      sectionType={section.section_type || 'section'}
-                      layoutTemplate={section.layout_template || 'stacked'}
-                    />
-                  </SectionWrapper>
-                </div>
-              </div>
+                    <div
+                      className="absolute inset-0"
+                      style={{
+                        // Scale 1920px-wide content to fit the container width
+                        // CSS does: containerWidth / 1920. We use a trick: width 1920px + transform scale
+                        width: `${virtualW}px`,
+                        height: `${virtualH}px`,
+                        transform: 'scale(var(--preview-scale))',
+                        transformOrigin: 'top left',
+                      }}
+                      ref={(el) => {
+                        if (el) {
+                          const parent = el.parentElement;
+                          if (!parent) return;
+                          const setScale = () => {
+                            const scale = parent.clientWidth / virtualW;
+                            el.style.setProperty('--preview-scale', String(scale));
+                          };
+                          setScale();
+                          const ro = new ResizeObserver(setScale);
+                          ro.observe(parent);
+                        }
+                      }}
+                    >
+                      <SectionWrapper
+                        key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
+                        config={{
+                          ...section,
+                          hero_height: sectionH as any,
+                          section_height: isHero ? undefined : sectionH,
+                        }}
+                      >
+                        <DynamicSection
+                          sectionId={section.id}
+                          sectionType={section.section_type || 'section'}
+                          layoutTemplate={section.layout_template || 'stacked'}
+                        />
+                      </SectionWrapper>
+                    </div>
+                  </div>
+                );
+              })()}
               <div className="flex items-center justify-between w-full mt-2">
                 <span className="text-white/40 text-[11px] font-heading">
                   {LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.description || ''}
