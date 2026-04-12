@@ -711,25 +711,21 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                   <RefreshCw className="w-3 h-3 mr-1" />Refresh
                 </Button>
               </div>
-              <div
-                className="w-full rounded-xl border border-white/10 overflow-hidden relative"
-                style={{
-                  backgroundColor: section.bg_color || '#ffffff',
-                  backgroundImage: section.bg_image_url ? `url(${section.bg_image_url})` : undefined,
-                  backgroundSize: 'cover',
-                  backgroundPosition: 'center',
-                }}
-              >
-                {section.bg_image_url && (
-                  <div className="absolute inset-0 bg-black/40 z-0" />
-                )}
-                <div className="relative z-10 origin-top-left" style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', maxHeight: '400px', overflow: 'hidden' }}>
-                  <DynamicSection
+              <div className="w-full rounded-xl border border-white/10 overflow-hidden">
+                <div className="origin-top-left" style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: '200%', maxHeight: '400px', overflow: 'hidden' }}>
+                  <SectionWrapper
                     key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
-                    sectionId={section.id}
-                    sectionType={section.section_type || 'section'}
-                    layoutTemplate={section.layout_template || 'stacked'}
-                  />
+                    config={{
+                      ...section,
+                      hero_height: '400px',
+                    }}
+                  >
+                    <DynamicSection
+                      sectionId={section.id}
+                      sectionType={section.section_type || 'section'}
+                      layoutTemplate={section.layout_template || 'stacked'}
+                    />
+                  </SectionWrapper>
                 </div>
               </div>
               <div className="flex items-center justify-between w-full mt-2">
