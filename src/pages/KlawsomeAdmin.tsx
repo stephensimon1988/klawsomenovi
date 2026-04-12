@@ -269,6 +269,7 @@ const BLOCK_TYPES = [
   { type: 'party_options', icon: '🎂', label: 'Party Options' },
   { type: 'templates', icon: '📄', label: 'Invite Templates' },
   { type: 'cards', icon: '🃏', label: 'Cards Grid' },
+  { type: 'data_cards', icon: '📊', label: 'Data Cards' },
 ];
 
 function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password: string; sectionId: string; onBlocksChanged?: () => void }) {
@@ -306,6 +307,7 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
         blockType === 'faq' ? { page: 'general' } :
         blockType === 'jobs' ? { category: '' } :
         blockType === 'cards' ? { items: [{ icon: '⭐', title: 'Card 1', description: 'Description' }] } :
+        blockType === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [{ title: 'Card 1', description: 'Description' }] } :
         {};
       await cmsInvoke(password, {
         action: 'insert', table: 'section_content_blocks',
