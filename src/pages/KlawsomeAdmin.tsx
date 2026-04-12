@@ -10,12 +10,12 @@ import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown, RefreshCw
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
-import { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
+import DynamicSection, { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
