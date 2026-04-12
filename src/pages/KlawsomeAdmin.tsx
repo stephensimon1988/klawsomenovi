@@ -573,6 +573,141 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
           }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add card</Button>
         </div>
       )}
+
+      {/* Data Cards — generic data source widget */}
+      {block.block_type === 'data_cards' && (
+        <div className="space-y-3">
+          {/* Presets */}
+          <div className="flex flex-wrap gap-1">
+            <span className="text-white/30 text-xs self-center mr-1">Presets:</span>
+            {[
+              { key: 'party_options', label: '🎂 Party Options' },
+              { key: 'token_tiers', label: '💰 Token Pricing' },
+              { key: 'faq_items', label: '❓ FAQ' },
+              { key: 'job_listings', label: '💼 Jobs' },
+              { key: 'news_articles', label: '📰 News' },
+              { key: 'business_pricing_tiers', label: '💎 Biz Pricing' },
+              { key: 'invite_templates', label: '📄 Templates' },
+            ].map(preset => (
+              <Button key={preset.key} size="sm" variant="ghost"
+                onClick={() => {
+                  const p: Record<string, any> = {
+                    party_options: { source: 'party_options', mappings: { title: 'name', description: 'description', price: 'price', features: 'features' }, display: 'card-grid', columns: 2 },
+                    token_tiers: { source: 'token_tiers', mappings: { title: 'tokens', price: 'price', description: 'bonus', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 4 },
+                    faq_items: { source: 'faq_items', mappings: { title: 'question', description: 'answer' }, display: 'accordion', columns: 1 },
+                    job_listings: { source: 'job_listings', mappings: { title: 'title', description: 'description', image: 'image_url', link: 'apply_url' }, display: 'list', columns: 1 },
+                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'card-grid', columns: 3 },
+                    business_pricing_tiers: { source: 'business_pricing_tiers', mappings: { title: 'name', price: 'price', features: 'features', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 3 },
+                    invite_templates: { source: 'invite_templates', mappings: { title: 'name', image: 'thumbnail_url', link: 'url' }, display: 'card-grid', columns: 2 },
+                  };
+                  setLocalContent({ ...localContent, ...p[preset.key] });
+                }}
+                className={`text-xs h-6 px-2 border ${localContent.source === preset.key.replace('_items', '').replace('_tiers', '') || localContent.source === preset.key ? 'border-klawsome-yellow/50 text-klawsome-yellow' : 'border-white/10 text-white/50'}`}>
+                {preset.label}
+              </Button>
+            ))}
+          </div>
+
+          {/* Source */}
+          <div className="grid grid-cols-3 gap-2">
+            <div>
+              <label className="text-white/40 text-[10px] uppercase">Source</label>
+              <select value={localContent.source || 'inline'}
+                onChange={e => setLocalContent({ ...localContent, source: e.target.value })}
+                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
+                <option value="inline">Inline (manual)</option>
+                <option value="party_options">party_options</option>
+                <option value="token_tiers">token_tiers</option>
+                <option value="job_listings">job_listings</option>
+                <option value="news_articles">news_articles</option>
+                <option value="faq_items">faq_items</option>
+                <option value="invite_templates">invite_templates</option>
+                <option value="business_pricing_tiers">business_pricing_tiers</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-white/40 text-[10px] uppercase">Display</label>
+              <select value={localContent.display || 'card-grid'}
+                onChange={e => setLocalContent({ ...localContent, display: e.target.value })}
+                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
+                <option value="card-grid">Card Grid</option>
+                <option value="pricing-grid">Pricing Grid</option>
+                <option value="list">List</option>
+                <option value="accordion">Accordion</option>
+              </select>
+            </div>
+            <div>
+              <label className="text-white/40 text-[10px] uppercase">Columns</label>
+              <select value={localContent.columns || 3}
+                onChange={e => setLocalContent({ ...localContent, columns: parseInt(e.target.value) })}
+                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
+                <option value={2}>2</option>
+                <option value={3}>3</option>
+                <option value={4}>4</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Column Mappings (when not inline) */}
+          {localContent.source !== 'inline' && (
+            <div className="space-y-1">
+              <label className="text-white/40 text-[10px] uppercase">Column Mappings (DB column → field)</label>
+              <div className="grid grid-cols-2 gap-1">
+                {['title', 'description', 'price', 'image', 'features', 'link', 'highlight'].map(field => (
+                  <div key={field} className="flex items-center gap-1">
+                    <span className="text-white/30 text-[10px] w-16 flex-shrink-0">{field}:</span>
+                    <Input value={(localContent.mappings || {})[field] || ''} 
+                      onChange={e => setLocalContent({ ...localContent, mappings: { ...(localContent.mappings || {}), [field]: e.target.value } })}
+                      placeholder={`DB column`} className="bg-white/10 border-white/20 text-white text-xs h-6 flex-1" />
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Inline Items Editor */}
+          {localContent.source === 'inline' && (
+            <div className="space-y-2">
+              <label className="text-white/40 text-[10px] uppercase">Cards</label>
+              {(localContent.items || []).map((card: any, i: number) => (
+                <div key={i} className="bg-white/5 rounded p-2 space-y-1">
+                  <div className="grid grid-cols-2 gap-1">
+                    <Input value={card.title || ''} onChange={e => {
+                      const items = [...(localContent.items || [])];
+                      items[i] = { ...items[i], title: e.target.value };
+                      setLocalContent({ ...localContent, items });
+                    }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+                    <Input value={card.price || ''} onChange={e => {
+                      const items = [...(localContent.items || [])];
+                      items[i] = { ...items[i], price: e.target.value };
+                      setLocalContent({ ...localContent, items });
+                    }} placeholder="Price" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+                  </div>
+                  <div className="flex gap-1">
+                    <Input value={card.description || ''} onChange={e => {
+                      const items = [...(localContent.items || [])];
+                      items[i] = { ...items[i], description: e.target.value };
+                      setLocalContent({ ...localContent, items });
+                    }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+                    <Input value={card.image || ''} onChange={e => {
+                      const items = [...(localContent.items || [])];
+                      items[i] = { ...items[i], image: e.target.value };
+                      setLocalContent({ ...localContent, items });
+                    }} placeholder="Image URL" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+                    <Button size="sm" variant="ghost" onClick={() => {
+                      const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
+                      setLocalContent({ ...localContent, items });
+                    }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+                  </div>
+                </div>
+              ))}
+              <Button size="sm" variant="ghost" onClick={() => {
+                setLocalContent({ ...localContent, items: [...(localContent.items || []), { title: '', description: '' }] });
+              }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add card</Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   );
 }
