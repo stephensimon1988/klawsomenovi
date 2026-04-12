@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
+import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
@@ -583,9 +584,13 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   onUpdateLayout: (id: string, field: string, value: string) => void;
   onDelete: (id: string) => void;
 }) {
+  const queryClient = useQueryClient();
   const [expanded, setExpanded] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
-  const refreshPreview = useCallback(() => setPreviewKey(k => k + 1), []);
+  const refreshPreview = useCallback(() => {
+    queryClient.invalidateQueries({ queryKey: ['cms', 'section_content_blocks'] });
+    setPreviewKey(k => k + 1);
+  }, [queryClient]);
   return (
     <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
       {/* Header */}
