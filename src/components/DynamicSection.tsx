@@ -512,6 +512,141 @@ function TemplatesWidget() {
   );
 }
 
+// ─── Generic Data Cards Widget ──────────────────────────────
+interface DataCardItem {
+  title?: string;
+  description?: string;
+  price?: string;
+  image?: string;
+  features?: string[];
+  link?: string;
+  highlight?: boolean;
+}
+
+const DATA_CARD_PRESETS: Record<string, { source: string; mappings: Record<string, string>; display: string }> = {
+  party_options: { source: 'party_options', mappings: { title: 'name', description: 'description', price: 'price', features: 'features' }, display: 'card-grid' },
+  token_tiers: { source: 'token_tiers', mappings: { title: 'tokens', price: 'price', description: 'bonus', highlight: 'is_highlight' }, display: 'pricing-grid' },
+  faq_items: { source: 'faq_items', mappings: { title: 'question', description: 'answer' }, display: 'accordion' },
+  job_listings: { source: 'job_listings', mappings: { title: 'title', description: 'description', image: 'image_url', link: 'apply_url' }, display: 'list' },
+  news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'card-grid' },
+  business_pricing_tiers: { source: 'business_pricing_tiers', mappings: { title: 'name', price: 'price', features: 'features', highlight: 'is_highlight' }, display: 'pricing-grid' },
+  invite_templates: { source: 'invite_templates', mappings: { title: 'name', image: 'thumbnail_url', link: 'url' }, display: 'card-grid' },
+};
+
+function DataCardsWidget({ content }: { content: Record<string, any> }) {
+  const source = content.source || 'inline';
+  const mappings = content.mappings || {};
+  const display = content.display || 'card-grid';
+  const columnCount = content.columns || 3;
+  const inlineItems = content.items || [];
+
+  const { data: rawData } = useCmsTable<Record<string, any>>(source, { enabled: source !== 'inline' });
+
+  // Map raw DB rows to uniform card items
+  const items: DataCardItem[] = source === 'inline'
+    ? inlineItems
+    : (rawData || []).map((row: Record<string, any>) => ({
+        title: mappings.title ? String(row[mappings.title] || '') : undefined,
+        description: mappings.description ? String(row[mappings.description] || '') : undefined,
+        price: mappings.price ? String(row[mappings.price] || '') : undefined,
+        image: mappings.image ? String(row[mappings.image] || '') : undefined,
+        features: mappings.features ? (Array.isArray(row[mappings.features]) ? row[mappings.features] : undefined) : undefined,
+        link: mappings.link ? String(row[mappings.link] || '') : undefined,
+        highlight: mappings.highlight ? Boolean(row[mappings.highlight]) : false,
+      }));
+
+  if (items.length === 0) return <p className="text-muted-foreground text-center text-sm font-body">No data to display</p>;
+
+  const colsClass = columnCount === 2 ? 'md:grid-cols-2' : columnCount === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3';
+
+  // ── Card Grid ──
+  if (display === 'card-grid') {
+    return (
+      <div className={`grid grid-cols-1 ${colsClass} gap-6`}>
+        {items.map((item, i) => (
+          <div key={i} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow flex flex-col">
+            {item.image && (
+              <div className="h-40 flex items-center justify-center mb-4 overflow-hidden rounded-xl">
+                <img src={item.image} alt={item.title || ''} className="max-h-full max-w-full object-contain" loading="lazy" />
+              </div>
+            )}
+            {item.title && <h4 className="font-heading font-bold text-foreground text-lg mb-2">{item.title}</h4>}
+            {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-3 flex-1">{item.description}</p>}
+            {item.features && item.features.length > 0 && (
+              <ul className="text-muted-foreground font-body text-sm space-y-1 mb-3 text-left">
+                {item.features.map((f, j) => <li key={j}>• {f}</li>)}
+              </ul>
+            )}
+            {item.price && <p className="font-heading font-bold text-foreground text-lg">{item.price}</p>}
+            {item.link && (
+              <a href={item.link} target="_blank" rel="noopener noreferrer" className="text-primary text-sm font-heading font-bold mt-2 inline-block">
+                View →
+              </a>
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // ── Pricing Grid ──
+  if (display === 'pricing-grid') {
+    return (
+      <div className={`grid grid-cols-2 ${colsClass} gap-4`}>
+        {items.map((item, i) => (
+          <div key={i} className={`rounded-2xl p-6 text-center border transition-shadow hover:shadow-lg ${item.highlight ? 'bg-primary/10 border-primary/30 ring-2 ring-primary/20' : 'bg-background border-border'}`}>
+            {item.title && <p className="font-heading font-bold text-lg text-foreground">{item.title}</p>}
+            {item.price && <p className="font-heading font-bold text-3xl text-primary my-2">{item.price}</p>}
+            {item.description && <p className="text-sm text-muted-foreground font-body">{item.description}</p>}
+            {item.features && item.features.length > 0 && (
+              <ul className="text-muted-foreground font-body text-sm space-y-1 mt-3 text-left">
+                {item.features.map((f, j) => <li key={j}>✓ {f}</li>)}
+              </ul>
+            )}
+            {item.highlight && <span className="inline-block mt-2 text-xs font-heading font-bold text-primary bg-primary/10 rounded-full px-3 py-1">Top Pick</span>}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // ── List ──
+  if (display === 'list') {
+    return (
+      <div className="space-y-6">
+        {items.map((item, i) => (
+          <div key={i} className="rounded-2xl border border-border bg-background overflow-hidden md:flex hover:shadow-lg transition-shadow">
+            {item.image && <img src={item.image} alt={item.title || ''} className="w-full md:w-56 h-40 md:h-auto object-cover flex-shrink-0" loading="lazy" />}
+            <div className="p-6 flex flex-col flex-1">
+              {item.title && <h4 className="font-heading font-bold text-lg text-foreground mb-2">{item.title}</h4>}
+              {item.description && <p className="text-muted-foreground font-body text-sm leading-relaxed mb-4 flex-1">{item.description}</p>}
+              {item.price && <p className="font-heading font-bold text-foreground mb-2">{item.price}</p>}
+              {item.link && (
+                <a href={item.link} target="_blank" rel="noopener noreferrer">
+                  <Button size="sm" className="rounded-full font-heading font-bold">View →</Button>
+                </a>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  // ── Accordion ──
+  if (display === 'accordion') {
+    return (
+      <div className="rounded-2xl border border-border bg-background p-6 md:p-8 max-w-3xl mx-auto">
+        {items.map((item, i) => (
+          <FaqAccordionItem key={i} q={item.title || ''} a={item.description || ''} />
+        ))}
+      </div>
+    );
+  }
+
+  return null;
+}
+
 // ─── Universal Block Renderer ───────────────────────────────
 function BlockRenderer({ block, isHero = false, align = 'center' }: { block: SectionContentBlock; isHero?: boolean; align?: 'center' | 'left' }) {
   const c = block.content || {};
