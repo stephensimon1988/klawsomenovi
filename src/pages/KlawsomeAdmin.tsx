@@ -258,7 +258,7 @@ const BLOCK_TYPES = [
   { type: 'list', icon: '📋', label: 'List' },
   { type: 'button', icon: '▶', label: 'Button' },
   { type: 'divider', icon: '—', label: 'Divider' },
-  { type: 'spacer', icon: '↕', label: 'Spacer' },
+  
   { type: 'pricing', icon: '💰', label: 'Token Prices' },
   { type: 'hours', icon: '🕐', label: 'Store Hours' },
   { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
