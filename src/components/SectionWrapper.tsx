@@ -85,6 +85,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
   const sectionStyle: React.CSSProperties = {
     position: 'relative',
     width: '100%',
+    flex: '1 1 auto',
   };
 
   if (section_type === 'hero') {
