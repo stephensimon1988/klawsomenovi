@@ -664,7 +664,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
               <label className="text-white/40 text-[10px] uppercase">Cards</label>
               {(localContent.items || []).map((card: any, i: number) => (
                 <div key={i} className="bg-white/5 rounded p-2 space-y-1">
-                  <div className="grid grid-cols-2 gap-1">
+                  <div className="grid grid-cols-3 gap-1">
                     <Input value={card.title || ''} onChange={e => {
                       const items = [...(localContent.items || [])];
                       items[i] = { ...items[i], title: e.target.value };
@@ -675,18 +675,31 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                       items[i] = { ...items[i], price: e.target.value };
                       setLocalContent({ ...localContent, items });
                     }} placeholder="Price" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+                    <select value={card.media_type || 'none'}
+                      onChange={e => {
+                        const items = [...(localContent.items || [])];
+                        items[i] = { ...items[i], media_type: e.target.value };
+                        setLocalContent({ ...localContent, items });
+                      }}
+                      className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 h-7">
+                      <option value="none">No media</option>
+                      <option value="image">🖼 Image</option>
+                      <option value="video">🎬 Video</option>
+                    </select>
                   </div>
+                  {card.media_type && card.media_type !== 'none' && (
+                    <Input value={card.media_url || ''} onChange={e => {
+                      const items = [...(localContent.items || [])];
+                      items[i] = { ...items[i], media_url: e.target.value };
+                      setLocalContent({ ...localContent, items });
+                    }} placeholder={card.media_type === 'video' ? 'Video URL (mp4, webm…)' : 'Image URL'} className="bg-white/10 border-white/20 text-white text-xs h-7" />
+                  )}
                   <div className="flex gap-1">
                     <Input value={card.description || ''} onChange={e => {
                       const items = [...(localContent.items || [])];
                       items[i] = { ...items[i], description: e.target.value };
                       setLocalContent({ ...localContent, items });
                     }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-                    <Input value={card.image || ''} onChange={e => {
-                      const items = [...(localContent.items || [])];
-                      items[i] = { ...items[i], image: e.target.value };
-                      setLocalContent({ ...localContent, items });
-                    }} placeholder="Image URL" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
                     <Button size="sm" variant="ghost" onClick={() => {
                       const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
                       setLocalContent({ ...localContent, items });
