@@ -740,10 +740,14 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                       ref={(el) => {
                         if (el) {
                           const parent = el.parentElement;
-                          if (parent) {
+                          if (!parent) return;
+                          const setScale = () => {
                             const scale = parent.clientWidth / virtualW;
                             el.style.setProperty('--preview-scale', String(scale));
-                          }
+                          };
+                          setScale();
+                          const ro = new ResizeObserver(setScale);
+                          ro.observe(parent);
                         }
                       }}
                     >
