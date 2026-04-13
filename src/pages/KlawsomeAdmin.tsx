@@ -17,7 +17,7 @@ import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
 import ColorPickerField from '@/components/ColorPickerField';
 import DynamicSection, { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
-import SectionWrapper from '@/components/SectionWrapper';
+import SectionWrapper, { ANIMATION_PRESETS } from '@/components/SectionWrapper';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
