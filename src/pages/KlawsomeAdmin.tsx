@@ -527,6 +527,191 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
         <p className="text-white/20 text-xs italic">Horizontal divider line</p>
       )}
 
+      {/* Tabs */}
+      {block.block_type === 'tabs' && (
+        <div className="space-y-2">
+          {(localContent.tabs || []).map((tab: any, i: number) => (
+            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
+              <div className="flex gap-1 items-center">
+                <Input value={tab.label || ''} onChange={e => {
+                  const tabs = [...(localContent.tabs || [])];
+                  tabs[i] = { ...tabs[i], label: e.target.value };
+                  setLocalContent({ ...localContent, tabs });
+                }} placeholder="Tab label" className="bg-white/10 border-white/20 text-white text-xs h-7 w-32" />
+                <Button size="sm" variant="ghost" onClick={() => {
+                  const tabs = (localContent.tabs || []).filter((_: any, idx: number) => idx !== i);
+                  setLocalContent({ ...localContent, tabs });
+                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+              <Textarea value={tab.content || ''} onChange={e => {
+                const tabs = [...(localContent.tabs || [])];
+                tabs[i] = { ...tabs[i], content: e.target.value };
+                setLocalContent({ ...localContent, tabs });
+              }} placeholder="HTML content" className="bg-white/10 border-white/20 text-white text-xs min-h-[40px]" />
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, tabs: [...(localContent.tabs || []), { label: `Tab ${(localContent.tabs || []).length + 1}`, content: '<p>Content</p>' }] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add tab</Button>
+        </div>
+      )}
+
+      {/* Table */}
+      {block.block_type === 'table' && (
+        <div className="space-y-2">
+          <div className="space-y-1">
+            <label className="text-white/40 text-[10px] uppercase">Headers (comma-separated)</label>
+            <Input value={(localContent.headers || []).join(', ')} onChange={e => {
+              setLocalContent({ ...localContent, headers: e.target.value.split(',').map((s: string) => s.trim()) });
+            }} className="bg-white/10 border-white/20 text-white text-xs h-7" />
+          </div>
+          {(localContent.rows || []).map((row: string[], ri: number) => (
+            <div key={ri} className="flex gap-1 items-center">
+              {row.map((cell: string, ci: number) => (
+                <Input key={ci} value={cell} onChange={e => {
+                  const rows = [...(localContent.rows || [])];
+                  rows[ri] = [...rows[ri]];
+                  rows[ri][ci] = e.target.value;
+                  setLocalContent({ ...localContent, rows });
+                }} className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+              ))}
+              <Button size="sm" variant="ghost" onClick={() => {
+                const rows = (localContent.rows || []).filter((_: any, idx: number) => idx !== ri);
+                setLocalContent({ ...localContent, rows });
+              }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            const colCount = (localContent.headers || []).length || 2;
+            setLocalContent({ ...localContent, rows: [...(localContent.rows || []), Array(colCount).fill('')] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add row</Button>
+        </div>
+      )}
+
+      {/* Gallery */}
+      {block.block_type === 'gallery' && (
+        <div className="space-y-2">
+          {(localContent.images || []).map((img: any, i: number) => (
+            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
+              <div className="flex gap-1">
+                <ImageUploadField value={img.url || ''} onChange={url => {
+                  const images = [...(localContent.images || [])];
+                  images[i] = { ...images[i], url };
+                  setLocalContent({ ...localContent, images });
+                }} />
+                <Button size="sm" variant="ghost" onClick={() => {
+                  const images = (localContent.images || []).filter((_: any, idx: number) => idx !== i);
+                  setLocalContent({ ...localContent, images });
+                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+              <Input value={img.caption || ''} onChange={e => {
+                const images = [...(localContent.images || [])];
+                images[i] = { ...images[i], caption: e.target.value };
+                setLocalContent({ ...localContent, images });
+              }} placeholder="Caption (optional)" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, images: [...(localContent.images || []), { url: '', alt: '', caption: '' }] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add image</Button>
+        </div>
+      )}
+
+      {/* Map */}
+      {block.block_type === 'map' && (
+        <div className="space-y-1">
+          <Input value={localContent.embed_url || ''} onChange={e => setLocalContent({ ...localContent, embed_url: e.target.value })}
+            placeholder="Google Maps embed URL" className="bg-white/10 border-white/20 text-white text-sm h-9" />
+          <Input value={localContent.title || ''} onChange={e => setLocalContent({ ...localContent, title: e.target.value })}
+            placeholder="Title (optional)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+        </div>
+      )}
+
+      {/* Icon Box */}
+      {block.block_type === 'icon_box' && (
+        <div className="space-y-2">
+          {(localContent.items || []).map((box: any, i: number) => (
+            <div key={i} className="grid grid-cols-3 gap-1 items-center">
+              <Input value={box.icon || ''} onChange={e => {
+                const items = [...(localContent.items || [])];
+                items[i] = { ...items[i], icon: e.target.value };
+                setLocalContent({ ...localContent, items });
+              }} placeholder="Icon/emoji" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+              <Input value={box.title || ''} onChange={e => {
+                const items = [...(localContent.items || [])];
+                items[i] = { ...items[i], title: e.target.value };
+                setLocalContent({ ...localContent, items });
+              }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+              <div className="flex gap-1">
+                <Input value={box.description || ''} onChange={e => {
+                  const items = [...(localContent.items || [])];
+                  items[i] = { ...items[i], description: e.target.value };
+                  setLocalContent({ ...localContent, items });
+                }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+                <Button size="sm" variant="ghost" onClick={() => {
+                  const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
+                  setLocalContent({ ...localContent, items });
+                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, items: [...(localContent.items || []), { icon: '⭐', title: '', description: '' }] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add icon box</Button>
+        </div>
+      )}
+
+      {/* Countdown */}
+      {block.block_type === 'countdown' && (
+        <div className="space-y-1">
+          <Input type="datetime-local" value={localContent.target_date || ''} onChange={e => setLocalContent({ ...localContent, target_date: e.target.value })}
+            className="bg-white/10 border-white/20 text-white text-xs h-8" />
+          <Input value={localContent.label || ''} onChange={e => setLocalContent({ ...localContent, label: e.target.value })}
+            placeholder="Label (e.g. Grand Opening!)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+        </div>
+      )}
+
+      {/* Carousel */}
+      {block.block_type === 'carousel' && (
+        <div className="space-y-2">
+          {(localContent.slides || []).map((slide: any, i: number) => (
+            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
+              <div className="grid grid-cols-2 gap-1">
+                <Input value={slide.title || ''} onChange={e => {
+                  const slides = [...(localContent.slides || [])];
+                  slides[i] = { ...slides[i], title: e.target.value };
+                  setLocalContent({ ...localContent, slides });
+                }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+                <div className="flex gap-1">
+                  <Input value={slide.link || ''} onChange={e => {
+                    const slides = [...(localContent.slides || [])];
+                    slides[i] = { ...slides[i], link: e.target.value };
+                    setLocalContent({ ...localContent, slides });
+                  }} placeholder="Link (optional)" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
+                  <Button size="sm" variant="ghost" onClick={() => {
+                    const slides = (localContent.slides || []).filter((_: any, idx: number) => idx !== i);
+                    setLocalContent({ ...localContent, slides });
+                  }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
+                </div>
+              </div>
+              <ImageUploadField value={slide.image || ''} onChange={url => {
+                const slides = [...(localContent.slides || [])];
+                slides[i] = { ...slides[i], image: url };
+                setLocalContent({ ...localContent, slides });
+              }} />
+              <Input value={slide.description || ''} onChange={e => {
+                const slides = [...(localContent.slides || [])];
+                slides[i] = { ...slides[i], description: e.target.value };
+                setLocalContent({ ...localContent, slides });
+              }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7" />
+            </div>
+          ))}
+          <Button size="sm" variant="ghost" onClick={() => {
+            setLocalContent({ ...localContent, slides: [...(localContent.slides || []), { image: '', title: '', description: '' }] });
+          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add slide</Button>
+        </div>
+      )}
+
       {/* FAQ — page filter */}
       {block.block_type === 'faq' && (
         <div className="space-y-1">
