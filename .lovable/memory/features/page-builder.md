@@ -10,7 +10,10 @@ type: feature
 - Rule engine in `DynamicSection.tsx` picks template from block types + priority (hero split, gallery, CTA strip, cards, stacked, etc.)
 - No AI API calls — all layout is deterministic client-side logic
 - `SectionWrapper` reads `section_type` to apply fixed styles per type
-- Admin UI: section type toggle + hero height toggle + bg color/image + content blocks with priority numbers
+- `animation` column on `page_sections` — 25 scroll animation presets (fade, slide, zoom, flip, rotate, bounce, elastic, blur, skew, clip)
+- IntersectionObserver triggers animation when section enters viewport
+- Admin UI: section type toggle + hero height toggle + bg color/image + animation dropdown + content blocks with priority numbers
 - `custom_blocks` table: freeform content blocks referenced via `custom:block_key`
 - `site-images` storage bucket: public uploads for admin image management
 - All pages use `usePageSections(page)` hook to dynamically render sections
+- Block types: heading, richtext, text, image, video, iframe, code, list, button, divider, spacer, tabs, table, gallery, map, icon_box, countdown, carousel, hours, reviews, data_cards, cards, pricing, faq, jobs, news, templates, party_options
