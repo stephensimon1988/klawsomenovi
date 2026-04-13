@@ -632,7 +632,7 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
           <div key={i} className="rounded-2xl border border-border bg-background overflow-hidden md:flex hover:shadow-lg transition-shadow">
             {(item.media_url || item.image) && (
               <div className="w-full md:w-56 flex-shrink-0">
-                <div className="aspect-video w-full overflow-hidden bg-muted">
+                <div className="aspect-square w-full h-full overflow-hidden bg-muted">
                   {(item.media_type === 'video') ? (
                     <video src={item.media_url || item.image} className="w-full h-full object-cover" autoPlay muted loop playsInline />
                   ) : (
