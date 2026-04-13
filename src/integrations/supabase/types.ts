@@ -364,6 +364,7 @@ export type Database = {
       }
       page_sections: {
         Row: {
+          animation: string
           bg_color: string
           bg_image_url: string
           columns: number
@@ -385,6 +386,7 @@ export type Database = {
           wrapper_max_width: string
         }
         Insert: {
+          animation?: string
           bg_color?: string
           bg_image_url?: string
           columns?: number
@@ -406,6 +408,7 @@ export type Database = {
           wrapper_max_width?: string
         }
         Update: {
+          animation?: string
           bg_color?: string
           bg_image_url?: string
           columns?: number

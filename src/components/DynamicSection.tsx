@@ -2,8 +2,9 @@ import { Button } from '@/components/ui/button';
 import { useCmsTable } from '@/hooks/useCmsContent';
 import type { SectionContentBlock, TokenTier, StoreHour, NewsArticle } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
-import { useState, useEffect } from 'react';
-import { Star, StarHalf } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface DynamicSectionProps {
   sectionId: string;
@@ -755,6 +756,111 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
     case 'spacer':
       return <div style={{ height: c.height || '2rem' }} />;
 
+    // ─── Tabs Block ─────────────────────────────────────
+    case 'tabs': {
+      const tabs = c.tabs || [{ label: 'Tab 1', content: '<p>Content here</p>' }];
+      return (
+        <Tabs defaultValue="0" className="w-full max-w-3xl mx-auto">
+          <TabsList className="flex-wrap h-auto gap-1 bg-muted/50">
+            {tabs.map((_: any, i: number) => (
+              <TabsTrigger key={i} value={String(i)} className="font-heading font-bold text-sm">{_.label}</TabsTrigger>
+            ))}
+          </TabsList>
+          {tabs.map((tab: any, i: number) => (
+            <TabsContent key={i} value={String(i)} className="mt-4">
+              <div className="prose prose-invert max-w-none font-body" dangerouslySetInnerHTML={{ __html: tab.content || '' }} />
+            </TabsContent>
+          ))}
+        </Tabs>
+      );
+    }
+
+    // ─── Table Block ────────────────────────────────────
+    case 'table': {
+      const headers = c.headers || ['Column 1', 'Column 2'];
+      const rows = c.rows || [['Data 1', 'Data 2']];
+      return (
+        <div className="overflow-x-auto max-w-4xl mx-auto rounded-2xl border border-border">
+          <table className="w-full text-sm font-body">
+            <thead>
+              <tr className="bg-muted/30 border-b border-border">
+                {headers.map((h: string, i: number) => (
+                  <th key={i} className="px-4 py-3 text-left font-heading font-bold text-foreground">{h}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((row: string[], ri: number) => (
+                <tr key={ri} className="border-b border-border/30 last:border-0 hover:bg-muted/10">
+                  {row.map((cell: string, ci: number) => (
+                    <td key={ci} className="px-4 py-3 text-muted-foreground">{cell}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      );
+    }
+
+    // ─── Gallery Block ──────────────────────────────────
+    case 'gallery': {
+      const images = c.images || [];
+      const cols = images.length <= 2 ? 'md:grid-cols-2' : images.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+      return (
+        <div className={`grid grid-cols-1 ${cols} gap-3`}>
+          {images.map((img: { url: string; alt?: string; caption?: string }, i: number) => (
+            <div key={i} className="group rounded-2xl overflow-hidden border border-border bg-muted/10">
+              <div className="aspect-[4/3] overflow-hidden">
+                <img src={img.url} alt={img.alt || ''} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" loading="lazy" />
+              </div>
+              {img.caption && <p className="text-xs text-muted-foreground font-body p-2 text-center">{img.caption}</p>}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // ─── Map Block ──────────────────────────────────────
+    case 'map':
+      return (
+        <div className="aspect-video rounded-2xl overflow-hidden border border-border/20 max-w-4xl mx-auto">
+          <iframe
+            src={c.embed_url || c.url || `https://www.google.com/maps/embed/v1/place?key=YOUR_KEY&q=${encodeURIComponent(c.address || '')}`}
+            className="w-full h-full"
+            title={c.title || 'Map'}
+            allowFullScreen
+            loading="lazy"
+            referrerPolicy="no-referrer-when-downgrade"
+          />
+        </div>
+      );
+
+    // ─── Icon Box Block ─────────────────────────────────
+    case 'icon_box': {
+      const boxes = c.items || [{ icon: '⭐', title: 'Feature', description: 'Description' }];
+      const boxCols = boxes.length <= 2 ? 'md:grid-cols-2' : boxes.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+      return (
+        <div className={`grid grid-cols-1 ${boxCols} gap-6`}>
+          {boxes.map((box: any, i: number) => (
+            <div key={i} className="text-center space-y-3 p-4">
+              <span className="text-4xl block">{box.icon}</span>
+              {box.title && <h4 className="font-heading font-bold text-foreground">{box.title}</h4>}
+              {box.description && <p className="text-muted-foreground font-body text-sm leading-relaxed">{box.description}</p>}
+            </div>
+          ))}
+        </div>
+      );
+    }
+
+    // ─── Countdown Timer Block ──────────────────────────
+    case 'countdown':
+      return <CountdownWidget targetDate={c.target_date} label={c.label} />;
+
+    // ─── Content Carousel Block ─────────────────────────
+    case 'carousel':
+      return <ContentCarousel slides={c.slides || []} />;
+
     case 'hours': return <HoursWidget />;
     case 'reviews': return <ReviewsWidget />;
 
@@ -769,9 +875,9 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
 
     case 'cards':
       const cardItems = c.items || [];
-      const cols = cardItems.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+      const cardCols = cardItems.length <= 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
       return (
-        <div className={`grid grid-cols-1 ${cols} gap-6`}>
+        <div className={`grid grid-cols-1 ${cardCols} gap-6`}>
           {cardItems.map((card: { icon?: string; title?: string; description?: string }, i: number) => (
             <div key={i} className="rounded-2xl border border-border bg-background p-6 text-center hover:shadow-lg transition-shadow">
               {card.icon && <span className="text-3xl mb-3 block">{card.icon}</span>}
@@ -785,6 +891,104 @@ function BlockRenderer({ block, isHero = false, align = 'center' }: { block: Sec
     default:
       return null;
   }
+}
+
+// ─── Countdown Timer Widget ─────────────────────────────────
+function CountdownWidget({ targetDate, label }: { targetDate?: string; label?: string }) {
+  const [timeLeft, setTimeLeft] = useState({ days: 0, hours: 0, minutes: 0, seconds: 0 });
+
+  useEffect(() => {
+    if (!targetDate) return;
+    const target = new Date(targetDate).getTime();
+    const tick = () => {
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      setTimeLeft({
+        days: Math.floor(diff / 86400000),
+        hours: Math.floor((diff % 86400000) / 3600000),
+        minutes: Math.floor((diff % 3600000) / 60000),
+        seconds: Math.floor((diff % 60000) / 1000),
+      });
+    };
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [targetDate]);
+
+  if (!targetDate) return <p className="text-muted-foreground text-sm font-body">Set a target date</p>;
+
+  return (
+    <div className="text-center space-y-4">
+      {label && <h3 className="font-heading font-bold text-foreground">{label}</h3>}
+      <div className="flex justify-center gap-4">
+        {[
+          { val: timeLeft.days, unit: 'Days' },
+          { val: timeLeft.hours, unit: 'Hours' },
+          { val: timeLeft.minutes, unit: 'Min' },
+          { val: timeLeft.seconds, unit: 'Sec' },
+        ].map((item, i) => (
+          <div key={i} className="rounded-2xl border border-border bg-background/50 p-4 min-w-[70px]">
+            <div className="font-heading font-bold text-2xl text-foreground">{String(item.val).padStart(2, '0')}</div>
+            <div className="text-muted-foreground font-body text-xs uppercase">{item.unit}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// ─── Content Carousel Widget ────────────────────────────────
+function ContentCarousel({ slides }: { slides: { image?: string; title?: string; description?: string; link?: string }[] }) {
+  const [current, setCurrent] = useState(0);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  if (slides.length === 0) return <p className="text-muted-foreground text-sm font-body">No slides</p>;
+
+  const prev = () => setCurrent(i => (i === 0 ? slides.length - 1 : i - 1));
+  const next = () => setCurrent(i => (i === slides.length - 1 ? 0 : i + 1));
+
+  return (
+    <div className="relative max-w-4xl mx-auto">
+      <div className="overflow-hidden rounded-2xl border border-border" ref={trackRef}>
+        <div className="flex transition-transform duration-500 ease-out" style={{ transform: `translateX(-${current * 100}%)` }}>
+          {slides.map((slide, i) => (
+            <div key={i} className="w-full flex-shrink-0">
+              {slide.image && (
+                <div className="aspect-video overflow-hidden">
+                  <img src={slide.image} alt={slide.title || ''} className="w-full h-full object-cover" loading="lazy" />
+                </div>
+              )}
+              <div className="p-6 text-center">
+                {slide.title && <h4 className="font-heading font-bold text-foreground mb-2">{slide.title}</h4>}
+                {slide.description && <p className="text-muted-foreground font-body text-sm">{slide.description}</p>}
+                {slide.link && (
+                  <a href={slide.link} target="_blank" rel="noopener noreferrer" className="text-primary text-sm font-heading font-bold mt-2 inline-block">
+                    Learn More →
+                  </a>
+                )}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+      {slides.length > 1 && (
+        <>
+          <button onClick={prev} className="absolute left-2 top-1/2 -translate-y-1/2 bg-background/80 border border-border rounded-full p-2 hover:bg-background">
+            <ChevronLeft className="w-5 h-5 text-foreground" />
+          </button>
+          <button onClick={next} className="absolute right-2 top-1/2 -translate-y-1/2 bg-background/80 border border-border rounded-full p-2 hover:bg-background">
+            <ChevronRight className="w-5 h-5 text-foreground" />
+          </button>
+          <div className="flex justify-center gap-2 mt-3">
+            {slides.map((_, i) => (
+              <button key={i} onClick={() => setCurrent(i)}
+                className={`w-2 h-2 rounded-full transition-all ${i === current ? 'bg-primary w-6' : 'bg-muted-foreground/30'}`} />
+            ))}
+          </div>
+        </>
+      )}
+    </div>
+  );
 }
 
 export default DynamicSection;
