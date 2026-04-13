@@ -2,8 +2,9 @@ import { Button } from '@/components/ui/button';
 import { useCmsTable } from '@/hooks/useCmsContent';
 import type { SectionContentBlock, TokenTier, StoreHour, NewsArticle } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
-import { useState, useEffect } from 'react';
-import { Star, StarHalf } from 'lucide-react';
+import { useState, useEffect, useRef } from 'react';
+import { Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface DynamicSectionProps {
   sectionId: string;
