@@ -259,6 +259,13 @@ const BLOCK_TYPES = [
   { type: 'list', icon: '📋', label: 'List' },
   { type: 'button', icon: '▶', label: 'Button' },
   { type: 'divider', icon: '—', label: 'Divider' },
+  { type: 'tabs', icon: '📑', label: 'Tabs' },
+  { type: 'table', icon: '📊', label: 'Table' },
+  { type: 'gallery', icon: '🖼️', label: 'Gallery' },
+  { type: 'map', icon: '📍', label: 'Map' },
+  { type: 'icon_box', icon: '💎', label: 'Icon Box' },
+  { type: 'countdown', icon: '⏱', label: 'Countdown' },
+  { type: 'carousel', icon: '🎠', label: 'Carousel' },
   
   { type: 'hours', icon: '🕐', label: 'Store Hours' },
   { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
@@ -301,6 +308,13 @@ function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password
         blockType === 'jobs' ? { category: '' } :
         blockType === 'cards' ? { items: [{ icon: '⭐', title: 'Card 1', description: 'Description' }] } :
         blockType === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [{ title: 'Card 1', description: 'Description' }] } :
+        blockType === 'tabs' ? { tabs: [{ label: 'Tab 1', content: '<p>Content for tab 1</p>' }, { label: 'Tab 2', content: '<p>Content for tab 2</p>' }] } :
+        blockType === 'table' ? { headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['Data 1', 'Data 2', 'Data 3']] } :
+        blockType === 'gallery' ? { images: [{ url: '', alt: '', caption: '' }] } :
+        blockType === 'map' ? { embed_url: '', title: 'Our Location' } :
+        blockType === 'icon_box' ? { items: [{ icon: '⭐', title: 'Feature', description: 'Description' }] } :
+        blockType === 'countdown' ? { target_date: '', label: 'Coming Soon!' } :
+        blockType === 'carousel' ? { slides: [{ image: '', title: 'Slide 1', description: 'Description' }] } :
         {};
       await cmsInvoke(password, {
         action: 'insert', table: 'section_content_blocks',
