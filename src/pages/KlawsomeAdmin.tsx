@@ -1040,6 +1040,22 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                 </select>
               </div>
 
+              {/* Animation Dropdown */}
+              <div className="space-y-2">
+                <label className="text-white/60 text-xs font-heading">Scroll Animation</label>
+                <select
+                  value={section.animation || ''}
+                  onChange={e => onUpdateLayout(section.id, 'animation', e.target.value)}
+                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm font-heading focus:outline-none focus:border-klawsome-yellow"
+                >
+                  {Object.entries(ANIMATION_PRESETS).map(([key, preset]) => (
+                    <option key={key} value={key} className="bg-[#1e293b] text-white">
+                      {preset.label}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
               {/* Background controls */}
               <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
               <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
