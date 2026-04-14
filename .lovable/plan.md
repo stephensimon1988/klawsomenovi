@@ -1,62 +1,67 @@
 
 
-# Generic Data Cards System + Live Preview
+## Plan: Consolidate Widget Blocks into Data Cards + Custom Table Creator
 
-## Problem
-Widget blocks (Party Options, Token Prices, Jobs, etc.) are each hardcoded to a specific DB table. The admin can't reuse these card layouts with different content.
+### The Problem
 
-## Solution
-Add a `data_cards` block type that can pull from any allowed DB table with column mappings, or use inline card data. Existing widget types stay as-is for backward compatibility. The live preview already uses `SectionWrapper` + `DynamicSection` in a virtual 1920x1080 viewport, so new block types render automatically with no extra preview work.
+Right now there are **two systems** for showing database content in sections:
 
-## Changes
+1. **Dedicated widget blocks** (`jobs`, `faq`, `news`, `pricing`, `hours`, `reviews`, `party_options`, `templates`) — each hardcoded to one table with a fixed layout. In the admin they just say "This block pulls from the database" with no configuration.
 
-### 1. `src/components/DynamicSection.tsx`
+2. **Data Cards block** — already supports mapping *any* DB table to cards/pricing/list/accordion displays, with column mappings and presets.
 
-**New `DataCardsWidget` component** that accepts config from the block's `content` JSONB:
-- `source`: table name (e.g. `party_options`) or `"inline"`
-- `mappings`: maps DB columns to uniform fields (`title`, `description`, `price`, `image`, `features`, `link`, `highlight`)
-- `display`: rendering style — `card-grid`, `pricing-grid`, `list`, or `accordion`
-- `columns`: 2, 3, or 4
-- `items`: array of card objects (when source is `"inline"`)
+These overlap. The user wants to eliminate the dedicated widgets and make Data Cards the universal approach, plus add the ability to create new data tables from the admin.
 
-Uses `useCmsTable(source)` to fetch, then maps columns to a uniform shape and renders using the chosen display style — reusing the same visual patterns already in PartyOptionsWidget, PricingWidget, JobsWidget, and FaqWidget.
+### What Changes
 
-| Display Style | Renders Like |
-|---------------|-------------|
-| `card-grid` | Equal cards in N columns (Party Options style) |
-| `pricing-grid` | Pricing cards with highlight (Token Tiers style) |
-| `list` | Vertical list with optional images (Jobs style) |
-| `accordion` | Expandable Q&A rows (FAQ style) |
+**Phase 1: Remove dedicated widget blocks, unify into Data Cards**
 
-Add `'data_cards'` to the `WIDGET_TYPES` set and a new case in `BlockRenderer`.
+- **DynamicSection.tsx**: Remove the individual widget functions (`PricingWidget`, `HoursWidget`, `NewsWidget`, `FaqWidget`, `JobsWidget`, `PartyOptionsWidget`, `TemplatesWidget`). Keep `ReviewsWidget` (it calls an edge function, not a table). Keep `DataCardsWidget` as the single renderer.
+- Remove `pricing`, `hours`, `news`, `faq`, `jobs`, `party_options`, `templates` from `WIDGET_TYPES` and the block type menu.
+- Add new display styles to `DataCardsWidget`: `hours` (day/time pairs), `faq-accordion` (Q&A with expand/collapse) so the existing visual styles aren't lost.
+- Existing sections using old block types will need a one-time data migration to convert them to `data_cards` blocks with the correct preset mappings.
 
-### 2. `src/pages/KlawsomeAdmin.tsx`
+**Phase 2: Custom Data Table Creator in Admin**
 
-**Add to `BLOCK_TYPES`**: `{ type: 'data_cards', icon: '📊', label: 'Data Cards' }`
+- Add a new section in the Settings tab: **"Custom Data Tables"**
+- UI lets the admin:
+  1. Enter a table name (e.g. `menu_items`, `team_members`)
+  2. Define columns: name, type (text, number, bool, array, textarea, image URL), required/optional
+  3. Click "Create Table" — calls a new edge function
+- **New edge function `cms-create-table`**: Accepts table name + column definitions, runs `CREATE TABLE` with RLS (public read), adds it to the `TABLES_ALLOWED` list dynamically
+- Store table definitions in a new `cms_custom_tables` metadata table so the admin knows which custom tables exist and their column schemas
+- Auto-generate `MiniTableEditor` instances for each custom table in the Settings tab
+- Auto-populate the Data Cards "Source" dropdown with custom tables
 
-**Add editor UI in `BlockItem`** when `block_type === 'data_cards'`:
-- **Source** dropdown: `Inline` | `party_options` | `token_tiers` | `job_listings` | `news_articles` | `faq_items` | `invite_templates` | `business_pricing_tiers`
-- **Display style** dropdown: Card Grid | Pricing Grid | List | Accordion
-- **Columns** dropdown: 2, 3, 4
-- **Preset buttons** that auto-fill source + mappings + display:
-  - "Party Options" → source `party_options`, mappings `{title:'name', description:'description', price:'price', features:'features'}`, display `card-grid`
-  - "Token Pricing" → source `token_tiers`, mappings `{title:'tokens', price:'price', description:'bonus', highlight:'is_highlight'}`, display `pricing-grid`
-  - "FAQ" → source `faq_items`, mappings `{title:'question', description:'answer'}`, display `accordion`
-  - "Jobs" → source `job_listings`, mappings `{title:'title', description:'description', image:'image_url', link:'apply_url'}`, display `list`
-- **Column mapping fields**: Editable inputs for title, description, price, image, features, link
-- **Inline mode**: When source is "inline", show add/remove card editor
+**Phase 3: Migration for existing content**
 
-### 3. Live Preview — No Additional Work
+- SQL migration to convert all existing `section_content_blocks` rows with `block_type` in (`pricing`, `hours`, `news`, `faq`, `jobs`, `party_options`, `templates`) to `block_type = 'data_cards'` with the correct preset content JSON.
 
-The preview already renders `DynamicSection` inside `SectionWrapper` in the 1920x1080 virtual viewport. Since `DataCardsWidget` goes through the same `BlockRenderer` pipeline, it appears in the live preview automatically with correct styling, scaling, and centering.
+### Technical Details
 
-### Files Changed
+**New DB table: `cms_custom_tables`**
+```
+id           uuid PK
+table_name   text UNIQUE NOT NULL
+label        text NOT NULL
+columns      jsonb NOT NULL  -- [{key, label, type, required}]
+created_at   timestamptz
+```
 
-| File | Change |
-|------|--------|
-| `src/components/DynamicSection.tsx` | Add `DataCardsWidget`, update `WIDGET_TYPES`, add `BlockRenderer` case |
-| `src/pages/KlawsomeAdmin.tsx` | Add `data_cards` to `BLOCK_TYPES`, add editor UI with source/mapping/display/preset controls |
+**New edge function: `cms-create-table`**
+- Accepts: password, table_name, label, columns definition
+- Validates name (alphanumeric + underscores only)
+- Runs: `CREATE TABLE public.<name> (id uuid PK, sort_order int, <dynamic columns>)`
+- Enables RLS with public SELECT
+- Inserts metadata into `cms_custom_tables`
+- Adds table to `cms-admin` allowed list (by reading `cms_custom_tables` dynamically instead of a hardcoded array)
 
-### No Database Migration Needed
-Config is stored in the existing `content` JSONB column of `section_content_blocks`. All existing widget blocks continue working unchanged.
+**cms-admin update**: Change `TABLES_ALLOWED` from hardcoded to: hardcoded base list + dynamic lookup from `cms_custom_tables`.
+
+**Files changed:**
+- `src/components/DynamicSection.tsx` — remove 7 widget functions, add display styles to DataCardsWidget
+- `src/pages/KlawsomeAdmin.tsx` — remove old block types from menu, add Custom Table Creator UI, dynamic MiniTableEditor for custom tables
+- `supabase/functions/cms-admin/index.ts` — dynamic TABLES_ALLOWED
+- New: `supabase/functions/cms-create-table/index.ts`
+- Migration: `cms_custom_tables` table + convert existing widget blocks to data_cards
 
