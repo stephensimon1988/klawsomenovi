@@ -121,7 +121,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   };
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-20">
+    <div className="relative z-20 w-full">
       {/* Compact toolbar */}
       <div className="flex items-center gap-2 bg-background/95 backdrop-blur border-b border-border px-3 py-1.5 rounded-t-lg shadow-lg">
         <span className="font-heading font-bold text-xs text-foreground truncate flex-1">
