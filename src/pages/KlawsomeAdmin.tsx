@@ -1257,7 +1257,116 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   );
 }
 
-// ─── Settings Tab ───────────────────────────────────────────
+// ─── Custom Data Table Creator ──────────────────────────────
+function CustomTableCreator({ password }: { password: string }) {
+  const [customTables, setCustomTables] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [tableName, setTableName] = useState('');
+  const [tableLabel, setTableLabel] = useState('');
+  const [columns, setColumns] = useState<{ key: string; label: string; type: string; required: boolean }[]>([
+    { key: '', label: '', type: 'text', required: false },
+  ]);
+  const [creating, setCreating] = useState(false);
+
+  const loadTables = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table: 'cms_custom_tables' });
+      setCustomTables(res.rows || []);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [password]);
+
+  useEffect(() => { loadTables(); }, [loadTables]);
+
+  const createTable = async () => {
+    const validCols = columns.filter(c => c.key.trim());
+    if (!tableName || !tableLabel || validCols.length === 0) {
+      toast.error('Fill in table name, label, and at least one column');
+      return;
+    }
+    setCreating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('cms-create-table', {
+        body: { password, table_name: tableName, label: tableLabel, columns: validCols },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Table "${tableLabel}" created!`);
+      setTableName('');
+      setTableLabel('');
+      setColumns([{ key: '', label: '', type: 'text', required: false }]);
+      loadTables();
+    } catch (e: any) { toast.error(e.message); }
+    setCreating(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Creator */}
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Create New Data Table</CardTitle></CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <InlineField label="Table Name (snake_case)" value={tableName} onChange={setTableName} />
+            <InlineField label="Display Label" value={tableLabel} onChange={setTableLabel} />
+          </div>
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Columns</label>
+            {columns.map((col, i) => (
+              <div key={i} className="grid grid-cols-4 gap-1 items-end">
+                <Input value={col.key} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], key: e.target.value }; setColumns(next);
+                }} placeholder="column_name" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+                <Input value={col.label} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], label: e.target.value }; setColumns(next);
+                }} placeholder="Display Label" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+                <select value={col.type} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], type: e.target.value }; setColumns(next);
+                }} className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 h-8">
+                  <option value="text">Text</option>
+                  <option value="textarea">Textarea</option>
+                  <option value="number">Number</option>
+                  <option value="bool">Boolean</option>
+                  <option value="array">Array</option>
+                  <option value="image_url">Image URL</option>
+                </select>
+                <Button size="sm" variant="ghost" onClick={() => setColumns(columns.filter((_, idx) => idx !== i))}
+                  className="text-red-400 h-8 w-8 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            ))}
+            <Button size="sm" variant="ghost" onClick={() => setColumns([...columns, { key: '', label: '', type: 'text', required: false }])}
+              className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add column</Button>
+          </div>
+          <Button onClick={createTable} disabled={creating} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+            {creating ? 'Creating…' : 'Create Table'}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Existing custom tables */}
+      {loading && <p className="text-white/40 text-center text-sm">Loading custom tables…</p>}
+      {customTables.map(ct => (
+        <Card key={ct.id} className="border-white/10 bg-white/5 backdrop-blur-sm">
+          <CardHeader><CardTitle className="text-white font-heading text-lg">{ct.label} <span className="text-white/30 text-xs font-mono ml-2">{ct.table_name}</span></CardTitle></CardHeader>
+          <CardContent>
+            <MiniTableEditor
+              password={password}
+              table={ct.table_name}
+              columns={(ct.columns || []).map((c: any) => ({
+                key: c.key,
+                label: c.label || c.key,
+                type: c.type === 'textarea' ? 'textarea' : c.type === 'bool' ? 'bool' : c.type === 'array' ? 'array' : 'text',
+              }))}
+            />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+
 function SettingsEditor({ password }: { password: string }) {
   const [row, setRow] = useState<Record<string, string>>({});
   const [originalId, setOriginalId] = useState('');
