@@ -750,7 +750,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
           {/* Presets */}
           <div className="flex flex-wrap gap-1">
             <span className="text-white/30 text-xs self-center mr-1">Presets:</span>
-            {[
+              {[
               { key: 'party_options', label: '🎂 Party Options' },
               { key: 'token_tiers', label: '💰 Token Pricing' },
               { key: 'faq_items', label: '❓ FAQ' },
@@ -758,6 +758,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
               { key: 'news_articles', label: '📰 News' },
               { key: 'business_pricing_tiers', label: '💎 Biz Pricing' },
               { key: 'invite_templates', label: '📄 Templates' },
+              { key: 'store_hours', label: '🕐 Store Hours' },
             ].map(preset => (
               <Button key={preset.key} size="sm" variant="ghost"
                 onClick={() => {
