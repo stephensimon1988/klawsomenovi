@@ -10,9 +10,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import MultiImageUpload from '@/components/MultiImageUpload';
+import MediaLibraryPicker from '@/components/MediaLibraryPicker';
 import {
   Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown, RefreshCw
+  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown, RefreshCw,
+  Sparkles, Shuffle, Link as LinkIcon
 } from 'lucide-react';
 import { toast } from 'sonner';
 import ImageUploadField from '@/components/ImageUploadField';
