@@ -258,7 +258,7 @@ function CardGridTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, 
         </div>
       )}
       {cards.length > 0 && (
-        <div className={`grid grid-cols-1 ${colCount} gap-6`}>
+        <div className={`grid grid-cols-1 ${colCount} gap-6 ${cards.length === 1 ? 'justify-items-center' : ''}`} style={cards.length === 1 ? { maxWidth: '480px', margin: '0 auto' } : undefined}>
           {cards.map(([colIdx, cardBlocks]) => (
             <div key={colIdx} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow space-y-3">
               {cardBlocks.sort((a, b) => a.row_order - b.row_order).map(b => (
