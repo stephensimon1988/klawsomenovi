@@ -134,6 +134,30 @@ export type Database = {
         }
         Relationships: []
       }
+      cms_custom_tables: {
+        Row: {
+          columns: Json
+          created_at: string
+          id: string
+          label: string
+          table_name: string
+        }
+        Insert: {
+          columns?: Json
+          created_at?: string
+          id?: string
+          label: string
+          table_name: string
+        }
+        Update: {
+          columns?: Json
+          created_at?: string
+          id?: string
+          label?: string
+          table_name?: string
+        }
+        Relationships: []
+      }
       custom_blocks: {
         Row: {
           block_key: string
