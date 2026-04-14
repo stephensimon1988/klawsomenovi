@@ -1,76 +1,68 @@
 
 
-## Plan: AI Section Builder Tab
+## Plan: AI-First Page Builder Overhaul
 
-### Overview
-Add an "AI Builder" tab inside each page's PageBuilder that lets users input raw content (text blocks, images, links), pick a column count, and have AI organize it into a fully responsive section. Includes a "Remix" button to re-shuffle the layout.
+### What changes
 
-### New File: `src/components/AIBuilderTab.tsx`
+The admin page builder becomes AI-first. No more "Sections" vs "AI Builder" tabs — everything lives in one unified view. Blocks auto-save, the AI builder inputs persist to localStorage, and all block types are supported.
 
-A self-contained form component with:
+### 1. Unify PageBuilder — remove Sections/AI Builder tabs
 
-- **Section Label** — text input
-- **Column Picker** — 1–4 toggle buttons
-- **Text Blocks** — accordion of WYSIWYG editors (using existing `RichTextEditor`). Adding a new block collapses the previous one. Each has a delete button.
-- **Images** — `MultiImageUpload` for direct uploads + "Browse Library" button opening `MediaLibraryPicker`
-- **Links** — repeatable Label + URL rows with add/remove
-- **Create Section** button — sends all content to the `ai-layout` edge function with `mode: 'build'`, creates a `page_section` + `section_content_blocks` rows from the AI response
-- **Remix** button (appears after creation) — re-calls AI with same content requesting a different layout, updates existing blocks
+**File: `src/pages/KlawsomeAdmin.tsx`**
 
-### Modified: `src/pages/KlawsomeAdmin.tsx`
+- Remove the `<Tabs>` wrapper in `PageBuilder` that splits "Sections" and "AI Builder"
+- The default view becomes: AI Content Builder panel at top (always visible) + section list below
+- Move the `AIBuilderTab` content inline into `PageBuilder` (or keep it as a component but always render it, not behind a tab)
+- The section list (accordion-style `SectionCard` components) stays below with reorder, visibility, delete
 
-Wrap the existing `PageBuilder` section list and new `AIBuilderTab` in a sub-tabs component:
+### 2. Remove "Save" buttons from BlockItem — auto-save on blur/change
 
-```text
-[Sections]  [✨ AI Builder]
-```
+**File: `src/pages/KlawsomeAdmin.tsx` (BlockItem component)**
 
-The AI Builder tab receives `page` and `password` props, same as the section list.
+- Remove the explicit "Save" button from each block's header bar
+- Add `onBlur` handler to text inputs and `onChange` debounce (500ms) for WYSIWYG/complex fields that auto-calls `onUpdate`
+- Use a `useEffect` with a debounce timer on `localContent` changes to auto-persist
 
-### Modified: `supabase/functions/ai-layout/index.ts`
+### 3. localStorage persistence for AI Builder inputs
 
-Add a `mode: 'build'` code path alongside the existing "clean up" flow:
+**File: `src/pages/KlawsomeAdmin.tsx` (SectionCard AI builder state)**
 
-**Input:**
-```json
-{
-  "password": "...",
-  "mode": "build",
-  "page": "home",
-  "label": "About Us",
-  "columns": 2,
-  "textBlocks": ["<p>Rich text HTML...</p>", "<p>Second block...</p>"],
-  "images": ["https://...jpg", "https://...png"],
-  "links": [{"label": "Learn More", "url": "/about"}]
-}
-```
+- On mount, load `aiTextBlocks`, `aiImages`, `aiLinks`, `aiColumns` from `localStorage` keyed by section ID
+- On every state change, write back to localStorage
+- Clear localStorage entry after successful AI Create
+- Same pattern for the top-level AI Builder in PageBuilder
 
-**AI prompt:** Asks the model to arrange the provided content pieces into blocks with `block_type`, `content`, `column_index` (0-based, max = columns-1), and `row_order`. Also picks a `layout_template`.
+### 4. Support all block types in AI builder's "Add Block Directly"
 
-**Output:**
-```json
-{
-  "template": "split-left",
-  "blocks": [
-    {"block_type": "richtext", "content": {...}, "column_index": 0, "row_order": 0},
-    {"block_type": "image", "content": {"url": "..."}, "column_index": 1, "row_order": 0},
-    {"block_type": "button", "content": {"text": "Learn More", "url": "/about"}, "column_index": 0, "row_order": 1}
-  ]
-}
-```
+**File: `src/pages/KlawsomeAdmin.tsx` (SectionCard)**
 
-The edge function then:
-1. Inserts a `page_section` row
-2. Bulk-inserts all `section_content_blocks` rows
-3. Returns the section ID + template
+- The `BLOCK_TYPES` array in the AI builder section currently only has a subset. Replace it with the full `BLOCK_TYPES` array (18 types: heading, richtext, image, video, iframe, code, list, button, divider, tabs, table, gallery, map, icon_box, countdown, carousel, reviews, data_cards)
+- Each block type already has default content defined in `ContentBlockEditor.addBlock` — reuse those defaults
 
-For **Remix** (`mode: 'remix'`), it takes an existing `section_id`, reads current blocks, re-calls AI requesting a different arrangement, then updates blocks' `column_index`/`row_order` and the section's `layout_template`.
+### 5. AI Create adds blocks into the section's existing block list
 
-### Files Summary
+This already works — `aiAddContent` calls the edge function with `existingSectionId: section.id`, which appends blocks to the section. The blocks then appear in the `ContentBlockEditor` accordion below. No change needed here, just verify the flow.
+
+### 6. Remove the standalone `AIBuilderTab` component and tab
+
+**Files:**
+- Remove `src/components/AIBuilderTab.tsx` (no longer needed — its functionality is merged into the unified PageBuilder)
+- Remove the import in `KlawsomeAdmin.tsx`
+
+### 7. Auto-save for SectionCard settings
+
+The section settings (label, bg_color, layout_template, etc.) already auto-save via `onUpdateLayout` on every change. No additional work needed.
+
+### Files changed
 
 | File | Action |
 |------|--------|
-| `src/components/AIBuilderTab.tsx` | **Create** — full AI builder form |
-| `src/pages/KlawsomeAdmin.tsx` | **Modify** — add sub-tabs in PageBuilder |
-| `supabase/functions/ai-layout/index.ts` | **Modify** — add `build` and `remix` modes |
+| `src/pages/KlawsomeAdmin.tsx` | Major refactor — unify tabs, auto-save blocks, localStorage, full block types |
+| `src/components/AIBuilderTab.tsx` | Delete (merged into PageBuilder) |
+
+### Technical details
+
+- **Debounce auto-save**: Use a `useRef` timer in `BlockItem`. On any `localContent` change, clear previous timer and set a new 800ms timeout to call `onUpdate`. Also fire on blur for immediate save when leaving a field.
+- **localStorage keys**: `ai-builder-${sectionId}` storing `{ textBlocks, images, links, columns }` as JSON.
+- **Block type defaults**: Consolidate the default content map from `ContentBlockEditor.addBlock` (lines 298-322) and reuse it in the AI builder's "Add Block Directly" section, so code, tabs, table, gallery, map, icon_box, countdown, carousel, reviews all work.
 
