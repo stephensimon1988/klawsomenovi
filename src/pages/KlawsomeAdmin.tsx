@@ -920,10 +920,71 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   const [expanded, setExpanded] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
   const [cleaningUp, setCleaningUp] = useState<string | null>(null);
+  const [aiMode, setAiMode] = useState(false);
+
+  // AI Builder state
+  const [aiTextBlocks, setAiTextBlocks] = useState<string[]>(['']);
+  const [aiImages, setAiImages] = useState<string[]>([]);
+  const [aiLinks, setAiLinks] = useState<{ label: string; url: string }[]>([]);
+  const [aiColumns, setAiColumns] = useState('1');
+  const [aiAccordion, setAiAccordion] = useState('ai-text-0');
+  const [aiMediaOpen, setAiMediaOpen] = useState(false);
+  const [aiBuilding, setAiBuilding] = useState(false);
+  const [aiRemixing, setAiRemixing] = useState(false);
+
   const refreshPreview = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['cms', 'section_content_blocks'] });
     setPreviewKey(k => k + 1);
   }, [queryClient]);
+
+  const aiAddContent = async () => {
+    const hasContent = aiTextBlocks.some(t => t.trim()) || aiImages.length > 0 || aiLinks.length > 0;
+    if (!hasContent) { toast.error('Add at least one text block, image, or link'); return; }
+    setAiBuilding(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: {
+          password,
+          mode: 'build',
+          page: section.page,
+          label: section.label || 'AI Section',
+          columns: parseInt(aiColumns),
+          textBlocks: aiTextBlocks.filter(t => t.trim()),
+          images: aiImages,
+          links: aiLinks.filter(l => l.url.trim()),
+          existingSectionId: section.id,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      onUpdateLayout(section.id, 'layout_template', data.template);
+      setAiTextBlocks(['']);
+      setAiImages([]);
+      setAiLinks([]);
+      toast.success(`AI organized content with "${data.template}" layout ✨`);
+      setTimeout(refreshPreview, 300);
+    } catch (e: any) {
+      toast.error(e.message || 'AI build failed');
+    }
+    setAiBuilding(false);
+  };
+
+  const aiRemix = async () => {
+    setAiRemixing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: { password, mode: 'remix', section_id: section.id, columns: parseInt(aiColumns) },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      onUpdateLayout(section.id, 'layout_template', data.template);
+      toast.success(`Remixed to "${data.template}" 🔀`);
+      setTimeout(refreshPreview, 300);
+    } catch (e: any) {
+      toast.error(e.message || 'Remix failed');
+    }
+    setAiRemixing(false);
+  };
 
   const handleCleanUp = async (sec: any) => {
     setCleaningUp(sec.id);
