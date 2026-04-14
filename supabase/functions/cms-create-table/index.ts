@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.49.4";
 
 const corsHeaders = {
@@ -15,24 +14,24 @@ const RESERVED_NAMES = new Set([
 ]);
 
 const TYPE_MAP: Record<string, string> = {
-  text: 'text NOT NULL DEFAULT \'\'',
-  textarea: 'text NOT NULL DEFAULT \'\'',
+  text: "text NOT NULL DEFAULT ''",
+  textarea: "text NOT NULL DEFAULT ''",
   number: 'numeric',
   bool: 'boolean NOT NULL DEFAULT false',
   array: "text[] NOT NULL DEFAULT '{}'",
-  image_url: 'text NOT NULL DEFAULT \'\'',
+  image_url: "text NOT NULL DEFAULT ''",
 };
 
-serve(async (req) => {
+const json = (data: unknown, status = 200) =>
+  new Response(JSON.stringify(data), {
+    status,
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+  });
+
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
     return new Response(null, { headers: corsHeaders });
   }
-
-  const json = (data: unknown, status = 200) =>
-    new Response(JSON.stringify(data), {
-      status,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
 
   try {
     const body = await req.json();
@@ -69,56 +68,66 @@ serve(async (req) => {
       return json({ error: 'Label is required' }, 400);
     }
 
-    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
-    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
-    const supabase = createClient(supabaseUrl, serviceKey);
-
     // Build column definitions
     const colDefs = columns
       .map((col: { key: string; type: string }) => `"${col.key}" ${TYPE_MAP[col.type]}`)
-      .join(',\n  ');
+      .join(', ');
 
-    // Create table via raw SQL using rpc
-    const sql = `
-      CREATE TABLE IF NOT EXISTS public."${table_name}" (
-        id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-        sort_order integer NOT NULL DEFAULT 0,
-        ${colDefs}
-      );
-
-      ALTER TABLE public."${table_name}" ENABLE ROW LEVEL SECURITY;
-
-      CREATE POLICY "Public read ${table_name}"
-        ON public."${table_name}"
-        FOR SELECT
-        TO public
-        USING (true);
-    `;
-
-    // Execute via service role postgres
+    // Execute SQL via direct postgres connection
     const pgUrl = Deno.env.get('SUPABASE_DB_URL');
     if (!pgUrl) {
       return json({ error: 'Database URL not configured' }, 500);
     }
 
-    // Use pg connection
-    const { Pool } = await import("https://deno.land/x/postgres@v0.17.0/mod.ts");
-    const pool = new Pool(pgUrl, 1);
-    const conn = await pool.connect();
+    // Use the built-in Deno postgres driver
+    const { Client } = await import("https://deno.land/x/postgres@v0.19.3/mod.ts");
+    const client = new Client(pgUrl);
+    await client.connect();
+
     try {
-      await conn.queryArray(sql);
+      // Create table
+      await client.queryArray(
+        `CREATE TABLE IF NOT EXISTS public."${table_name}" (
+          id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
+          sort_order integer NOT NULL DEFAULT 0,
+          ${colDefs}
+        )`
+      );
+
+      // Enable RLS
+      await client.queryArray(
+        `ALTER TABLE public."${table_name}" ENABLE ROW LEVEL SECURITY`
+      );
+
+      // Create read policy (ignore if exists)
+      try {
+        await client.queryArray(
+          `CREATE POLICY "Public read ${table_name}" ON public."${table_name}" FOR SELECT TO public USING (true)`
+        );
+      } catch (_policyErr) {
+        // Policy may already exist, that's fine
+        console.log('Policy may already exist:', _policyErr);
+      }
     } finally {
-      conn.release();
-      await pool.end();
+      await client.end();
     }
 
-    // Register in cms_custom_tables
+    // Register in cms_custom_tables via service role
+    const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+    const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
+    const supabase = createClient(supabaseUrl, serviceKey);
+
     const { error: insertErr } = await supabase
       .from('cms_custom_tables')
       .insert({
         table_name,
         label,
-        columns: columns.map((c: any) => ({ key: c.key, label: c.label || c.key, type: c.type, required: c.required || false })),
+        columns: columns.map((c: any) => ({
+          key: c.key,
+          label: c.label || c.key,
+          type: c.type,
+          required: c.required || false,
+        })),
       });
 
     if (insertErr) {
@@ -127,6 +136,7 @@ serve(async (req) => {
 
     return json({ success: true, table_name });
   } catch (e: any) {
+    console.error('cms-create-table error:', e);
     return json({ error: e.message || 'Failed to create table' }, 500);
   }
 });
