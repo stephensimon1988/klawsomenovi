@@ -1,15 +1,22 @@
-import { useState } from 'react';
+import { useState, lazy, Suspense } from 'react';
 import { useEditMode } from '@/contexts/EditModeContext';
+import { supabase } from '@/integrations/supabase/client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Palette, Settings, Eye, EyeOff, ArrowUp, ArrowDown, Trash2, Plus } from 'lucide-react';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
+import { Palette, Settings, Eye, EyeOff, ArrowUp, ArrowDown, Trash2, Plus, Sparkles, Shuffle, Link as LinkIcon } from 'lucide-react';
 import { toast } from 'sonner';
 import { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
 import { ANIMATION_PRESETS } from '@/components/SectionWrapper';
 import type { PageSectionConfig } from '@/components/SectionWrapper';
 import ColorPickerField from '@/components/ColorPickerField';
 import ImageUploadField from '@/components/ImageUploadField';
+import MultiImageUpload from '@/components/MultiImageUpload';
+import MediaLibraryPicker from '@/components/MediaLibraryPicker';
+
+const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
 interface SectionToolbarProps {
   config: PageSectionConfig;
