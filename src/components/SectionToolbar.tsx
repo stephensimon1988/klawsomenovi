@@ -145,6 +145,63 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
     }
   };
 
+  const aiAddContent = async () => {
+    const hasContent = aiTextBlocks.some(t => t.trim()) || aiImages.length > 0 || aiLinks.length > 0;
+    if (!hasContent) { toast.error('Add at least one text block, image, or link'); return; }
+
+    setAiBuilding(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: {
+          password,
+          mode: 'build',
+          page: config.page,
+          label: config.label || 'AI Section',
+          columns: parseInt(aiColumns),
+          textBlocks: aiTextBlocks.filter(t => t.trim()),
+          images: aiImages,
+          links: aiLinks.filter(l => l.url.trim()),
+          existingSectionId: config.id,
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      setLayoutTemplate(data.template);
+      saveSectionSettings({ layout_template: data.template, columns: parseInt(aiColumns) });
+      setAiTextBlocks(['']);
+      setAiImages([]);
+      setAiLinks([]);
+      toast.success(`AI organized content with "${data.template}" layout ✨`);
+    } catch (e: any) {
+      toast.error(e.message || 'AI build failed');
+    }
+    setAiBuilding(false);
+  };
+
+  const aiRemix = async () => {
+    setAiRemixing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('ai-layout', {
+        body: {
+          password,
+          mode: 'remix',
+          section_id: config.id,
+          columns: parseInt(aiColumns),
+        },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
+      setLayoutTemplate(data.template);
+      toast.success(`Remixed to "${data.template}" 🔀`);
+      triggerRefresh();
+    } catch (e: any) {
+      toast.error(e.message || 'Remix failed');
+    }
+    setAiRemixing(false);
+  };
+
   return (
     <div className="relative z-20 w-full" style={{ color: 'hsl(var(--foreground))' }}>
       {/* Compact toolbar */}
