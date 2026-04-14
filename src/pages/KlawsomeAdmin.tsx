@@ -1,5 +1,4 @@
-import { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import AIBuilderTab from '@/components/AIBuilderTab';
+import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
@@ -402,10 +401,18 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
   isFirst: boolean; isLast: boolean;
 }) {
   const [localContent, setLocalContent] = useState(block.content || {});
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const initialRef = useRef(true);
 
-  const handleSave = () => {
-    onUpdate(block.id, { block_type: block.block_type, content: localContent });
-  };
+  // Auto-save with debounce
+  useEffect(() => {
+    if (initialRef.current) { initialRef.current = false; return; }
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+    debounceRef.current = setTimeout(() => {
+      onUpdate(block.id, { block_type: block.block_type, content: localContent });
+    }, 800);
+    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+  }, [localContent]);
 
   const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
 
@@ -416,15 +423,12 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
       <div className="flex items-center gap-2">
         <span className="text-lg">{typeLabel?.icon || '?'}</span>
         <span className="text-white/60 text-xs font-heading font-bold uppercase">{typeLabel?.label || block.block_type}</span>
+        {saving === block.id && <span className="text-klawsome-yellow text-[10px] animate-pulse">saving…</span>}
         <div className="flex-1" />
         <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'up')} disabled={isFirst}
           className="text-white/40 h-6 w-6 p-0"><ArrowUp className="w-3 h-3" /></Button>
         <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'down')} disabled={isLast}
           className="text-white/40 h-6 w-6 p-0"><ArrowDown className="w-3 h-3" /></Button>
-        {!isDataBlock && (
-          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />{saving === block.id ? '…' : 'Save'}</Button>
-        )}
         <Button size="sm" variant="ghost" onClick={() => onDelete(block.id)}
           className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
       </div>
@@ -920,17 +924,32 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
   const [expanded, setExpanded] = useState(false);
   const [previewKey, setPreviewKey] = useState(0);
   const [cleaningUp, setCleaningUp] = useState<string | null>(null);
-  const [aiMode, setAiMode] = useState(false);
 
-  // AI Builder state
-  const [aiTextBlocks, setAiTextBlocks] = useState<string[]>(['']);
-  const [aiImages, setAiImages] = useState<string[]>([]);
-  const [aiLinks, setAiLinks] = useState<{ label: string; url: string }[]>([]);
-  const [aiColumns, setAiColumns] = useState('1');
+  // AI Builder state — persisted to localStorage
+  const storageKey = `ai-builder-${section.id}`;
+  const loadSaved = () => {
+    try {
+      const saved = localStorage.getItem(storageKey);
+      if (saved) return JSON.parse(saved);
+    } catch {}
+    return null;
+  };
+  const saved = loadSaved();
+  const [aiTextBlocks, setAiTextBlocks] = useState<string[]>(saved?.textBlocks || ['']);
+  const [aiImages, setAiImages] = useState<string[]>(saved?.images || []);
+  const [aiLinks, setAiLinks] = useState<{ label: string; url: string }[]>(saved?.links || []);
+  const [aiColumns, setAiColumns] = useState(saved?.columns || '1');
   const [aiAccordion, setAiAccordion] = useState('ai-text-0');
   const [aiMediaOpen, setAiMediaOpen] = useState(false);
   const [aiBuilding, setAiBuilding] = useState(false);
   const [aiRemixing, setAiRemixing] = useState(false);
+
+  // Persist AI builder state to localStorage
+  useEffect(() => {
+    localStorage.setItem(storageKey, JSON.stringify({
+      textBlocks: aiTextBlocks, images: aiImages, links: aiLinks, columns: aiColumns
+    }));
+  }, [aiTextBlocks, aiImages, aiLinks, aiColumns, storageKey]);
 
   const refreshPreview = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ['cms', 'section_content_blocks'] });
@@ -961,6 +980,7 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
       setAiTextBlocks(['']);
       setAiImages([]);
       setAiLinks([]);
+      localStorage.removeItem(storageKey);
       toast.success(`AI organized content with "${data.template}" layout ✨`);
       setTimeout(refreshPreview, 300);
     } catch (e: any) {
@@ -1199,15 +1219,10 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
           {/* AI Mode Toggle + Content editor */}
           <div className="border-t border-white/10 pt-3">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-white/50 text-xs font-heading">Content Blocks</p>
-              <div className="flex items-center gap-2">
-                <Sparkles className={`w-3 h-3 ${aiMode ? 'text-klawsome-yellow' : 'text-white/30'}`} />
-                <label className="text-white/40 text-xs font-heading">AI Builder</label>
-                <Switch checked={aiMode} onCheckedChange={setAiMode} />
-              </div>
+              <p className="text-white/50 text-xs font-heading flex items-center gap-1"><Sparkles className="w-3 h-3 text-klawsome-yellow" /> AI Content Builder</p>
             </div>
 
-            {aiMode && (
+            {(
               <div className="bg-white/5 border border-klawsome-yellow/20 rounded-xl p-4 mb-4 space-y-4">
                 <p className="text-klawsome-yellow text-xs font-heading font-bold flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> AI Content Builder
@@ -1281,11 +1296,23 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                             const defaultContent: Record<string, any> =
                               item.type === 'heading' ? { text: 'New Heading' } :
                               item.type === 'richtext' ? { html: '<p>Your text here...</p>' } :
+                              item.type === 'text' ? { text: 'Your text here...' } :
                               item.type === 'image' ? { url: '', alt: '' } :
+                              item.type === 'video' ? { url: '', alt: '' } :
+                              item.type === 'iframe' ? { url: '', title: '' } :
+                              item.type === 'code' ? { code: '// Your code here', language: 'javascript' } :
+                              item.type === 'list' ? { items: ['Item 1', 'Item 2', 'Item 3'] } :
                               item.type === 'button' ? { text: 'Learn More', url: '/' } :
-                              item.type === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [] } :
                               item.type === 'divider' ? {} :
                               item.type === 'spacer' ? { height: '2rem' } :
+                              item.type === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [{ title: 'Card 1', description: 'Description' }] } :
+                              item.type === 'tabs' ? { tabs: [{ label: 'Tab 1', content: '<p>Content for tab 1</p>' }, { label: 'Tab 2', content: '<p>Content for tab 2</p>' }] } :
+                              item.type === 'table' ? { headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['Data 1', 'Data 2', 'Data 3']] } :
+                              item.type === 'gallery' ? { images: [{ url: '', alt: '', caption: '' }] } :
+                              item.type === 'map' ? { embed_url: '', title: 'Our Location' } :
+                              item.type === 'icon_box' ? { items: [{ icon: '⭐', title: 'Feature', description: 'Description' }] } :
+                              item.type === 'countdown' ? { target_date: '', label: 'Coming Soon!' } :
+                              item.type === 'carousel' ? { slides: [{ image: '', title: 'Slide 1', description: 'Description' }] } :
                               {};
                             await cmsInvoke(password, {
                               action: 'insert', table: 'section_content_blocks',
@@ -1416,37 +1443,26 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   if (loading) return <p className="text-white/40 py-8 text-center">Loading page sections…</p>;
 
   return (
-    <Tabs defaultValue="sections" className="w-full">
-      <TabsList className="bg-white/5 border border-white/10 mb-4">
-        <TabsTrigger value="sections" className="text-xs font-heading data-[state=active]:bg-white/10 data-[state=active]:text-white">Sections</TabsTrigger>
-        <TabsTrigger value="ai-builder" className="text-xs font-heading data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy">✨ AI Builder</TabsTrigger>
-      </TabsList>
-      <TabsContent value="sections">
-        <div className="space-y-3">
-          {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
-          {sections.map((s) => (
-            <SectionCard
-              key={s.id}
-              section={s}
-              password={password}
-              page={page}
-              onReorder={reorder}
-              onToggleVisibility={toggleVisibility}
-              onUpdateLayout={updateLayout}
-              onDelete={deleteSection}
-            />
-          ))}
-          <div className="flex gap-2 pt-2">
-            <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-              <Plus className="w-3 h-3 mr-1" />Add Section
-            </Button>
-          </div>
-        </div>
-      </TabsContent>
-      <TabsContent value="ai-builder">
-        <AIBuilderTab page={page} password={password} onSectionCreated={load} />
-      </TabsContent>
-    </Tabs>
+    <div className="space-y-3">
+      {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
+      {sections.map((s) => (
+        <SectionCard
+          key={s.id}
+          section={s}
+          password={password}
+          page={page}
+          onReorder={reorder}
+          onToggleVisibility={toggleVisibility}
+          onUpdateLayout={updateLayout}
+          onDelete={deleteSection}
+        />
+      ))}
+      <div className="flex gap-2 pt-2">
+        <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+          <Plus className="w-3 h-3 mr-1" />Add Section
+        </Button>
+      </div>
+    </div>
   );
 }
 
