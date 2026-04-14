@@ -138,24 +138,52 @@ Return ONLY valid JSON:
         }
       });
 
-      // Insert section
-      const { data: sectionData, error: secErr } = await supabase.from('page_sections').insert({
-        page,
-        section_key: `ai:${label.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
-        label,
-        layout_template: result.template,
-        columns,
-        sort_order: 999,
-        is_visible: true,
-        section_type: 'section',
-      }).select('id').single();
+      const { existingSectionId } = body;
+      let sectionId: string;
 
-      if (secErr) return json({ error: secErr.message }, 500);
+      if (existingSectionId) {
+        // Add blocks to existing section — find max row_order first
+        const { data: existingBlocks } = await supabase
+          .from('section_content_blocks')
+          .select('row_order')
+          .eq('section_id', existingSectionId)
+          .order('row_order', { ascending: false })
+          .limit(1);
+
+        const maxExisting = existingBlocks?.[0]?.row_order ?? -1;
+        // Offset new block row_orders so they come after existing ones
+        for (const b of finalBlocks) {
+          b.row_order = b.row_order + maxExisting + 1;
+        }
+
+        // Update the section's layout template and columns
+        await supabase.from('page_sections').update({
+          layout_template: result.template,
+          columns,
+        }).eq('id', existingSectionId);
+
+        sectionId = existingSectionId;
+      } else {
+        // Create new section
+        const { data: sectionData, error: secErr } = await supabase.from('page_sections').insert({
+          page,
+          section_key: `ai:${label.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+          label,
+          layout_template: result.template,
+          columns,
+          sort_order: 999,
+          is_visible: true,
+          section_type: 'section',
+        }).select('id').single();
+
+        if (secErr) return json({ error: secErr.message }, 500);
+        sectionId = sectionData.id;
+      }
 
       // Insert blocks
       if (finalBlocks.length > 0) {
         const rows = finalBlocks.map(b => ({
-          section_id: sectionData.id,
+          section_id: sectionId,
           block_type: b.block_type,
           content: b.content,
           column_index: b.column_index,
@@ -165,7 +193,7 @@ Return ONLY valid JSON:
         if (blkErr) console.error('Block insert error:', blkErr);
       }
 
-      return json({ section_id: sectionData.id, template: result.template, blocks_count: finalBlocks.length, source: 'ai' });
+      return json({ section_id: sectionId, template: result.template, blocks_count: finalBlocks.length, source: 'ai' });
     }
 
     // ─── REMIX MODE: re-arrange existing blocks ───
