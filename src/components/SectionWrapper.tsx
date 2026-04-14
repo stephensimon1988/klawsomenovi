@@ -186,7 +186,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           marginRight: 'auto',
           paddingLeft: SAFE_PAD_X,
           paddingRight: SAFE_PAD_X,
-          paddingTop: effectivePadY,
+          paddingTop: isEditMode ? `calc(${effectivePadY} + 40px)` : effectivePadY,
           paddingBottom: photoArray.length > 0 ? '2rem' : effectivePadY,
           display: 'flex',
           flexDirection: 'column' as const,
