@@ -153,6 +153,18 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
       {/* Expanded settings */}
       {expanded && (
         <div className="bg-background backdrop-blur border border-b-0 border-border rounded-b-lg p-4 shadow-lg space-y-4 text-foreground">
+          {/* Label */}
+          <div className="space-y-1">
+            <label className="text-xs font-heading text-muted-foreground">Label</label>
+            <Input
+              value={label}
+              onChange={e => setLabel(e.target.value)}
+              onBlur={() => saveSectionSettings({ label })}
+              className="h-8 text-xs bg-background border-border text-foreground"
+              placeholder="Section label"
+            />
+          </div>
+
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* BG Color */}
             <div className="space-y-1">
@@ -219,6 +231,38 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
                 </SelectContent>
               </Select>
             </div>
+          </div>
+
+          {/* Hero Height (only when type is Hero) */}
+          {sectionType === 'hero' && (
+            <div className="space-y-1">
+              <label className="text-xs font-heading text-muted-foreground">Hero Height</label>
+              <div className="flex gap-2">
+                <Button size="sm" variant={heroHeight === '50vh' ? 'default' : 'outline'}
+                  className="text-xs h-8 px-4"
+                  onClick={() => { setHeroHeight('50vh'); saveSectionSettings({ hero_height: '50vh' }); }}>
+                  Half Screen
+                </Button>
+                <Button size="sm" variant={heroHeight !== '50vh' ? 'default' : 'outline'}
+                  className="text-xs h-8 px-4"
+                  onClick={() => { setHeroHeight('100vh'); saveSectionSettings({ hero_height: '100vh' }); }}>
+                  Full Screen
+                </Button>
+              </div>
+            </div>
+          )}
+
+          {/* Background Image */}
+          <div className="space-y-1">
+            <label className="text-xs font-heading text-muted-foreground">Background Image</label>
+            <ImageUploadField
+              value={bgImageUrl}
+              onChange={v => {
+                setBgImageUrl(v);
+                saveSectionSettings({ bg_image_url: v });
+              }}
+              label=""
+            />
           </div>
 
           {/* Add Block */}
