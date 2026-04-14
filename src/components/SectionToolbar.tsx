@@ -169,7 +169,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
                 setLayoutTemplate(v);
                 saveSectionSettings({ layout_template: v });
               }}>
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs text-foreground bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -187,7 +187,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
                 setSectionType(v as any);
                 saveSectionSettings({ section_type: v });
               }}>
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs text-foreground bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -205,7 +205,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
                 setAnimation(v);
                 saveSectionSettings({ animation: v });
               }}>
-                <SelectTrigger className="h-8 text-xs">
+                <SelectTrigger className="h-8 text-xs text-foreground bg-background border-border">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
