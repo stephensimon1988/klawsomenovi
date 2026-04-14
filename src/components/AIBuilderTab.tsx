@@ -6,7 +6,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import MultiImageUpload from '@/components/MultiImageUpload';
 import MediaLibraryPicker from '@/components/MediaLibraryPicker';
-import { Plus, Trash2, Link as LinkIcon, Sparkles, Shuffle, Image } from 'lucide-react';
+import DynamicSection from '@/components/DynamicSection';
+import SectionWrapper from '@/components/SectionWrapper';
+import { Plus, Trash2, Link as LinkIcon, Sparkles, Shuffle, Image, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
@@ -30,6 +32,8 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
   const [building, setBuilding] = useState(false);
   const [remixing, setRemixing] = useState(false);
   const [createdSectionId, setCreatedSectionId] = useState<string | null>(null);
+  const [createdTemplate, setCreatedTemplate] = useState<string>('stacked');
+  const [previewKey, setPreviewKey] = useState(0);
 
   const addTextBlock = () => {
     setTextBlocks(prev => [...prev, '']);
@@ -80,6 +84,8 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
       if (data?.error) throw new Error(data.error);
 
       setCreatedSectionId(data.section_id);
+      setCreatedTemplate(data.template);
+      setPreviewKey(k => k + 1);
       toast.success(`Section created with "${data.template}" layout ✨`);
       onSectionCreated?.();
     } catch (e: any) {
@@ -103,6 +109,8 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
       if (error) throw error;
       if (data?.error) throw new Error(data.error);
 
+      setCreatedTemplate(data.template);
+      setPreviewKey(k => k + 1);
       toast.success(`Remixed to "${data.template}" layout 🔀`);
       onSectionCreated?.();
     } catch (e: any) {
@@ -259,9 +267,71 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
       </div>
 
       {createdSectionId && (
-        <p className="text-green-400/80 text-xs font-heading">
-          ✅ Section created! Switch to the "Sections" tab to see it, or click Remix to try a different layout.
-        </p>
+        <div className="space-y-3">
+          <div className="flex items-center justify-between">
+            <p className="text-green-400/80 text-xs font-heading">
+              ✅ Section created! Click Remix to try a different layout.
+            </p>
+            <Button size="sm" variant="ghost" onClick={() => setPreviewKey(k => k + 1)} className="text-white/40 h-6 px-2 text-xs">
+              <RefreshCw className="w-3 h-3 mr-1" />Refresh
+            </Button>
+          </div>
+          {/* Live Preview */}
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Live Preview</label>
+            <div
+              className="w-full rounded-xl border border-white/10 overflow-hidden relative"
+              style={{ aspectRatio: '16 / 9' }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{ width: '1920px', height: '1080px', transform: 'scale(var(--preview-scale))', transformOrigin: 'top left' }}
+                ref={(el) => {
+                  if (el) {
+                    const parent = el.parentElement;
+                    if (!parent) return;
+                    const setScale = () => { el.style.setProperty('--preview-scale', String(parent.clientWidth / 1920)); };
+                    setScale();
+                    const ro = new ResizeObserver(setScale);
+                    ro.observe(parent);
+                  }
+                }}
+              >
+                <SectionWrapper
+                  key={`ai-preview-${createdSectionId}-${previewKey}`}
+                  config={{
+                    id: createdSectionId,
+                    section_key: 'ai-preview',
+                    label: label,
+                    page: page,
+                    sort_order: 0,
+                    is_visible: true,
+                    section_type: 'section',
+                    hero_height: '100vh',
+                    layout_template: createdTemplate,
+                    bg_color: '',
+                    bg_image_url: '',
+                    padding_y: '7rem',
+                    wrapper_max_width: '1200px',
+                    section_height: 'auto',
+                    columns: parseInt(columns),
+                    photos: [],
+                    text_color: '',
+                    layout_json: {},
+                    custom_css_class: '',
+                    animation: '',
+                  }}
+                >
+                  <DynamicSection
+                    sectionId={createdSectionId}
+                    sectionType="section"
+                    layoutTemplate={createdTemplate}
+                  />
+                </SectionWrapper>
+              </div>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
