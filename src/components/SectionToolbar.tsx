@@ -32,9 +32,12 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   const { cmsInvoke, triggerRefresh } = useEditMode();
   const [expanded, setExpanded] = useState(false);
   const [bgColor, setBgColor] = useState(config.bg_color || '');
+  const [bgImageUrl, setBgImageUrl] = useState(config.bg_image_url || '');
   const [layoutTemplate, setLayoutTemplate] = useState(config.layout_template || 'stacked');
   const [animation, setAnimation] = useState(config.animation || '');
   const [sectionType, setSectionType] = useState(config.section_type || 'section');
+  const [heroHeight, setHeroHeight] = useState(config.hero_height || '100vh');
+  const [label, setLabel] = useState(config.label || '');
   const [saving, setSaving] = useState(false);
 
   const saveSectionSettings = async (updates: Record<string, any>) => {
