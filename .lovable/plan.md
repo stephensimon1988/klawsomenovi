@@ -1,107 +1,76 @@
 
 
-## Plan: Desktop-Only Inline Edit Mode
+## Plan: AI Section Builder Tab
 
-### UI Concept
+### Overview
+Add an "AI Builder" tab inside each page's PageBuilder that lets users input raw content (text blocks, images, links), pick a column count, and have AI organize it into a fully responsive section. Includes a "Remix" button to re-shuffle the layout.
 
-Here's what the editor looks like on desktop. On mobile, the existing /klawsome-admin block editor is used instead.
+### New File: `src/components/AIBuilderTab.tsx`
+
+A self-contained form component with:
+
+- **Section Label** — text input
+- **Column Picker** — 1–4 toggle buttons
+- **Text Blocks** — accordion of WYSIWYG editors (using existing `RichTextEditor`). Adding a new block collapses the previous one. Each has a delete button.
+- **Images** — `MultiImageUpload` for direct uploads + "Browse Library" button opening `MediaLibraryPicker`
+- **Links** — repeatable Label + URL rows with add/remove
+- **Create Section** button — sends all content to the `ai-layout` edge function with `mode: 'build'`, creates a `page_section` + `section_content_blocks` rows from the AI response
+- **Remix** button (appears after creation) — re-calls AI with same content requesting a different layout, updates existing blocks
+
+### Modified: `src/pages/KlawsomeAdmin.tsx`
+
+Wrap the existing `PageBuilder` section list and new `AIBuilderTab` in a sub-tabs component:
 
 ```text
-┌──────────────────────────────────────────────────────────────────┐
-│  HOME   BIRTHDAYS   GIFT CARDS   CAREERS   NEWS   ...   BOOK   │
-├──────────────────────────────────────────────────────────────────┤
-│                                                                  │
-│  ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐   │
-│  │  ┌──────────────────────────────────────────────────┐    │   │
-│  │  │ Section: Gallery Hero          [🎨 BG] [📐 Type]│◄───┼── Section toolbar  │
-│  │  └──────────────────────────────────────────────────┘    │   │
-│  │                                                          │   │
-│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
-│  │   ┊  GALLERY                          [Heading ✏️]┊◄────┼── Hover = dashed   │
-│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │   blue outline    │
-│  │                                                          │   │
-│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
-│  │   ┊  Check out our space!             [Text ✏️]   ┊     │   │
-│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │
-│  │                                        [+ Add Block]     │   │
-│  └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘   │
-│                         [+ Add Section]                          │
-│  ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐   │
-│  │  ┌──────────────────────────────────────────────────┐    │   │
-│  │  │ Section: In the Beginning      [🎨 BG] [📐 Type]│    │   │
-│  │  └──────────────────────────────────────────────────┘    │   │
-│  │                                                          │   │
-│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
-│  │   ┊  [📷] [📷] [📷] [📷]           [Gallery ✏️]  ┊◄────┼── Click opens      │
-│  │   ┊  [📷] [📷] [📷] [📷]                         ┊     │   │   table editor    │
-│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │   in a drawer     │
-│  └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘   │
-│                                                                  │
-│                                          ┌─────────────────┐     │
-│                                          │  ✏️ Edit Mode   │◄── Floating toggle │
-│                                          └─────────────────┘     │
-└──────────────────────────────────────────────────────────────────┘
+[Sections]  [✨ AI Builder]
 ```
 
-**Clicking a block opens an inline popover:**
-```text
-  ┌──────────────────────────────────┐
-  │  GALLERY              ← live text, contentEditable
-  ├──────────────────────────────────┤
-  │  Type: [Heading ▾]              │
-  │  ────────────────────────────── │
-  │  [Save]  [Cancel]  [🗑 Delete]  │
-  └──────────────────────────────────┘
+The AI Builder tab receives `page` and `password` props, same as the section list.
+
+### Modified: `supabase/functions/ai-layout/index.ts`
+
+Add a `mode: 'build'` code path alongside the existing "clean up" flow:
+
+**Input:**
+```json
+{
+  "password": "...",
+  "mode": "build",
+  "page": "home",
+  "label": "About Us",
+  "columns": 2,
+  "textBlocks": ["<p>Rich text HTML...</p>", "<p>Second block...</p>"],
+  "images": ["https://...jpg", "https://...png"],
+  "links": [{"label": "Learn More", "url": "/about"}]
+}
 ```
 
-**For images/data_cards, clicking opens a side drawer with the table editor:**
-```text
-  ┌─────────────────────────────────────┐
-  │  ✕  Editing: gallery_photos         │
-  │─────────────────────────────────────│
-  │  [MiniTableEditor rows here]        │
-  │  image_url | section | caption      │
-  │  ───────── ──────── ─────────       │
-  │  url1.jpg  | begin  | Fun day       │
-  │  url2.jpg  | begin  | More fun      │
-  │  ...                                │
-  │  [+ Add Row]                        │
-  └─────────────────────────────────────┘
+**AI prompt:** Asks the model to arrange the provided content pieces into blocks with `block_type`, `content`, `column_index` (0-based, max = columns-1), and `row_order`. Also picks a `layout_template`.
+
+**Output:**
+```json
+{
+  "template": "split-left",
+  "blocks": [
+    {"block_type": "richtext", "content": {...}, "column_index": 0, "row_order": 0},
+    {"block_type": "image", "content": {"url": "..."}, "column_index": 1, "row_order": 0},
+    {"block_type": "button", "content": {"text": "Learn More", "url": "/about"}, "column_index": 0, "row_order": 1}
+  ]
+}
 ```
 
-### Key Rules
+The edge function then:
+1. Inserts a `page_section` row
+2. Bulk-inserts all `section_content_blocks` rows
+3. Returns the section ID + template
 
-1. **Desktop only (>768px)**: The floating "Edit Mode" button only renders on desktop. On mobile, admins use /klawsome-admin as-is.
-2. **Mobile layout is automatic**: The responsive CSS already handles mobile — no need to edit layout at phone size.
-3. **Same /klawsome-admin for both**: The block-style editor at /klawsome-admin remains unchanged and works on all devices.
+For **Remix** (`mode: 'remix'`), it takes an existing `section_id`, reads current blocks, re-calls AI requesting a different arrangement, then updates blocks' `column_index`/`row_order` and the section's `layout_template`.
 
-### Interaction Flow
+### Files Summary
 
-1. Admin visits any page on desktop, clicks floating "✏️ Edit" button
-2. Password prompt (same ADMIN_PASSWORD, stored in sessionStorage)
-3. Every section gets a toolbar overlay (bg color, section type, animation)
-4. Every content block gets a dashed hover outline with type badge
-5. Click a text block → contentEditable inline + save/cancel popover
-6. Click an image block → upload/URL popover
-7. Click a data_cards block → side drawer with MiniTableEditor
-8. "Add Section" buttons between sections, "Add Block" at bottom of each section
-9. All saves go through the existing `cms-admin` edge function
-
-### Files
-
-| File | Change |
+| File | Action |
 |------|--------|
-| `src/contexts/EditModeContext.tsx` | **New** — Context with `isEditMode`, auth state, `useIsMobile()` gate |
-| `src/components/EditModeToggle.tsx` | **New** — Floating button, hidden on mobile via `useIsMobile()` |
-| `src/components/EditableWrapper.tsx` | **New** — Hover outline + click popover per block type |
-| `src/components/SectionToolbar.tsx` | **New** — Section controls (bg, type, layout, add/delete) |
-| `src/components/DynamicSection.tsx` | **Edit** — Wrap `BlockRenderer` in `EditableWrapper` when edit mode on |
-| `src/components/SectionWrapper.tsx` | **Edit** — Show `SectionToolbar` when edit mode on |
-| `src/App.tsx` | **Edit** — Wrap in `EditModeProvider` |
-
-### What Stays the Same
-- /klawsome-admin works on all devices, unchanged
-- All rendering logic unchanged — edit mode is purely an overlay
-- No new database tables needed
-- No drag-and-drop (use arrow buttons for reordering)
+| `src/components/AIBuilderTab.tsx` | **Create** — full AI builder form |
+| `src/pages/KlawsomeAdmin.tsx` | **Modify** — add sub-tabs in PageBuilder |
+| `supabase/functions/ai-layout/index.ts` | **Modify** — add `build` and `remix` modes |
 
