@@ -182,12 +182,72 @@ function SplitTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, med
 // ═══════════════════════════════════════════════════════════
 // TEMPLATE: Card Grid
 // ═══════════════════════════════════════════════════════════
+const CARD_BLOCK_TYPES = [
+  { type: 'image', icon: '🖼', label: 'Image' },
+  { type: 'icon_box', icon: '✨', label: 'Icon' },
+];
+
 function CardGridTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, isHero, blocks }: TemplateProps & { blocks: SectionContentBlock[] }) {
-  const contentBlocks = [...mediaBlocks, ...widgetBlocks];
+  const { isEditMode, cmsInvoke, triggerRefresh } = useEditMode();
   const headings = headerBlocks.filter(b => b.block_type === 'heading');
-  const bodyBlocks = headerBlocks.filter(b => b.block_type !== 'heading');
-  const cardBlocks = [...bodyBlocks, ...contentBlocks];
-  const cols = cardBlocks.length <= 2 ? 'md:grid-cols-2' : cardBlocks.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+  const nonHeadingBlocks = blocks.filter(b => b.block_type !== 'heading' && b.block_type !== 'button');
+
+  // Group by column_index to form cards
+  const cardMap = new Map<number, SectionContentBlock[]>();
+  nonHeadingBlocks.forEach(b => {
+    const col = b.column_index ?? 0;
+    if (!cardMap.has(col)) cardMap.set(col, []);
+    cardMap.get(col)!.push(b);
+  });
+  const cards = Array.from(cardMap.entries()).sort(([a], [b]) => a - b);
+  const colCount = cards.length <= 2 ? 'md:grid-cols-2' : cards.length === 3 ? 'md:grid-cols-3' : 'md:grid-cols-2 lg:grid-cols-4';
+
+  const addSubBlock = async (columnIndex: number, blockType: string) => {
+    const defaultContent: Record<string, any> =
+      blockType === 'image' ? { url: '', alt: '' } :
+      blockType === 'icon_box' ? { items: [{ icon: '⭐', title: 'Feature', description: 'Description' }] } :
+      {};
+    const existingInCol = nonHeadingBlocks.filter(b => (b.column_index ?? 0) === columnIndex);
+    const maxRow = existingInCol.length > 0 ? Math.max(...existingInCol.map(b => b.row_order)) + 1 : 0;
+    try {
+      await cmsInvoke({
+        action: 'insert',
+        table: 'section_content_blocks',
+        data: {
+          section_id: blocks[0]?.section_id,
+          column_index: columnIndex,
+          row_order: maxRow,
+          block_type: blockType,
+          content: defaultContent,
+        },
+      });
+      toast.success('Block added to card');
+      triggerRefresh();
+    } catch (e: any) {
+      toast.error(e.message || 'Failed to add block');
+    }
+  };
+
+  const addNewCard = async () => {
+    const nextCol = cards.length > 0 ? Math.max(...cards.map(([c]) => c)) + 1 : 1;
+    try {
+      await cmsInvoke({
+        action: 'insert',
+        table: 'section_content_blocks',
+        data: {
+          section_id: blocks[0]?.section_id,
+          column_index: nextCol,
+          row_order: 0,
+          block_type: 'text',
+          content: { text: 'New card content' },
+        },
+      });
+      toast.success('Card added');
+      triggerRefresh();
+    } catch (e: any) {
+      toast.error(e.message || 'Failed to add card');
+    }
+  };
 
   return (
     <div className="space-y-10">
@@ -196,13 +256,38 @@ function CardGridTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, 
           {headings.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
-      {cardBlocks.length > 0 && (
-        <div className={`grid grid-cols-1 ${cols} gap-6`}>
-          {cardBlocks.map(b => (
-            <div key={b.id} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow">
-              <EditableBlock block={b} isHero={false} />
+      {cards.length > 0 && (
+        <div className={`grid grid-cols-1 ${colCount} gap-6`}>
+          {cards.map(([colIdx, cardBlocks]) => (
+            <div key={colIdx} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow space-y-3">
+              {cardBlocks.sort((a, b) => a.row_order - b.row_order).map(b => (
+                <EditableBlock key={b.id} block={b} isHero={false} />
+              ))}
+              {isEditMode && (
+                <div className="flex flex-wrap justify-center gap-1 pt-2 border-t border-dashed border-border/50">
+                  {CARD_BLOCK_TYPES.map(bt => (
+                    <button
+                      key={bt.type}
+                      onClick={() => addSubBlock(colIdx, bt.type)}
+                      className="text-xs px-2 py-1 rounded bg-muted hover:bg-primary/10 text-muted-foreground hover:text-primary transition-colors"
+                    >
+                      {bt.icon} {bt.label}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
           ))}
+        </div>
+      )}
+      {isEditMode && (
+        <div className="flex justify-center">
+          <button
+            onClick={addNewCard}
+            className="text-sm px-4 py-2 rounded-lg border-2 border-dashed border-primary/30 text-primary hover:bg-primary/5 transition-colors"
+          >
+            + Add Card
+          </button>
         </div>
       )}
       {ctaBlocks.length > 0 && (
