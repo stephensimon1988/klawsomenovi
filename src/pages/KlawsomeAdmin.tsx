@@ -266,8 +266,6 @@ const BLOCK_TYPES = [
   { type: 'icon_box', icon: '💎', label: 'Icon Box' },
   { type: 'countdown', icon: '⏱', label: 'Countdown' },
   { type: 'carousel', icon: '🎠', label: 'Carousel' },
-  
-  { type: 'hours', icon: '🕐', label: 'Store Hours' },
   { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
   { type: 'data_cards', icon: '📊', label: 'Data Cards' },
 ];
