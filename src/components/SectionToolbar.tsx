@@ -121,23 +121,23 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   };
 
   return (
-    <div className="relative z-20 w-full">
+    <div className="relative z-20 w-full" style={{ color: 'hsl(var(--foreground))' }}>
       {/* Compact toolbar */}
-      <div className="flex items-center gap-2 bg-background/95 backdrop-blur border-b border-border px-3 py-1.5 rounded-b-lg shadow-lg">
+      <div className="flex items-center gap-2 bg-background backdrop-blur border-b border-border px-3 py-1.5 rounded-b-lg shadow-lg text-foreground">
         <span className="font-heading font-bold text-xs text-foreground truncate flex-1">
           {config.label || config.section_key}
         </span>
 
-        <Button size="sm" variant="ghost" onClick={() => moveSection('up')} className="h-6 w-6 p-0">
+        <Button size="sm" variant="ghost" onClick={() => moveSection('up')} className="h-6 w-6 p-0 text-foreground">
           <ArrowUp className="w-3 h-3" />
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => moveSection('down')} className="h-6 w-6 p-0">
+        <Button size="sm" variant="ghost" onClick={() => moveSection('down')} className="h-6 w-6 p-0 text-foreground">
           <ArrowDown className="w-3 h-3" />
         </Button>
-        <Button size="sm" variant="ghost" onClick={toggleVisibility} className="h-6 w-6 p-0">
+        <Button size="sm" variant="ghost" onClick={toggleVisibility} className="h-6 w-6 p-0 text-foreground">
           {config.is_visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3 text-muted-foreground" />}
         </Button>
-        <Button size="sm" variant="ghost" onClick={() => setExpanded(!expanded)} className="h-6 px-2 text-xs font-heading">
+        <Button size="sm" variant="ghost" onClick={() => setExpanded(!expanded)} className="h-6 px-2 text-xs font-heading text-foreground">
           <Settings className="w-3 h-3 mr-1" />
           {expanded ? 'Close' : 'Settings'}
         </Button>
@@ -148,7 +148,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
 
       {/* Expanded settings */}
       {expanded && (
-        <div className="bg-background/95 backdrop-blur border border-b-0 border-border rounded-b-lg p-4 shadow-lg space-y-4">
+        <div className="bg-background backdrop-blur border border-b-0 border-border rounded-b-lg p-4 shadow-lg space-y-4 text-foreground">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* BG Color */}
             <div className="space-y-1">
