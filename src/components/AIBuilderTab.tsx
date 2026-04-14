@@ -84,6 +84,8 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
       if (data?.error) throw new Error(data.error);
 
       setCreatedSectionId(data.section_id);
+      setCreatedTemplate(data.template);
+      setPreviewKey(k => k + 1);
       toast.success(`Section created with "${data.template}" layout ✨`);
       onSectionCreated?.();
     } catch (e: any) {
