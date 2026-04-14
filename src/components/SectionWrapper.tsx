@@ -173,6 +173,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
       style={sectionStyle}
       className={custom_css_class || undefined}
     >
+      {isEditMode && <SectionToolbar config={config} />}
       {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" aria-hidden="true" />}
 
       <div
