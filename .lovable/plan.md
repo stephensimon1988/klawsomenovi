@@ -1,76 +1,107 @@
 
 
-## Plan: Transfer All Content from klawsomenovi.com into CMS
+## Plan: Desktop-Only Inline Edit Mode
 
-### Summary
+### UI Concept
 
-Transfer all content and images from the 8 Squarespace pages into our CMS system. Create 4 new page routes (/gallery, /ourstory, /rewards, /faq), populate all database tables with real content, and create page_sections + content blocks for every page.
+Here's what the editor looks like on desktop. On mobile, the existing /klawsome-admin block editor is used instead.
 
-### What Already Exists (skip or update)
+```text
+┌──────────────────────────────────────────────────────────────────┐
+│  HOME   BIRTHDAYS   GIFT CARDS   CAREERS   NEWS   ...   BOOK   │
+├──────────────────────────────────────────────────────────────────┤
+│                                                                  │
+│  ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐   │
+│  │  ┌──────────────────────────────────────────────────┐    │   │
+│  │  │ Section: Gallery Hero          [🎨 BG] [📐 Type]│◄───┼── Section toolbar  │
+│  │  └──────────────────────────────────────────────────┘    │   │
+│  │                                                          │   │
+│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
+│  │   ┊  GALLERY                          [Heading ✏️]┊◄────┼── Hover = dashed   │
+│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │   blue outline    │
+│  │                                                          │   │
+│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
+│  │   ┊  Check out our space!             [Text ✏️]   ┊     │   │
+│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │
+│  │                                        [+ Add Block]     │   │
+│  └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘   │
+│                         [+ Add Section]                          │
+│  ┌─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┐   │
+│  │  ┌──────────────────────────────────────────────────┐    │   │
+│  │  │ Section: In the Beginning      [🎨 BG] [📐 Type]│    │   │
+│  │  └──────────────────────────────────────────────────┘    │   │
+│  │                                                          │   │
+│  │   ┌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┐     │   │
+│  │   ┊  [📷] [📷] [📷] [📷]           [Gallery ✏️]  ┊◄────┼── Click opens      │
+│  │   ┊  [📷] [📷] [📷] [📷]                         ┊     │   │   table editor    │
+│  │   └╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌╌┘     │   │   in a drawer     │
+│  └─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ─ ┘   │
+│                                                                  │
+│                                          ┌─────────────────┐     │
+│                                          │  ✏️ Edit Mode   │◄── Floating toggle │
+│                                          └─────────────────┘     │
+└──────────────────────────────────────────────────────────────────┘
+```
 
-| Page | Route | Status |
-|------|-------|--------|
-| Home | `/` | Exists — update data in tables |
-| Birthdays | `/birthdays` | Exists — update data in tables |
-| Careers | `/careers` | Exists — update job_listings data |
-| News | `/news` | Exists — update news_articles data |
+**Clicking a block opens an inline popover:**
+```text
+  ┌──────────────────────────────────┐
+  │  GALLERY              ← live text, contentEditable
+  ├──────────────────────────────────┤
+  │  Type: [Heading ▾]              │
+  │  ────────────────────────────── │
+  │  [Save]  [Cancel]  [🗑 Delete]  │
+  └──────────────────────────────────┘
+```
 
-### What Needs to Be Created
+**For images/data_cards, clicking opens a side drawer with the table editor:**
+```text
+  ┌─────────────────────────────────────┐
+  │  ✕  Editing: gallery_photos         │
+  │─────────────────────────────────────│
+  │  [MiniTableEditor rows here]        │
+  │  image_url | section | caption      │
+  │  ───────── ──────── ─────────       │
+  │  url1.jpg  | begin  | Fun day       │
+  │  url2.jpg  | begin  | More fun      │
+  │  ...                                │
+  │  [+ Add Row]                        │
+  └─────────────────────────────────────┘
+```
 
-| Page | Route | Content |
-|------|-------|---------|
-| Gallery | `/gallery` | Hero + 3 photo gallery sections (In the Beginning, Private Party, Semi-Private) |
-| Our Story | `/ourstory` | Our Story intro, Where It All Began, Bringing Our Culture sections with images |
-| Rewards | `/rewards` | Loyalty hero, membership benefits, lifetime tiers table, points redeemable table |
-| FAQ | `/faq` | Hero + 3 FAQ sections (General, Plushies/Upgrades/Trade-Ins, Miscellaneous) |
+### Key Rules
 
-### Work Breakdown
+1. **Desktop only (>768px)**: The floating "Edit Mode" button only renders on desktop. On mobile, admins use /klawsome-admin as-is.
+2. **Mobile layout is automatic**: The responsive CSS already handles mobile — no need to edit layout at phone size.
+3. **Same /klawsome-admin for both**: The block-style editor at /klawsome-admin remains unchanged and works on all devices.
 
-**1. Create 4 new page components**
-- `src/pages/Gallery.tsx`, `src/pages/OurStory.tsx`, `src/pages/Rewards.tsx`, `src/pages/Faq.tsx`
-- All follow the same pattern as `News.tsx` / `Careers.tsx` (KawaiiNav + usePageSections loop + KawaiiFooter)
+### Interaction Flow
 
-**2. Add routes in App.tsx**
-- `/gallery`, `/ourstory`, `/rewards`, `/faq`
+1. Admin visits any page on desktop, clicks floating "✏️ Edit" button
+2. Password prompt (same ADMIN_PASSWORD, stored in sessionStorage)
+3. Every section gets a toolbar overlay (bg color, section type, animation)
+4. Every content block gets a dashed hover outline with type badge
+5. Click a text block → contentEditable inline + save/cancel popover
+6. Click an image block → upload/URL popover
+7. Click a data_cards block → side drawer with MiniTableEditor
+8. "Add Section" buttons between sections, "Add Block" at bottom of each section
+9. All saves go through the existing `cms-admin` edge function
 
-**3. Update navigation**
-- Update `KawaiiNav.tsx` navLinks to match klawsomenovi.com nav: Home, Birthdays, Gift Cards, Careers, + More dropdown with Gallery, Our Story, Rewards, News, FAQ
+### Files
 
-**4. Create new data table: `rewards_tiers`**
-- Columns: `tier_name` (text), `min_points` (text), `benefit` (text), `sort_order` (int)
-- Data: Base (0, x1), Collector (500, x1.2), Master Of The Claw (1500, x1.4), Legendary (4000, x1.7)
+| File | Change |
+|------|--------|
+| `src/contexts/EditModeContext.tsx` | **New** — Context with `isEditMode`, auth state, `useIsMobile()` gate |
+| `src/components/EditModeToggle.tsx` | **New** — Floating button, hidden on mobile via `useIsMobile()` |
+| `src/components/EditableWrapper.tsx` | **New** — Hover outline + click popover per block type |
+| `src/components/SectionToolbar.tsx` | **New** — Section controls (bg, type, layout, add/delete) |
+| `src/components/DynamicSection.tsx` | **Edit** — Wrap `BlockRenderer` in `EditableWrapper` when edit mode on |
+| `src/components/SectionWrapper.tsx` | **Edit** — Show `SectionToolbar` when edit mode on |
+| `src/App.tsx` | **Edit** — Wrap in `EditModeProvider` |
 
-**5. Create new data table: `rewards_redemptions`**
-- Columns: `points` (text), `reward` (text), `sort_order` (int)
-- Data: 250/Free mini plushie, 500/Free Regular Plushie, 1000/Any XL plushie
-
-**6. Create new data table: `gallery_photos`**
-- Columns: `section` (text), `image_url` (text), `caption` (text), `sort_order` (int)
-- Data: ~40+ photos from the gallery page organized by section (beginning, private_party, semi_private)
-
-**7. Insert/update data in existing tables**
-
-- **`faq_items`**: Insert all ~25 FAQ Q&As from the FAQ page with `page` categories: "general", "plushies", "miscellaneous" — plus the ~15 birthday-specific FAQs from the events page with page "birthdays"
-- **`news_articles`**: Insert/update 6 articles (Little Guide Detroit, Hour Detroit, Michigan Mama News, Hometown Life, @clawcraziness TikTok, @Zcaders YouTube) with correct titles, dates, URLs, and Squarespace image URLs
-- **`job_listings`**: Insert/update all positions: Assistant Store Manager, Store Associate, Internship, Corporate Development Fellow, General Manager, Purchasing Specialist, Events Assistant Manager — with descriptions, job_desc_urls, apply_urls, is_paid flags
-- **`party_options`**: Update with Private ($250, features list) and Reserved Semi-Private ($250, features list)
-- **`token_tiers`**: Update with $10/10, $30/35 (16%), $50/60 (20%), $100/125 (25%), $250/325 (30% TOP PICK)
-- **`homepage_content`**: Update hero headline, subheadline, story text with actual klawsomenovi.com content
-- **`birthdays_content`**: Update with party rules text, promo text, booking contact info
-
-**8. Create page_sections + section_content_blocks for all pages**
-
-For each new page, insert `page_sections` rows with section_type/layout_template, then `section_content_blocks` rows with the actual content (headings, text, images, data_cards blocks pointing to the right tables).
-
-For existing pages (home, birthdays, careers, news), verify sections exist and add any missing ones.
-
-### Technical Details
-
-- **New files**: `src/pages/Gallery.tsx`, `src/pages/OurStory.tsx`, `src/pages/Rewards.tsx`, `src/pages/Faq.tsx`
-- **Edited files**: `src/App.tsx` (add routes), `src/components/KawaiiNav.tsx` (update nav links)
-- **DB migration**: Create `rewards_tiers`, `rewards_redemptions`, `gallery_photos` tables with RLS
-- **Data inserts**: Bulk insert into faq_items, news_articles, job_listings, party_options, token_tiers, homepage_content, birthdays_content, gallery_photos, rewards_tiers, rewards_redemptions, page_sections, section_content_blocks
-- All images will reference the Squarespace CDN URLs directly (they're publicly accessible)
-- All content blocks use the existing `data_cards` system for database-driven content
-- No AI calls needed — all deterministic content transfer
+### What Stays the Same
+- /klawsome-admin works on all devices, unchanged
+- All rendering logic unchanged — edit mode is purely an overlay
+- No new database tables needed
+- No drag-and-drop (use arrow buttons for reordering)
 
