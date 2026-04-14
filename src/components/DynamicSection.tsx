@@ -431,6 +431,21 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
 
   const colsClass = columnCount === 2 ? 'md:grid-cols-2' : columnCount === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3';
 
+  // ── Gallery (image grid) ──
+  if (display === 'grid' || display === 'gallery') {
+    return (
+      <div className={`grid grid-cols-2 ${colsClass} gap-3`}>
+        {items.map((item, i) => (
+          <div key={i} className="rounded-xl overflow-hidden bg-muted aspect-square">
+            {item.image && (
+              <img src={item.image} alt={item.description || item.title || ''} className="w-full h-full object-cover hover:scale-105 transition-transform duration-300" loading="lazy" />
+            )}
+          </div>
+        ))}
+      </div>
+    );
+  }
+
   // ── Hours ──
   if (display === 'hours') {
     return (
