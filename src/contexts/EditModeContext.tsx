@@ -26,11 +26,15 @@ export function useEditMode() {
 export function EditModeProvider({ children }: { children: React.ReactNode }) {
   const isMobile = useIsMobile();
   const [isEditMode, setIsEditMode] = useState(false);
+  const queryClient = useQueryClient();
   const [password, setPassword] = useState(() => sessionStorage.getItem('cms_password') || '');
   const [isAuthenticated, setIsAuthenticated] = useState(() => !!sessionStorage.getItem('cms_password'));
   const [refreshKey, setRefreshKey] = useState(0);
 
-  const triggerRefresh = useCallback(() => setRefreshKey(k => k + 1), []);
+  const triggerRefresh = useCallback(() => {
+    setRefreshKey(k => k + 1);
+    queryClient.invalidateQueries();
+  }, [queryClient]);
 
   const authenticate = useCallback(async (pwd: string) => {
     try {
