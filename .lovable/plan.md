@@ -1,67 +1,43 @@
 
 
-## Plan: Consolidate Widget Blocks into Data Cards + Custom Table Creator
+## Plan: Spreadsheet-Style Table Creator
 
-### The Problem
+Replace the current developer-oriented table creation form (snake_case names, type dropdowns) with an intuitive spreadsheet-style WYSIWYG builder.
 
-Right now there are **two systems** for showing database content in sections:
-
-1. **Dedicated widget blocks** (`jobs`, `faq`, `news`, `pricing`, `hours`, `reviews`, `party_options`, `templates`) — each hardcoded to one table with a fixed layout. In the admin they just say "This block pulls from the database" with no configuration.
-
-2. **Data Cards block** — already supports mapping *any* DB table to cards/pricing/list/accordion displays, with column mappings and presets.
-
-These overlap. The user wants to eliminate the dedicated widgets and make Data Cards the universal approach, plus add the ability to create new data tables from the admin.
+### How It Works Now
+Users must manually type column names in snake_case, pick types from a dropdown, then create the table. It feels like a database tool, not a content tool.
 
 ### What Changes
 
-**Phase 1: Remove dedicated widget blocks, unify into Data Cards**
+**Replace the creator UI with a visual spreadsheet builder:**
 
-- **DynamicSection.tsx**: Remove the individual widget functions (`PricingWidget`, `HoursWidget`, `NewsWidget`, `FaqWidget`, `JobsWidget`, `PartyOptionsWidget`, `TemplatesWidget`). Keep `ReviewsWidget` (it calls an edge function, not a table). Keep `DataCardsWidget` as the single renderer.
-- Remove `pricing`, `hours`, `news`, `faq`, `jobs`, `party_options`, `templates` from `WIDGET_TYPES` and the block type menu.
-- Add new display styles to `DataCardsWidget`: `hours` (day/time pairs), `faq-accordion` (Q&A with expand/collapse) so the existing visual styles aren't lost.
-- Existing sections using old block types will need a one-time data migration to convert them to `data_cards` blocks with the correct preset mappings.
+1. **Step 1 — Name it**: Just two fields: "What do you want to call this table?" (e.g. "Team Members") and auto-generate the snake_case name from it.
 
-**Phase 2: Custom Data Table Creator in Admin**
+2. **Step 2 — Design columns visually**: A live spreadsheet-style grid where:
+   - Click "+" to add a column — a popover asks for column name and type via friendly labels ("Short Text", "Long Text", "Number", "Yes/No", "Image", "List")
+   - Column headers are editable inline
+   - Type is shown as a small icon/badge in the header (camera icon for image, toggle for yes/no, etc.)
+   - Users can drag to reorder columns (optional, can skip for simplicity)
+   - A sample empty row is shown so they can visualize what data entry will look like
 
-- Add a new section in the Settings tab: **"Custom Data Tables"**
-- UI lets the admin:
-  1. Enter a table name (e.g. `menu_items`, `team_members`)
-  2. Define columns: name, type (text, number, bool, array, textarea, image URL), required/optional
-  3. Click "Create Table" — calls a new edge function
-- **New edge function `cms-create-table`**: Accepts table name + column definitions, runs `CREATE TABLE` with RLS (public read), adds it to the `TABLES_ALLOWED` list dynamically
-- Store table definitions in a new `cms_custom_tables` metadata table so the admin knows which custom tables exist and their column schemas
-- Auto-generate `MiniTableEditor` instances for each custom table in the Settings tab
-- Auto-populate the Data Cards "Source" dropdown with custom tables
+3. **Step 3 — Click "Create"**: Same edge function call, just friendlier packaging.
 
-**Phase 3: Migration for existing content**
+**Auto-generate snake_case**: When user types "Team Members" as label, auto-fill table name as `team_members`. User never sees snake_case unless they want to.
 
-- SQL migration to convert all existing `section_content_blocks` rows with `block_type` in (`pricing`, `hours`, `news`, `faq`, `jobs`, `party_options`, `templates`) to `block_type = 'data_cards'` with the correct preset content JSON.
+**Friendly type labels**: Map user-friendly names to internal types:
+- "Short Text" → `text`
+- "Long Text" → `textarea`  
+- "Number" → `number`
+- "Yes/No" → `bool`
+- "Image" → `image_url`
+- "List" → `array`
 
-### Technical Details
+### Files Changed
 
-**New DB table: `cms_custom_tables`**
-```
-id           uuid PK
-table_name   text UNIQUE NOT NULL
-label        text NOT NULL
-columns      jsonb NOT NULL  -- [{key, label, type, required}]
-created_at   timestamptz
-```
+- **`src/pages/KlawsomeAdmin.tsx`** — Replace `CustomTableCreator` with the new spreadsheet-style UI. Same edge function, same data flow, just a much friendlier interface.
 
-**New edge function: `cms-create-table`**
-- Accepts: password, table_name, label, columns definition
-- Validates name (alphanumeric + underscores only)
-- Runs: `CREATE TABLE public.<name> (id uuid PK, sort_order int, <dynamic columns>)`
-- Enables RLS with public SELECT
-- Inserts metadata into `cms_custom_tables`
-- Adds table to `cms-admin` allowed list (by reading `cms_custom_tables` dynamically instead of a hardcoded array)
-
-**cms-admin update**: Change `TABLES_ALLOWED` from hardcoded to: hardcoded base list + dynamic lookup from `cms_custom_tables`.
-
-**Files changed:**
-- `src/components/DynamicSection.tsx` — remove 7 widget functions, add display styles to DataCardsWidget
-- `src/pages/KlawsomeAdmin.tsx` — remove old block types from menu, add Custom Table Creator UI, dynamic MiniTableEditor for custom tables
-- `supabase/functions/cms-admin/index.ts` — dynamic TABLES_ALLOWED
-- New: `supabase/functions/cms-create-table/index.ts`
-- Migration: `cms_custom_tables` table + convert existing widget blocks to data_cards
+### What Stays the Same
+- Edge function `cms-create-table` — no changes needed
+- `MiniTableEditor` for editing rows after creation — no changes
+- `cms-admin` dynamic table lookup — no changes
 
