@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useEditMode } from '@/contexts/EditModeContext';
-import { Pencil, Save, X, Trash2 } from 'lucide-react';
+import { Pencil, Save, X, Trash2, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import MediaLibraryPicker from '@/components/MediaLibraryPicker';
 import type { SectionContentBlock } from '@/hooks/useCmsContent';
 
 interface EditableWrapperProps {
