@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, lazy, Suspense } from 'react';
 import { useEditMode } from '@/contexts/EditModeContext';
 import { Pencil, Save, X, Trash2, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -7,6 +7,8 @@ import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
 import MediaLibraryPicker from '@/components/MediaLibraryPicker';
 import type { SectionContentBlock } from '@/hooks/useCmsContent';
+
+const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
 
 interface EditableWrapperProps {
   block: SectionContentBlock;
@@ -87,12 +89,15 @@ const EditableWrapper = ({ block, children }: EditableWrapperProps) => {
       case 'richtext':
         return (
           <div className="space-y-2">
-            <Textarea
-              value={editContent.html || editContent.text || ''}
-              onChange={e => setEditContent({ ...editContent, html: e.target.value })}
-              className="text-sm min-h-[120px] font-mono"
-              placeholder="HTML content..."
-            />
+            <Suspense fallback={<div className="h-32 bg-muted rounded animate-pulse" />}>
+              <div className="bg-white rounded-lg">
+                <RichTextEditor
+                  value={editContent.html || editContent.text || ''}
+                  onChange={val => setEditContent({ ...editContent, html: val })}
+                  placeholder="Edit content…"
+                />
+              </div>
+            </Suspense>
           </div>
         );
       case 'image':
