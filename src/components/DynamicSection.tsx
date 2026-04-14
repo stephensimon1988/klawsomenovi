@@ -5,6 +5,7 @@ import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect, useRef } from 'react';
 import { Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { toast } from 'sonner';
 import EditableWrapper from '@/components/EditableWrapper';
 import { useEditMode } from '@/contexts/EditModeContext';
 
