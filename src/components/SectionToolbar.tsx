@@ -9,6 +9,7 @@ import { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
 import { ANIMATION_PRESETS } from '@/components/SectionWrapper';
 import type { PageSectionConfig } from '@/components/SectionWrapper';
 import ColorPickerField from '@/components/ColorPickerField';
+import ImageUploadField from '@/components/ImageUploadField';
 
 interface SectionToolbarProps {
   config: PageSectionConfig;
