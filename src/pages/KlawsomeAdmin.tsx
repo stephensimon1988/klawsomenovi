@@ -767,9 +767,10 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                     token_tiers: { source: 'token_tiers', mappings: { title: 'tokens', price: 'price', description: 'bonus', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 4 },
                     faq_items: { source: 'faq_items', mappings: { title: 'question', description: 'answer' }, display: 'accordion', columns: 1 },
                     job_listings: { source: 'job_listings', mappings: { title: 'title', description: 'description', image: 'image_url', link: 'apply_url' }, display: 'list', columns: 1 },
-                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'card-grid', columns: 3 },
+                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'news-grid', columns: 3 },
                     business_pricing_tiers: { source: 'business_pricing_tiers', mappings: { title: 'name', price: 'price', features: 'features', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 3 },
                     invite_templates: { source: 'invite_templates', mappings: { title: 'name', image: 'thumbnail_url', link: 'url' }, display: 'card-grid', columns: 2 },
+                    store_hours: { source: 'store_hours', mappings: { title: 'day_label', description: 'open_time', extra: 'close_time', highlight: 'is_closed' }, display: 'hours', columns: 1 },
                   };
                   setLocalContent({ ...localContent, ...p[preset.key] });
                 }}
