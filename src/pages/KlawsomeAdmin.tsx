@@ -1290,7 +1290,18 @@ function CustomTableCreator({ password }: { password: string }) {
       const { data, error } = await supabase.functions.invoke('cms-create-table', {
         body: { password, table_name: tableName, label: tableLabel, columns: validCols },
       });
-      if (error) throw error;
+      if (error) {
+        // Try to extract the actual error message from the response
+        const ctx = (error as any).context;
+        let msg = error.message;
+        try {
+          if (ctx && typeof ctx.json === 'function') {
+            const body = await ctx.json();
+            if (body?.error) msg = body.error;
+          }
+        } catch {}
+        throw new Error(msg);
+      }
       if (data?.error) throw new Error(data.error);
       toast.success(`Table "${tableLabel}" created!`);
       setTableName('');
