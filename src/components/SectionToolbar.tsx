@@ -38,6 +38,10 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   const [sectionType, setSectionType] = useState(config.section_type || 'section');
   const [heroHeight, setHeroHeight] = useState(config.hero_height || '100vh');
   const [label, setLabel] = useState(config.label || '');
+  const [paddingY, setPaddingY] = useState(config.padding_y || '');
+  const [wrapperMaxWidth, setWrapperMaxWidth] = useState(config.wrapper_max_width || '');
+  const [textColor, setTextColor] = useState(config.text_color || '');
+  const [customCssClass, setCustomCssClass] = useState(config.custom_css_class || '');
   const [saving, setSaving] = useState(false);
 
   const saveSectionSettings = async (updates: Record<string, any>) => {
@@ -263,6 +267,56 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
               }}
               label=""
             />
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            {/* Padding Y */}
+            <div className="space-y-1">
+              <label className="text-xs font-heading text-muted-foreground">Padding Y</label>
+              <Input
+                value={paddingY}
+                onChange={e => setPaddingY(e.target.value)}
+                onBlur={() => saveSectionSettings({ padding_y: paddingY })}
+                className="h-8 text-xs bg-background border-border text-foreground"
+                placeholder="e.g. 4rem"
+              />
+            </div>
+
+            {/* Max Width */}
+            <div className="space-y-1">
+              <label className="text-xs font-heading text-muted-foreground">Max Width</label>
+              <Input
+                value={wrapperMaxWidth}
+                onChange={e => setWrapperMaxWidth(e.target.value)}
+                onBlur={() => saveSectionSettings({ wrapper_max_width: wrapperMaxWidth })}
+                className="h-8 text-xs bg-background border-border text-foreground"
+                placeholder="e.g. 1200px"
+              />
+            </div>
+
+            {/* Text Color */}
+            <div className="space-y-1">
+              <label className="text-xs font-heading text-muted-foreground">Text Color</label>
+              <Input
+                value={textColor}
+                onChange={e => setTextColor(e.target.value)}
+                onBlur={() => saveSectionSettings({ text_color: textColor })}
+                className="h-8 text-xs bg-background border-border text-foreground"
+                placeholder="e.g. #ffffff"
+              />
+            </div>
+
+            {/* CSS Class */}
+            <div className="space-y-1">
+              <label className="text-xs font-heading text-muted-foreground">CSS Class</label>
+              <Input
+                value={customCssClass}
+                onChange={e => setCustomCssClass(e.target.value)}
+                onBlur={() => saveSectionSettings({ custom_css_class: customCssClass })}
+                className="h-8 text-xs bg-background border-border text-foreground"
+                placeholder="custom-class"
+              />
+            </div>
           </div>
 
           {/* Add Block */}
