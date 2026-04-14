@@ -410,6 +410,80 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
               ))}
             </div>
           </div>
+
+          {/* AI Builder */}
+          <div className="border-t border-border pt-4 space-y-3">
+            <label className="text-xs font-heading text-muted-foreground flex items-center gap-1">
+              <Sparkles className="w-3 h-3" /> AI Content Builder
+            </label>
+
+            {/* Column Picker */}
+            <div className="space-y-1">
+              <label className="text-[10px] text-muted-foreground">Columns</label>
+              <ToggleGroup type="single" value={aiColumns} onValueChange={v => v && setAiColumns(v)} className="justify-start">
+                {['1', '2', '3', '4'].map(n => (
+                  <ToggleGroupItem key={n} value={n} className="text-xs h-7 px-3">{n}</ToggleGroupItem>
+                ))}
+              </ToggleGroup>
+            </div>
+
+            {/* Text Blocks */}
+            <Accordion type="single" collapsible value={aiAccordion} onValueChange={setAiAccordion}>
+              {aiTextBlocks.map((text, idx) => (
+                <AccordionItem key={idx} value={`ai-text-${idx}`} className="border-border">
+                  <div className="flex items-center gap-2">
+                    <AccordionTrigger className="text-xs py-1 flex-1">
+                      Text {idx + 1} {text.trim() ? '✓' : ''}
+                    </AccordionTrigger>
+                    {aiTextBlocks.length > 1 && (
+                      <Button size="sm" variant="ghost" onClick={() => setAiTextBlocks(prev => prev.filter((_, i) => i !== idx))} className="h-5 w-5 p-0 text-destructive">
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    )}
+                  </div>
+                  <AccordionContent>
+                    <Suspense fallback={<div className="h-24 bg-muted rounded animate-pulse" />}>
+                      <div className="bg-white rounded-lg">
+                        <RichTextEditor value={text} onChange={val => setAiTextBlocks(prev => prev.map((t, i) => i === idx ? val : t))} placeholder="Write content…" />
+                      </div>
+                    </Suspense>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+            <Button size="sm" variant="ghost" onClick={() => { setAiTextBlocks(prev => [...prev, '']); setAiAccordion(`ai-text-${aiTextBlocks.length}`); }} className="text-xs h-6">
+              <Plus className="w-3 h-3 mr-1" />Add Text
+            </Button>
+
+            {/* Images */}
+            <MultiImageUpload value={aiImages} onChange={setAiImages} label="Images" />
+            <Button size="sm" variant="ghost" onClick={() => setAiMediaOpen(true)} className="text-xs h-6">
+              Browse Library
+            </Button>
+            <MediaLibraryPicker open={aiMediaOpen} onClose={() => setAiMediaOpen(false)} onSelect={url => { setAiImages(prev => [...prev, url]); setAiMediaOpen(false); }} />
+
+            {/* Links */}
+            {aiLinks.map((link, idx) => (
+              <div key={idx} className="flex gap-1 items-center">
+                <Input value={link.label} onChange={e => setAiLinks(prev => prev.map((l, i) => i === idx ? { ...l, label: e.target.value } : l))} placeholder="Label" className="h-7 text-xs bg-background border-border text-foreground flex-1" />
+                <Input value={link.url} onChange={e => setAiLinks(prev => prev.map((l, i) => i === idx ? { ...l, url: e.target.value } : l))} placeholder="URL" className="h-7 text-xs bg-background border-border text-foreground flex-1" />
+                <Button size="sm" variant="ghost" onClick={() => setAiLinks(prev => prev.filter((_, i) => i !== idx))} className="h-5 w-5 p-0 text-destructive"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            ))}
+            <Button size="sm" variant="ghost" onClick={() => setAiLinks(prev => [...prev, { label: '', url: '' }])} className="text-xs h-6">
+              <LinkIcon className="w-3 h-3 mr-1" />Add Link
+            </Button>
+
+            {/* Actions */}
+            <div className="flex gap-2">
+              <Button size="sm" onClick={aiAddContent} disabled={aiBuilding} className="text-xs h-7 font-heading">
+                <Sparkles className="w-3 h-3 mr-1" />{aiBuilding ? 'Creating…' : 'AI Create'}
+              </Button>
+              <Button size="sm" variant="outline" onClick={aiRemix} disabled={aiRemixing} className="text-xs h-7 font-heading">
+                <Shuffle className="w-3 h-3 mr-1" />{aiRemixing ? 'Remixing…' : 'Remix'}
+              </Button>
+            </div>
+          </div>
         </div>
       )}
     </div>
