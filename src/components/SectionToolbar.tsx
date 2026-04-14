@@ -36,7 +36,7 @@ const BLOCK_TYPES = [
 ];
 
 const SectionToolbar = ({ config }: SectionToolbarProps) => {
-  const { cmsInvoke, triggerRefresh } = useEditMode();
+  const { cmsInvoke, triggerRefresh, password } = useEditMode();
   const [expanded, setExpanded] = useState(false);
   const [bgColor, setBgColor] = useState(config.bg_color || '');
   const [bgImageUrl, setBgImageUrl] = useState(config.bg_image_url || '');
@@ -50,6 +50,16 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   const [textColor, setTextColor] = useState(config.text_color || '');
   const [customCssClass, setCustomCssClass] = useState(config.custom_css_class || '');
   const [saving, setSaving] = useState(false);
+
+  // AI Builder state
+  const [aiTextBlocks, setAiTextBlocks] = useState<string[]>(['']);
+  const [aiImages, setAiImages] = useState<string[]>([]);
+  const [aiLinks, setAiLinks] = useState<{ label: string; url: string }[]>([]);
+  const [aiColumns, setAiColumns] = useState('1');
+  const [aiAccordion, setAiAccordion] = useState('ai-text-0');
+  const [aiMediaOpen, setAiMediaOpen] = useState(false);
+  const [aiBuilding, setAiBuilding] = useState(false);
+  const [aiRemixing, setAiRemixing] = useState(false);
 
   const saveSectionSettings = async (updates: Record<string, any>) => {
     setSaving(true);
