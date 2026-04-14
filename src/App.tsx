@@ -4,6 +4,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { SiteSettingsProvider } from "@/contexts/SiteSettingsContext";
+import { EditModeProvider } from "@/contexts/EditModeContext";
+import EditModeToggle from "@/components/EditModeToggle";
 import Index from "./pages/Index.tsx";
 import NotFound from "./pages/NotFound.tsx";
 import KlawsomeAdmin from "./pages/KlawsomeAdmin.tsx";
@@ -21,26 +23,29 @@ const queryClient = new QueryClient();
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <SiteSettingsProvider>
-      <TooltipProvider>
-        <Toaster />
-        <Sonner />
-        <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Index />} />
-            <Route path="/business" element={<Business />} />
-            <Route path="/birthdays" element={<Birthdays />} />
-            <Route path="/careers" element={<Careers />} />
-            <Route path="/news" element={<News />} />
-            <Route path="/gallery" element={<Gallery />} />
-            <Route path="/ourstory" element={<OurStory />} />
-            <Route path="/rewards" element={<Rewards />} />
-            <Route path="/faq" element={<Faq />} />
-            <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
-            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-            <Route path="*" element={<NotFound />} />
-          </Routes>
-        </BrowserRouter>
-      </TooltipProvider>
+      <EditModeProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Sonner />
+          <BrowserRouter>
+            <Routes>
+              <Route path="/" element={<Index />} />
+              <Route path="/business" element={<Business />} />
+              <Route path="/birthdays" element={<Birthdays />} />
+              <Route path="/careers" element={<Careers />} />
+              <Route path="/news" element={<News />} />
+              <Route path="/gallery" element={<Gallery />} />
+              <Route path="/ourstory" element={<OurStory />} />
+              <Route path="/rewards" element={<Rewards />} />
+              <Route path="/faq" element={<Faq />} />
+              <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
+              {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+            <EditModeToggle />
+          </BrowserRouter>
+        </TooltipProvider>
+      </EditModeProvider>
     </SiteSettingsProvider>
   </QueryClientProvider>
 );
