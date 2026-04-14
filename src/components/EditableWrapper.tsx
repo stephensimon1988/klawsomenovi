@@ -19,6 +19,7 @@ const EditableWrapper = ({ block, children }: EditableWrapperProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState<Record<string, any>>({});
   const [saving, setSaving] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   if (!isEditMode) return <>{children}</>;
