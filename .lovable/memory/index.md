@@ -9,7 +9,7 @@ Square App ID: sandbox-sq0idb-odBIf_MpySp0OxgocdsyEw
 - [Square integration](mem://features/square) — Sandbox env, catalog edge function, access token stored as secret
 - [Acuity integration](mem://features/acuity) — Scheduling API, availability edge function, calendar UI
 - [Design tokens](mem://design/kawaii-tokens) — Pastel color system, kawaii animations, rounded borders
-- [CMS system](mem://features/cms) — Custom CMS replacing Prismic, all content in DB, edited via /klawsome-admin
-- [CMS content sync](mem://constraint/cms-content-sync) — When changing site content, always update DB record too
-- [New sections constraint](mem://constraint/new-sections-cms) — New content sections must have DB table + cms-admin + Command Center tab
-- [Page builder](mem://features/page-builder) — Dynamic page_sections table controls layout, custom_blocks for freeform sections, site-images bucket
+- [Page builder](mem://features/page-builder) — Dynamic page_sections with section types, priority layout, animation presets
+- [Layout templates](mem://features/layout-templates) — 8 Bootstrap-style templates controlling block rendering
+- [AI Builder](mem://features/ai-builder) — AI Builder tab in PageBuilder, WYSIWYG + images + links → AI arranges, remix button
+- [Card grid alignment](mem://design/card-grid-alignment) — Single-card grid vertically centers
