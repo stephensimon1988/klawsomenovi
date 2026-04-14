@@ -1516,6 +1516,9 @@ function SettingsEditor({ password }: { password: string }) {
           ]} />
         </CardContent>
       </Card>
+
+      {/* Custom Data Tables */}
+      <CustomTableCreator password={password} />
     </div>
   );
 }
