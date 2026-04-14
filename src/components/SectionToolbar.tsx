@@ -123,7 +123,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   return (
     <div className="relative z-20 w-full">
       {/* Compact toolbar */}
-      <div className="flex items-center gap-2 bg-background/95 backdrop-blur border-b border-border px-3 py-1.5 rounded-t-lg shadow-lg">
+      <div className="flex items-center gap-2 bg-background/95 backdrop-blur border-b border-border px-3 py-1.5 rounded-b-lg shadow-lg">
         <span className="font-heading font-bold text-xs text-foreground truncate flex-1">
           {config.label || config.section_key}
         </span>
@@ -148,7 +148,7 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
 
       {/* Expanded settings */}
       {expanded && (
-        <div className="bg-background/95 backdrop-blur border border-t-0 border-border rounded-b-lg p-4 shadow-lg space-y-4">
+        <div className="bg-background/95 backdrop-blur border border-b-0 border-border rounded-b-lg p-4 shadow-lg space-y-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {/* BG Color */}
             <div className="space-y-1">
