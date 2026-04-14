@@ -95,6 +95,7 @@ function getAutoTextColor(bgColor: string): string {
 const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
   const globalContainerMax = useContainerMaxWidth();
   const { isEditMode } = useEditMode();
+  const {
     id,
     section_key,
     bg_color,
