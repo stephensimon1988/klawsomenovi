@@ -1,10 +1,11 @@
 import { useState, useRef, useEffect } from 'react';
 import { useEditMode } from '@/contexts/EditModeContext';
-import { Pencil, Save, X, Trash2 } from 'lucide-react';
+import { Pencil, Save, X, Trash2, Image } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { toast } from 'sonner';
+import MediaLibraryPicker from '@/components/MediaLibraryPicker';
 import type { SectionContentBlock } from '@/hooks/useCmsContent';
 
 interface EditableWrapperProps {
@@ -18,6 +19,7 @@ const EditableWrapper = ({ block, children }: EditableWrapperProps) => {
   const [isEditing, setIsEditing] = useState(false);
   const [editContent, setEditContent] = useState<Record<string, any>>({});
   const [saving, setSaving] = useState(false);
+  const [mediaOpen, setMediaOpen] = useState(false);
   const wrapperRef = useRef<HTMLDivElement>(null);
 
   if (!isEditMode) return <>{children}</>;
@@ -96,17 +98,36 @@ const EditableWrapper = ({ block, children }: EditableWrapperProps) => {
       case 'image':
         return (
           <div className="space-y-2">
-            <Input
-              value={editContent.url || ''}
-              onChange={e => setEditContent({ ...editContent, url: e.target.value })}
-              placeholder="Image URL"
-              className="text-sm"
-            />
+            <div className="flex gap-2">
+              <Input
+                value={editContent.url || ''}
+                onChange={e => setEditContent({ ...editContent, url: e.target.value })}
+                placeholder="Image URL"
+                className="text-sm flex-1"
+              />
+              <Button
+                type="button"
+                size="sm"
+                variant="outline"
+                onClick={() => setMediaOpen(true)}
+                className="h-9 px-3 shrink-0"
+              >
+                <Image className="w-4 h-4 mr-1" /> Browse
+              </Button>
+            </div>
+            {editContent.url && (
+              <img src={editContent.url} alt="Preview" className="w-full max-h-32 object-cover rounded-md border" />
+            )}
             <Input
               value={editContent.alt || ''}
               onChange={e => setEditContent({ ...editContent, alt: e.target.value })}
               placeholder="Alt text"
               className="text-sm"
+            />
+            <MediaLibraryPicker
+              open={mediaOpen}
+              onClose={() => setMediaOpen(false)}
+              onSelect={(url) => setEditContent({ ...editContent, url })}
             />
           </div>
         );
