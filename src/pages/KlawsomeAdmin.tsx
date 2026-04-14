@@ -266,8 +266,6 @@ const BLOCK_TYPES = [
   { type: 'icon_box', icon: '💎', label: 'Icon Box' },
   { type: 'countdown', icon: '⏱', label: 'Countdown' },
   { type: 'carousel', icon: '🎠', label: 'Carousel' },
-  
-  { type: 'hours', icon: '🕐', label: 'Store Hours' },
   { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
   { type: 'data_cards', icon: '📊', label: 'Data Cards' },
 ];
@@ -405,8 +403,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
 
   const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
 
-  // Specialized blocks that pull from DB tables — no inline editing needed
-  const isDataBlock = ['pricing', 'hours', 'reviews', 'news', 'party_options', 'templates', 'faq', 'jobs'].includes(block.block_type);
+  const isDataBlock = ['reviews'].includes(block.block_type);
 
   return (
     <div className="bg-white/5 rounded-lg p-3 space-y-2 border border-white/10">
@@ -712,25 +709,6 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
         </div>
       )}
 
-      {/* FAQ — page filter */}
-      {block.block_type === 'faq' && (
-        <div className="space-y-1">
-          <Input value={localContent.page || 'general'} onChange={e => setLocalContent({ ...localContent, page: e.target.value })}
-            placeholder="Page filter (e.g. birthdays, general)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
-        </div>
-      )}
-
-      {/* Jobs — category filter */}
-      {block.block_type === 'jobs' && (
-        <div className="space-y-1">
-          <Input value={localContent.category || ''} onChange={e => setLocalContent({ ...localContent, category: e.target.value })}
-            placeholder="Category filter (e.g. in-store, hybrid, unpaid — leave empty for all)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
-        </div>
-      )}
 
       {/* Cards — inline JSON editor */}
       {block.block_type === 'cards' && (
@@ -772,7 +750,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
           {/* Presets */}
           <div className="flex flex-wrap gap-1">
             <span className="text-white/30 text-xs self-center mr-1">Presets:</span>
-            {[
+              {[
               { key: 'party_options', label: '🎂 Party Options' },
               { key: 'token_tiers', label: '💰 Token Pricing' },
               { key: 'faq_items', label: '❓ FAQ' },
@@ -780,6 +758,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
               { key: 'news_articles', label: '📰 News' },
               { key: 'business_pricing_tiers', label: '💎 Biz Pricing' },
               { key: 'invite_templates', label: '📄 Templates' },
+              { key: 'store_hours', label: '🕐 Store Hours' },
             ].map(preset => (
               <Button key={preset.key} size="sm" variant="ghost"
                 onClick={() => {
@@ -788,9 +767,10 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                     token_tiers: { source: 'token_tiers', mappings: { title: 'tokens', price: 'price', description: 'bonus', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 4 },
                     faq_items: { source: 'faq_items', mappings: { title: 'question', description: 'answer' }, display: 'accordion', columns: 1 },
                     job_listings: { source: 'job_listings', mappings: { title: 'title', description: 'description', image: 'image_url', link: 'apply_url' }, display: 'list', columns: 1 },
-                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'card-grid', columns: 3 },
+                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'news-grid', columns: 3 },
                     business_pricing_tiers: { source: 'business_pricing_tiers', mappings: { title: 'name', price: 'price', features: 'features', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 3 },
                     invite_templates: { source: 'invite_templates', mappings: { title: 'name', image: 'thumbnail_url', link: 'url' }, display: 'card-grid', columns: 2 },
+                    store_hours: { source: 'store_hours', mappings: { title: 'day_label', description: 'open_time', extra: 'close_time', highlight: 'is_closed' }, display: 'hours', columns: 1 },
                   };
                   setLocalContent({ ...localContent, ...p[preset.key] });
                 }}
@@ -815,6 +795,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                 <option value="faq_items">faq_items</option>
                 <option value="invite_templates">invite_templates</option>
                 <option value="business_pricing_tiers">business_pricing_tiers</option>
+                <option value="store_hours">store_hours</option>
               </select>
             </div>
             <div>
@@ -826,6 +807,8 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                 <option value="pricing-grid">Pricing Grid</option>
                 <option value="list">List</option>
                 <option value="accordion">Accordion</option>
+                <option value="hours">Hours</option>
+                <option value="news-grid">News Grid</option>
               </select>
             </div>
             <div>
@@ -1274,7 +1257,116 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   );
 }
 
-// ─── Settings Tab ───────────────────────────────────────────
+// ─── Custom Data Table Creator ──────────────────────────────
+function CustomTableCreator({ password }: { password: string }) {
+  const [customTables, setCustomTables] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [tableName, setTableName] = useState('');
+  const [tableLabel, setTableLabel] = useState('');
+  const [columns, setColumns] = useState<{ key: string; label: string; type: string; required: boolean }[]>([
+    { key: '', label: '', type: 'text', required: false },
+  ]);
+  const [creating, setCreating] = useState(false);
+
+  const loadTables = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table: 'cms_custom_tables' });
+      setCustomTables(res.rows || []);
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [password]);
+
+  useEffect(() => { loadTables(); }, [loadTables]);
+
+  const createTable = async () => {
+    const validCols = columns.filter(c => c.key.trim());
+    if (!tableName || !tableLabel || validCols.length === 0) {
+      toast.error('Fill in table name, label, and at least one column');
+      return;
+    }
+    setCreating(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('cms-create-table', {
+        body: { password, table_name: tableName, label: tableLabel, columns: validCols },
+      });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      toast.success(`Table "${tableLabel}" created!`);
+      setTableName('');
+      setTableLabel('');
+      setColumns([{ key: '', label: '', type: 'text', required: false }]);
+      loadTables();
+    } catch (e: any) { toast.error(e.message); }
+    setCreating(false);
+  };
+
+  return (
+    <div className="space-y-6">
+      {/* Creator */}
+      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+        <CardHeader><CardTitle className="text-white font-heading text-lg">Create New Data Table</CardTitle></CardHeader>
+        <CardContent className="space-y-3">
+          <div className="grid grid-cols-2 gap-2">
+            <InlineField label="Table Name (snake_case)" value={tableName} onChange={setTableName} />
+            <InlineField label="Display Label" value={tableLabel} onChange={setTableLabel} />
+          </div>
+          <div className="space-y-2">
+            <label className="text-white/60 text-xs font-heading">Columns</label>
+            {columns.map((col, i) => (
+              <div key={i} className="grid grid-cols-4 gap-1 items-end">
+                <Input value={col.key} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], key: e.target.value }; setColumns(next);
+                }} placeholder="column_name" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+                <Input value={col.label} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], label: e.target.value }; setColumns(next);
+                }} placeholder="Display Label" className="bg-white/10 border-white/20 text-white text-xs h-8" />
+                <select value={col.type} onChange={e => {
+                  const next = [...columns]; next[i] = { ...next[i], type: e.target.value }; setColumns(next);
+                }} className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 h-8">
+                  <option value="text">Text</option>
+                  <option value="textarea">Textarea</option>
+                  <option value="number">Number</option>
+                  <option value="bool">Boolean</option>
+                  <option value="array">Array</option>
+                  <option value="image_url">Image URL</option>
+                </select>
+                <Button size="sm" variant="ghost" onClick={() => setColumns(columns.filter((_, idx) => idx !== i))}
+                  className="text-red-400 h-8 w-8 p-0"><Trash2 className="w-3 h-3" /></Button>
+              </div>
+            ))}
+            <Button size="sm" variant="ghost" onClick={() => setColumns([...columns, { key: '', label: '', type: 'text', required: false }])}
+              className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add column</Button>
+          </div>
+          <Button onClick={createTable} disabled={creating} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+            {creating ? 'Creating…' : 'Create Table'}
+          </Button>
+        </CardContent>
+      </Card>
+
+      {/* Existing custom tables */}
+      {loading && <p className="text-white/40 text-center text-sm">Loading custom tables…</p>}
+      {customTables.map(ct => (
+        <Card key={ct.id} className="border-white/10 bg-white/5 backdrop-blur-sm">
+          <CardHeader><CardTitle className="text-white font-heading text-lg">{ct.label} <span className="text-white/30 text-xs font-mono ml-2">{ct.table_name}</span></CardTitle></CardHeader>
+          <CardContent>
+            <MiniTableEditor
+              password={password}
+              table={ct.table_name}
+              columns={(ct.columns || []).map((c: any) => ({
+                key: c.key,
+                label: c.label || c.key,
+                type: c.type === 'textarea' ? 'textarea' : c.type === 'bool' ? 'bool' : c.type === 'array' ? 'array' : 'text',
+              }))}
+            />
+          </CardContent>
+        </Card>
+      ))}
+    </div>
+  );
+}
+
+
 function SettingsEditor({ password }: { password: string }) {
   const [row, setRow] = useState<Record<string, string>>({});
   const [originalId, setOriginalId] = useState('');
@@ -1424,6 +1516,9 @@ function SettingsEditor({ password }: { password: string }) {
           ]} />
         </CardContent>
       </Card>
+
+      {/* Custom Data Tables */}
+      <CustomTableCreator password={password} />
     </div>
   );
 }
