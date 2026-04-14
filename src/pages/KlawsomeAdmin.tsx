@@ -1235,26 +1235,37 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   if (loading) return <p className="text-white/40 py-8 text-center">Loading page sections…</p>;
 
   return (
-    <div className="space-y-3">
-      {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
-      {sections.map((s) => (
-        <SectionCard
-          key={s.id}
-          section={s}
-          password={password}
-          page={page}
-          onReorder={reorder}
-          onToggleVisibility={toggleVisibility}
-          onUpdateLayout={updateLayout}
-          onDelete={deleteSection}
-        />
-      ))}
-      <div className="flex gap-2 pt-2">
-        <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-          <Plus className="w-3 h-3 mr-1" />Add Section
-        </Button>
-      </div>
-    </div>
+    <Tabs defaultValue="sections" className="w-full">
+      <TabsList className="bg-white/5 border border-white/10 mb-4">
+        <TabsTrigger value="sections" className="text-xs font-heading data-[state=active]:bg-white/10 data-[state=active]:text-white">Sections</TabsTrigger>
+        <TabsTrigger value="ai-builder" className="text-xs font-heading data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy">✨ AI Builder</TabsTrigger>
+      </TabsList>
+      <TabsContent value="sections">
+        <div className="space-y-3">
+          {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
+          {sections.map((s) => (
+            <SectionCard
+              key={s.id}
+              section={s}
+              password={password}
+              page={page}
+              onReorder={reorder}
+              onToggleVisibility={toggleVisibility}
+              onUpdateLayout={updateLayout}
+              onDelete={deleteSection}
+            />
+          ))}
+          <div className="flex gap-2 pt-2">
+            <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
+              <Plus className="w-3 h-3 mr-1" />Add Section
+            </Button>
+          </div>
+        </div>
+      </TabsContent>
+      <TabsContent value="ai-builder">
+        <AIBuilderTab page={page} password={password} onSectionCreated={load} />
+      </TabsContent>
+    </Tabs>
   );
 }
 
