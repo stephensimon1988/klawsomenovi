@@ -38,6 +38,10 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
   const [sectionType, setSectionType] = useState(config.section_type || 'section');
   const [heroHeight, setHeroHeight] = useState(config.hero_height || '100vh');
   const [label, setLabel] = useState(config.label || '');
+  const [paddingY, setPaddingY] = useState(config.padding_y || '');
+  const [wrapperMaxWidth, setWrapperMaxWidth] = useState(config.wrapper_max_width || '');
+  const [textColor, setTextColor] = useState(config.text_color || '');
+  const [customCssClass, setCustomCssClass] = useState(config.custom_css_class || '');
   const [saving, setSaving] = useState(false);
 
   const saveSectionSettings = async (updates: Record<string, any>) => {
