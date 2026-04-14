@@ -170,10 +170,9 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
       ref={sectionRef}
       id={`section-${section_key}`}
       data-section-id={id}
-      style={sectionStyle}
+      style={{ ...sectionStyle, marginBottom: isEditMode ? '25px' : undefined }}
       className={custom_css_class || undefined}
     >
-      {isEditMode && <SectionToolbar config={config} />}
       {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" aria-hidden="true" />}
 
       <div
@@ -186,7 +185,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           marginRight: 'auto',
           paddingLeft: SAFE_PAD_X,
           paddingRight: SAFE_PAD_X,
-          paddingTop: isEditMode ? `calc(${effectivePadY} + 40px)` : effectivePadY,
+          paddingTop: effectivePadY,
           paddingBottom: photoArray.length > 0 ? '2rem' : effectivePadY,
           display: 'flex',
           flexDirection: 'column' as const,
@@ -215,6 +214,8 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           <SectionPhotoGallery photos={photoArray} />
         </div>
       )}
+
+      {isEditMode && <SectionToolbar config={config} />}
     </section>
   );
 };
