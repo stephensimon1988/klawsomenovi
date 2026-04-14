@@ -11,7 +11,7 @@ import { useEditMode } from '@/contexts/EditModeContext';
 /** Wraps BlockRenderer with EditableWrapper when edit mode is on */
 function EditableBlock({ block, isHero, align }: { block: SectionContentBlock; isHero?: boolean; align?: 'center' | 'left' }) {
   const { isEditMode } = useEditMode();
-  const rendered = <EditableBlock block={block} isHero={isHero} align={align} />;
+  const rendered = <BlockRenderer block={block} isHero={isHero} align={align} />;
   if (!isEditMode) return rendered;
   return <EditableWrapper block={block}>{rendered}</EditableWrapper>;
 }
