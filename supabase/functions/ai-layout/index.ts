@@ -16,12 +16,278 @@ serve(async (req) => {
 
   try {
     const body = await req.json();
-    const { password, section_id } = body;
+    const { password, mode } = body;
 
     const adminPassword = Deno.env.get('ADMIN_PASSWORD');
     if (!adminPassword || password !== adminPassword) return json({ error: 'Unauthorized' }, 401);
 
     const supabase = createClient(Deno.env.get('SUPABASE_URL')!, Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!);
+    const apiKey = Deno.env.get('LOVABLE_API_KEY');
+    if (!apiKey) return json({ error: 'AI key not configured' }, 500);
+
+    // ─── BUILD MODE: create a new section from raw content ───
+    if (mode === 'build') {
+      const { page, label, columns = 1, textBlocks = [], images = [], links = [] } = body;
+      if (!page || !label) return json({ error: 'page and label required' }, 400);
+
+      const contentSummary = {
+        textBlocks: textBlocks.map((t: string, i: number) => ({ index: i, preview: t.replace(/<[^>]*>/g, '').substring(0, 100) })),
+        images: images.map((url: string, i: number) => ({ index: i, url })),
+        links: links.map((l: { label: string; url: string }, i: number) => ({ index: i, ...l })),
+      };
+
+      const prompt = `You are a web layout architect. Arrange the following raw content into a responsive page section.
+
+Columns available: ${columns} (0-indexed: 0 to ${columns - 1})
+Content pieces:
+${JSON.stringify(contentSummary, null, 2)}
+
+Available layout templates: ${TEMPLATES.join(', ')}
+
+Rules:
+- Each text block becomes a "richtext" block with content: { html: "<the html>" }
+- Each image becomes an "image" block with content: { url: "<image url>" }
+- Each link becomes a "button" block with content: { text: "<label>", url: "<url>" }
+- Assign each block a column_index (0 to ${columns - 1}) and row_order (starting at 0)
+- Pick the best layout_template for this content
+- If there's only text, use "stacked" or "feature-list"
+- If there's text + 1 image, use "split-left" or "split-right"
+- If there are multiple images or cards, use "card-grid"
+- If it looks like a CTA, use "cta-banner"
+- Distribute content evenly across columns when possible
+
+Return ONLY valid JSON:
+{
+  "template": "template-name",
+  "blocks": [
+    { "block_type": "richtext|image|button", "content": {...}, "column_index": 0, "row_order": 0 }
+  ]
+}`;
+
+      const aiRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'google/gemini-3-flash-preview',
+          messages: [
+            { role: 'system', content: 'You are a web layout architect. Output only valid JSON, no markdown fences.' },
+            { role: 'user', content: prompt },
+          ],
+        }),
+      });
+
+      if (!aiRes.ok) {
+        const status = aiRes.status;
+        if (status === 429) return json({ error: 'Rate limit exceeded, try again shortly.' }, 429);
+        if (status === 402) return json({ error: 'AI credits exhausted.' }, 402);
+        console.error('AI error:', await aiRes.text());
+        return json({ error: 'AI service unavailable' }, 500);
+      }
+
+      const aiData = await aiRes.json();
+      const raw = aiData.choices?.[0]?.message?.content || '{}';
+      let result: any;
+      try {
+        const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+        result = JSON.parse(cleaned);
+      } catch {
+        return json({ error: 'Could not parse AI response' }, 500);
+      }
+
+      if (!TEMPLATES.includes(result.template)) result.template = 'stacked';
+
+      // Build the actual blocks from AI mapping + original content
+      const finalBlocks: any[] = [];
+      for (const b of (result.blocks || [])) {
+        let content = b.content || {};
+        // For richtext, inject original HTML
+        if (b.block_type === 'richtext' && typeof content.index === 'number' && textBlocks[content.index]) {
+          content = { html: textBlocks[content.index] };
+        } else if (b.block_type === 'richtext' && !content.html) {
+          // AI might have put html directly
+          const idx = contentSummary.textBlocks.findIndex((t: any) => content.preview?.includes(t.preview?.substring(0, 30)));
+          if (idx >= 0 && textBlocks[idx]) content = { html: textBlocks[idx] };
+        }
+        finalBlocks.push({
+          block_type: b.block_type || 'richtext',
+          content,
+          column_index: Math.min(b.column_index || 0, columns - 1),
+          row_order: b.row_order || 0,
+        });
+      }
+
+      // If AI missed some content, add them
+      const usedTextIdxs = new Set(finalBlocks.filter(b => b.block_type === 'richtext').map((_, i) => i));
+      const usedImgUrls = new Set(finalBlocks.filter(b => b.block_type === 'image').map(b => b.content?.url));
+      const usedLinkUrls = new Set(finalBlocks.filter(b => b.block_type === 'button').map(b => b.content?.url));
+
+      let nextRow = Math.max(0, ...finalBlocks.map(b => b.row_order)) + 1;
+      textBlocks.forEach((html: string, i: number) => {
+        if (html.trim() && !usedTextIdxs.has(i) && finalBlocks.filter(b => b.block_type === 'richtext').length <= i) {
+          finalBlocks.push({ block_type: 'richtext', content: { html }, column_index: i % columns, row_order: nextRow++ });
+        }
+      });
+      images.forEach((url: string) => {
+        if (!usedImgUrls.has(url)) {
+          finalBlocks.push({ block_type: 'image', content: { url }, column_index: 0, row_order: nextRow++ });
+        }
+      });
+      links.forEach((l: { label: string; url: string }) => {
+        if (l.url.trim() && !usedLinkUrls.has(l.url)) {
+          finalBlocks.push({ block_type: 'button', content: { text: l.label || 'Link', url: l.url }, column_index: 0, row_order: nextRow++ });
+        }
+      });
+
+      // Insert section
+      const { data: sectionData, error: secErr } = await supabase.from('page_sections').insert({
+        page,
+        section_key: `ai:${label.toLowerCase().replace(/\s+/g, '-')}-${Date.now()}`,
+        label,
+        layout_template: result.template,
+        columns,
+        sort_order: 999,
+        is_visible: true,
+        section_type: 'section',
+      }).select('id').single();
+
+      if (secErr) return json({ error: secErr.message }, 500);
+
+      // Insert blocks
+      if (finalBlocks.length > 0) {
+        const rows = finalBlocks.map(b => ({
+          section_id: sectionData.id,
+          block_type: b.block_type,
+          content: b.content,
+          column_index: b.column_index,
+          row_order: b.row_order,
+        }));
+        const { error: blkErr } = await supabase.from('section_content_blocks').insert(rows);
+        if (blkErr) console.error('Block insert error:', blkErr);
+      }
+
+      return json({ section_id: sectionData.id, template: result.template, blocks_count: finalBlocks.length, source: 'ai' });
+    }
+
+    // ─── REMIX MODE: re-arrange existing blocks ───
+    if (mode === 'remix') {
+      const { section_id, columns: remixCols } = body;
+      if (!section_id) return json({ error: 'section_id required' }, 400);
+
+      const cols = remixCols || 1;
+
+      const { data: blocks, error: blocksErr } = await supabase
+        .from('section_content_blocks')
+        .select('*')
+        .eq('section_id', section_id)
+        .order('row_order', { ascending: true });
+
+      if (blocksErr) return json({ error: blocksErr.message }, 500);
+
+      const { data: section } = await supabase
+        .from('page_sections')
+        .select('layout_template')
+        .eq('id', section_id)
+        .single();
+
+      const currentTemplate = section?.layout_template || 'stacked';
+
+      const blockSummary = (blocks || []).map((b: any, i: number) => ({
+        index: i,
+        type: b.block_type,
+        column_index: b.column_index,
+        row_order: b.row_order,
+      }));
+
+      const prompt = `You are a web layout remixer. Rearrange these content blocks into a DIFFERENT layout.
+
+Current template: "${currentTemplate}" — pick something DIFFERENT.
+Columns available: ${cols} (0-indexed: 0 to ${cols - 1})
+
+Current blocks:
+${JSON.stringify(blockSummary, null, 2)}
+
+Available templates: ${TEMPLATES.join(', ')}
+
+Rules:
+- Keep the same blocks (same count), just change their column_index and row_order
+- Pick a DIFFERENT template than "${currentTemplate}"
+- Distribute blocks across columns creatively
+
+Return ONLY valid JSON:
+{
+  "template": "new-template-name",
+  "assignments": [
+    { "index": 0, "column_index": 1, "row_order": 0 },
+    { "index": 1, "column_index": 0, "row_order": 0 }
+  ]
+}`;
+
+      const aiRes = await fetch('https://ai.gateway.lovable.dev/v1/chat/completions', {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          model: 'google/gemini-3-flash-preview',
+          messages: [
+            { role: 'system', content: 'You are a web layout remixer. Output only valid JSON, no markdown fences.' },
+            { role: 'user', content: prompt },
+          ],
+        }),
+      });
+
+      if (!aiRes.ok) {
+        const status = aiRes.status;
+        if (status === 429) return json({ error: 'Rate limit exceeded, try again shortly.' }, 429);
+        if (status === 402) return json({ error: 'AI credits exhausted.' }, 402);
+        // Fallback: random shuffle
+        const other = TEMPLATES.filter(t => t !== currentTemplate);
+        const fallbackTemplate = other[Math.floor(Math.random() * other.length)];
+        // Random shuffle column/row
+        const shuffled = (blocks || []).map((b: any, i: number) => ({
+          id: b.id,
+          column_index: i % cols,
+          row_order: Math.floor(i / cols),
+        }));
+        for (const s of shuffled) {
+          await supabase.from('section_content_blocks').update({ column_index: s.column_index, row_order: s.row_order }).eq('id', s.id);
+        }
+        await supabase.from('page_sections').update({ layout_template: fallbackTemplate, columns: cols }).eq('id', section_id);
+        return json({ template: fallbackTemplate, source: 'fallback' });
+      }
+
+      const aiData = await aiRes.json();
+      const raw = aiData.choices?.[0]?.message?.content || '{}';
+      let result: any;
+      try {
+        const cleaned = raw.replace(/```json\s*/g, '').replace(/```\s*/g, '').trim();
+        result = JSON.parse(cleaned);
+      } catch {
+        const other = TEMPLATES.filter(t => t !== currentTemplate);
+        result = { template: other[0], assignments: [] };
+      }
+
+      if (!TEMPLATES.includes(result.template) || result.template === currentTemplate) {
+        const other = TEMPLATES.filter(t => t !== currentTemplate);
+        result.template = other[Math.floor(Math.random() * other.length)];
+      }
+
+      // Apply assignments
+      for (const a of (result.assignments || [])) {
+        const block = (blocks || [])[a.index];
+        if (block) {
+          await supabase.from('section_content_blocks').update({
+            column_index: Math.min(a.column_index || 0, cols - 1),
+            row_order: a.row_order || 0,
+          }).eq('id', block.id);
+        }
+      }
+
+      await supabase.from('page_sections').update({ layout_template: result.template, columns: cols }).eq('id', section_id);
+
+      return json({ template: result.template, source: 'ai' });
+    }
+
+    // ─── ORIGINAL MODE: suggest layout for existing section ───
+    const { section_id } = body;
 
     const { data: blocks, error: blocksErr } = await supabase
       .from('section_content_blocks')
@@ -49,9 +315,6 @@ serve(async (req) => {
         `(${b.block_type})`,
     }));
 
-    const apiKey = Deno.env.get('LOVABLE_API_KEY');
-    if (!apiKey) return json({ error: 'AI key not configured' }, 500);
-
     const currentTemplate = section?.layout_template || 'stacked';
     const sectionType = section?.section_type || 'section';
 
@@ -65,17 +328,16 @@ Content blocks:
 ${JSON.stringify(blockSummary, null, 2)}
 
 Available templates (pick ONE):
-- stacked: Centered heading + body + CTA, everything stacked vertically. Best for simple sections with just text and buttons.
-- split-left: Text on left, image/media on right (50/50). Best when there's one image + text.
-- split-right: Image/media on left, text on right (50/50). Same as split-left but reversed.
-- card-grid: Heading above, content in equal card grid below. Best for multiple cards or list items.
-- hero-cover: Full-bleed background image with centered text overlay. Best for hero banners WITH a background image.
-- cta-banner: Heading + buttons in a compact horizontal strip. Best for call-to-action sections with minimal content.
-- feature-list: Icon + title + description rows, left-aligned. Best for feature lists or steps.
-- pricing-grid: Equal pricing/tier cards in a row. Best for pricing blocks.
+- stacked: Centered heading + body + CTA, everything stacked vertically.
+- split-left: Text on left, image/media on right (50/50).
+- split-right: Image/media on left, text on right (50/50).
+- card-grid: Heading above, content in equal card grid below.
+- hero-cover: Full-bleed background image with centered text overlay.
+- cta-banner: Heading + buttons in a compact horizontal strip.
+- feature-list: Icon + title + description rows, left-aligned.
+- pricing-grid: Equal pricing/tier cards in a row.
 
 Pick the BEST template that is DIFFERENT from the current one "${currentTemplate}" (unless it's already optimal).
-Consider: content types, number of blocks, section type, and whether there's a background image.
 
 Respond with ONLY a JSON object: { "template": "template-name", "reason": "one sentence why" }`;
 
@@ -94,9 +356,8 @@ Respond with ONLY a JSON object: { "template": "template-name", "reason": "one s
     if (!aiRes.ok) {
       const status = aiRes.status;
       if (status === 429) return json({ error: 'Rate limit exceeded, try again shortly.' }, 429);
-      if (status === 402) return json({ error: 'AI credits exhausted. Add funds in Settings.' }, 402);
+      if (status === 402) return json({ error: 'AI credits exhausted.' }, 402);
       console.error('AI error:', await aiRes.text());
-      // Fallback: pick a different template randomly
       const other = TEMPLATES.filter(t => t !== currentTemplate);
       return json({ template: other[Math.floor(Math.random() * other.length)], reason: 'AI unavailable, random suggestion', source: 'fallback' });
     }
@@ -112,10 +373,7 @@ Respond with ONLY a JSON object: { "template": "template-name", "reason": "one s
       result = { template: other[0], reason: 'Could not parse AI response' };
     }
 
-    // Validate template name
-    if (!TEMPLATES.includes(result.template)) {
-      result.template = 'stacked';
-    }
+    if (!TEMPLATES.includes(result.template)) result.template = 'stacked';
 
     return json({ template: result.template, reason: result.reason, source: 'ai' });
   } catch (e: any) {
