@@ -12,6 +12,7 @@ const BASE_TABLES = [
   'faq_items', 'invite_templates', 'job_listings', 'business_sections',
   'business_pricing_tiers', 'business_how_steps', 'page_sections',
   'custom_blocks', 'section_content_blocks', 'cms_custom_tables',
+  'rewards_tiers', 'rewards_redemptions', 'gallery_photos',
 ];
 
 async function getAllowedTables(supabase: any): Promise<string[]> {

@@ -218,6 +218,30 @@ export type Database = {
         }
         Relationships: []
       }
+      gallery_photos: {
+        Row: {
+          caption: string
+          id: string
+          image_url: string
+          section: string
+          sort_order: number
+        }
+        Insert: {
+          caption?: string
+          id?: string
+          image_url?: string
+          section?: string
+          sort_order?: number
+        }
+        Update: {
+          caption?: string
+          id?: string
+          image_url?: string
+          section?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
       homepage_content: {
         Row: {
           about_subtitle: string | null
@@ -479,6 +503,51 @@ export type Database = {
           name?: string
           price?: string | null
           sort_order?: number
+        }
+        Relationships: []
+      }
+      rewards_redemptions: {
+        Row: {
+          id: string
+          points: string
+          reward: string
+          sort_order: number
+        }
+        Insert: {
+          id?: string
+          points?: string
+          reward?: string
+          sort_order?: number
+        }
+        Update: {
+          id?: string
+          points?: string
+          reward?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      rewards_tiers: {
+        Row: {
+          benefit: string
+          id: string
+          min_points: string
+          sort_order: number
+          tier_name: string
+        }
+        Insert: {
+          benefit?: string
+          id?: string
+          min_points?: string
+          sort_order?: number
+          tier_name?: string
+        }
+        Update: {
+          benefit?: string
+          id?: string
+          min_points?: string
+          sort_order?: number
+          tier_name?: string
         }
         Relationships: []
       }
