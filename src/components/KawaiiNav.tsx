@@ -11,6 +11,10 @@ const navLinks = [
   { label: 'GIFT CARDS', href: '#giftcards' },
   { label: 'CAREERS', href: '/careers' },
   { label: 'NEWS', href: '/news' },
+  { label: 'GALLERY', href: '/gallery' },
+  { label: 'OUR STORY', href: '/ourstory' },
+  { label: 'REWARDS', href: '/rewards' },
+  { label: 'FAQ', href: '/faq' },
 ];
 
 const smoothScroll = (id: string) => {
