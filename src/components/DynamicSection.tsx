@@ -5,6 +5,16 @@ import { supabase } from '@/integrations/supabase/client';
 import { useState, useEffect, useRef } from 'react';
 import { Star, StarHalf, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import EditableWrapper from '@/components/EditableWrapper';
+import { useEditMode } from '@/contexts/EditModeContext';
+
+/** Wraps BlockRenderer with EditableWrapper when edit mode is on */
+function EditableBlock({ block, isHero, align }: { block: SectionContentBlock; isHero?: boolean; align?: 'center' | 'left' }) {
+  const { isEditMode } = useEditMode();
+  const rendered = <BlockRenderer block={block} isHero={isHero} align={align} />;
+  if (!isEditMode) return rendered;
+  return <EditableWrapper block={block}>{rendered}</EditableWrapper>;
+}
 
 interface DynamicSectionProps {
   sectionId: string;
@@ -82,22 +92,22 @@ function StackedTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, i
     <div className="space-y-10">
       {headerBlocks.length > 0 && (
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          {headerBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {headerBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {mediaBlocks.length > 0 && (
         <div className={autoGridCols(mediaBlocks.length)}>
-          {mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {mediaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {widgetBlocks.length > 0 && (
         <div className="space-y-8">
-          {widgetBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {widgetBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>
@@ -120,12 +130,12 @@ function HeroCoverTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks 
         </>
       )}
       <div className="relative z-10 max-w-3xl mx-auto text-center space-y-6 py-16">
-        {headerBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={true} />)}
-        {otherMedia.map(b => <BlockRenderer key={b.id} block={b} isHero={true} />)}
-        {widgetBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={true} />)}
+        {headerBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={true} />)}
+        {otherMedia.map(b => <EditableBlock key={b.id} block={b} isHero={true} />)}
+        {widgetBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={true} />)}
         {ctaBlocks.length > 0 && (
           <div className="flex flex-wrap justify-center gap-4 pt-4">
-            {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={true} />)}
+            {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={true} />)}
           </div>
         )}
       </div>
@@ -139,11 +149,11 @@ function HeroCoverTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks 
 function SplitTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, mediaFirst, isHero }: TemplateProps & { mediaFirst: boolean }) {
   const textContent = (
     <div className="space-y-6 flex flex-col justify-center text-left">
-      {headerBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} align="left" />)}
-      {widgetBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+      {headerBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} align="left" />)}
+      {widgetBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap gap-4">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>
@@ -152,7 +162,7 @@ function SplitTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, med
   const mediaContent = (
     <div className="space-y-4">
       {mediaBlocks.length > 0
-        ? mediaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)
+        ? mediaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)
         : <div className="bg-muted/20 rounded-2xl aspect-[4/3]" />
       }
     </div>
@@ -183,21 +193,21 @@ function CardGridTemplate({ headerBlocks, ctaBlocks, mediaBlocks, widgetBlocks, 
     <div className="space-y-10">
       {headings.length > 0 && (
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          {headings.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {headings.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {cardBlocks.length > 0 && (
         <div className={`grid grid-cols-1 ${cols} gap-6`}>
           {cardBlocks.map(b => (
             <div key={b.id} className="rounded-2xl border border-border bg-background/50 p-6 text-center hover:shadow-lg transition-shadow">
-              <BlockRenderer block={b} isHero={false} />
+              <EditableBlock block={b} isHero={false} />
             </div>
           ))}
         </div>
       )}
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>
@@ -211,11 +221,11 @@ function CTABannerTemplate({ headerBlocks, ctaBlocks, isHero }: TemplateProps) {
   return (
     <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 py-4">
       <div className="text-center md:text-left space-y-2 flex-1">
-        {headerBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+        {headerBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
       </div>
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap gap-3 flex-shrink-0">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>
@@ -233,7 +243,7 @@ function FeatureListTemplate({ headerBlocks, ctaBlocks, blocks, isHero }: Templa
     <div className="space-y-10">
       {headings.length > 0 && (
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          {headings.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {headings.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {bodyBlocks.length > 0 && (
@@ -244,7 +254,7 @@ function FeatureListTemplate({ headerBlocks, ctaBlocks, blocks, isHero }: Templa
                 {bodyBlocks.indexOf(b) + 1}
               </div>
               <div className="flex-1">
-                <BlockRenderer block={b} isHero={false} align="left" />
+                <EditableBlock block={b} isHero={false} align="left" />
               </div>
             </div>
           ))}
@@ -253,13 +263,13 @@ function FeatureListTemplate({ headerBlocks, ctaBlocks, blocks, isHero }: Templa
       {blocks.filter(b => !HEADER_TYPES.has(b.block_type) && !CTA_TYPES.has(b.block_type)).length > 0 && (
         <div className="space-y-8">
           {blocks.filter(b => !HEADER_TYPES.has(b.block_type) && !CTA_TYPES.has(b.block_type)).map(b => (
-            <BlockRenderer key={b.id} block={b} isHero={isHero} />
+            <EditableBlock key={b.id} block={b} isHero={isHero} />
           ))}
         </div>
       )}
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>
@@ -274,17 +284,17 @@ function PricingGridTemplate({ headerBlocks, ctaBlocks, widgetBlocks, isHero }: 
     <div className="space-y-10">
       {headerBlocks.length > 0 && (
         <div className="max-w-3xl mx-auto text-center space-y-4">
-          {headerBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {headerBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {widgetBlocks.length > 0 && (
         <div className="space-y-8">
-          {widgetBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {widgetBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
       {ctaBlocks.length > 0 && (
         <div className="flex flex-wrap justify-center gap-4">
-          {ctaBlocks.map(b => <BlockRenderer key={b.id} block={b} isHero={isHero} />)}
+          {ctaBlocks.map(b => <EditableBlock key={b.id} block={b} isHero={isHero} />)}
         </div>
       )}
     </div>

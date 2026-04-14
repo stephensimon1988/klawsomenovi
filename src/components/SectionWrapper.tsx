@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SectionPhotoGallery from './SectionPhotoGallery';
 import { useContainerMaxWidth } from '@/contexts/SiteSettingsContext';
+import { useEditMode } from '@/contexts/EditModeContext';
+import SectionToolbar from './SectionToolbar';
 
 export interface PageSectionConfig {
   id: string;
@@ -92,6 +94,7 @@ function getAutoTextColor(bgColor: string): string {
 
 const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
   const globalContainerMax = useContainerMaxWidth();
+  const { isEditMode } = useEditMode();
   const {
     id,
     section_key,
@@ -170,6 +173,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
       style={sectionStyle}
       className={custom_css_class || undefined}
     >
+      {isEditMode && <SectionToolbar config={config} />}
       {hasBgImage && <div className="absolute inset-0 bg-black/45 z-0" aria-hidden="true" />}
 
       <div
@@ -182,7 +186,7 @@ const SectionWrapper = ({ config, children }: SectionWrapperProps) => {
           marginRight: 'auto',
           paddingLeft: SAFE_PAD_X,
           paddingRight: SAFE_PAD_X,
-          paddingTop: effectivePadY,
+          paddingTop: isEditMode ? `calc(${effectivePadY} + 40px)` : effectivePadY,
           paddingBottom: photoArray.length > 0 ? '2rem' : effectivePadY,
           display: 'flex',
           flexDirection: 'column' as const,
