@@ -6,7 +6,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/
 import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
 import MultiImageUpload from '@/components/MultiImageUpload';
 import MediaLibraryPicker from '@/components/MediaLibraryPicker';
-import { Plus, Trash2, Link as LinkIcon, Sparkles, Shuffle, Image } from 'lucide-react';
+import DynamicSection from '@/components/DynamicSection';
+import SectionWrapper from '@/components/SectionWrapper';
+import { Plus, Trash2, Link as LinkIcon, Sparkles, Shuffle, Image, RefreshCw } from 'lucide-react';
 import { toast } from 'sonner';
 
 const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
@@ -30,6 +32,8 @@ const AIBuilderTab = ({ page, password, onSectionCreated }: AIBuilderTabProps) =
   const [building, setBuilding] = useState(false);
   const [remixing, setRemixing] = useState(false);
   const [createdSectionId, setCreatedSectionId] = useState<string | null>(null);
+  const [createdTemplate, setCreatedTemplate] = useState<string>('stacked');
+  const [previewKey, setPreviewKey] = useState(0);
 
   const addTextBlock = () => {
     setTextBlocks(prev => [...prev, '']);
