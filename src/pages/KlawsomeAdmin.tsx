@@ -1334,7 +1334,6 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
                   </Button>
                 </div>
               </div>
-            )}
 
             <ContentBlockEditor password={password} sectionId={section.id} onBlocksChanged={refreshPreview} />
           </div>
