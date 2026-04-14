@@ -1257,16 +1257,35 @@ function PageBuilder({ page, password }: { page: string; password: string }) {
   );
 }
 
-// ─── Custom Data Table Creator ──────────────────────────────
+// ─── Spreadsheet-Style Table Creator ──────────────────────────────
+const FRIENDLY_TYPES = [
+  { label: 'Short Text', value: 'text', icon: '✏️' },
+  { label: 'Long Text', value: 'textarea', icon: '📝' },
+  { label: 'Number', value: 'number', icon: '🔢' },
+  { label: 'Yes/No', value: 'bool', icon: '✅' },
+  { label: 'Image', value: 'image_url', icon: '📷' },
+  { label: 'List', value: 'array', icon: '📋' },
+] as const;
+
+function toSnakeCase(str: string) {
+  return str.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
+}
+
+function getFriendlyLabel(type: string) {
+  return FRIENDLY_TYPES.find(t => t.value === type) || FRIENDLY_TYPES[0];
+}
+
 function CustomTableCreator({ password }: { password: string }) {
   const [customTables, setCustomTables] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
-  const [tableName, setTableName] = useState('');
   const [tableLabel, setTableLabel] = useState('');
-  const [columns, setColumns] = useState<{ key: string; label: string; type: string; required: boolean }[]>([
-    { key: '', label: '', type: 'text', required: false },
-  ]);
+  const [columns, setColumns] = useState<{ key: string; label: string; type: string; required: boolean }[]>([]);
   const [creating, setCreating] = useState(false);
+  const [addingCol, setAddingCol] = useState(false);
+  const [newColLabel, setNewColLabel] = useState('');
+  const [newColType, setNewColType] = useState('text');
+
+  const tableName = toSnakeCase(tableLabel);
 
   const loadTables = useCallback(async () => {
     setLoading(true);
@@ -1279,19 +1298,32 @@ function CustomTableCreator({ password }: { password: string }) {
 
   useEffect(() => { loadTables(); }, [loadTables]);
 
+  const addColumn = () => {
+    if (!newColLabel.trim()) return;
+    const key = toSnakeCase(newColLabel);
+    if (columns.some(c => c.key === key)) {
+      toast.error('Column already exists');
+      return;
+    }
+    setColumns([...columns, { key, label: newColLabel.trim(), type: newColType, required: false }]);
+    setNewColLabel('');
+    setNewColType('text');
+    setAddingCol(false);
+  };
+
+  const removeColumn = (idx: number) => setColumns(columns.filter((_, i) => i !== idx));
+
   const createTable = async () => {
-    const validCols = columns.filter(c => c.key.trim());
-    if (!tableName || !tableLabel || validCols.length === 0) {
-      toast.error('Fill in table name, label, and at least one column');
+    if (!tableLabel.trim() || columns.length === 0) {
+      toast.error('Give your table a name and at least one column');
       return;
     }
     setCreating(true);
     try {
       const { data, error } = await supabase.functions.invoke('cms-create-table', {
-        body: { password, table_name: tableName, label: tableLabel, columns: validCols },
+        body: { password, table_name: tableName, label: tableLabel.trim(), columns },
       });
       if (error) {
-        // Try to extract the actual error message from the response
         const ctx = (error as any).context;
         let msg = error.message;
         try {
@@ -1304,9 +1336,8 @@ function CustomTableCreator({ password }: { password: string }) {
       }
       if (data?.error) throw new Error(data.error);
       toast.success(`Table "${tableLabel}" created!`);
-      setTableName('');
       setTableLabel('');
-      setColumns([{ key: '', label: '', type: 'text', required: false }]);
+      setColumns([]);
       loadTables();
     } catch (e: any) { toast.error(e.message); }
     setCreating(false);
@@ -1316,42 +1347,113 @@ function CustomTableCreator({ password }: { password: string }) {
     <div className="space-y-6">
       {/* Creator */}
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Create New Data Table</CardTitle></CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-2 gap-2">
-            <InlineField label="Table Name (snake_case)" value={tableName} onChange={setTableName} />
-            <InlineField label="Display Label" value={tableLabel} onChange={setTableLabel} />
+        <CardHeader>
+          <CardTitle className="text-white font-heading text-lg">Create New Data Table</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          {/* Step 1: Name */}
+          <div className="space-y-1">
+            <label className="text-white/60 text-xs font-heading">What do you want to call this table?</label>
+            <Input
+              value={tableLabel}
+              onChange={e => setTableLabel(e.target.value)}
+              placeholder="e.g. Team Members, Menu Items, Testimonials…"
+              className="bg-white/10 border-white/20 text-white text-sm"
+            />
+            {tableLabel.trim() && (
+              <p className="text-white/30 text-xs font-mono">→ {tableName}</p>
+            )}
           </div>
+
+          {/* Step 2: Visual spreadsheet grid */}
           <div className="space-y-2">
-            <label className="text-white/60 text-xs font-heading">Columns</label>
-            {columns.map((col, i) => (
-              <div key={i} className="grid grid-cols-4 gap-1 items-end">
-                <Input value={col.key} onChange={e => {
-                  const next = [...columns]; next[i] = { ...next[i], key: e.target.value }; setColumns(next);
-                }} placeholder="column_name" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-                <Input value={col.label} onChange={e => {
-                  const next = [...columns]; next[i] = { ...next[i], label: e.target.value }; setColumns(next);
-                }} placeholder="Display Label" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-                <select value={col.type} onChange={e => {
-                  const next = [...columns]; next[i] = { ...next[i], type: e.target.value }; setColumns(next);
-                }} className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 h-8">
-                  <option value="text">Text</option>
-                  <option value="textarea">Textarea</option>
-                  <option value="number">Number</option>
-                  <option value="bool">Boolean</option>
-                  <option value="array">Array</option>
-                  <option value="image_url">Image URL</option>
-                </select>
-                <Button size="sm" variant="ghost" onClick={() => setColumns(columns.filter((_, idx) => idx !== i))}
-                  className="text-red-400 h-8 w-8 p-0"><Trash2 className="w-3 h-3" /></Button>
+            <label className="text-white/60 text-xs font-heading">Design your columns</label>
+            <div className="border border-white/10 rounded-lg overflow-hidden">
+              {/* Header row */}
+              <div className="flex bg-white/5">
+                <div className="w-10 shrink-0 border-r border-white/10 p-2 text-white/30 text-xs text-center">#</div>
+                {columns.map((col, i) => (
+                  <div key={i} className="flex-1 min-w-[120px] border-r border-white/10 p-2 group">
+                    <div className="flex items-center justify-between gap-1">
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-sm" title={getFriendlyLabel(col.type).label}>{getFriendlyLabel(col.type).icon}</span>
+                        <span className="text-white text-xs font-medium truncate">{col.label}</span>
+                      </div>
+                      <button
+                        onClick={() => removeColumn(i)}
+                        className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300"
+                      >
+                        <Trash2 className="w-3 h-3" />
+                      </button>
+                    </div>
+                    <span className="text-white/30 text-[10px]">{getFriendlyLabel(col.type).label}</span>
+                  </div>
+                ))}
+                {/* Add column button */}
+                <div className="w-[100px] shrink-0 p-2 flex items-center justify-center">
+                  {addingCol ? (
+                    <div className="space-y-1.5 w-full">
+                      <Input
+                        value={newColLabel}
+                        onChange={e => setNewColLabel(e.target.value)}
+                        placeholder="Column name"
+                        className="bg-white/10 border-white/20 text-white text-xs h-7"
+                        autoFocus
+                        onKeyDown={e => { if (e.key === 'Enter') addColumn(); if (e.key === 'Escape') setAddingCol(false); }}
+                      />
+                      <select
+                        value={newColType}
+                        onChange={e => setNewColType(e.target.value)}
+                        className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-1.5 h-7"
+                      >
+                        {FRIENDLY_TYPES.map(t => (
+                          <option key={t.value} value={t.value}>{t.icon} {t.label}</option>
+                        ))}
+                      </select>
+                      <div className="flex gap-1">
+                        <Button size="sm" onClick={addColumn} className="h-6 text-[10px] px-2 bg-klawsome-yellow text-klawsome-navy">Add</Button>
+                        <Button size="sm" variant="ghost" onClick={() => setAddingCol(false)} className="h-6 text-[10px] px-2 text-white/40">✕</Button>
+                      </div>
+                    </div>
+                  ) : (
+                    <Button size="sm" variant="ghost" onClick={() => setAddingCol(true)} className="text-white/30 hover:text-white/60 h-full w-full">
+                      <Plus className="w-4 h-4" />
+                    </Button>
+                  )}
+                </div>
               </div>
-            ))}
-            <Button size="sm" variant="ghost" onClick={() => setColumns([...columns, { key: '', label: '', type: 'text', required: false }])}
-              className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add column</Button>
+              {/* Sample data row */}
+              <div className="flex border-t border-white/10">
+                <div className="w-10 shrink-0 border-r border-white/10 p-2 text-white/20 text-xs text-center">1</div>
+                {columns.map((col, i) => (
+                  <div key={i} className="flex-1 min-w-[120px] border-r border-white/10 p-2">
+                    {col.type === 'bool' ? (
+                      <div className="w-4 h-4 rounded border border-white/20 bg-white/5" />
+                    ) : col.type === 'image_url' ? (
+                      <div className="w-10 h-10 rounded bg-white/5 border border-dashed border-white/20 flex items-center justify-center">
+                        <span className="text-white/20 text-xs">📷</span>
+                      </div>
+                    ) : (
+                      <div className="h-4 bg-white/5 rounded w-3/4" />
+                    )}
+                  </div>
+                ))}
+                <div className="w-[100px] shrink-0" />
+              </div>
+              {columns.length === 0 && !addingCol && (
+                <div className="p-6 text-center text-white/30 text-sm border-t border-white/10">
+                  Click <strong>+</strong> to add your first column
+                </div>
+              )}
+            </div>
           </div>
-          <Button onClick={createTable} disabled={creating} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-            {creating ? 'Creating…' : 'Create Table'}
-          </Button>
+
+          {/* Step 3: Create */}
+          {columns.length > 0 && tableLabel.trim() && (
+            <Button onClick={createTable} disabled={creating} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-sm">
+              {creating ? 'Creating…' : `Create "${tableLabel.trim()}" Table`}
+            </Button>
+          )}
         </CardContent>
       </Card>
 
