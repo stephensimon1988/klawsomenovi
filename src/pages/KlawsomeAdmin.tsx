@@ -1216,13 +1216,8 @@ function SectionCard({ section, password, page, onReorder, onToggleVisibility, o
             </div>
           </div>
 
-          {/* AI Mode Toggle + Content editor */}
+          {/* AI Content Builder */}
           <div className="border-t border-white/10 pt-3">
-            <div className="flex items-center justify-between mb-3">
-              <p className="text-white/50 text-xs font-heading flex items-center gap-1"><Sparkles className="w-3 h-3 text-klawsome-yellow" /> AI Content Builder</p>
-            </div>
-
-            {(
               <div className="bg-white/5 border border-klawsome-yellow/20 rounded-xl p-4 mb-4 space-y-4">
                 <p className="text-klawsome-yellow text-xs font-heading font-bold flex items-center gap-1">
                   <Sparkles className="w-3 h-3" /> AI Content Builder
