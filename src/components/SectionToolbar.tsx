@@ -168,11 +168,11 @@ const SectionToolbar = ({ config }: SectionToolbarProps) => {
       if (data?.error) throw new Error(data.error);
 
       setLayoutTemplate(data.template);
-      saveSectionSettings({ layout_template: data.template, columns: parseInt(aiColumns) });
       setAiTextBlocks(['']);
       setAiImages([]);
       setAiLinks([]);
       toast.success(`AI organized content with "${data.template}" layout ✨`);
+      triggerRefresh();
     } catch (e: any) {
       toast.error(e.message || 'AI build failed');
     }
