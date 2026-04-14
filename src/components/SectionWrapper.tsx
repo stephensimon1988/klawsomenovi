@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from 'react';
 import SectionPhotoGallery from './SectionPhotoGallery';
 import { useContainerMaxWidth } from '@/contexts/SiteSettingsContext';
+import { useEditMode } from '@/contexts/EditModeContext';
+import SectionToolbar from './SectionToolbar';
 
 export interface PageSectionConfig {
   id: string;
