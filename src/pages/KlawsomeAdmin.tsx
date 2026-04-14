@@ -795,6 +795,7 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                 <option value="faq_items">faq_items</option>
                 <option value="invite_templates">invite_templates</option>
                 <option value="business_pricing_tiers">business_pricing_tiers</option>
+                <option value="store_hours">store_hours</option>
               </select>
             </div>
             <div>
