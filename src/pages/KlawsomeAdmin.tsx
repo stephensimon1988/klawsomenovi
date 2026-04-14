@@ -806,6 +806,8 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
                 <option value="pricing-grid">Pricing Grid</option>
                 <option value="list">List</option>
                 <option value="accordion">Accordion</option>
+                <option value="hours">Hours</option>
+                <option value="news-grid">News Grid</option>
               </select>
             </div>
             <div>
