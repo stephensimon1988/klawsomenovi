@@ -249,3 +249,9 @@ html {
   border-color: rgba(255, 255, 255, 0.15) !important;
 }
 .rich-text-editor .ql-picker-item { color: white !important; }
+
+/* Admin native select dropdown fix — dark background for option elements */
+select option {
+  background: #1e293b;
+  color: white;
+}
