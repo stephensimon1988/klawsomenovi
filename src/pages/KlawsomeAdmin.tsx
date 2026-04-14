@@ -709,25 +709,6 @@ function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast 
         </div>
       )}
 
-      {/* FAQ — page filter */}
-      {block.block_type === 'faq' && (
-        <div className="space-y-1">
-          <Input value={localContent.page || 'general'} onChange={e => setLocalContent({ ...localContent, page: e.target.value })}
-            placeholder="Page filter (e.g. birthdays, general)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
-        </div>
-      )}
-
-      {/* Jobs — category filter */}
-      {block.block_type === 'jobs' && (
-        <div className="space-y-1">
-          <Input value={localContent.category || ''} onChange={e => setLocalContent({ ...localContent, category: e.target.value })}
-            placeholder="Category filter (e.g. in-store, hybrid, unpaid — leave empty for all)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Button size="sm" variant="ghost" onClick={handleSave} disabled={saving === block.id}
-            className="text-green-400 text-xs h-6 px-2"><Save className="w-3 h-3 mr-1" />Save</Button>
-        </div>
-      )}
 
       {/* Cards — inline JSON editor */}
       {block.block_type === 'cards' && (
