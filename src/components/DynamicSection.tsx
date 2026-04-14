@@ -401,13 +401,21 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
   const display = content.display || 'card-grid';
   const columnCount = content.columns || 3;
   const inlineItems = content.items || [];
+  const filterColumn = content.filter_column || '';
+  const filterValue = content.filter_value || '';
 
   const { data: rawData } = useCmsTable<Record<string, any>>(source, { enabled: source !== 'inline' });
+
+  // Apply optional filtering
+  const filteredData = (rawData || []).filter((row: Record<string, any>) => {
+    if (!filterColumn || !filterValue) return true;
+    return String(row[filterColumn] || '') === filterValue;
+  });
 
   // Map raw DB rows to uniform card items
   const items: DataCardItem[] = source === 'inline'
     ? inlineItems
-    : (rawData || []).map((row: Record<string, any>) => ({
+    : filteredData.map((row: Record<string, any>) => ({
         title: mappings.title ? String(row[mappings.title] || '') : undefined,
         description: mappings.description ? String(row[mappings.description] || '') : undefined,
         price: mappings.price ? String(row[mappings.price] || '') : undefined,
@@ -419,6 +427,7 @@ function DataCardsWidget({ content }: { content: Record<string, any> }) {
       }));
 
   if (items.length === 0) return <p className="text-muted-foreground text-center text-sm font-body">No data to display</p>;
+
 
   const colsClass = columnCount === 2 ? 'md:grid-cols-2' : columnCount === 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-3';
 
