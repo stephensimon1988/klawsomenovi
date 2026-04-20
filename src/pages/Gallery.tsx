@@ -26,34 +26,34 @@ const Gallery = () => {
       <KawaiiNav />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 lg:px-12">
-        <div className="container mx-auto">
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-6">Moments</p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold uppercase leading-[0.95] mb-8 max-w-4xl">
+      <section className="ds-page-hero">
+        <div className="ds-container">
+          <p className="ds-eyebrow mb-6">Moments</p>
+          <h1 className="ds-h1 mb-8 max-w-4xl">
             Klawsome<br/>Gallery
           </h1>
-          <p className="text-muted-foreground font-body text-lg max-w-2xl">
+          <p className="ds-lead max-w-2xl">
             From the build-out to grand opening to every birthday after — a look inside the arcade.
           </p>
         </div>
       </section>
 
       {Object.entries(grouped).map(([section, items]) => (
-        <section key={section} className="py-20 px-6 lg:px-12">
-          <div className="container mx-auto">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold uppercase mb-12 border-t border-foreground pt-6">
+        <section key={section} className="section-y section-x">
+          <div className="ds-container">
+            <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">
               {sectionLabels[section] || section}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {items.map((p) => (
                 <figure key={p.id} className="group">
-                  <div className="aspect-square overflow-hidden rounded-2xl bg-secondary">
+                  <div className="overflow-hidden rounded-2xl bg-secondary">
                     {p.image_url ? (
                       <img
                         src={p.image_url}
                         alt={p.caption}
                         loading="lazy"
-                        className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                        className="ds-img-thumb group-hover:scale-105 transition-transform duration-500"
                       />
                     ) : null}
                   </div>
@@ -68,7 +68,7 @@ const Gallery = () => {
       ))}
 
       {(!photos || photos.length === 0) && (
-        <section className="py-28 px-6 text-center text-muted-foreground font-body">No photos yet — add some in the Command Center.</section>
+        <section className="section-y section-x text-center text-muted-foreground font-body">No photos yet — add some in the Command Center.</section>
       )}
 
       <KawaiiFooter />

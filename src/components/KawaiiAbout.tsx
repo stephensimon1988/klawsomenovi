@@ -26,16 +26,16 @@ const KawaiiAbout = () => {
   ];
 
   return (
-    <section id="about" className="py-28 px-6 lg:px-12 bg-secondary/50 relative overflow-hidden">
+    <section id="about" className="section-y section-x bg-secondary/50 relative overflow-hidden">
       <LottieAccent type="sparkle" className="absolute top-12 left-12 opacity-20" size={80} />
 
-      <div className="container mx-auto">
+      <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">How It Works</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-6">
+          <p className="ds-eyebrow">How It Works</p>
+          <h2 className="ds-h2 mb-6">
             {aboutTitle}
           </h2>
-          <p className="text-muted-foreground text-lg font-body leading-relaxed">
+          <p className="ds-lead">
             {aboutSubtitle}
           </p>
         </div>
@@ -52,9 +52,9 @@ const KawaiiAbout = () => {
                   <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
                 )}
               </div>
-              <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-2">Step {index + 1}</p>
-              <h3 className="text-2xl font-heading font-bold text-foreground mb-3">{step.title}</h3>
-              <p className="text-muted-foreground font-body leading-relaxed">{step.description}</p>
+              <p className="ds-eyebrow mb-2">Step {index + 1}</p>
+              <h3 className="ds-h3 mb-3">{step.title}</h3>
+              <p className="ds-body">{step.description}</p>
             </div>
           ))}
         </div>

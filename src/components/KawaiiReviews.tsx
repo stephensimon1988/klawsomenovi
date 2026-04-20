@@ -46,11 +46,11 @@ const KawaiiReviews = () => {
   const displayStars = hasHalf ? fullStars + 1 : (rating - fullStars >= 0.75 ? fullStars + 1 : fullStars);
 
   return (
-    <section id="reviews" className="py-28 px-6 lg:px-12 bg-background">
-      <div className="container mx-auto">
+    <section id="reviews" className="section-y section-x bg-background">
+      <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Testimonials</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-4">
+          <p className="ds-eyebrow">Testimonials</p>
+          <h2 className="ds-h2 mb-4">
             Guests love us
           </h2>
           <div className="flex items-center gap-2 mb-2">

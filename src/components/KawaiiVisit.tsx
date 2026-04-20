@@ -20,24 +20,24 @@ const KawaiiVisit = () => {
     : '11 a.m. to 9 p.m.';
 
   return (
-    <section id="visit" className="py-28 px-6 lg:px-12 bg-background">
-      <div className="container mx-auto">
-        <div className="grid lg:grid-cols-2 gap-16 items-center max-w-6xl mx-auto">
+    <section id="visit" className="section-y section-x bg-background">
+      <div className="ds-container">
+        <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div ref={imageRef} style={{ opacity: 0 }}>
             <img
               src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg"
               alt="Klawsome arcade storefront"
-              className="rounded-2xl w-full object-cover aspect-[4/5]"
+              className="ds-img-portrait"
               loading="lazy"
             />
           </div>
 
           <div ref={textRef} style={{ opacity: 0 }}>
-            <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Visit Us</p>
-            <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground mb-6 leading-tight">
+            <p className="ds-eyebrow">Visit Us</p>
+            <h2 className="ds-h2 mb-6">
               Find us at Sakura Novi
             </h2>
-            <p className="text-muted-foreground font-body text-lg mb-10 leading-relaxed max-w-lg">
+            <p className="ds-lead mb-10 max-w-lg">
               Klawsome sits at {address}. Open Tuesday through Sunday, {hoursText}, closed Mondays.
             </p>
 

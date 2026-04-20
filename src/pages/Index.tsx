@@ -21,11 +21,11 @@ const Index = () => {
       <KawaiiNews />
       <KawaiiGiftCards />
       {/* Scheduling section */}
-      <section id="scheduling" className="py-28 px-6 lg:px-12 bg-secondary/50">
-        <div className="max-w-4xl mx-auto">
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Schedule</p>
-          <h2 className="font-heading text-4xl md:text-5xl lg:text-6xl font-bold text-foreground mb-4 leading-tight">Book Your Visit</h2>
-          <p className="text-muted-foreground font-body text-lg mb-10">Schedule your next Klawsome adventure!</p>
+      <section id="scheduling" className="section-y section-x bg-secondary/50">
+        <div className="ds-container-narrow">
+          <p className="ds-eyebrow">Schedule</p>
+          <h2 className="ds-h2 mb-4">Book Your Visit</h2>
+          <p className="ds-lead mb-10">Schedule your next Klawsome adventure!</p>
           <div className="rounded-2xl border border-border bg-background p-16 text-muted-foreground text-center font-body">
             Acuity scheduling form coming soon
           </div>
