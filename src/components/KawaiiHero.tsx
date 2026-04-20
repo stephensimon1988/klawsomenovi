@@ -62,9 +62,9 @@ const KawaiiHero = () => {
 
       <LottieAccent type="sparkle" className="absolute top-24 right-12 opacity-30 z-10" size={80} />
 
-      <div className="relative z-10 container mx-auto px-6 lg:px-12 pb-24 pt-32">
+      <div className="relative z-10 ds-container section-x pb-24 pt-32">
         <div ref={textRef} className="max-w-3xl">
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold mb-6 leading-[0.95] tracking-tight text-white uppercase" style={{ opacity: 0 }}>
+          <h1 className="ds-h1 text-white mb-6" style={{ opacity: 0 }}>
             {headlineParts.map((part, i) => (
               <span key={i} className="block">
                 {part}
@@ -72,7 +72,7 @@ const KawaiiHero = () => {
             ))}
           </h1>
 
-          <p className="text-lg md:text-xl text-white/70 max-w-xl mb-10 font-body leading-relaxed" style={{ opacity: 0 }}>
+          <p className="ds-lead text-white/70 max-w-xl mb-10" style={{ opacity: 0 }}>
             {subheadline}
           </p>
 

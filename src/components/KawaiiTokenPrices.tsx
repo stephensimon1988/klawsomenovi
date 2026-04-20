@@ -20,13 +20,13 @@ const KawaiiTokenPrices = () => {
   const tiers = dbTiers && dbTiers.length > 0 ? dbTiers : fallbackTiers;
 
   return (
-    <section id="tokens" className="py-28 px-6 lg:px-12 bg-klawsome-navy relative overflow-hidden">
+    <section id="tokens" className="section-y section-x bg-klawsome-navy relative overflow-hidden">
       <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-20" size={70} />
 
-      <div className="container mx-auto relative z-10">
+      <div className="ds-container relative z-10">
         <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
-          <p className="text-xs font-heading font-bold text-klawsome-yellow uppercase tracking-[0.2em] mb-4">Pricing</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-white leading-tight">
+          <p className="ds-eyebrow text-klawsome-yellow">Pricing</p>
+          <h2 className="ds-h2 text-white">
             Token Prices
           </h2>
         </div>

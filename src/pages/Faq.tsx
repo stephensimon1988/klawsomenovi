@@ -22,21 +22,21 @@ const Faq = () => {
       <KawaiiNav />
 
       {/* Hero */}
-      <section className="pt-32 pb-16 px-6 lg:px-12">
-        <div className="container mx-auto">
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-6">Help</p>
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold uppercase leading-[0.95] mb-8 max-w-4xl">
+      <section className="ds-page-hero">
+        <div className="ds-container">
+          <p className="ds-eyebrow mb-6">Help</p>
+          <h1 className="ds-h1 mb-8 max-w-4xl">
             Frequently Asked Questions
           </h1>
-          <p className="text-muted-foreground font-body text-lg max-w-2xl">
+          <p className="ds-lead max-w-2xl">
             Everything you wanted to know about claw machines, kawaii plushies, parties, and the rest.
           </p>
         </div>
       </section>
 
       {/* Tabs */}
-      <section className="px-6 lg:px-12 border-b border-border sticky top-20 bg-background/95 backdrop-blur z-30">
-        <div className="container mx-auto flex gap-8 overflow-x-auto">
+      <section className="section-x border-b border-border sticky top-20 bg-background/95 backdrop-blur z-30">
+        <div className="ds-container flex gap-8 overflow-x-auto">
           {categories.map((c) => (
             <button
               key={c.key}
@@ -52,8 +52,8 @@ const Faq = () => {
       </section>
 
       {/* Items */}
-      <section className="py-20 px-6 lg:px-12">
-        <div className="container mx-auto max-w-3xl">
+      <section className="section-y section-x">
+        <div className="ds-container-narrow">
           {filtered.length === 0 ? (
             <p className="text-muted-foreground font-body text-center py-20">No questions in this category yet.</p>
           ) : (

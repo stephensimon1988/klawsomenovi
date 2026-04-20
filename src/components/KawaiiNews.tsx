@@ -26,11 +26,11 @@ const KawaiiNews = () => {
   const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
 
   return (
-    <section id="news" className="py-28 px-6 lg:px-12 bg-secondary/50">
-      <div className="container mx-auto">
+    <section id="news" className="section-y section-x bg-secondary/50">
+      <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
-          <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4">Press</p>
-          <h2 className="text-4xl md:text-5xl lg:text-6xl font-heading font-bold text-foreground leading-tight mb-6">
+          <p className="ds-eyebrow">Press</p>
+          <h2 className="ds-h2 mb-6">
             In The News
           </h2>
           <img
@@ -41,26 +41,26 @@ const KawaiiNews = () => {
           />
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-3 gap-8 max-w-6xl">
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-8">
           {articles.slice(0, 3).map((article: any) => (
             <a
               key={article.url}
               href={article.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="group block rounded-2xl overflow-hidden bg-background border border-border hover:shadow-lg transition-all glow-hover glow-pink"
+              className="group block rounded-2xl overflow-hidden bg-background border border-border hover:shadow-lg transition-all glow-hover glow-pink flex flex-col"
               style={{ opacity: 0 }}
             >
-              <div className="aspect-[4/3] overflow-hidden">
+              <div className="overflow-hidden">
                 <img
                   src={article.image_url}
                   alt={article.title}
-                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  className="ds-img-card group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
                 />
               </div>
               <div className="p-6">
-                <h3 className="font-heading font-bold text-foreground leading-snug mb-3">{article.title}</h3>
+                <h3 className="ds-h3 text-lg mb-3">{article.title}</h3>
                 <span className="text-primary text-sm font-heading font-bold tracking-wider uppercase">Read More →</span>
               </div>
             </a>
