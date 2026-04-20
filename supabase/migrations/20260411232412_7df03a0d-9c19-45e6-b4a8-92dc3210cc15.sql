@@ -1,1 +1,0 @@
-ALTER TABLE public.site_settings ADD COLUMN container_max_width text NOT NULL DEFAULT '1200px';

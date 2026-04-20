@@ -33,10 +33,10 @@ const KawaiiProducts = () => {
     <section id="products" className="py-20 px-4 bg-klawsome-navy">
       <div className="container mx-auto">
         <div ref={headerRef} className="text-center mb-16" style={{ opacity: 0 }}>
-          <h2 className="font-heading font-bold mb-4 text-white">
+          <h2 className="text-4xl md:text-5xl font-heading font-bold mb-4 text-white">
             <span className="kawaii-text-gradient">Four simple steps</span> to winning big
           </h2>
-          <p className="text-white/60 max-w-2xl mx-auto font-body">
+          <p className="text-white/60 text-lg max-w-2xl mx-auto font-body">
             Grab tokens for the klaw machines! More tokens = more bonus coins! ✨
           </p>
         </div>
@@ -71,14 +71,14 @@ const KawaiiProducts = () => {
                   {product.imageUrl ? (
                     <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
-                    <div className="text-4xl">🪙</div>
+                    <div className="text-5xl">🪙</div>
                   )}
                 </div>
                 <div className="p-5">
-                  <h4 className="font-heading font-bold text-white mb-1">{product.name}</h4>
+                  <h3 className="font-heading font-bold text-lg text-white mb-1">{product.name}</h3>
                   <p className="text-white/50 text-sm font-body mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between">
-                    <h4 className="font-heading font-bold text-klawsome-yellow">{product.price}</h4>
+                    <span className="font-heading font-bold text-xl text-klawsome-yellow">{product.price}</span>
                     <Button size="sm" className="rounded-bubble font-heading text-sm bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
                       Buy
                     </Button>

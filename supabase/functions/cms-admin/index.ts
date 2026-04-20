@@ -6,22 +6,12 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const BASE_TABLES = [
+const TABLES_ALLOWED = [
   'site_settings', 'store_hours', 'homepage_content', 'homepage_steps',
   'token_tiers', 'news_articles', 'birthdays_content', 'party_options',
   'faq_items', 'invite_templates', 'job_listings', 'business_sections',
-  'business_pricing_tiers', 'business_how_steps', 'page_sections',
-  'custom_blocks', 'section_content_blocks', 'cms_custom_tables',
-  'rewards_tiers', 'rewards_redemptions', 'gallery_photos',
+  'business_pricing_tiers', 'business_how_steps',
 ];
-
-async function getAllowedTables(supabase: any): Promise<string[]> {
-  const { data: customTables } = await supabase
-    .from('cms_custom_tables')
-    .select('table_name');
-  const custom = (customTables || []).map((r: any) => r.table_name);
-  return [...BASE_TABLES, ...custom];
-}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -44,19 +34,16 @@ serve(async (req) => {
       return json({ error: 'Unauthorized' }, 401);
     }
 
+    // Validate table name
+    if (table && !TABLES_ALLOWED.includes(table)) {
+      return json({ error: 'Invalid table' }, 400);
+    }
+
     const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
     const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
     const supabase = createClient(supabaseUrl, serviceKey);
 
-    // Validate table name dynamically
-    if (table) {
-      const allowed = await getAllowedTables(supabase);
-      if (!allowed.includes(table)) {
-        return json({ error: 'Invalid table' }, 400);
-      }
-    }
-
-    // READ
+    // READ — fetch all rows from a table
     if (action === 'read') {
       if (!table) return json({ error: 'Table required' }, 400);
       const { data: rows, error } = await supabase
@@ -65,6 +52,7 @@ serve(async (req) => {
         .order('sort_order', { ascending: true });
 
       if (error) {
+        // Try without sort_order for tables that don't have it
         const { data: rows2, error: error2 } = await supabase
           .from(table)
           .select('*');
@@ -74,11 +62,10 @@ serve(async (req) => {
       return json({ rows });
     }
 
-    // READ ALL
+    // READ ALL — fetch all tables at once for the admin dashboard
     if (action === 'read_all') {
-      const allowed = await getAllowedTables(supabase);
       const results: Record<string, unknown[]> = {};
-      for (const t of allowed) {
+      for (const t of TABLES_ALLOWED) {
         const { data: rows } = await supabase
           .from(t)
           .select('*')
@@ -88,7 +75,7 @@ serve(async (req) => {
       return json({ data: results });
     }
 
-    // UPDATE
+    // UPDATE — update a single row by id
     if (action === 'update') {
       if (!table || !id || !data) return json({ error: 'Table, id, and data required' }, 400);
       const { error } = await supabase.from(table).update(data).eq('id', id);
@@ -96,7 +83,7 @@ serve(async (req) => {
       return json({ success: true });
     }
 
-    // UPSERT
+    // UPSERT — for single-row tables (site_settings, homepage_content, birthdays_content)
     if (action === 'upsert') {
       if (!table || !data) return json({ error: 'Table and data required' }, 400);
       const { error } = await supabase.from(table).upsert(data);
@@ -104,7 +91,7 @@ serve(async (req) => {
       return json({ success: true });
     }
 
-    // INSERT
+    // INSERT — add a new row
     if (action === 'insert') {
       if (!table || !data) return json({ error: 'Table and data required' }, 400);
       const { data: row, error } = await supabase.from(table).insert(data).select().single();
@@ -112,7 +99,7 @@ serve(async (req) => {
       return json({ row });
     }
 
-    // DELETE
+    // DELETE — remove a row by id
     if (action === 'delete') {
       if (!table || !id) return json({ error: 'Table and id required' }, 400);
       const { error } = await supabase.from(table).delete().eq('id', id);

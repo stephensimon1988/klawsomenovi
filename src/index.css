@@ -86,40 +86,6 @@ html {
 
   h1, h2, h3, h4, h5, h6 {
     font-family: var(--font-heading);
-    font-weight: 700;
-    line-height: 1.15;
-  }
-
-  h1 {
-    font-size: 3em;      /* ~48px at 16px base */
-  }
-
-  h2 {
-    font-size: 2.25em;   /* ~36px */
-  }
-
-  h3 {
-    font-size: 1.75em;   /* ~28px */
-  }
-
-  h4 {
-    font-size: 1.375em;  /* ~22px */
-  }
-
-  h5 {
-    font-size: 1.125em;  /* ~18px */
-  }
-
-  h6 {
-    font-size: 1em;      /* ~16px */
-  }
-
-  p, li, span, a, label, input, textarea, select, button {
-    font-size: 1em;
-  }
-
-  small {
-    font-size: 0.875em;  /* ~14px */
   }
 }
 
@@ -219,63 +185,4 @@ html {
 @keyframes marquee-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
-
-/* WYSIWYG Editor (Quill) — light mode (default, for inline edit mode) */
-.rich-text-editor .ql-toolbar {
-  background: #f8f9fa;
-  border-color: #e2e8f0 !important;
-  border-radius: 0.5rem 0.5rem 0 0;
-}
-.rich-text-editor .ql-toolbar .ql-stroke { stroke: #475569; }
-.rich-text-editor .ql-toolbar .ql-fill { fill: #475569; }
-.rich-text-editor .ql-toolbar .ql-picker-label { color: #475569; }
-.rich-text-editor .ql-toolbar button:hover .ql-stroke { stroke: #3b82f6; }
-.rich-text-editor .ql-toolbar button:hover .ql-fill { fill: #3b82f6; }
-.rich-text-editor .ql-container {
-  background: #ffffff;
-  border-color: #e2e8f0 !important;
-  border-radius: 0 0 0.5rem 0.5rem;
-  color: #1e293b;
-  font-family: var(--font-body), sans-serif;
-  min-height: 100px;
-}
-.rich-text-editor .ql-editor.ql-blank::before {
-  color: #94a3b8;
-  font-style: italic;
-}
-.rich-text-editor .ql-picker-options {
-  background: #ffffff !important;
-  border-color: #e2e8f0 !important;
-}
-.rich-text-editor .ql-picker-item { color: #1e293b !important; }
-
-/* WYSIWYG Editor — dark mode override (for admin panel dark backgrounds) */
-.rte-dark .rich-text-editor .ql-toolbar {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-.rte-dark .rich-text-editor .ql-toolbar .ql-stroke { stroke: rgba(255, 255, 255, 0.6); }
-.rte-dark .rich-text-editor .ql-toolbar .ql-fill { fill: rgba(255, 255, 255, 0.6); }
-.rte-dark .rich-text-editor .ql-toolbar .ql-picker-label { color: rgba(255, 255, 255, 0.6); }
-.rte-dark .rich-text-editor .ql-toolbar button:hover .ql-stroke { stroke: #fbbf24; }
-.rte-dark .rich-text-editor .ql-toolbar button:hover .ql-fill { fill: #fbbf24; }
-.rte-dark .rich-text-editor .ql-container {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: rgba(255, 255, 255, 0.15) !important;
-  color: white;
-}
-.rte-dark .rich-text-editor .ql-editor.ql-blank::before {
-  color: rgba(255, 255, 255, 0.3);
-}
-.rte-dark .rich-text-editor .ql-picker-options {
-  background: #1e293b !important;
-  border-color: rgba(255, 255, 255, 0.15) !important;
-}
-.rte-dark .rich-text-editor .ql-picker-item { color: white !important; }
-
-/* Admin native select dropdown fix — dark background for option elements */
-select option {
-  background: #1e293b;
-  color: white;
 }

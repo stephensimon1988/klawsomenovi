@@ -1,1 +1,0 @@
-ALTER TABLE public.page_sections ADD COLUMN animation text NOT NULL DEFAULT '';

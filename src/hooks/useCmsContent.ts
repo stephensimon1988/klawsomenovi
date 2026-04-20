@@ -19,12 +19,12 @@ export function useCmsTable<T = Record<string, unknown>>(table: string, options?
       }
       return (data || []) as T[];
     },
-    staleTime: 5 * 60 * 1000,
+    staleTime: 5 * 60 * 1000, // 5 min cache
     enabled: options?.enabled !== false,
   });
 }
 
-// Single-row table hook
+// Single-row table hook (site_settings, homepage_content, birthdays_content)
 export function useCmsSingle<T = Record<string, unknown>>(table: string) {
   return useQuery<T | null>({
     queryKey: ['cms', table, 'single'],
@@ -51,7 +51,6 @@ export interface SiteSettings {
   youtube_url: string;
   gift_card_url: string;
   newsletter_text: string;
-  container_max_width: string;
 }
 
 export interface StoreHour {
@@ -180,66 +179,4 @@ export interface BusinessHowStep {
   description: string;
   icon: string;
   sort_order: number;
-}
-
-export interface PageSection {
-  id: string;
-  page: string;
-  section_key: string;
-  label: string;
-  sort_order: number;
-  is_visible: boolean;
-  section_height: string;
-  wrapper_max_width: string;
-  padding_y: string;
-  bg_color: string;
-  bg_image_url: string;
-  custom_css_class: string;
-  columns: number;
-  photos?: string[];
-  text_color?: string;
-  layout_json?: Record<string, any>;
-  section_type?: 'hero' | 'section' | 'small';
-  hero_height?: '50vh' | '100vh';
-  layout_template?: string;
-  animation?: string;
-}
-
-export interface SectionContentBlock {
-  id: string;
-  section_id: string;
-  column_index: number;
-  row_order: number;
-  block_type: string;
-  content: Record<string, any>;
-}
-
-export interface CustomBlock {
-  id: string;
-  block_key: string;
-  headline: string;
-  body: string;
-  image_url: string;
-  image_position: string;
-  cta_text: string;
-  cta_url: string;
-  sort_order: number;
-}
-
-// Hook for fetching page sections for a specific page
-export function usePageSections(page: string) {
-  return useQuery<PageSection[]>({
-    queryKey: ['cms', 'page_sections', page],
-    queryFn: async () => {
-      const { data, error } = await supabase
-        .from('page_sections' as any)
-        .select('*')
-        .eq('page', page)
-        .eq('is_visible', true)
-        .order('sort_order', { ascending: true });
-      if (error) throw new Error(error.message);
-      return (data || []) as unknown as PageSection[];
-    },
-    staleTime: 5 * 60 * 1000,
-  });
 }

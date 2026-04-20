@@ -134,66 +134,6 @@ export type Database = {
         }
         Relationships: []
       }
-      cms_custom_tables: {
-        Row: {
-          columns: Json
-          created_at: string
-          id: string
-          label: string
-          table_name: string
-        }
-        Insert: {
-          columns?: Json
-          created_at?: string
-          id?: string
-          label: string
-          table_name: string
-        }
-        Update: {
-          columns?: Json
-          created_at?: string
-          id?: string
-          label?: string
-          table_name?: string
-        }
-        Relationships: []
-      }
-      custom_blocks: {
-        Row: {
-          block_key: string
-          body: string
-          cta_text: string
-          cta_url: string
-          headline: string
-          id: string
-          image_position: string
-          image_url: string
-          sort_order: number
-        }
-        Insert: {
-          block_key: string
-          body?: string
-          cta_text?: string
-          cta_url?: string
-          headline?: string
-          id?: string
-          image_position?: string
-          image_url?: string
-          sort_order?: number
-        }
-        Update: {
-          block_key?: string
-          body?: string
-          cta_text?: string
-          cta_url?: string
-          headline?: string
-          id?: string
-          image_position?: string
-          image_url?: string
-          sort_order?: number
-        }
-        Relationships: []
-      }
       faq_items: {
         Row: {
           answer: string
@@ -214,30 +154,6 @@ export type Database = {
           id?: string
           page?: string
           question?: string
-          sort_order?: number
-        }
-        Relationships: []
-      }
-      gallery_photos: {
-        Row: {
-          caption: string
-          id: string
-          image_url: string
-          section: string
-          sort_order: number
-        }
-        Insert: {
-          caption?: string
-          id?: string
-          image_url?: string
-          section?: string
-          sort_order?: number
-        }
-        Update: {
-          caption?: string
-          id?: string
-          image_url?: string
-          section?: string
           sort_order?: number
         }
         Relationships: []
@@ -410,75 +326,6 @@ export type Database = {
         }
         Relationships: []
       }
-      page_sections: {
-        Row: {
-          animation: string
-          bg_color: string
-          bg_image_url: string
-          columns: number
-          custom_css_class: string
-          hero_height: string
-          id: string
-          is_visible: boolean
-          label: string
-          layout_json: Json
-          layout_template: string
-          padding_y: string
-          page: string
-          photos: Json
-          section_height: string
-          section_key: string
-          section_type: string
-          sort_order: number
-          text_color: string
-          wrapper_max_width: string
-        }
-        Insert: {
-          animation?: string
-          bg_color?: string
-          bg_image_url?: string
-          columns?: number
-          custom_css_class?: string
-          hero_height?: string
-          id?: string
-          is_visible?: boolean
-          label?: string
-          layout_json?: Json
-          layout_template?: string
-          padding_y?: string
-          page: string
-          photos?: Json
-          section_height?: string
-          section_key: string
-          section_type?: string
-          sort_order?: number
-          text_color?: string
-          wrapper_max_width?: string
-        }
-        Update: {
-          animation?: string
-          bg_color?: string
-          bg_image_url?: string
-          columns?: number
-          custom_css_class?: string
-          hero_height?: string
-          id?: string
-          is_visible?: boolean
-          label?: string
-          layout_json?: Json
-          layout_template?: string
-          padding_y?: string
-          page?: string
-          photos?: Json
-          section_height?: string
-          section_key?: string
-          section_type?: string
-          sort_order?: number
-          text_color?: string
-          wrapper_max_width?: string
-        }
-        Relationships: []
-      }
       party_options: {
         Row: {
           description: string | null
@@ -506,91 +353,10 @@ export type Database = {
         }
         Relationships: []
       }
-      rewards_redemptions: {
-        Row: {
-          id: string
-          points: string
-          reward: string
-          sort_order: number
-        }
-        Insert: {
-          id?: string
-          points?: string
-          reward?: string
-          sort_order?: number
-        }
-        Update: {
-          id?: string
-          points?: string
-          reward?: string
-          sort_order?: number
-        }
-        Relationships: []
-      }
-      rewards_tiers: {
-        Row: {
-          benefit: string
-          id: string
-          min_points: string
-          sort_order: number
-          tier_name: string
-        }
-        Insert: {
-          benefit?: string
-          id?: string
-          min_points?: string
-          sort_order?: number
-          tier_name?: string
-        }
-        Update: {
-          benefit?: string
-          id?: string
-          min_points?: string
-          sort_order?: number
-          tier_name?: string
-        }
-        Relationships: []
-      }
-      section_content_blocks: {
-        Row: {
-          block_type: string
-          column_index: number
-          content: Json
-          id: string
-          row_order: number
-          section_id: string
-        }
-        Insert: {
-          block_type?: string
-          column_index?: number
-          content?: Json
-          id?: string
-          row_order?: number
-          section_id: string
-        }
-        Update: {
-          block_type?: string
-          column_index?: number
-          content?: Json
-          id?: string
-          row_order?: number
-          section_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "section_content_blocks_section_id_fkey"
-            columns: ["section_id"]
-            isOneToOne: false
-            referencedRelation: "page_sections"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
       site_settings: {
         Row: {
           address: string | null
           business_name: string
-          container_max_width: string
           email: string | null
           facebook_url: string | null
           gift_card_url: string | null
@@ -606,7 +372,6 @@ export type Database = {
         Insert: {
           address?: string | null
           business_name?: string
-          container_max_width?: string
           email?: string | null
           facebook_url?: string | null
           gift_card_url?: string | null
@@ -622,7 +387,6 @@ export type Database = {
         Update: {
           address?: string | null
           business_name?: string
-          container_max_width?: string
           email?: string | null
           facebook_url?: string | null
           gift_card_url?: string | null

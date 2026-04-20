@@ -1,30 +1,17 @@
-import { useState, useEffect, useCallback, useRef, lazy, Suspense } from 'react';
-import { useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+// Table/Badge also used by multi-row editor
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { ToggleGroup, ToggleGroupItem } from '@/components/ui/toggle-group';
-import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import MultiImageUpload from '@/components/MultiImageUpload';
-import MediaLibraryPicker from '@/components/MediaLibraryPicker';
-import {
-  Lock, Settings, Home, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2,
-  ChevronDown, ChevronUp, Eye, EyeOff, GripVertical, ArrowUp, ArrowDown, RefreshCw,
-  Sparkles, Shuffle, Link as LinkIcon
-} from 'lucide-react';
-import { toast } from 'sonner';
-import ImageUploadField from '@/components/ImageUploadField';
-import ColorPickerField from '@/components/ColorPickerField';
-import DynamicSection, { LAYOUT_TEMPLATES } from '@/components/DynamicSection';
-import SectionWrapper, { ANIMATION_PRESETS } from '@/components/SectionWrapper';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
 
-const RichTextEditor = lazy(() => import('@/components/RichTextEditor'));
+import { toast } from 'sonner';
 
 // ─── CMS helpers ────────────────────────────────────────────
 const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
@@ -36,29 +23,82 @@ const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
   return data;
 };
 
-// ─── Reusable inline field ──────────────────────────────────
-function InlineField({ label, value, onChange, multiline = false, type = 'text' }: {
-  label: string; value: string; onChange: (v: string) => void; multiline?: boolean; type?: string;
+// ─── Reusable field editor ──────────────────────────────────
+function FieldRow({ label, value, onChange, multiline = false }: {
+  label: string; value: string; onChange: (v: string) => void; multiline?: boolean;
 }) {
   return (
-    <div className="space-y-1">
-      <label className="text-white/60 text-xs font-heading">{label}</label>
-      {multiline ? (
-        <Textarea value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
-      ) : (
-        <Input type={type} value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white text-sm" />
-      )}
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
+      <label className="text-white/70 text-sm font-heading pt-2 md:text-right pr-4">{label}</label>
+      <div className="md:col-span-2">
+        {multiline ? (
+          <Textarea value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30 min-h-[80px]" />
+        ) : (
+          <Input value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30" />
+        )}
+      </div>
     </div>
   );
 }
 
-// ─── Mini table editor (reusable for steps, tiers, articles, etc.) ─
-function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
-  password: string;
-  table: string;
+// ─── Single-row editor (site_settings, homepage_content, birthdays_content) ─
+function SingleRowEditor({ table, password, fields }: {
+  table: string; password: string;
+  fields: { key: string; label: string; multiline?: boolean }[];
+}) {
+  const [row, setRow] = useState<Record<string, string>>({});
+  const [original, setOriginal] = useState<Record<string, string>>({});
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+
+  const load = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await cmsInvoke(password, { action: 'read', table });
+      const r = res.rows?.[0] || {};
+      const mapped: Record<string, string> = {};
+      fields.forEach((f) => (mapped[f.key] = r[f.key] ?? ''));
+      setRow(mapped);
+      setOriginal({ ...mapped, id: r.id });
+    } catch (e: any) { toast.error(e.message); }
+    setLoading(false);
+  }, [table, password, fields]);
+
+  useEffect(() => { load(); }, [load]);
+
+  const save = async () => {
+    setSaving(true);
+    try {
+      await cmsInvoke(password, { action: 'upsert', table, data: { ...row, id: original.id } });
+      toast.success('Saved!');
+      setOriginal({ ...row, id: original.id });
+    } catch (e: any) { toast.error(e.message); }
+    setSaving(false);
+  };
+
+  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
+
+  const dirty = fields.some((f) => row[f.key] !== original[f.key]);
+
+  return (
+    <div className="space-y-4">
+      {fields.map((f) => (
+        <FieldRow key={f.key} label={f.label} value={row[f.key] || ''} onChange={(v) => setRow({ ...row, [f.key]: v })} multiline={f.multiline} />
+      ))}
+      <div className="flex justify-end pt-2">
+        <Button onClick={save} disabled={saving || !dirty} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
+          <Save className="w-4 h-4 mr-2" />{saving ? 'Saving…' : 'Save Changes'}
+        </Button>
+      </div>
+    </div>
+  );
+}
+
+// ─── Multi-row editor (token_tiers, news_articles, etc.) ────
+function MultiRowEditor({ table, password, columns, defaultRow }: {
+  table: string; password: string;
   columns: { key: string; label: string; type?: 'text' | 'textarea' | 'bool' | 'array'; width?: string }[];
   defaultRow?: Record<string, unknown>;
-  filterFn?: (row: any) => boolean;
 }) {
   const [rows, setRows] = useState<any[]>([]);
   const [editing, setEditing] = useState<Record<string, any>>({});
@@ -69,9 +109,7 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
     setLoading(true);
     try {
       const res = await cmsInvoke(password, { action: 'read', table });
-      let r = res.rows || [];
-      if (filterFn) r = r.filter(filterFn);
-      setRows(r);
+      setRows(res.rows || []);
     } catch (e: any) { toast.error(e.message); }
     setLoading(false);
   }, [table, password]);
@@ -79,7 +117,11 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
   useEffect(() => { load(); }, [load]);
 
   const startEdit = (row: any) => setEditing({ ...editing, [row.id]: { ...row } });
-  const cancelEdit = (id: string) => { const next = { ...editing }; delete next[id]; setEditing(next); };
+  const cancelEdit = (id: string) => {
+    const next = { ...editing };
+    delete next[id];
+    setEditing(next);
+  };
   const updateField = (id: string, key: string, value: any) => {
     setEditing({ ...editing, [id]: { ...editing[id], [key]: value } });
   };
@@ -90,7 +132,7 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
       const edited = editing[id];
       const { id: _, ...data } = edited;
       await cmsInvoke(password, { action: 'update', table, id, data });
-      toast.success('Saved');
+      toast.success('Row saved');
       cancelEdit(id);
       load();
     } catch (e: any) { toast.error(e.message); }
@@ -99,9 +141,9 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
 
   const addRow = async () => {
     try {
-      const newData = { ...(defaultRow || {}) };
+      const newData = defaultRow || {};
       columns.forEach((c) => {
-        if (!(c.key in newData)) {
+        if (!(c.key in (newData as any))) {
           if (c.type === 'bool') (newData as any)[c.key] = true;
           else if (c.type === 'array') (newData as any)[c.key] = [];
           else (newData as any)[c.key] = '';
@@ -109,7 +151,7 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
       });
       (newData as any).sort_order = rows.length;
       await cmsInvoke(password, { action: 'insert', table, data: newData });
-      toast.success('Added');
+      toast.success('Row added');
       load();
     } catch (e: any) { toast.error(e.message); }
   };
@@ -123,18 +165,18 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
     } catch (e: any) { toast.error(e.message); }
   };
 
-  if (loading) return <p className="text-white/40 py-4 text-center text-sm">Loading…</p>;
+  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-4">
       <div className="overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="border-white/10 hover:bg-transparent">
               {columns.map((c) => (
-                <TableHead key={c.key} className="text-white/60 font-heading text-xs" style={{ width: c.width }}>{c.label}</TableHead>
+                <TableHead key={c.key} className="text-white/60 font-heading" style={{ width: c.width }}>{c.label}</TableHead>
               ))}
-              <TableHead className="text-white/60 font-heading text-xs w-[100px]">Actions</TableHead>
+              <TableHead className="text-white/60 font-heading w-[120px]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -143,41 +185,48 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
               return (
                 <TableRow key={row.id} className="border-white/10 hover:bg-white/5">
                   {columns.map((c) => (
-                    <TableCell key={c.key} className="text-white/80 align-top py-1.5">
+                    <TableCell key={c.key} className="text-white/80 align-top">
                       {isEditing ? (
                         c.type === 'bool' ? (
                           <Switch checked={!!isEditing[c.key]} onCheckedChange={(v) => updateField(row.id, c.key, v)} />
                         ) : c.type === 'array' ? (
-                          <Textarea value={(isEditing[c.key] || []).join('\n')} onChange={(e) => updateField(row.id, c.key, e.target.value.split('\n'))} className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" placeholder="One per line" />
+                          <Textarea
+                            value={(isEditing[c.key] || []).join('\n')}
+                            onChange={(e) => updateField(row.id, c.key, e.target.value.split('\n'))}
+                            className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]"
+                            placeholder="One per line"
+                          />
                         ) : c.type === 'textarea' ? (
-                          <Textarea value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-xs min-h-[50px]" />
+                          <Textarea value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
                         ) : (
-                          <Input value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-xs h-8" />
+                          <Input value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm" />
                         )
                       ) : (
                         c.type === 'bool' ? (
-                          <Badge variant="outline" className={`text-xs ${row[c.key] ? 'text-green-300 border-green-500/30' : 'text-red-300 border-red-500/30'}`}>
+                          <Badge variant="outline" className={row[c.key] ? 'text-green-300 border-green-500/30' : 'text-red-300 border-red-500/30'}>
                             {row[c.key] ? 'Yes' : 'No'}
                           </Badge>
                         ) : c.type === 'array' ? (
-                          <span className="text-xs">{(row[c.key] || []).join(', ') || '—'}</span>
+                          <span className="text-sm">{(row[c.key] || []).join(', ') || '—'}</span>
                         ) : (
-                          <span className="text-xs line-clamp-2">{row[c.key] || '—'}</span>
+                          <span className="text-sm line-clamp-2">{row[c.key] || '—'}</span>
                         )
                       )}
                     </TableCell>
                   ))}
-                  <TableCell className="align-top py-1.5">
+                  <TableCell className="align-top">
                     <div className="flex gap-1">
                       {isEditing ? (
                         <>
-                          <Button size="sm" onClick={() => saveRow(row.id)} disabled={saving === row.id} className="bg-green-600 hover:bg-green-700 text-white text-xs h-6 px-2">{saving === row.id ? '…' : 'Save'}</Button>
-                          <Button size="sm" variant="ghost" onClick={() => cancelEdit(row.id)} className="text-white/50 text-xs h-6 px-1">✕</Button>
+                          <Button size="sm" onClick={() => saveRow(row.id)} disabled={saving === row.id} className="bg-green-600 hover:bg-green-700 text-white text-xs h-7 px-2">
+                            {saving === row.id ? '…' : 'Save'}
+                          </Button>
+                          <Button size="sm" variant="ghost" onClick={() => cancelEdit(row.id)} className="text-white/50 text-xs h-7 px-2">Cancel</Button>
                         </>
                       ) : (
                         <>
-                          <Button size="sm" variant="ghost" onClick={() => startEdit(row)} className="text-klawsome-yellow text-xs h-6 px-2">Edit</Button>
-                          <Button size="sm" variant="ghost" onClick={() => deleteRow(row.id)} className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
+                          <Button size="sm" variant="ghost" onClick={() => startEdit(row)} className="text-klawsome-yellow text-xs h-7 px-2">Edit</Button>
+                          <Button size="sm" variant="ghost" onClick={() => deleteRow(row.id)} className="text-red-400 text-xs h-7 px-2"><Trash2 className="w-3 h-3" /></Button>
                         </>
                       )}
                     </div>
@@ -188,8 +237,8 @@ function MiniTableEditor({ password, table, columns, defaultRow, filterFn }: {
           </TableBody>
         </Table>
       </div>
-      <Button onClick={addRow} size="sm" className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs h-7">
-        <Plus className="w-3 h-3 mr-1" />Add Row
+      <Button onClick={addRow} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
+        <Plus className="w-4 h-4 mr-2" />Add Row
       </Button>
     </div>
   );
@@ -229,1615 +278,32 @@ function StoreHoursEditor({ password }: { password: string }) {
     setSaving(false);
   };
 
-  if (loading) return <p className="text-white/40 py-4 text-center text-sm">Loading…</p>;
+  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
 
   return (
-    <div className="space-y-2">
+    <div className="space-y-3">
       {hours.map((h, i) => (
-        <div key={h.id} className="grid grid-cols-4 gap-2 items-center">
-          <span className="text-white font-heading text-xs">{h.day_label}</span>
-          <Input value={h.open_time || ''} onChange={(e) => update(i, 'open_time', e.target.value)} disabled={h.is_closed} placeholder="10:00 AM" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Input value={h.close_time || ''} onChange={(e) => update(i, 'close_time', e.target.value)} disabled={h.is_closed} placeholder="8:00 PM" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <div className="flex items-center gap-1">
+        <div key={h.id} className="grid grid-cols-4 gap-3 items-center">
+          <span className="text-white font-heading text-sm">{h.day_label}</span>
+          <Input value={h.open_time || ''} onChange={(e) => update(i, 'open_time', e.target.value)} disabled={h.is_closed} placeholder="10:00 AM" className="bg-white/10 border-white/20 text-white text-sm" />
+          <Input value={h.close_time || ''} onChange={(e) => update(i, 'close_time', e.target.value)} disabled={h.is_closed} placeholder="8:00 PM" className="bg-white/10 border-white/20 text-white text-sm" />
+          <div className="flex items-center gap-2">
             <Switch checked={h.is_closed} onCheckedChange={(v) => update(i, 'is_closed', v)} />
             <span className="text-white/50 text-xs">Closed</span>
           </div>
         </div>
       ))}
-      <div className="flex justify-end pt-1">
-        <Button onClick={saveAll} disabled={saving} size="sm" className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs h-7">
-          <Save className="w-3 h-3 mr-1" />{saving ? 'Saving…' : 'Save Hours'}
+      <div className="flex justify-end pt-2">
+        <Button onClick={saveAll} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
+          <Save className="w-4 h-4 mr-2" />{saving ? 'Saving…' : 'Save Hours'}
         </Button>
       </div>
     </div>
   );
 }
 
-// ─── Content Block Editor ───────────────────────────────────
-const BLOCK_TYPES = [
-  { type: 'heading', icon: 'H', label: 'Heading' },
-  { type: 'richtext', icon: '📝', label: 'Rich Text' },
-  { type: 'image', icon: '🖼', label: 'Image' },
-  { type: 'video', icon: '🎬', label: 'Video' },
-  { type: 'iframe', icon: '🔗', label: 'Embed/iFrame' },
-  { type: 'code', icon: '💻', label: 'Code' },
-  { type: 'list', icon: '📋', label: 'List' },
-  { type: 'button', icon: '▶', label: 'Button' },
-  { type: 'divider', icon: '—', label: 'Divider' },
-  { type: 'tabs', icon: '📑', label: 'Tabs' },
-  { type: 'table', icon: '📊', label: 'Table' },
-  { type: 'gallery', icon: '🖼️', label: 'Gallery' },
-  { type: 'map', icon: '📍', label: 'Map' },
-  { type: 'icon_box', icon: '💎', label: 'Icon Box' },
-  { type: 'countdown', icon: '⏱', label: 'Countdown' },
-  { type: 'carousel', icon: '🎠', label: 'Carousel' },
-  { type: 'reviews', icon: '⭐', label: 'Google Reviews' },
-  { type: 'data_cards', icon: '📊', label: 'Data Cards' },
-];
 
-function ContentBlockEditor({ password, sectionId, onBlocksChanged }: { password: string; sectionId: string; onBlocksChanged?: () => void }) {
-  const [blocks, setBlocks] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState<string | null>(null);
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table: 'section_content_blocks' });
-      const filtered = (res.rows || [])
-        .filter((b: any) => b.section_id === sectionId)
-        .sort((a: any, b: any) => a.row_order - b.row_order);
-      setBlocks(filtered);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [password, sectionId]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const addBlock = async (blockType: string) => {
-    try {
-      const defaultContent: Record<string, any> =
-        blockType === 'heading' ? { text: 'New Heading' } :
-        blockType === 'richtext' ? { html: '<p>Your text here...</p>' } :
-        blockType === 'text' ? { text: 'Your text here...' } :
-        blockType === 'image' ? { url: '', alt: '' } :
-        blockType === 'video' ? { url: '', alt: '' } :
-        blockType === 'iframe' ? { url: '', title: '' } :
-        blockType === 'code' ? { code: '// Your code here', language: 'javascript' } :
-        blockType === 'list' ? { items: ['Item 1', 'Item 2', 'Item 3'] } :
-        blockType === 'button' ? { text: 'Learn More', url: '/' } :
-        blockType === 'divider' ? {} :
-        blockType === 'faq' ? { page: 'general' } :
-        blockType === 'jobs' ? { category: '' } :
-        blockType === 'cards' ? { items: [{ icon: '⭐', title: 'Card 1', description: 'Description' }] } :
-        blockType === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [{ title: 'Card 1', description: 'Description' }] } :
-        blockType === 'tabs' ? { tabs: [{ label: 'Tab 1', content: '<p>Content for tab 1</p>' }, { label: 'Tab 2', content: '<p>Content for tab 2</p>' }] } :
-        blockType === 'table' ? { headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['Data 1', 'Data 2', 'Data 3']] } :
-        blockType === 'gallery' ? { images: [{ url: '', alt: '', caption: '' }] } :
-        blockType === 'map' ? { embed_url: '', title: 'Our Location' } :
-        blockType === 'icon_box' ? { items: [{ icon: '⭐', title: 'Feature', description: 'Description' }] } :
-        blockType === 'countdown' ? { target_date: '', label: 'Coming Soon!' } :
-        blockType === 'carousel' ? { slides: [{ image: '', title: 'Slide 1', description: 'Description' }] } :
-        {};
-      await cmsInvoke(password, {
-        action: 'insert', table: 'section_content_blocks',
-        data: { section_id: sectionId, column_index: 0, row_order: blocks.length, block_type: blockType, content: defaultContent }
-      });
-      toast.success('Added!');
-      load();
-      onBlocksChanged?.();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const updateBlock = async (id: string, updates: Record<string, any>) => {
-    setSaving(id);
-    try {
-      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id, data: updates });
-      toast.success('Saved');
-      load();
-      onBlocksChanged?.();
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(null);
-  };
-
-  const deleteBlock = async (id: string) => {
-    if (!confirm('Remove this item?')) return;
-    try {
-      await cmsInvoke(password, { action: 'delete', table: 'section_content_blocks', id });
-      toast.success('Removed');
-      load();
-      onBlocksChanged?.();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const moveBlock = async (id: string, direction: 'up' | 'down') => {
-    const idx = blocks.findIndex(b => b.id === id);
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= blocks.length) return;
-    try {
-      const a = blocks[idx];
-      const b = blocks[swapIdx];
-      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: a.id, data: { row_order: b.row_order } });
-      await cmsInvoke(password, { action: 'update', table: 'section_content_blocks', id: b.id, data: { row_order: a.row_order } });
-      load();
-      onBlocksChanged?.();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  if (loading) return <p className="text-white/40 py-2 text-center text-xs">Loading…</p>;
-
-  return (
-    <div className="space-y-3">
-      <p className="text-white/30 text-[10px] italic">↑↓ Items at the top are most prominent on the page.</p>
-      {blocks.map((block, idx) => (
-        <div key={block.id} className="flex gap-2 items-start">
-          <span className="text-klawsome-yellow/60 text-xs font-mono pt-3 w-5 text-right flex-shrink-0">{idx + 1}</span>
-          <div className="flex-1">
-            <BlockItem block={block} saving={saving}
-              onUpdate={updateBlock} onDelete={deleteBlock}
-              onMove={moveBlock} isFirst={idx === 0} isLast={idx === blocks.length - 1} />
-          </div>
-        </div>
-      ))}
-
-      <div className="flex flex-wrap gap-1.5 pt-1">
-        <span className="text-white/30 text-xs self-center mr-1">Add:</span>
-        {BLOCK_TYPES.map(item => (
-          <Button key={item.type} size="sm" variant="ghost"
-            onClick={() => addBlock(item.type)}
-            className="text-white/60 hover:text-klawsome-yellow text-xs h-7 px-2 border border-white/10 hover:border-klawsome-yellow/30">
-            <span className="mr-1">{item.icon}</span>{item.label}
-          </Button>
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function BlockItem({ block, saving, onUpdate, onDelete, onMove, isFirst, isLast }: {
-  block: any; saving: string | null;
-  onUpdate: (id: string, data: any) => void; onDelete: (id: string) => void;
-  onMove: (id: string, direction: 'up' | 'down') => void;
-  isFirst: boolean; isLast: boolean;
-}) {
-  const [localContent, setLocalContent] = useState(block.content || {});
-  const debounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const initialRef = useRef(true);
-
-  // Auto-save with debounce
-  useEffect(() => {
-    if (initialRef.current) { initialRef.current = false; return; }
-    if (debounceRef.current) clearTimeout(debounceRef.current);
-    debounceRef.current = setTimeout(() => {
-      onUpdate(block.id, { block_type: block.block_type, content: localContent });
-    }, 800);
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
-  }, [localContent]);
-
-  const typeLabel = BLOCK_TYPES.find(t => t.type === block.block_type);
-
-  const isDataBlock = ['reviews'].includes(block.block_type);
-
-  return (
-    <div className="bg-white/5 rounded-lg p-3 space-y-2 border border-white/10">
-      <div className="flex items-center gap-2">
-        <span className="text-lg">{typeLabel?.icon || '?'}</span>
-        <span className="text-white/60 text-xs font-heading font-bold uppercase">{typeLabel?.label || block.block_type}</span>
-        {saving === block.id && <span className="text-klawsome-yellow text-[10px] animate-pulse">saving…</span>}
-        <div className="flex-1" />
-        <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'up')} disabled={isFirst}
-          className="text-white/40 h-6 w-6 p-0"><ArrowUp className="w-3 h-3" /></Button>
-        <Button size="sm" variant="ghost" onClick={() => onMove(block.id, 'down')} disabled={isLast}
-          className="text-white/40 h-6 w-6 p-0"><ArrowDown className="w-3 h-3" /></Button>
-        <Button size="sm" variant="ghost" onClick={() => onDelete(block.id)}
-          className="text-red-400 text-xs h-6 px-1"><Trash2 className="w-3 h-3" /></Button>
-      </div>
-
-      {/* Data blocks — auto-pull from DB */}
-      {isDataBlock && (
-        <p className="text-white/30 text-xs italic">This block automatically pulls data from the database. Edit it in the Settings tab or dedicated data tables.</p>
-      )}
-
-      {/* Heading */}
-      {block.block_type === 'heading' && (
-        <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
-          placeholder="Heading text" className="bg-white/10 border-white/20 text-white text-sm h-9" />
-      )}
-
-      {/* Rich Text (WYSIWYG) */}
-      {block.block_type === 'richtext' && (
-        <Suspense fallback={<p className="text-white/30 text-xs">Loading editor…</p>}>
-          <RichTextEditor value={localContent.html || ''} onChange={html => setLocalContent({ ...localContent, html })} />
-        </Suspense>
-      )}
-
-      {/* Plain text */}
-      {block.block_type === 'text' && (
-        <Textarea value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
-          placeholder="Body text" className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
-      )}
-
-      {/* Image */}
-      {block.block_type === 'image' && (
-        <div className="space-y-1">
-          <ImageUploadField value={localContent.url || ''} onChange={url => setLocalContent({ ...localContent, url })} />
-          <Input value={localContent.alt || ''} onChange={e => setLocalContent({ ...localContent, alt: e.target.value })}
-            placeholder="Alt text (for accessibility)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-        </div>
-      )}
-
-      {/* Video */}
-      {block.block_type === 'video' && (
-        <div className="space-y-1">
-          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
-            placeholder="YouTube, Vimeo, or direct video URL" className="bg-white/10 border-white/20 text-white text-sm h-9" />
-        </div>
-      )}
-
-      {/* iFrame / Embed */}
-      {block.block_type === 'iframe' && (
-        <div className="space-y-1">
-          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
-            placeholder="Embed URL (Google Maps, Calendly, etc.)" className="bg-white/10 border-white/20 text-white text-sm h-9" />
-          <Input value={localContent.title || ''} onChange={e => setLocalContent({ ...localContent, title: e.target.value })}
-            placeholder="Title (optional)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-        </div>
-      )}
-
-      {/* Code */}
-      {block.block_type === 'code' && (
-        <Textarea value={localContent.code || ''} onChange={e => setLocalContent({ ...localContent, code: e.target.value })}
-          placeholder="Paste your code here" className="bg-white/10 border-white/20 text-white text-sm min-h-[80px] font-mono" />
-      )}
-
-      {/* List */}
-      {block.block_type === 'list' && (
-        <div className="space-y-1">
-          {(localContent.items || []).map((item: string, i: number) => (
-            <div key={i} className="flex gap-1">
-              <span className="text-white/30 text-xs self-center w-4">{i + 1}.</span>
-              <Input value={item} onChange={e => {
-                const newItems = [...(localContent.items || [])];
-                newItems[i] = e.target.value;
-                setLocalContent({ ...localContent, items: newItems });
-              }} className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-              <Button size="sm" variant="ghost" onClick={() => {
-                const newItems = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
-                setLocalContent({ ...localContent, items: newItems });
-              }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, items: [...(localContent.items || []), ''] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add item</Button>
-        </div>
-      )}
-
-      {/* Button */}
-      {block.block_type === 'button' && (
-        <div className="grid grid-cols-2 gap-1">
-          <Input value={localContent.text || ''} onChange={e => setLocalContent({ ...localContent, text: e.target.value })}
-            placeholder="Button text" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Input value={localContent.url || ''} onChange={e => setLocalContent({ ...localContent, url: e.target.value })}
-            placeholder="URL" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-        </div>
-      )}
-
-      {/* Spacer */}
-      {block.block_type === 'spacer' && (
-        <Input value={localContent.height || '2rem'} onChange={e => setLocalContent({ ...localContent, height: e.target.value })}
-          placeholder="Height (e.g. 2rem)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-      )}
-
-      {/* Divider */}
-      {block.block_type === 'divider' && (
-        <p className="text-white/20 text-xs italic">Horizontal divider line</p>
-      )}
-
-      {/* Tabs */}
-      {block.block_type === 'tabs' && (
-        <div className="space-y-2">
-          {(localContent.tabs || []).map((tab: any, i: number) => (
-            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
-              <div className="flex gap-1 items-center">
-                <Input value={tab.label || ''} onChange={e => {
-                  const tabs = [...(localContent.tabs || [])];
-                  tabs[i] = { ...tabs[i], label: e.target.value };
-                  setLocalContent({ ...localContent, tabs });
-                }} placeholder="Tab label" className="bg-white/10 border-white/20 text-white text-xs h-7 w-32" />
-                <Button size="sm" variant="ghost" onClick={() => {
-                  const tabs = (localContent.tabs || []).filter((_: any, idx: number) => idx !== i);
-                  setLocalContent({ ...localContent, tabs });
-                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-              </div>
-              <Textarea value={tab.content || ''} onChange={e => {
-                const tabs = [...(localContent.tabs || [])];
-                tabs[i] = { ...tabs[i], content: e.target.value };
-                setLocalContent({ ...localContent, tabs });
-              }} placeholder="HTML content" className="bg-white/10 border-white/20 text-white text-xs min-h-[40px]" />
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, tabs: [...(localContent.tabs || []), { label: `Tab ${(localContent.tabs || []).length + 1}`, content: '<p>Content</p>' }] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add tab</Button>
-        </div>
-      )}
-
-      {/* Table */}
-      {block.block_type === 'table' && (
-        <div className="space-y-2">
-          <div className="space-y-1">
-            <label className="text-white/40 text-[10px] uppercase">Headers (comma-separated)</label>
-            <Input value={(localContent.headers || []).join(', ')} onChange={e => {
-              setLocalContent({ ...localContent, headers: e.target.value.split(',').map((s: string) => s.trim()) });
-            }} className="bg-white/10 border-white/20 text-white text-xs h-7" />
-          </div>
-          {(localContent.rows || []).map((row: string[], ri: number) => (
-            <div key={ri} className="flex gap-1 items-center">
-              {row.map((cell: string, ci: number) => (
-                <Input key={ci} value={cell} onChange={e => {
-                  const rows = [...(localContent.rows || [])];
-                  rows[ri] = [...rows[ri]];
-                  rows[ri][ci] = e.target.value;
-                  setLocalContent({ ...localContent, rows });
-                }} className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-              ))}
-              <Button size="sm" variant="ghost" onClick={() => {
-                const rows = (localContent.rows || []).filter((_: any, idx: number) => idx !== ri);
-                setLocalContent({ ...localContent, rows });
-              }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            const colCount = (localContent.headers || []).length || 2;
-            setLocalContent({ ...localContent, rows: [...(localContent.rows || []), Array(colCount).fill('')] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add row</Button>
-        </div>
-      )}
-
-      {/* Gallery */}
-      {block.block_type === 'gallery' && (
-        <div className="space-y-2">
-          {(localContent.images || []).map((img: any, i: number) => (
-            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
-              <div className="flex gap-1">
-                <ImageUploadField value={img.url || ''} onChange={url => {
-                  const images = [...(localContent.images || [])];
-                  images[i] = { ...images[i], url };
-                  setLocalContent({ ...localContent, images });
-                }} />
-                <Button size="sm" variant="ghost" onClick={() => {
-                  const images = (localContent.images || []).filter((_: any, idx: number) => idx !== i);
-                  setLocalContent({ ...localContent, images });
-                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-              </div>
-              <Input value={img.caption || ''} onChange={e => {
-                const images = [...(localContent.images || [])];
-                images[i] = { ...images[i], caption: e.target.value };
-                setLocalContent({ ...localContent, images });
-              }} placeholder="Caption (optional)" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, images: [...(localContent.images || []), { url: '', alt: '', caption: '' }] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add image</Button>
-        </div>
-      )}
-
-      {/* Map */}
-      {block.block_type === 'map' && (
-        <div className="space-y-1">
-          <Input value={localContent.embed_url || ''} onChange={e => setLocalContent({ ...localContent, embed_url: e.target.value })}
-            placeholder="Google Maps embed URL" className="bg-white/10 border-white/20 text-white text-sm h-9" />
-          <Input value={localContent.title || ''} onChange={e => setLocalContent({ ...localContent, title: e.target.value })}
-            placeholder="Title (optional)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-        </div>
-      )}
-
-      {/* Icon Box */}
-      {block.block_type === 'icon_box' && (
-        <div className="space-y-2">
-          {(localContent.items || []).map((box: any, i: number) => (
-            <div key={i} className="grid grid-cols-3 gap-1 items-center">
-              <Input value={box.icon || ''} onChange={e => {
-                const items = [...(localContent.items || [])];
-                items[i] = { ...items[i], icon: e.target.value };
-                setLocalContent({ ...localContent, items });
-              }} placeholder="Icon/emoji" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-              <Input value={box.title || ''} onChange={e => {
-                const items = [...(localContent.items || [])];
-                items[i] = { ...items[i], title: e.target.value };
-                setLocalContent({ ...localContent, items });
-              }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-              <div className="flex gap-1">
-                <Input value={box.description || ''} onChange={e => {
-                  const items = [...(localContent.items || [])];
-                  items[i] = { ...items[i], description: e.target.value };
-                  setLocalContent({ ...localContent, items });
-                }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-                <Button size="sm" variant="ghost" onClick={() => {
-                  const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
-                  setLocalContent({ ...localContent, items });
-                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-              </div>
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, items: [...(localContent.items || []), { icon: '⭐', title: '', description: '' }] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add icon box</Button>
-        </div>
-      )}
-
-      {/* Countdown */}
-      {block.block_type === 'countdown' && (
-        <div className="space-y-1">
-          <Input type="datetime-local" value={localContent.target_date || ''} onChange={e => setLocalContent({ ...localContent, target_date: e.target.value })}
-            className="bg-white/10 border-white/20 text-white text-xs h-8" />
-          <Input value={localContent.label || ''} onChange={e => setLocalContent({ ...localContent, label: e.target.value })}
-            placeholder="Label (e.g. Grand Opening!)" className="bg-white/10 border-white/20 text-white text-xs h-8" />
-        </div>
-      )}
-
-      {/* Carousel */}
-      {block.block_type === 'carousel' && (
-        <div className="space-y-2">
-          {(localContent.slides || []).map((slide: any, i: number) => (
-            <div key={i} className="bg-white/5 rounded p-2 space-y-1">
-              <div className="grid grid-cols-2 gap-1">
-                <Input value={slide.title || ''} onChange={e => {
-                  const slides = [...(localContent.slides || [])];
-                  slides[i] = { ...slides[i], title: e.target.value };
-                  setLocalContent({ ...localContent, slides });
-                }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-                <div className="flex gap-1">
-                  <Input value={slide.link || ''} onChange={e => {
-                    const slides = [...(localContent.slides || [])];
-                    slides[i] = { ...slides[i], link: e.target.value };
-                    setLocalContent({ ...localContent, slides });
-                  }} placeholder="Link (optional)" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-                  <Button size="sm" variant="ghost" onClick={() => {
-                    const slides = (localContent.slides || []).filter((_: any, idx: number) => idx !== i);
-                    setLocalContent({ ...localContent, slides });
-                  }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-                </div>
-              </div>
-              <ImageUploadField value={slide.image || ''} onChange={url => {
-                const slides = [...(localContent.slides || [])];
-                slides[i] = { ...slides[i], image: url };
-                setLocalContent({ ...localContent, slides });
-              }} />
-              <Input value={slide.description || ''} onChange={e => {
-                const slides = [...(localContent.slides || [])];
-                slides[i] = { ...slides[i], description: e.target.value };
-                setLocalContent({ ...localContent, slides });
-              }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, slides: [...(localContent.slides || []), { image: '', title: '', description: '' }] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add slide</Button>
-        </div>
-      )}
-
-
-      {/* Cards — inline JSON editor */}
-      {block.block_type === 'cards' && (
-        <div className="space-y-2">
-          {(localContent.items || []).map((card: any, i: number) => (
-            <div key={i} className="grid grid-cols-3 gap-1 items-center">
-              <Input value={card.icon || ''} onChange={e => {
-                const items = [...(localContent.items || [])];
-                items[i] = { ...items[i], icon: e.target.value };
-                setLocalContent({ ...localContent, items });
-              }} placeholder="Icon" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-              <Input value={card.title || ''} onChange={e => {
-                const items = [...(localContent.items || [])];
-                items[i] = { ...items[i], title: e.target.value };
-                setLocalContent({ ...localContent, items });
-              }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-              <div className="flex gap-1">
-                <Input value={card.description || ''} onChange={e => {
-                  const items = [...(localContent.items || [])];
-                  items[i] = { ...items[i], description: e.target.value };
-                  setLocalContent({ ...localContent, items });
-                }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-                <Button size="sm" variant="ghost" onClick={() => {
-                  const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
-                  setLocalContent({ ...localContent, items });
-                }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-              </div>
-            </div>
-          ))}
-          <Button size="sm" variant="ghost" onClick={() => {
-            setLocalContent({ ...localContent, items: [...(localContent.items || []), { icon: '⭐', title: '', description: '' }] });
-          }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add card</Button>
-        </div>
-      )}
-
-      {/* Data Cards — generic data source widget */}
-      {block.block_type === 'data_cards' && (
-        <div className="space-y-3">
-          {/* Presets */}
-          <div className="flex flex-wrap gap-1">
-            <span className="text-white/30 text-xs self-center mr-1">Presets:</span>
-              {[
-              { key: 'party_options', label: '🎂 Party Options' },
-              { key: 'token_tiers', label: '💰 Token Pricing' },
-              { key: 'faq_items', label: '❓ FAQ' },
-              { key: 'job_listings', label: '💼 Jobs' },
-              { key: 'news_articles', label: '📰 News' },
-              { key: 'business_pricing_tiers', label: '💎 Biz Pricing' },
-              { key: 'invite_templates', label: '📄 Templates' },
-              { key: 'store_hours', label: '🕐 Store Hours' },
-            ].map(preset => (
-              <Button key={preset.key} size="sm" variant="ghost"
-                onClick={() => {
-                  const p: Record<string, any> = {
-                    party_options: { source: 'party_options', mappings: { title: 'name', description: 'description', price: 'price', features: 'features' }, display: 'card-grid', columns: 2 },
-                    token_tiers: { source: 'token_tiers', mappings: { title: 'tokens', price: 'price', description: 'bonus', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 4 },
-                    faq_items: { source: 'faq_items', mappings: { title: 'question', description: 'answer' }, display: 'accordion', columns: 1 },
-                    job_listings: { source: 'job_listings', mappings: { title: 'title', description: 'description', image: 'image_url', link: 'apply_url' }, display: 'list', columns: 1 },
-                    news_articles: { source: 'news_articles', mappings: { title: 'title', description: 'source', image: 'image_url', link: 'url' }, display: 'news-grid', columns: 3 },
-                    business_pricing_tiers: { source: 'business_pricing_tiers', mappings: { title: 'name', price: 'price', features: 'features', highlight: 'is_highlight' }, display: 'pricing-grid', columns: 3 },
-                    invite_templates: { source: 'invite_templates', mappings: { title: 'name', image: 'thumbnail_url', link: 'url' }, display: 'card-grid', columns: 2 },
-                    store_hours: { source: 'store_hours', mappings: { title: 'day_label', description: 'open_time', extra: 'close_time', highlight: 'is_closed' }, display: 'hours', columns: 1 },
-                  };
-                  setLocalContent({ ...localContent, ...p[preset.key] });
-                }}
-                className={`text-xs h-6 px-2 border ${localContent.source === preset.key.replace('_items', '').replace('_tiers', '') || localContent.source === preset.key ? 'border-klawsome-yellow/50 text-klawsome-yellow' : 'border-white/10 text-white/50'}`}>
-                {preset.label}
-              </Button>
-            ))}
-          </div>
-
-          {/* Source */}
-          <div className="grid grid-cols-3 gap-2">
-            <div>
-              <label className="text-white/40 text-[10px] uppercase">Source</label>
-              <select value={localContent.source || 'inline'}
-                onChange={e => setLocalContent({ ...localContent, source: e.target.value })}
-                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
-                <option value="inline">Inline (manual)</option>
-                <option value="party_options">party_options</option>
-                <option value="token_tiers">token_tiers</option>
-                <option value="job_listings">job_listings</option>
-                <option value="news_articles">news_articles</option>
-                <option value="faq_items">faq_items</option>
-                <option value="invite_templates">invite_templates</option>
-                <option value="business_pricing_tiers">business_pricing_tiers</option>
-                <option value="store_hours">store_hours</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-white/40 text-[10px] uppercase">Display</label>
-              <select value={localContent.display || 'card-grid'}
-                onChange={e => setLocalContent({ ...localContent, display: e.target.value })}
-                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
-                <option value="card-grid">Card Grid</option>
-                <option value="pricing-grid">Pricing Grid</option>
-                <option value="list">List</option>
-                <option value="accordion">Accordion</option>
-                <option value="hours">Hours</option>
-                <option value="news-grid">News Grid</option>
-              </select>
-            </div>
-            <div>
-              <label className="text-white/40 text-[10px] uppercase">Columns</label>
-              <select value={localContent.columns || 3}
-                onChange={e => setLocalContent({ ...localContent, columns: parseInt(e.target.value) })}
-                className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-2 py-1.5">
-                <option value={2}>2</option>
-                <option value={3}>3</option>
-                <option value={4}>4</option>
-              </select>
-            </div>
-          </div>
-
-          {/* Column Mappings (when not inline) */}
-          {localContent.source !== 'inline' && (
-            <div className="space-y-1">
-              <label className="text-white/40 text-[10px] uppercase">Column Mappings (DB column → field)</label>
-              <div className="grid grid-cols-2 gap-1">
-                {['title', 'description', 'price', 'image', 'features', 'link', 'highlight'].map(field => (
-                  <div key={field} className="flex items-center gap-1">
-                    <span className="text-white/30 text-[10px] w-16 flex-shrink-0">{field}:</span>
-                    <Input value={(localContent.mappings || {})[field] || ''} 
-                      onChange={e => setLocalContent({ ...localContent, mappings: { ...(localContent.mappings || {}), [field]: e.target.value } })}
-                      placeholder={`DB column`} className="bg-white/10 border-white/20 text-white text-xs h-6 flex-1" />
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Inline Items Editor */}
-          {localContent.source === 'inline' && (
-            <div className="space-y-2">
-              <label className="text-white/40 text-[10px] uppercase">Cards</label>
-              {(localContent.items || []).map((card: any, i: number) => (
-                <div key={i} className="bg-white/5 rounded p-2 space-y-1">
-                  <div className="grid grid-cols-3 gap-1">
-                    <Input value={card.title || ''} onChange={e => {
-                      const items = [...(localContent.items || [])];
-                      items[i] = { ...items[i], title: e.target.value };
-                      setLocalContent({ ...localContent, items });
-                    }} placeholder="Title" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-                    <Input value={card.price || ''} onChange={e => {
-                      const items = [...(localContent.items || [])];
-                      items[i] = { ...items[i], price: e.target.value };
-                      setLocalContent({ ...localContent, items });
-                    }} placeholder="Price" className="bg-white/10 border-white/20 text-white text-xs h-7" />
-                    <select value={card.media_type || 'none'}
-                      onChange={e => {
-                        const items = [...(localContent.items || [])];
-                        items[i] = { ...items[i], media_type: e.target.value };
-                        setLocalContent({ ...localContent, items });
-                      }}
-                      className="bg-white/10 border border-white/20 text-white text-xs rounded px-2 h-7">
-                      <option value="none">No media</option>
-                      <option value="image">🖼 Image</option>
-                      <option value="video">🎬 Video</option>
-                    </select>
-                  </div>
-                  {card.media_type && card.media_type !== 'none' && (
-                    <Input value={card.media_url || ''} onChange={e => {
-                      const items = [...(localContent.items || [])];
-                      items[i] = { ...items[i], media_url: e.target.value };
-                      setLocalContent({ ...localContent, items });
-                    }} placeholder={card.media_type === 'video' ? 'Video URL (mp4, webm…)' : 'Image URL'} className="bg-white/10 border-white/20 text-white text-xs h-7" />
-                  )}
-                  <div className="flex gap-1">
-                    <Input value={card.description || ''} onChange={e => {
-                      const items = [...(localContent.items || [])];
-                      items[i] = { ...items[i], description: e.target.value };
-                      setLocalContent({ ...localContent, items });
-                    }} placeholder="Description" className="bg-white/10 border-white/20 text-white text-xs h-7 flex-1" />
-                    <Button size="sm" variant="ghost" onClick={() => {
-                      const items = (localContent.items || []).filter((_: any, idx: number) => idx !== i);
-                      setLocalContent({ ...localContent, items });
-                    }} className="text-red-400 h-7 w-7 p-0"><Trash2 className="w-3 h-3" /></Button>
-                  </div>
-                </div>
-              ))}
-              <Button size="sm" variant="ghost" onClick={() => {
-                setLocalContent({ ...localContent, items: [...(localContent.items || []), { title: '', description: '' }] });
-              }} className="text-white/40 text-xs h-7"><Plus className="w-3 h-3 mr-1" />Add card</Button>
-            </div>
-          )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Section Card (expandable) ──────────────────────────────
-function SectionCard({ section, password, page, onReorder, onToggleVisibility, onUpdateLayout, onDelete }: {
-  section: any;
-  password: string;
-  page: string;
-  onReorder: (id: string, direction: 'up' | 'down') => void;
-  onToggleVisibility: (id: string, visible: boolean) => void;
-  onUpdateLayout: (id: string, field: string, value: string) => void;
-  onDelete: (id: string) => void;
-}) {
-  const queryClient = useQueryClient();
-  const [expanded, setExpanded] = useState(false);
-  const [previewKey, setPreviewKey] = useState(0);
-  const [cleaningUp, setCleaningUp] = useState<string | null>(null);
-
-  // AI Builder state — persisted to localStorage
-  const storageKey = `ai-builder-${section.id}`;
-  const loadSaved = () => {
-    try {
-      const saved = localStorage.getItem(storageKey);
-      if (saved) return JSON.parse(saved);
-    } catch {}
-    return null;
-  };
-  const saved = loadSaved();
-  const [aiTextBlocks, setAiTextBlocks] = useState<string[]>(saved?.textBlocks || ['']);
-  const [aiImages, setAiImages] = useState<string[]>(saved?.images || []);
-  const [aiLinks, setAiLinks] = useState<{ label: string; url: string }[]>(saved?.links || []);
-  const [aiColumns, setAiColumns] = useState(saved?.columns || '1');
-  const [aiAccordion, setAiAccordion] = useState('ai-text-0');
-  const [aiMediaOpen, setAiMediaOpen] = useState(false);
-  const [aiBuilding, setAiBuilding] = useState(false);
-  const [aiRemixing, setAiRemixing] = useState(false);
-
-  // Persist AI builder state to localStorage
-  useEffect(() => {
-    localStorage.setItem(storageKey, JSON.stringify({
-      textBlocks: aiTextBlocks, images: aiImages, links: aiLinks, columns: aiColumns
-    }));
-  }, [aiTextBlocks, aiImages, aiLinks, aiColumns, storageKey]);
-
-  const refreshPreview = useCallback(() => {
-    queryClient.invalidateQueries({ queryKey: ['cms', 'section_content_blocks'] });
-    setPreviewKey(k => k + 1);
-  }, [queryClient]);
-
-  const aiAddContent = async () => {
-    const hasContent = aiTextBlocks.some(t => t.trim()) || aiImages.length > 0 || aiLinks.length > 0;
-    if (!hasContent) { toast.error('Add at least one text block, image, or link'); return; }
-    setAiBuilding(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-layout', {
-        body: {
-          password,
-          mode: 'build',
-          page: section.page,
-          label: section.label || 'AI Section',
-          columns: parseInt(aiColumns),
-          textBlocks: aiTextBlocks.filter(t => t.trim()),
-          images: aiImages,
-          links: aiLinks.filter(l => l.url.trim()),
-          existingSectionId: section.id,
-        },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      onUpdateLayout(section.id, 'layout_template', data.template);
-      setAiTextBlocks(['']);
-      setAiImages([]);
-      setAiLinks([]);
-      localStorage.removeItem(storageKey);
-      toast.success(`AI organized content with "${data.template}" layout ✨`);
-      setTimeout(refreshPreview, 300);
-    } catch (e: any) {
-      toast.error(e.message || 'AI build failed');
-    }
-    setAiBuilding(false);
-  };
-
-  const aiRemix = async () => {
-    setAiRemixing(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-layout', {
-        body: { password, mode: 'remix', section_id: section.id, columns: parseInt(aiColumns) },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      onUpdateLayout(section.id, 'layout_template', data.template);
-      toast.success(`Remixed to "${data.template}" 🔀`);
-      setTimeout(refreshPreview, 300);
-    } catch (e: any) {
-      toast.error(e.message || 'Remix failed');
-    }
-    setAiRemixing(false);
-  };
-
-  const handleCleanUp = async (sec: any) => {
-    setCleaningUp(sec.id);
-    try {
-      const { data, error } = await supabase.functions.invoke('ai-layout', {
-        body: { password, section_id: sec.id },
-      });
-      if (error) throw error;
-      if (data?.error) throw new Error(data.error);
-      if (data?.template) {
-        onUpdateLayout(sec.id, 'layout_template', data.template);
-        toast.success(`Switched to "${data.template}" — ${data.reason || 'AI suggestion'}`);
-        setTimeout(refreshPreview, 300);
-      }
-    } catch (e: any) {
-      toast.error(e.message || 'Clean up failed');
-    }
-    setCleaningUp(null);
-  };
-  return (
-    <div className={`border rounded-xl overflow-hidden transition-all ${section.is_visible ? 'border-white/15 bg-white/5' : 'border-white/5 bg-white/[0.02] opacity-60'}`}>
-      {/* Header */}
-      <div className="flex items-center gap-2 px-4 py-3 cursor-pointer" onClick={() => setExpanded(!expanded)}>
-        <GripVertical className="w-4 h-4 text-white/20 flex-shrink-0" />
-        <span className="text-white/40 text-xs font-mono w-6">{section.sort_order}</span>
-        <span className="font-heading font-bold text-white text-sm flex-1">{section.label || section.section_key}</span>
-        <Badge variant="outline" className="text-xs text-white/40 border-white/10">{section.section_key}</Badge>
-
-        <div className="flex items-center gap-1 ml-2" onClick={e => e.stopPropagation()}>
-          <Button size="sm" variant="ghost" onClick={() => onReorder(section.id, 'up')} className="text-white/40 h-6 w-6 p-0"><ChevronUp className="w-3 h-3" /></Button>
-          <Button size="sm" variant="ghost" onClick={() => onReorder(section.id, 'down')} className="text-white/40 h-6 w-6 p-0"><ChevronDown className="w-3 h-3" /></Button>
-          <Button size="sm" variant="ghost" onClick={() => onToggleVisibility(section.id, !section.is_visible)} className="h-6 w-6 p-0">
-            {section.is_visible ? <Eye className="w-3 h-3 text-green-400" /> : <EyeOff className="w-3 h-3 text-red-400" />}
-          </Button>
-          <Button size="sm" variant="ghost" onClick={() => onDelete(section.id)} className="text-red-400/60 h-6 w-6 p-0"><Trash2 className="w-3 h-3" /></Button>
-        </div>
-
-        {expanded ? <ChevronUp className="w-4 h-4 text-white/30" /> : <ChevronDown className="w-4 h-4 text-white/30" />}
-      </div>
-
-      {/* Expanded content */}
-      {expanded && (
-        <div className="px-4 pb-4 space-y-4 border-t border-white/10 pt-3">
-          {/* Two-column: Controls left, Template preview right */}
-          <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr] gap-6">
-            {/* LEFT: Controls */}
-            <div className="space-y-4">
-              {/* Label */}
-              <InlineField label="Label" value={section.label || ''} onChange={v => onUpdateLayout(section.id, 'label', v)} />
-
-              {/* Section Type Toggle */}
-              <div className="space-y-2">
-                <label className="text-white/60 text-xs font-heading">Section Type</label>
-                <div className="flex gap-2">
-                  {(['hero', 'section', 'small'] as const).map(type => (
-                    <Button key={type} size="sm" variant="ghost"
-                      onClick={() => onUpdateLayout(section.id, 'section_type', type)}
-                      className={`text-xs h-8 px-4 border ${section.section_type === type || (!section.section_type && type === 'section')
-                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                        : 'text-white/60 border-white/20 hover:border-klawsome-yellow/40'}`}>
-                      {type === 'hero' ? '🖼 Hero Banner' : type === 'section' ? '📄 Section' : '📌 Small Section'}
-                    </Button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Hero Height Toggle */}
-              {(section.section_type === 'hero') && (
-                <div className="space-y-2">
-                  <label className="text-white/60 text-xs font-heading">Hero Height</label>
-                  <div className="flex gap-2">
-                    <Button size="sm" variant="ghost"
-                      onClick={() => onUpdateLayout(section.id, 'hero_height', '50vh')}
-                      className={`text-xs h-8 px-4 border ${section.hero_height === '50vh'
-                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                        : 'text-white/60 border-white/20'}`}>
-                      Half Screen
-                    </Button>
-                    <Button size="sm" variant="ghost"
-                      onClick={() => onUpdateLayout(section.id, 'hero_height', '100vh')}
-                      className={`text-xs h-8 px-4 border ${section.hero_height !== '50vh'
-                        ? 'bg-klawsome-yellow text-klawsome-navy border-klawsome-yellow font-bold'
-                        : 'text-white/60 border-white/20'}`}>
-                      Full Screen
-                    </Button>
-                  </div>
-                </div>
-              )}
-
-              {/* Layout Template Dropdown */}
-              <div className="space-y-2">
-                <label className="text-white/60 text-xs font-heading">Layout Template</label>
-                <select
-                  value={section.layout_template || 'stacked'}
-                  onChange={e => onUpdateLayout(section.id, 'layout_template', e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm font-heading focus:outline-none focus:border-klawsome-yellow"
-                >
-                  {Object.entries(LAYOUT_TEMPLATES).map(([key, tmpl]) => (
-                    <option key={key} value={key} className="bg-[#1e293b] text-white">
-                      {tmpl.label} — {tmpl.description}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Animation Dropdown */}
-              <div className="space-y-2">
-                <label className="text-white/60 text-xs font-heading">Scroll Animation</label>
-                <select
-                  value={section.animation || ''}
-                  onChange={e => onUpdateLayout(section.id, 'animation', e.target.value)}
-                  className="w-full bg-white/10 border border-white/20 rounded-lg px-3 py-2 text-white text-sm font-heading focus:outline-none focus:border-klawsome-yellow"
-                >
-                  {Object.entries(ANIMATION_PRESETS).map(([key, preset]) => (
-                    <option key={key} value={key} className="bg-[#1e293b] text-white">
-                      {preset.label}
-                    </option>
-                  ))}
-                </select>
-              </div>
-
-              {/* Background controls */}
-              <ColorPickerField label="Background Color" value={section.bg_color || ''} onChange={v => onUpdateLayout(section.id, 'bg_color', v)} />
-              <ImageUploadField value={section.bg_image_url || ''} onChange={v => onUpdateLayout(section.id, 'bg_image_url', v)} label="Background Image" />
-            </div>
-
-            {/* RIGHT: Live Section Preview */}
-            <div className="flex flex-col items-start">
-              <div className="flex items-center justify-between w-full mb-2">
-                <label className="text-white/60 text-xs font-heading">Live Preview</label>
-                <Button size="sm" variant="ghost" onClick={refreshPreview} className="text-white/40 h-6 px-2 text-xs">
-                  <RefreshCw className="w-3 h-3 mr-1" />Refresh
-                </Button>
-              </div>
-              {(() => {
-                // Treat preview as a virtual 1920×1080 browser window
-                // Outer container is 16:9, inner renders at 1920px wide then scales down to fit
-                const virtualW = 1920;
-                const virtualH = 1080;
-                const isHero = (section.section_type || 'section') === 'hero';
-                const isFullScreen = section.hero_height === '100vh' || !section.hero_height;
-                const sectionH = isHero
-                  ? (isFullScreen ? `${virtualH}px` : `${virtualH / 2}px`)
-                  : 'auto';
-
-                return (
-                  <div
-                    className="w-full rounded-xl border border-white/10 overflow-hidden relative"
-                    style={{ aspectRatio: '16 / 9' }}
-                  >
-                    <div
-                      className="absolute inset-0"
-                      style={{
-                        // Scale 1920px-wide content to fit the container width
-                        // CSS does: containerWidth / 1920. We use a trick: width 1920px + transform scale
-                        width: `${virtualW}px`,
-                        height: `${virtualH}px`,
-                        transform: 'scale(var(--preview-scale))',
-                        transformOrigin: 'top left',
-                      }}
-                      ref={(el) => {
-                        if (el) {
-                          const parent = el.parentElement;
-                          if (!parent) return;
-                          const setScale = () => {
-                            const scale = parent.clientWidth / virtualW;
-                            el.style.setProperty('--preview-scale', String(scale));
-                          };
-                          setScale();
-                          const ro = new ResizeObserver(setScale);
-                          ro.observe(parent);
-                        }
-                      }}
-                    >
-                      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
-                        <SectionWrapper
-                          key={`preview-${section.id}-${previewKey}-${section.layout_template}`}
-                          config={{
-                            ...section,
-                            hero_height: sectionH as any,
-                            section_height: isHero ? undefined : sectionH,
-                          }}
-                        >
-                          <DynamicSection
-                            sectionId={section.id}
-                            sectionType={section.section_type || 'section'}
-                            layoutTemplate={section.layout_template || 'stacked'}
-                          />
-                        </SectionWrapper>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })()}
-              <div className="flex items-center justify-between w-full mt-2">
-                <span className="text-white/40 text-[11px] font-heading">
-                  {LAYOUT_TEMPLATES[(section.layout_template || 'stacked') as keyof typeof LAYOUT_TEMPLATES]?.description || ''}
-                </span>
-                <Button
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => handleCleanUp(section)}
-                  disabled={cleaningUp === section.id}
-                  className="text-klawsome-yellow text-xs h-7 px-3 border border-klawsome-yellow/30 hover:bg-klawsome-yellow/10"
-                >
-                  {cleaningUp === section.id ? '✨ Redesigning…' : '✨ Clean Up'}
-                </Button>
-              </div>
-            </div>
-          </div>
-
-          {/* AI Content Builder */}
-          <div className="border-t border-white/10 pt-3">
-              <div className="bg-white/5 border border-klawsome-yellow/20 rounded-xl p-4 mb-4 space-y-4">
-                <p className="text-klawsome-yellow text-xs font-heading font-bold flex items-center gap-1">
-                  <Sparkles className="w-3 h-3" /> AI Content Builder
-                </p>
-
-                {/* Column Picker */}
-                <div className="space-y-1">
-                  <label className="text-white/40 text-[10px] uppercase">Columns</label>
-                  <ToggleGroup type="single" value={aiColumns} onValueChange={v => v && setAiColumns(v)} className="justify-start">
-                    {['1', '2', '3', '4'].map(n => (
-                      <ToggleGroupItem key={n} value={n} className="text-xs h-7 px-3">{n}</ToggleGroupItem>
-                    ))}
-                  </ToggleGroup>
-                </div>
-
-                {/* WYSIWYG Text Blocks */}
-                <Accordion type="single" collapsible value={aiAccordion} onValueChange={setAiAccordion}>
-                  {aiTextBlocks.map((text, idx) => (
-                    <AccordionItem key={idx} value={`ai-text-${idx}`} className="border-white/10">
-                      <div className="flex items-center gap-2">
-                        <AccordionTrigger className="text-xs text-white/60 py-1 flex-1">
-                          Text {idx + 1} {text.trim() ? '✓' : ''}
-                        </AccordionTrigger>
-                        {aiTextBlocks.length > 1 && (
-                          <Button size="sm" variant="ghost" onClick={() => setAiTextBlocks(prev => prev.filter((_, i) => i !== idx))} className="h-5 w-5 p-0 text-red-400">
-                            <Trash2 className="w-3 h-3" />
-                          </Button>
-                        )}
-                      </div>
-                      <AccordionContent>
-                        <Suspense fallback={<div className="h-24 bg-white/5 rounded animate-pulse" />}>
-                          <div className="bg-white rounded-lg">
-                            <RichTextEditor value={text} onChange={val => setAiTextBlocks(prev => prev.map((t, i) => i === idx ? val : t))} placeholder="Write content…" />
-                          </div>
-                        </Suspense>
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-                <Button size="sm" variant="ghost" onClick={() => { setAiTextBlocks(prev => [...prev, '']); setAiAccordion(`ai-text-${aiTextBlocks.length}`); }} className="text-white/40 text-xs h-6">
-                  <Plus className="w-3 h-3 mr-1" />Add Text
-                </Button>
-
-                {/* Images */}
-                <MultiImageUpload value={aiImages} onChange={setAiImages} label="Images" />
-                <Button size="sm" variant="ghost" onClick={() => setAiMediaOpen(true)} className="text-white/40 text-xs h-6">
-                  Browse Library
-                </Button>
-                <MediaLibraryPicker open={aiMediaOpen} onClose={() => setAiMediaOpen(false)} onSelect={url => { setAiImages(prev => [...prev, url]); setAiMediaOpen(false); }} />
-
-                {/* Links */}
-                {aiLinks.map((link, idx) => (
-                  <div key={idx} className="flex gap-1 items-center">
-                    <Input value={link.label} onChange={e => setAiLinks(prev => prev.map((l, i) => i === idx ? { ...l, label: e.target.value } : l))} placeholder="Label" className="h-7 text-xs bg-white/10 border-white/20 text-white flex-1" />
-                    <Input value={link.url} onChange={e => setAiLinks(prev => prev.map((l, i) => i === idx ? { ...l, url: e.target.value } : l))} placeholder="URL" className="h-7 text-xs bg-white/10 border-white/20 text-white flex-1" />
-                    <Button size="sm" variant="ghost" onClick={() => setAiLinks(prev => prev.filter((_, i) => i !== idx))} className="h-5 w-5 p-0 text-red-400"><Trash2 className="w-3 h-3" /></Button>
-                  </div>
-                ))}
-                <Button size="sm" variant="ghost" onClick={() => setAiLinks(prev => [...prev, { label: '', url: '' }])} className="text-white/40 text-xs h-6">
-                  <LinkIcon className="w-3 h-3 mr-1" />Add Link
-                </Button>
-
-                {/* Add Block bar (same blocks as normal mode) */}
-                <div className="border-t border-white/10 pt-3">
-                  <label className="text-white/40 text-[10px] uppercase mb-1 block">Add Block Directly</label>
-                  <div className="flex flex-wrap gap-1.5">
-                    {BLOCK_TYPES.map(item => (
-                      <Button key={item.type} size="sm" variant="ghost"
-                        onClick={async () => {
-                          try {
-                            const defaultContent: Record<string, any> =
-                              item.type === 'heading' ? { text: 'New Heading' } :
-                              item.type === 'richtext' ? { html: '<p>Your text here...</p>' } :
-                              item.type === 'text' ? { text: 'Your text here...' } :
-                              item.type === 'image' ? { url: '', alt: '' } :
-                              item.type === 'video' ? { url: '', alt: '' } :
-                              item.type === 'iframe' ? { url: '', title: '' } :
-                              item.type === 'code' ? { code: '// Your code here', language: 'javascript' } :
-                              item.type === 'list' ? { items: ['Item 1', 'Item 2', 'Item 3'] } :
-                              item.type === 'button' ? { text: 'Learn More', url: '/' } :
-                              item.type === 'divider' ? {} :
-                              item.type === 'spacer' ? { height: '2rem' } :
-                              item.type === 'data_cards' ? { source: 'inline', display: 'card-grid', columns: 3, mappings: {}, items: [{ title: 'Card 1', description: 'Description' }] } :
-                              item.type === 'tabs' ? { tabs: [{ label: 'Tab 1', content: '<p>Content for tab 1</p>' }, { label: 'Tab 2', content: '<p>Content for tab 2</p>' }] } :
-                              item.type === 'table' ? { headers: ['Column 1', 'Column 2', 'Column 3'], rows: [['Data 1', 'Data 2', 'Data 3']] } :
-                              item.type === 'gallery' ? { images: [{ url: '', alt: '', caption: '' }] } :
-                              item.type === 'map' ? { embed_url: '', title: 'Our Location' } :
-                              item.type === 'icon_box' ? { items: [{ icon: '⭐', title: 'Feature', description: 'Description' }] } :
-                              item.type === 'countdown' ? { target_date: '', label: 'Coming Soon!' } :
-                              item.type === 'carousel' ? { slides: [{ image: '', title: 'Slide 1', description: 'Description' }] } :
-                              {};
-                            await cmsInvoke(password, {
-                              action: 'insert', table: 'section_content_blocks',
-                              data: { section_id: section.id, column_index: 0, row_order: 99, block_type: item.type, content: defaultContent }
-                            });
-                            toast.success(`Added ${item.label}`);
-                            refreshPreview();
-                          } catch (e: any) { toast.error(e.message); }
-                        }}
-                        className="text-white/60 hover:text-klawsome-yellow text-xs h-7 px-2 border border-white/10 hover:border-klawsome-yellow/30">
-                        <span className="mr-1">{item.icon}</span>{item.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* AI Actions */}
-                <div className="flex gap-2 pt-2 border-t border-white/10">
-                  <Button size="sm" onClick={aiAddContent} disabled={aiBuilding} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 text-xs h-7 font-heading font-bold">
-                    <Sparkles className="w-3 h-3 mr-1" />{aiBuilding ? 'Creating…' : 'AI Create'}
-                  </Button>
-                  <Button size="sm" variant="outline" onClick={aiRemix} disabled={aiRemixing} className="text-xs h-7 font-heading border-white/20 text-white/60">
-                    <Shuffle className="w-3 h-3 mr-1" />{aiRemixing ? 'Remixing…' : 'Remix'}
-                  </Button>
-                </div>
-              </div>
-
-            <ContentBlockEditor password={password} sectionId={section.id} onBlocksChanged={refreshPreview} />
-          </div>
-        </div>
-      )}
-    </div>
-  );
-}
-
-// ─── Page Builder ───────────────────────────────────────────
-function PageBuilder({ page, password }: { page: string; password: string }) {
-  const [sections, setSections] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [savingLayout, setSavingLayout] = useState(false);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table: 'page_sections' });
-      const filtered = (res.rows || [])
-        .filter((s: any) => s.page === page)
-        .sort((a: any, b: any) => a.sort_order - b.sort_order);
-      setSections(filtered);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [page, password]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const reorder = async (id: string, direction: 'up' | 'down') => {
-    const idx = sections.findIndex(s => s.id === id);
-    if (idx < 0) return;
-    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
-    if (swapIdx < 0 || swapIdx >= sections.length) return;
-
-    try {
-      const a = sections[idx];
-      const b = sections[swapIdx];
-      await cmsInvoke(password, { action: 'update', table: 'page_sections', id: a.id, data: { sort_order: b.sort_order } });
-      await cmsInvoke(password, { action: 'update', table: 'page_sections', id: b.id, data: { sort_order: a.sort_order } });
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const toggleVisibility = async (id: string, visible: boolean) => {
-    try {
-      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data: { is_visible: visible } });
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const updateLayout = async (id: string, field: string, value: string) => {
-    setSections(prev => prev.map(s => {
-      if (s.id !== id) return s;
-      if (field === 'columns') return { ...s, [field]: parseInt(value) || 1 };
-      if (field === 'photos') return { ...s, [field]: JSON.parse(value as string) };
-      return { ...s, [field]: value };
-    }));
-
-    setSavingLayout(true);
-    try {
-      let dbValue: any = value;
-      if (field === 'columns') dbValue = parseInt(value) || 1;
-      if (field === 'photos') dbValue = JSON.parse(value as string);
-      await cmsInvoke(password, { action: 'update', table: 'page_sections', id, data: { [field]: dbValue } });
-    } catch (e: any) { toast.error(e.message); }
-    setSavingLayout(false);
-  };
-
-  const deleteSection = async (id: string) => {
-    if (!confirm('Delete this section? This cannot be undone.')) return;
-    try {
-      await cmsInvoke(password, { action: 'delete', table: 'page_sections', id });
-      toast.success('Section deleted');
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const addSection = async () => {
-    try {
-      const sectionKey = `custom:new-${Date.now()}`;
-      await cmsInvoke(password, {
-        action: 'insert', table: 'page_sections',
-        data: {
-          page,
-          section_key: sectionKey,
-          label: 'New Section',
-          sort_order: sections.length + 1,
-          is_visible: true,
-          section_type: 'section',
-          hero_height: '100vh',
-          bg_color: '',
-          bg_image_url: '',
-        }
-      });
-      toast.success('Section added');
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading page sections…</p>;
-
-  return (
-    <div className="space-y-3">
-      {savingLayout && <div className="text-xs text-klawsome-yellow animate-pulse text-right">Saving layout…</div>}
-      {sections.map((s) => (
-        <SectionCard
-          key={s.id}
-          section={s}
-          password={password}
-          page={page}
-          onReorder={reorder}
-          onToggleVisibility={toggleVisibility}
-          onUpdateLayout={updateLayout}
-          onDelete={deleteSection}
-        />
-      ))}
-      <div className="flex gap-2 pt-2">
-        <Button onClick={addSection} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-          <Plus className="w-3 h-3 mr-1" />Add Section
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Spreadsheet-Style Table Creator ──────────────────────────────
-const FRIENDLY_TYPES = [
-  { label: 'Short Text', value: 'text', icon: '✏️' },
-  { label: 'Long Text', value: 'textarea', icon: '📝' },
-  { label: 'Number', value: 'number', icon: '🔢' },
-  { label: 'Yes/No', value: 'bool', icon: '✅' },
-  { label: 'Image', value: 'image_url', icon: '📷' },
-  { label: 'List', value: 'array', icon: '📋' },
-] as const;
-
-function toSnakeCase(str: string) {
-  return str.toLowerCase().replace(/[^a-z0-9]+/g, '_').replace(/^_|_$/g, '');
-}
-
-function getFriendlyLabel(type: string) {
-  return FRIENDLY_TYPES.find(t => t.value === type) || FRIENDLY_TYPES[0];
-}
-
-function CustomTableCreator({ password }: { password: string }) {
-  const [customTables, setCustomTables] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [tableLabel, setTableLabel] = useState('');
-  const [columns, setColumns] = useState<{ key: string; label: string; type: string; required: boolean }[]>([]);
-  const [creating, setCreating] = useState(false);
-  const [addingCol, setAddingCol] = useState(false);
-  const [newColLabel, setNewColLabel] = useState('');
-  const [newColType, setNewColType] = useState('text');
-
-  const tableName = toSnakeCase(tableLabel);
-
-  const loadTables = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table: 'cms_custom_tables' });
-      setCustomTables(res.rows || []);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [password]);
-
-  useEffect(() => { loadTables(); }, [loadTables]);
-
-  const addColumn = () => {
-    if (!newColLabel.trim()) return;
-    const key = toSnakeCase(newColLabel);
-    if (columns.some(c => c.key === key)) {
-      toast.error('Column already exists');
-      return;
-    }
-    setColumns([...columns, { key, label: newColLabel.trim(), type: newColType, required: false }]);
-    setNewColLabel('');
-    setNewColType('text');
-    setAddingCol(false);
-  };
-
-  const removeColumn = (idx: number) => setColumns(columns.filter((_, i) => i !== idx));
-
-  const createTable = async () => {
-    if (!tableLabel.trim() || columns.length === 0) {
-      toast.error('Give your table a name and at least one column');
-      return;
-    }
-    setCreating(true);
-    try {
-      const { data, error } = await supabase.functions.invoke('cms-create-table', {
-        body: { password, table_name: tableName, label: tableLabel.trim(), columns },
-      });
-      if (error) {
-        const ctx = (error as any).context;
-        let msg = error.message;
-        try {
-          if (ctx && typeof ctx.json === 'function') {
-            const body = await ctx.json();
-            if (body?.error) msg = body.error;
-          }
-        } catch {}
-        throw new Error(msg);
-      }
-      if (data?.error) throw new Error(data.error);
-      toast.success(`Table "${tableLabel}" created!`);
-      setTableLabel('');
-      setColumns([]);
-      loadTables();
-    } catch (e: any) { toast.error(e.message); }
-    setCreating(false);
-  };
-
-  return (
-    <div className="space-y-6">
-      {/* Creator */}
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-white font-heading text-lg">Create New Data Table</CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          {/* Step 1: Name */}
-          <div className="space-y-1">
-            <label className="text-white/60 text-xs font-heading">What do you want to call this table?</label>
-            <Input
-              value={tableLabel}
-              onChange={e => setTableLabel(e.target.value)}
-              placeholder="e.g. Team Members, Menu Items, Testimonials…"
-              className="bg-white/10 border-white/20 text-white text-sm"
-            />
-            {tableLabel.trim() && (
-              <p className="text-white/30 text-xs font-mono">→ {tableName}</p>
-            )}
-          </div>
-
-          {/* Step 2: Visual spreadsheet grid */}
-          <div className="space-y-2">
-            <label className="text-white/60 text-xs font-heading">Design your columns</label>
-            <div className="border border-white/10 rounded-lg overflow-hidden">
-              {/* Header row */}
-              <div className="flex bg-white/5">
-                <div className="w-10 shrink-0 border-r border-white/10 p-2 text-white/30 text-xs text-center">#</div>
-                {columns.map((col, i) => (
-                  <div key={i} className="flex-1 min-w-[120px] border-r border-white/10 p-2 group">
-                    <div className="flex items-center justify-between gap-1">
-                      <div className="flex items-center gap-1.5">
-                        <span className="text-sm" title={getFriendlyLabel(col.type).label}>{getFriendlyLabel(col.type).icon}</span>
-                        <span className="text-white text-xs font-medium truncate">{col.label}</span>
-                      </div>
-                      <button
-                        onClick={() => removeColumn(i)}
-                        className="opacity-0 group-hover:opacity-100 transition-opacity text-red-400 hover:text-red-300"
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </button>
-                    </div>
-                    <span className="text-white/30 text-[10px]">{getFriendlyLabel(col.type).label}</span>
-                  </div>
-                ))}
-                {/* Add column button */}
-                <div className="w-[100px] shrink-0 p-2 flex items-center justify-center">
-                  {addingCol ? (
-                    <div className="space-y-1.5 w-full">
-                      <Input
-                        value={newColLabel}
-                        onChange={e => setNewColLabel(e.target.value)}
-                        placeholder="Column name"
-                        className="bg-white/10 border-white/20 text-white text-xs h-7"
-                        autoFocus
-                        onKeyDown={e => { if (e.key === 'Enter') addColumn(); if (e.key === 'Escape') setAddingCol(false); }}
-                      />
-                      <select
-                        value={newColType}
-                        onChange={e => setNewColType(e.target.value)}
-                        className="w-full bg-white/10 border border-white/20 text-white text-xs rounded px-1.5 h-7"
-                      >
-                        {FRIENDLY_TYPES.map(t => (
-                          <option key={t.value} value={t.value}>{t.icon} {t.label}</option>
-                        ))}
-                      </select>
-                      <div className="flex gap-1">
-                        <Button size="sm" onClick={addColumn} className="h-6 text-[10px] px-2 bg-klawsome-yellow text-klawsome-navy">Add</Button>
-                        <Button size="sm" variant="ghost" onClick={() => setAddingCol(false)} className="h-6 text-[10px] px-2 text-white/40">✕</Button>
-                      </div>
-                    </div>
-                  ) : (
-                    <Button size="sm" variant="ghost" onClick={() => setAddingCol(true)} className="text-white/30 hover:text-white/60 h-full w-full">
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                  )}
-                </div>
-              </div>
-              {/* Sample data row */}
-              <div className="flex border-t border-white/10">
-                <div className="w-10 shrink-0 border-r border-white/10 p-2 text-white/20 text-xs text-center">1</div>
-                {columns.map((col, i) => (
-                  <div key={i} className="flex-1 min-w-[120px] border-r border-white/10 p-2">
-                    {col.type === 'bool' ? (
-                      <div className="w-4 h-4 rounded border border-white/20 bg-white/5" />
-                    ) : col.type === 'image_url' ? (
-                      <div className="w-10 h-10 rounded bg-white/5 border border-dashed border-white/20 flex items-center justify-center">
-                        <span className="text-white/20 text-xs">📷</span>
-                      </div>
-                    ) : (
-                      <div className="h-4 bg-white/5 rounded w-3/4" />
-                    )}
-                  </div>
-                ))}
-                <div className="w-[100px] shrink-0" />
-              </div>
-              {columns.length === 0 && !addingCol && (
-                <div className="p-6 text-center text-white/30 text-sm border-t border-white/10">
-                  Click <strong>+</strong> to add your first column
-                </div>
-              )}
-            </div>
-          </div>
-
-          {/* Step 3: Create */}
-          {columns.length > 0 && tableLabel.trim() && (
-            <Button onClick={createTable} disabled={creating} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-sm">
-              {creating ? 'Creating…' : `Create "${tableLabel.trim()}" Table`}
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Existing custom tables */}
-      {loading && <p className="text-white/40 text-center text-sm">Loading custom tables…</p>}
-      {customTables.map(ct => (
-        <Card key={ct.id} className="border-white/10 bg-white/5 backdrop-blur-sm">
-          <CardHeader><CardTitle className="text-white font-heading text-lg">{ct.label} <span className="text-white/30 text-xs font-mono ml-2">{ct.table_name}</span></CardTitle></CardHeader>
-          <CardContent>
-            <MiniTableEditor
-              password={password}
-              table={ct.table_name}
-              columns={(ct.columns || []).map((c: any) => ({
-                key: c.key,
-                label: c.label || c.key,
-                type: c.type === 'textarea' ? 'textarea' : c.type === 'bool' ? 'bool' : c.type === 'array' ? 'array' : 'text',
-              }))}
-            />
-          </CardContent>
-        </Card>
-      ))}
-    </div>
-  );
-}
-
-
-function SettingsEditor({ password }: { password: string }) {
-  const [row, setRow] = useState<Record<string, string>>({});
-  const [originalId, setOriginalId] = useState('');
-  const [loading, setLoading] = useState(true);
-  const [dirty, setDirty] = useState(false);
-  const [saving, setSaving] = useState(false);
-
-  const fields = ['business_name', 'phone', 'email', 'address', 'google_maps_url', 'instagram_url', 'tiktok_url', 'facebook_url', 'youtube_url', 'gift_card_url', 'newsletter_text'];
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table: 'site_settings' });
-      const r = res.rows?.[0] || {};
-      const mapped: Record<string, string> = {};
-      fields.forEach((f) => (mapped[f] = r[f] ?? ''));
-      setRow(mapped);
-      setOriginalId(r.id || '');
-      setDirty(false);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [password]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const update = (key: string, value: string) => {
-    setRow(prev => ({ ...prev, [key]: value }));
-    setDirty(true);
-  };
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await cmsInvoke(password, { action: 'upsert', table: 'site_settings', data: { ...row, id: originalId } });
-      toast.success('Saved!');
-      setDirty(false);
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(false);
-  };
-
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
-
-  return (
-    <div className="space-y-6">
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Vital Info</CardTitle></CardHeader>
-        <CardContent className="space-y-3">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            <InlineField label="Business Name" value={row.business_name} onChange={v => update('business_name', v)} />
-            <InlineField label="Phone" value={row.phone} onChange={v => update('phone', v)} />
-            <InlineField label="Email" value={row.email} onChange={v => update('email', v)} />
-            <InlineField label="Address" value={row.address} onChange={v => update('address', v)} />
-            <InlineField label="Google Maps URL" value={row.google_maps_url} onChange={v => update('google_maps_url', v)} />
-            <InlineField label="Gift Card URL" value={row.gift_card_url} onChange={v => update('gift_card_url', v)} />
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-            <InlineField label="Instagram" value={row.instagram_url} onChange={v => update('instagram_url', v)} />
-            <InlineField label="TikTok" value={row.tiktok_url} onChange={v => update('tiktok_url', v)} />
-            <InlineField label="Facebook" value={row.facebook_url} onChange={v => update('facebook_url', v)} />
-            <InlineField label="YouTube" value={row.youtube_url} onChange={v => update('youtube_url', v)} />
-          </div>
-          <InlineField label="Newsletter Text" value={row.newsletter_text} onChange={v => update('newsletter_text', v)} multiline />
-          {dirty && (
-            <Button onClick={save} disabled={saving} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold text-xs">
-              <Save className="w-3 h-3 mr-1" />{saving ? 'Saving…' : 'Save Changes'}
-            </Button>
-          )}
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Store Hours</CardTitle></CardHeader>
-        <CardContent><StoreHoursEditor password={password} /></CardContent>
-      </Card>
-
-      {/* Data Table Editors */}
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Token Tiers</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="token_tiers" columns={[
-            { key: 'tokens', label: 'Tokens' },
-            { key: 'price', label: 'Price' },
-            { key: 'bonus', label: 'Bonus' },
-            { key: 'is_highlight', label: '⭐', type: 'bool' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">News Articles</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="news_articles" columns={[
-            { key: 'title', label: 'Title' },
-            { key: 'source', label: 'Source' },
-            { key: 'date', label: 'Date' },
-            { key: 'url', label: 'URL' },
-            { key: 'image_url', label: 'Image' },
-            { key: 'is_active', label: 'Active', type: 'bool' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Job Listings</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="job_listings" columns={[
-            { key: 'title', label: 'Title' },
-            { key: 'category', label: 'Category' },
-            { key: 'description', label: 'Description', type: 'textarea' },
-            { key: 'is_paid', label: 'Paid', type: 'bool' },
-            { key: 'is_active', label: 'Active', type: 'bool' },
-            { key: 'apply_url', label: 'Apply URL' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Party Options</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="party_options" columns={[
-            { key: 'name', label: 'Name' },
-            { key: 'price', label: 'Price' },
-            { key: 'description', label: 'Description', type: 'textarea' },
-            { key: 'features', label: 'Features', type: 'array' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">FAQ Items</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="faq_items" columns={[
-            { key: 'question', label: 'Question' },
-            { key: 'answer', label: 'Answer', type: 'textarea' },
-            { key: 'page', label: 'Page' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-      <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-        <CardHeader><CardTitle className="text-white font-heading text-lg">Invite Templates</CardTitle></CardHeader>
-        <CardContent>
-          <MiniTableEditor password={password} table="invite_templates" columns={[
-            { key: 'name', label: 'Name' },
-            { key: 'url', label: 'Download URL' },
-            { key: 'thumbnail_url', label: 'Thumbnail' },
-            { key: 'sort_order', label: '#', width: '40px' },
-          ]} />
-        </CardContent>
-      </Card>
-
-      {/* Custom Data Tables */}
-      <CustomTableCreator password={password} />
-    </div>
-  );
-}
 
 // ─── Main Admin Component ───────────────────────────────────
 const KlawsomeAdmin = () => {
@@ -1897,16 +363,8 @@ const KlawsomeAdmin = () => {
     );
   }
 
-  const pages = [
-    { key: 'home', label: 'Home', icon: Home },
-    { key: 'birthdays', label: 'Birthdays', icon: Cake },
-    { key: 'careers', label: 'Careers', icon: Briefcase },
-    { key: 'business', label: 'Business', icon: Building2 },
-    { key: 'news', label: 'News', icon: Newspaper },
-  ];
-
   return (
-    <div className="min-h-screen bg-klawsome-navy p-4 md:p-8 rte-dark">
+    <div className="min-h-screen bg-klawsome-navy p-4 md:p-8">
       <div className="max-w-7xl mx-auto">
         <div className="flex items-center justify-between mb-6">
           <div className="flex items-center gap-3">
@@ -1916,27 +374,231 @@ const KlawsomeAdmin = () => {
           <Button onClick={() => { sessionStorage.removeItem('klawsome-admin'); sessionStorage.removeItem('klawsome-admin-pw'); setAuthenticated(false); }} variant="ghost" className="text-white/60 hover:text-white hover:bg-white/10">Log out</Button>
         </div>
 
-        <Tabs defaultValue="home" className="space-y-6">
+        <Tabs defaultValue="vital" className="space-y-6">
           <TabsList className="bg-white/5 border border-white/10 flex-wrap h-auto gap-1 p-1">
-            {pages.map(p => (
-              <TabsTrigger key={p.key} value={p.key} className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">
-                <p.icon className="w-3 h-3 mr-1" />{p.label}
-              </TabsTrigger>
-            ))}
-            <TabsTrigger value="settings" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">
-              <Settings className="w-3 h-3 mr-1" />Settings
-            </TabsTrigger>
+            <TabsTrigger value="vital" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Settings className="w-3 h-3 mr-1" />Vital Info</TabsTrigger>
+            <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
+            <TabsTrigger value="homepage" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Home className="w-3 h-3 mr-1" />Homepage</TabsTrigger>
+            <TabsTrigger value="tokens" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Coins className="w-3 h-3 mr-1" />Tokens</TabsTrigger>
+            <TabsTrigger value="news" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Newspaper className="w-3 h-3 mr-1" />News</TabsTrigger>
+            <TabsTrigger value="birthdays" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Cake className="w-3 h-3 mr-1" />Birthdays</TabsTrigger>
+            <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
+            <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
+            <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
+            
           </TabsList>
 
-          {pages.map(p => (
-            <TabsContent key={p.key} value={p.key}>
-              <PageBuilder page={p.key} password={storedPassword} />
-            </TabsContent>
-          ))}
-
-          <TabsContent value="settings">
-            <SettingsEditor password={storedPassword} />
+          {/* ─── Vital Info ─── */}
+          <TabsContent value="vital">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Vital Info</CardTitle></CardHeader>
+              <CardContent>
+                <SingleRowEditor password={storedPassword} table="site_settings" fields={[
+                  { key: 'business_name', label: 'Business Name' },
+                  { key: 'phone', label: 'Phone' },
+                  { key: 'email', label: 'Email' },
+                  { key: 'address', label: 'Address' },
+                  { key: 'google_maps_url', label: 'Google Maps URL' },
+                  { key: 'instagram_url', label: 'Instagram URL' },
+                  { key: 'tiktok_url', label: 'TikTok URL' },
+                  { key: 'facebook_url', label: 'Facebook URL' },
+                  { key: 'youtube_url', label: 'YouTube URL' },
+                  { key: 'gift_card_url', label: 'Gift Card URL' },
+                  { key: 'newsletter_text', label: 'Newsletter Text', multiline: true },
+                ]} />
+              </CardContent>
+            </Card>
           </TabsContent>
+
+          {/* ─── Store Hours ─── */}
+          <TabsContent value="hours">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Store Hours</CardTitle></CardHeader>
+              <CardContent><StoreHoursEditor password={storedPassword} /></CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Homepage ─── */}
+          <TabsContent value="homepage" className="space-y-6">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Hero & Story</CardTitle></CardHeader>
+              <CardContent>
+                <SingleRowEditor password={storedPassword} table="homepage_content" fields={[
+                  { key: 'hero_headline', label: 'Hero Headline' },
+                  { key: 'hero_subheadline', label: 'Hero Subheadline' },
+                  { key: 'hero_cta_text', label: 'Hero CTA Button' },
+                  { key: 'hero_image_url', label: 'Hero Image URL' },
+                  { key: 'story_title', label: 'Story Title' },
+                  { key: 'story_body', label: 'Story Body', multiline: true },
+                  { key: 'story_image_url', label: 'Story Image URL' },
+                  { key: 'about_title', label: 'About Title' },
+                  { key: 'about_subtitle', label: 'About Subtitle' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">How It Works Steps</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="homepage_steps" columns={[
+                  { key: 'icon', label: 'Icon', width: '60px' },
+                  { key: 'title', label: 'Title' },
+                  { key: 'description', label: 'Description', type: 'textarea' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Tokens ─── */}
+          <TabsContent value="tokens">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Token Pricing Tiers</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="token_tiers" columns={[
+                  { key: 'tokens', label: 'Tokens' },
+                  { key: 'price', label: 'Price' },
+                  { key: 'bonus', label: 'Bonus' },
+                  { key: 'is_highlight', label: 'Highlight', type: 'bool' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── News ─── */}
+          <TabsContent value="news">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">News Articles</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="news_articles" columns={[
+                  { key: 'title', label: 'Title' },
+                  { key: 'source', label: 'Source' },
+                  { key: 'date', label: 'Date' },
+                  { key: 'url', label: 'URL' },
+                  { key: 'image_url', label: 'Image URL' },
+                  { key: 'is_active', label: 'Active', type: 'bool' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Birthdays ─── */}
+          <TabsContent value="birthdays" className="space-y-6">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Birthday Page Content</CardTitle></CardHeader>
+              <CardContent>
+                <SingleRowEditor password={storedPassword} table="birthdays_content" fields={[
+                  { key: 'hero_headline', label: 'Hero Headline' },
+                  { key: 'hero_subheadline', label: 'Hero Subheadline' },
+                  { key: 'hero_image_url', label: 'Hero Image URL' },
+                  { key: 'promo_text', label: 'Promo Text', multiline: true },
+                  { key: 'rules_text', label: 'Rules Text', multiline: true },
+                  { key: 'booking_email', label: 'Booking Email' },
+                  { key: 'booking_phone', label: 'Booking Phone' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Party Packages</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="party_options" columns={[
+                  { key: 'name', label: 'Name' },
+                  { key: 'price', label: 'Price' },
+                  { key: 'description', label: 'Description', type: 'textarea' },
+                  { key: 'features', label: 'Features', type: 'array' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Invite Templates</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="invite_templates" columns={[
+                  { key: 'name', label: 'Name' },
+                  { key: 'url', label: 'Download URL' },
+                  { key: 'thumbnail_url', label: 'Thumbnail URL' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Careers ─── */}
+          <TabsContent value="careers">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Job Listings</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="job_listings" columns={[
+                  { key: 'title', label: 'Title' },
+                  { key: 'category', label: 'Category' },
+                  { key: 'description', label: 'Description', type: 'textarea' },
+                  { key: 'is_paid', label: 'Paid', type: 'bool' },
+                  { key: 'is_active', label: 'Active', type: 'bool' },
+                  { key: 'apply_url', label: 'Apply URL' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Business ─── */}
+          <TabsContent value="business" className="space-y-6">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Business Page Sections</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="business_sections" columns={[
+                  { key: 'section_key', label: 'Key' },
+                  { key: 'title', label: 'Title' },
+                  { key: 'subtitle', label: 'Subtitle' },
+                  { key: 'description', label: 'Description', type: 'textarea' },
+                  { key: 'bullet_points', label: 'Bullet Points', type: 'array' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Business Pricing Tiers</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="business_pricing_tiers" columns={[
+                  { key: 'name', label: 'Name' },
+                  { key: 'price', label: 'Price' },
+                  { key: 'features', label: 'Features', type: 'array' },
+                  { key: 'is_highlight', label: 'Highlight', type: 'bool' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">How It Works Steps</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="business_how_steps" columns={[
+                  { key: 'icon', label: 'Icon', width: '60px' },
+                  { key: 'title', label: 'Title' },
+                  { key: 'description', label: 'Description', type: 'textarea' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── FAQ ─── */}
+          <TabsContent value="faq">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">FAQ Items</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="faq_items" columns={[
+                  { key: 'question', label: 'Question' },
+                  { key: 'answer', label: 'Answer', type: 'textarea' },
+                  { key: 'page', label: 'Page' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+
+
         </Tabs>
       </div>
     </div>

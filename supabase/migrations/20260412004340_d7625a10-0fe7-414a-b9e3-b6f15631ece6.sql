@@ -1,1 +1,0 @@
-UPDATE page_sections SET photos = '[]'::jsonb WHERE id = '12890044-c6a8-4bb1-82e9-33df9aa7825f';

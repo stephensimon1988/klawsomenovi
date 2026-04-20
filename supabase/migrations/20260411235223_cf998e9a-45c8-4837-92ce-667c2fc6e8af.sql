@@ -1,1 +1,0 @@
-ALTER TABLE public.page_sections ADD COLUMN layout_template text NOT NULL DEFAULT 'stacked';

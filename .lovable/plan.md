@@ -1,68 +1,113 @@
 
+# Prismic Content Architecture for Klawsome
 
-## Plan: AI-First Page Builder Overhaul
+## Already in Prismic
+- **product_pages** — Square catalog items (name, description, image, price)
+- **scheduling** — Appointment types with per-day availability
 
-### What changes
+---
 
-The admin page builder becomes AI-first. No more "Sections" vs "AI Builder" tabs — everything lives in one unified view. Blocks auto-save, the AI builder inputs persist to localStorage, and all block types are supported.
+## New Prismic Custom Types Needed
 
-### 1. Unify PageBuilder — remove Sections/AI Builder tabs
+### 1. `homepage` (Single type)
+One document controlling the entire homepage. Fields:
+- **hero_headline** (rich text) — "Michigan's first stand-alone claw arcade"
+- **hero_description** (rich text) — paragraph below headline
+- **hero_background_image** (image) — the big hero photo
+- **hero_logo** (image) — circular logo
+- **hours_card** (group) — repeatable rows with `label` (text) + `value` (text) for hours display
+- **story_title** (rich text) — "The Klawsome Story"
+- **story_body** (rich text) — story paragraph
+- **about_steps** (group) — repeatable: `image` (image), `title` (text), `description` (text)
 
-**File: `src/pages/KlawsomeAdmin.tsx`**
+### 2. `token_tier` (Repeatable type)
+One document per pricing tier:
+- **price** (text) — "$5"
+- **tokens** (text) — "25 Tokens"
+- **bonus** (text) — "" or "Best Value!"
+- **is_highlight** (boolean)
+- **sort_order** (number)
 
-- Remove the `<Tabs>` wrapper in `PageBuilder` that splits "Sections" and "AI Builder"
-- The default view becomes: AI Content Builder panel at top (always visible) + section list below
-- Move the `AIBuilderTab` content inline into `PageBuilder` (or keep it as a component but always render it, not behind a tab)
-- The section list (accordion-style `SectionCard` components) stays below with reorder, visibility, delete
+### 3. `news_article` (Repeatable type)
+One document per press mention / media hit:
+- **title** (rich text)
+- **source** (text) — "Hour Detroit"
+- **date** (date)
+- **url** (text / link) — external article URL
+- **thumbnail** (image)
 
-### 2. Remove "Save" buttons from BlockItem — auto-save on blur/change
+### 4. `birthday_page` (Single type)
+One document for the entire birthdays page:
+- **hero_image** (image) — background photo
+- **hero_badge** (image) — "klawsome birthday" badge
+- **hero_headline** (rich text)
+- **celebration_title** (rich text) — "Klawsome Wants To Celebrate You!"
+- **celebration_body** (rich text)
+- **celebration_gif** (image)
+- **hosting_rules** (rich text) — "Looking to Host" section
+- **contact_email** (text)
+- **party_options** (group) — repeatable: `title`, `image`, `features` (rich text)
+- **photography_note** (text) — "Photography Rental also available..."
+- **invite_templates** (group) — repeatable: `image` (image), `download_url` (text)
 
-**File: `src/pages/KlawsomeAdmin.tsx` (BlockItem component)**
+### 5. `faq_item` (Repeatable type)
+One document per FAQ (used on birthdays page, could be reused):
+- **question** (rich text)
+- **answer** (rich text)
+- **page** (text) — "birthdays" / "general" for filtering
+- **sort_order** (number)
 
-- Remove the explicit "Save" button from each block's header bar
-- Add `onBlur` handler to text inputs and `onChange` debounce (500ms) for WYSIWYG/complex fields that auto-calls `onUpdate`
-- Use a `useEffect` with a debounce timer on `localContent` changes to auto-persist
+### 6. `job_listing` (Repeatable type)
+One document per job/internship:
+- **title** (text) — "Store Associate"
+- **category** (select: "in_store" | "hybrid_paid" | "hybrid_unpaid")
+- **description** (rich text)
+- **image** (image) — optional
+- **job_description_url** (text / link)
+- **apply_url** (text / link)
+- **is_active** (boolean)
 
-### 3. localStorage persistence for AI Builder inputs
+### 7. `business_page` (Single type)
+One document for the Business / Rentals page:
+- **hero_headline** (rich text) — "Grow With Klawsome!"
+- **hero_description** (rich text)
+- **hosted_machine_section** (group of fields):
+  - `headline`, `description`, `revenue_share` (text), `klawsome_handles` (rich text), `business_provides` (rich text), `venues` (group: `label` text)
+- **partner_section** (group of fields):
+  - `headline`, `description`, `includes` (group: `icon`, `title`, `desc`)
+- **plushie_section** (group of fields):
+  - `headline`, `description`, `pricing_tiers` (group: `label`, `title`, `price`, `per`, `desc`), `steps` (group: `icon`, `title`, `desc`)
+- **how_it_works** (group) — repeatable: `step_number`, `title`, `description`
 
-**File: `src/pages/KlawsomeAdmin.tsx` (SectionCard AI builder state)**
+### 8. `site_settings` (Single type)
+Global settings used across all pages:
+- **address** (text) — "42768 Grand River Ave, Suite C-140, Novi, MI 48375"
+- **phone** (text) — "(248) 938-4093"
+- **general_email** (text) — "team@klawsomenovi.com"
+- **events_email** (text) — "events@klawsomenovi.com"
+- **instagram_url** (text)
+- **facebook_url** (text)
+- **tiktok_url** (text)
+- **google_maps_url** (text)
+- **tagline** (text) — "Michigan's first stand-alone claw machine arcade"
+- **regular_hours** (rich text) — "Tue–Sun 11am–9pm, Closed Mondays"
+- **special_hours** (group) — repeatable: `label` (text), `value` (text)
+- **as_seen_on_image** (image) — the "As Seen On" banner
+- **storefront_image** (image) — used in Visit section
+- **gift_card_url** (text) — Square gift card purchase link
+- **gift_card_images** (group) — repeatable image fields
+- **newsletter_signup_url** (text)
 
-- On mount, load `aiTextBlocks`, `aiImages`, `aiLinks`, `aiColumns` from `localStorage` keyed by section ID
-- On every state change, write back to localStorage
-- Clear localStorage entry after successful AI Create
-- Same pattern for the top-level AI Builder in PageBuilder
+---
 
-### 4. Support all block types in AI builder's "Add Block Directly"
+## Implementation Approach
+1. Create these custom types in Prismic via the existing `prismic-write` edge function pattern (or manually in Prismic dashboard)
+2. Extend the `prismic` edge function to handle each new type with field mapping
+3. Update each component to fetch from the edge function instead of hardcoded data
+4. Add React Query caching so content loads fast
 
-**File: `src/pages/KlawsomeAdmin.tsx` (SectionCard)**
-
-- The `BLOCK_TYPES` array in the AI builder section currently only has a subset. Replace it with the full `BLOCK_TYPES` array (18 types: heading, richtext, image, video, iframe, code, list, button, divider, tabs, table, gallery, map, icon_box, countdown, carousel, reviews, data_cards)
-- Each block type already has default content defined in `ContentBlockEditor.addBlock` — reuse those defaults
-
-### 5. AI Create adds blocks into the section's existing block list
-
-This already works — `aiAddContent` calls the edge function with `existingSectionId: section.id`, which appends blocks to the section. The blocks then appear in the `ContentBlockEditor` accordion below. No change needed here, just verify the flow.
-
-### 6. Remove the standalone `AIBuilderTab` component and tab
-
-**Files:**
-- Remove `src/components/AIBuilderTab.tsx` (no longer needed — its functionality is merged into the unified PageBuilder)
-- Remove the import in `KlawsomeAdmin.tsx`
-
-### 7. Auto-save for SectionCard settings
-
-The section settings (label, bg_color, layout_template, etc.) already auto-save via `onUpdateLayout` on every change. No additional work needed.
-
-### Files changed
-
-| File | Action |
-|------|--------|
-| `src/pages/KlawsomeAdmin.tsx` | Major refactor — unify tabs, auto-save blocks, localStorage, full block types |
-| `src/components/AIBuilderTab.tsx` | Delete (merged into PageBuilder) |
-
-### Technical details
-
-- **Debounce auto-save**: Use a `useRef` timer in `BlockItem`. On any `localContent` change, clear previous timer and set a new 800ms timeout to call `onUpdate`. Also fire on blur for immediate save when leaving a field.
-- **localStorage keys**: `ai-builder-${sectionId}` storing `{ textBlocks, images, links, columns }` as JSON.
-- **Block type defaults**: Consolidate the default content map from `ContentBlockEditor.addBlock` (lines 298-322) and reuse it in the AI builder's "Add Block Directly" section, so code, tabs, table, gallery, map, icon_box, countdown, carousel, reviews all work.
-
+## What stays hardcoded
+- Navigation links (structural, not content)
+- UI labels like "Read Here →", button text patterns
+- Animation/layout configuration
+- Design tokens and styling
