@@ -1,12 +1,12 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
-import playKlawImg from '@/assets/play-klaw-machines.gif';
-import winPlushiesImg from '@/assets/win-plushies.gif';
-import tradeUpImg from '@/assets/trade-up.gif';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type HomepageContent, type HomepageStep } from '@/hooks/useCmsContent';
+import playKlawImg from '@/assets/play-klaw-machines.gif';
+import winPlushiesImg from '@/assets/win-plushies.gif';
+import tradeUpImg from '@/assets/trade-up.gif';
 
-const stepImages = [playKlawImg, winPlushiesImg, tradeUpImg];
+const fallbackImages = [playKlawImg, winPlushiesImg, tradeUpImg];
 
 const KawaiiAbout = () => {
   const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp', distance: 60 });
@@ -42,11 +42,18 @@ const KawaiiAbout = () => {
 
         <div ref={gridRef} className="grid md:grid-cols-3 gap-10 max-w-5xl">
           {displaySteps.map((step, index) => (
-            <div key={step.id} className="flex flex-col" style={{ opacity: 0 }}>
-              <div className="h-36 w-36 flex items-center justify-center mb-6">
-                <img src={stepImages[index] || stepImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
+            <div key={step.id} className="flex flex-col">
+              <div className="h-36 w-36 flex items-center justify-center mb-6 rounded-2xl bg-secondary/50">
+                {step.icon && /^https?:\/\//.test(step.icon) ? (
+                  <img src={step.icon} alt={step.title} className="max-h-full max-w-full object-contain" />
+                ) : step.icon ? (
+                  <span className="text-6xl" aria-hidden>{step.icon}</span>
+                ) : (
+                  <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
+                )}
               </div>
-              <h3 className="text-xl font-heading font-bold text-foreground mb-3">{step.title}</h3>
+              <p className="text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-2">Step {index + 1}</p>
+              <h3 className="text-2xl font-heading font-bold text-foreground mb-3">{step.title}</h3>
               <p className="text-muted-foreground font-body leading-relaxed">{step.description}</p>
             </div>
           ))}
