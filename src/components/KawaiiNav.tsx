@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { Button } from './ui/button';
@@ -10,7 +10,14 @@ const navLinks = [
   { label: 'BIRTHDAYS', href: '/birthdays' },
   { label: 'GIFT CARDS', href: '#giftcards' },
   { label: 'CAREERS', href: '/careers' },
-  { label: 'NEWS', href: '/news' },
+];
+
+const moreLinks = [
+  { label: 'Rewards', href: '/rewards' },
+  { label: 'Gallery', href: '/gallery' },
+  { label: 'Our Story', href: '/our-story' },
+  { label: 'News', href: '/news' },
+  { label: 'FAQ', href: '/faq' },
 ];
 
 const smoothScroll = (id: string) => {
@@ -21,6 +28,7 @@ const smoothScroll = (id: string) => {
 const KawaiiNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [moreOpen, setMoreOpen] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,6 +73,42 @@ const KawaiiNav = () => {
                 {link.label}
               </button>
             ))}
+            <div
+              className="relative"
+              onMouseEnter={() => setMoreOpen(true)}
+              onMouseLeave={() => setMoreOpen(false)}
+            >
+              <button
+                className={`flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-colors duration-200 ${
+                  scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
+                }`}
+              >
+                MORE <ChevronDown className="w-3 h-3" />
+              </button>
+              <AnimatePresence>
+                {moreOpen && (
+                  <motion.div
+                    initial={{ opacity: 0, y: 8 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: 8 }}
+                    transition={{ duration: 0.15 }}
+                    className="absolute top-full right-0 pt-3"
+                  >
+                    <div className="min-w-[200px] bg-background border border-border rounded-2xl shadow-lg py-2 overflow-hidden">
+                      {moreLinks.map((link) => (
+                        <button
+                          key={link.label}
+                          onClick={() => { setMoreOpen(false); handleNav(link.href); }}
+                          className="block w-full text-left px-5 py-3 font-heading font-bold text-xs tracking-[0.15em] uppercase text-foreground/70 hover:text-foreground hover:bg-secondary/60 transition-colors"
+                        >
+                          {link.label}
+                        </button>
+                      ))}
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
             <Button
               size="sm"
               onClick={() => handleNav('#scheduling')}
@@ -98,6 +142,18 @@ const KawaiiNav = () => {
                   {link.label}
                 </button>
               ))}
+              <div className="pt-2 border-t border-border">
+                <p className="font-heading font-bold text-[10px] tracking-[0.2em] text-muted-foreground py-2 uppercase">More</p>
+                {moreLinks.map((link) => (
+                  <button
+                    key={link.label}
+                    onClick={() => handleNav(link.href)}
+                    className="block font-heading font-bold text-xs tracking-[0.15em] uppercase text-foreground/60 hover:text-foreground py-2 transition-colors w-full text-left"
+                  >
+                    {link.label}
+                  </button>
+                ))}
+              </div>
               <Button size="sm" onClick={() => handleNav('#scheduling')} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white w-full">
                 BOOK NOW
               </Button>
