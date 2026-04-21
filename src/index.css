@@ -90,7 +90,17 @@ html {
   }
 
   h1, h2 {
-    font-family: "Arbuckle W00 Black", var(--font-heading);
+    font-family: "Arbuckle W00 Black", var(--font-heading) !important;
+  }
+
+  /* Force Arbuckle on any descendant of h1/h2 (spans, etc.) and any element
+     using heading utility classes that semantically render as h1/h2 sizes. */
+  h1 *, h2 * {
+    font-family: "Arbuckle W00 Black", var(--font-heading) !important;
+  }
+
+  .ds-h1, .ds-h2 {
+    font-family: "Arbuckle W00 Black", var(--font-heading) !important;
   }
 }
 
