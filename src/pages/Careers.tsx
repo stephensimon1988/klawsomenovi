@@ -1,10 +1,12 @@
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
-import { useCmsTable, type JobListing } from '@/hooks/useCmsContent';
+import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 
 const Careers = () => {
   const { data: allJobs } = useCmsTable<JobListing>('job_listings');
+  const { data: hero } = usePageHero('careers');
 
   const inStoreJobs = allJobs?.filter(j => j.category === 'in-store') || [];
   const hybridJobs = allJobs?.filter(j => j.category === 'hybrid') || [];
@@ -14,20 +16,13 @@ const Careers = () => {
     <div className="min-h-screen bg-klawsome-navy">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="pt-28 pb-16 px-4 text-center">
-        <img
-          src="https://images.squarespace-cdn.com/content/679927505e618d391ae386e6/8c57b6f1-0c08-4d2f-bb04-e54051ae7f0b/Klawsome_Fox__CUT.png?content-type=image%2Fpng"
-          alt="Klawsome Fox"
-          className="w-32 mx-auto mb-6"
-        />
-        <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-4">
-          <span className="kawaii-text-gradient">Careers</span>
-        </h1>
-        <p className="text-white/60 font-body text-lg max-w-xl mx-auto">
-          Join the Klawsome team and help create a fun, welcoming experience for everyone!
-        </p>
-      </section>
+      <PageHero
+        eyebrow={hero?.eyebrow || 'Join Us'}
+        title={hero?.title || 'Careers'}
+        subtitle={hero?.subtitle || 'Join the Klawsome team and help create a fun, welcoming experience for everyone!'}
+        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg'}
+        height="md"
+      />
 
       {/* In-Store Jobs */}
       {inStoreJobs.length > 0 && (

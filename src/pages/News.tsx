@@ -1,6 +1,6 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
-import { useCmsTable, type NewsArticle } from '@/hooks/useCmsContent';
+import { useCmsTable, usePageHero, type NewsArticle } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 
 const fallbackArticles = [
@@ -9,6 +9,7 @@ const fallbackArticles = [
 
 const News = () => {
   const { data: dbArticles } = useCmsTable<NewsArticle>('news_articles');
+  const { data: hero } = usePageHero('news');
   const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
 
   return (
@@ -16,10 +17,10 @@ const News = () => {
       <KawaiiNav />
 
       <PageHero
-        eyebrow="Press"
-        title="News"
-        subtitle="See what local news outlets and community voices are saying about us!"
-        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp"
+        eyebrow={hero?.eyebrow || 'Press'}
+        title={hero?.title || 'News'}
+        subtitle={hero?.subtitle || 'See what people are saying about us.'}
+        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp'}
       >
         <img
           src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.png"
