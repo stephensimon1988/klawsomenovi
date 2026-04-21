@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout } from 'lucide-react';
 
 import { toast } from 'sonner';
 
@@ -385,7 +385,12 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
             <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            
+            <TabsTrigger value="heroes" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Layout className="w-3 h-3 mr-1" />Page Heroes</TabsTrigger>
+            <TabsTrigger value="reviews" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Star className="w-3 h-3 mr-1" />Reviews</TabsTrigger>
+            <TabsTrigger value="giftcards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Gift className="w-3 h-3 mr-1" />Gift Cards</TabsTrigger>
+            <TabsTrigger value="rewards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Trophy className="w-3 h-3 mr-1" />Rewards</TabsTrigger>
+            <TabsTrigger value="gallery" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Image className="w-3 h-3 mr-1" />Gallery</TabsTrigger>
+            <TabsTrigger value="ourstory" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><BookOpen className="w-3 h-3 mr-1" />Our Story</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
