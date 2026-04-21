@@ -736,6 +736,19 @@ const KlawsomeAdmin = () => {
             </Card>
           </TabsContent>
 
+          {/* ─── Image Library ─── */}
+          <TabsContent value="imagelib">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white font-heading">Image Library</CardTitle>
+                <p className="text-white/50 text-xs font-body mt-1">Seeded with images pulled from klawsomenovi.com. Click any image to copy its URL, then paste it into any image field across the admin.</p>
+              </CardHeader>
+              <CardContent>
+                <ImageLibraryEditor password={storedPassword} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
         </Tabs>
       </div>
     </div>
