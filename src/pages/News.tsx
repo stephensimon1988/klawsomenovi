@@ -1,6 +1,7 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { useCmsTable, type NewsArticle } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 
 const fallbackArticles = [
   { image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg', title: "Check Out Klawsome In Novi – Michigan's Only Stand-Alone Claw Machine Arcade", source: 'Little Guide Detroit', date: 'August 28th, 2025', url: 'https://littleguidedetroit.com/check-out-klawsome-in-novi-michigans-only-stand-alone-claw-machine-arcade/' },
@@ -14,28 +15,19 @@ const News = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* Full-bleed hero */}
-      <section className="relative min-h-[70vh] flex items-end overflow-hidden">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp')` }}
+      <PageHero
+        eyebrow="Press"
+        title="News"
+        subtitle="See what local news outlets and community voices are saying about us!"
+        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp"
+      >
+        <img
+          src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.png"
+          alt="As seen on Michigan Mama News, Hour Detroit, Little Guide, Hometown Life"
+          className="max-w-sm w-full mt-4"
+          loading="lazy"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
-        <div className="relative z-10 ds-container section-x pb-20 pt-32">
-          <div className="max-w-2xl">
-            <h1 className="ds-h1 text-white mb-6">NEWS</h1>
-            <p className="ds-lead text-white/70 max-w-xl">
-              See what local news outlets and community voices are saying about us!
-            </p>
-            <img
-              src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.png"
-              alt="As seen on Michigan Mama News, Hour Detroit, Little Guide, Hometown Life"
-              className="max-w-sm w-full mt-8"
-              loading="lazy"
-            />
-          </div>
-        </div>
-      </section>
+      </PageHero>
 
       {/* Article grid */}
       <section className="section-y section-x">

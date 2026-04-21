@@ -1,6 +1,7 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { useCmsTable } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 
 interface GalleryPhoto { id: string; section: string; caption: string; image_url: string; sort_order: number; }
 
@@ -25,18 +26,12 @@ const Gallery = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="ds-page-hero">
-        <div className="ds-container">
-          <p className="ds-eyebrow mb-6">Moments</p>
-          <h1 className="ds-h1 mb-8 max-w-4xl">
-            Klawsome<br/>Gallery
-          </h1>
-          <p className="ds-lead max-w-2xl">
-            From the build-out to grand opening to every birthday after — a look inside the arcade.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Moments"
+        title={<>Klawsome<br/>Gallery</>}
+        subtitle="From the build-out to grand opening to every birthday after — a look inside the arcade."
+        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp"
+      />
 
       {Object.entries(grouped).map(([section, items]) => (
         <section key={section} className="section-y section-x">

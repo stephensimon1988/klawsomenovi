@@ -3,6 +3,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import PageHero from '@/components/PageHero';
 
 const categories = [
   { key: 'general', label: 'General' },
@@ -21,18 +22,13 @@ const Faq = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="ds-page-hero">
-        <div className="ds-container">
-          <p className="ds-eyebrow mb-6">Help</p>
-          <h1 className="ds-h1 mb-8 max-w-4xl">
-            Frequently Asked Questions
-          </h1>
-          <p className="ds-lead max-w-2xl">
-            Everything you wanted to know about claw machines, kawaii plushies, parties, and the rest.
-          </p>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Help"
+        title="Frequently Asked Questions"
+        subtitle="Everything you wanted to know about claw machines, kawaii plushies, parties, and the rest."
+        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg"
+        height="md"
+      />
 
       {/* Tabs */}
       <section className="section-x border-b border-border sticky top-20 bg-background/95 backdrop-blur z-30">
