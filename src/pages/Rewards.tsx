@@ -2,6 +2,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { Button } from '@/components/ui/button';
 import { useCmsTable } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 
 interface RewardsTier { id: string; tier_name: string; min_points: string; benefit: string; sort_order: number; }
 interface RewardsRedemption { id: string; points: string; reward: string; sort_order: number; }
@@ -21,21 +22,16 @@ const Rewards = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="relative min-h-[60vh] flex items-end overflow-hidden bg-secondary/40 ds-page-hero">
-        <div className="ds-container relative z-10">
-          <p className="ds-eyebrow mb-6">Loyalty</p>
-          <h1 className="ds-h1 mb-8">
-            Rewards<br/>Program
-          </h1>
-          <p className="ds-lead max-w-2xl mb-10">
-            Your claw game, upgraded. Earn points every visit, unlock perks, and trade up for the prizes you actually want.
-          </p>
-          <Button asChild size="lg" className="rounded-full px-8 font-heading font-bold tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
-            <a href="https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty" target="_blank" rel="noopener noreferrer">Join Today</a>
-          </Button>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="Loyalty"
+        title={<>Rewards<br/>Program</>}
+        subtitle="Your claw game, upgraded. Earn points every visit, unlock perks, and trade up for the prizes you actually want."
+        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg"
+      >
+        <Button asChild size="lg" className="rounded-full px-8 font-heading font-bold tracking-wider bg-white text-foreground hover:bg-white/90 uppercase">
+          <a href="https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty" target="_blank" rel="noopener noreferrer">Join Today</a>
+        </Button>
+      </PageHero>
 
       {/* Benefits */}
       <section className="section-y section-x">

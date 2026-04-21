@@ -1,33 +1,24 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
 
   const title = content?.story_title || 'Our Story';
   const body = content?.story_body || '';
-  const image = content?.story_image_url;
+  const image = content?.story_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg';
 
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="relative min-h-[70vh] flex items-end overflow-hidden">
-        {image && (
-          <>
-            <div className="absolute inset-0 bg-cover bg-center" style={{ backgroundImage: `url('${image}')` }} />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
-          </>
-        )}
-        <div className="relative z-10 ds-container section-x pb-20 pt-32">
-          <p className="ds-eyebrow mb-6 text-white/80">About Us</p>
-          <h1 className="ds-h1 text-white max-w-4xl">
-            {title}
-          </h1>
-        </div>
-      </section>
+      <PageHero
+        eyebrow="About Us"
+        title={title}
+        imageUrl={image}
+      />
 
       {/* Intro */}
       <section className="section-y section-x">
