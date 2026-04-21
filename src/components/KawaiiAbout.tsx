@@ -40,16 +40,18 @@ const KawaiiAbout = () => {
           </p>
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-3 gap-10 max-w-5xl">
+        <div ref={gridRef} className="grid md:grid-cols-3 gap-10 w-full">
           {displaySteps.map((step, index) => (
             <div key={step.id} className="flex flex-col">
-              <div className="h-36 w-36 flex items-center justify-center mb-6 rounded-2xl bg-secondary/50">
+              <div className="aspect-[4/3] w-full flex items-center justify-center mb-6 rounded-2xl bg-secondary/40 p-8">
                 {step.icon && /^https?:\/\//.test(step.icon) ? (
-                  <img src={step.icon} alt={step.title} className="max-h-full max-w-full object-contain" />
+                  <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
+                ) : step.icon && step.icon.startsWith('/') ? (
+                  <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
                 ) : step.icon ? (
                   <span className="text-6xl" aria-hidden>{step.icon}</span>
                 ) : (
-                  <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
+                  <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-40 max-w-full object-contain" />
                 )}
               </div>
               <p className="ds-eyebrow mb-2">Step {index + 1}</p>
