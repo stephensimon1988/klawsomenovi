@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout } from 'lucide-react';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout, ImageIcon } from 'lucide-react';
+import ImageLibraryEditor from '@/components/admin/ImageLibraryEditor';
 
 import { toast } from 'sonner';
 
