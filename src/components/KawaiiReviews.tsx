@@ -2,18 +2,13 @@ import { useState, useEffect } from 'react';
 import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
-
-const reviews = [
-  { name: 'Patrick G.', role: 'Local arcade visitor', text: 'Great vibes! Staff is super friendly, and they go out of their way to make sure everyone gets prizes no matter their skill level!' },
-  { name: 'Daniel B.', role: 'Family outing guest', text: 'Had such a blast with the kids. Owner and staff are so friendly and its absolutely fun for kids to win prizes.' },
-  { name: 'Christine A.', role: 'Regular family visitor', text: "Such a great experience! Love this place—so helpful and amazing time with the kiddos!" },
-  { name: 'Michelle D.', role: 'Arcade enthusiast', text: 'sooo fun!!! really cute prizes!!! friendly staff too ❤️' },
-  { name: 'Rich S.', role: 'Weekend visitor', text: 'The staff was very friendly and the prizes were not too difficult to win! Will definitely come back again and recommend this place to anyone!' },
-  { name: 'Lucy D.', role: 'Saturday night visitor', text: "Klawsome was an awesome Saturday night activity! We had a great time and met Agnes, one of the owners. We enjoyed our time and got our money's worth of prizes. We'll be back!" },
-  { name: 'Genki N.', role: 'Family visitor', text: "This is a great place to have fun with kids or even without kids! So many claw machines and bunch of toys. Staffs are great and very kind. Literally AWESOME place!" },
-];
+import { useCmsTable, type Review } from '@/hooks/useCmsContent';
 
 const KawaiiReviews = () => {
+  const { data: cmsReviews } = useCmsTable<Review>('reviews');
+  const reviews = (cmsReviews && cmsReviews.length > 0)
+    ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
+    : [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rating, setRating] = useState(4.9);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
