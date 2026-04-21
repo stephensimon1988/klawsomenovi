@@ -392,6 +392,7 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="rewards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Trophy className="w-3 h-3 mr-1" />Rewards</TabsTrigger>
             <TabsTrigger value="gallery" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Image className="w-3 h-3 mr-1" />Gallery</TabsTrigger>
             <TabsTrigger value="ourstory" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><BookOpen className="w-3 h-3 mr-1" />Our Story</TabsTrigger>
+            <TabsTrigger value="imagelib" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><ImageIcon className="w-3 h-3 mr-1" />Image Library</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
