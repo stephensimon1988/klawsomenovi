@@ -37,6 +37,18 @@ export function useCmsSingle<T = Record<string, unknown>>(table: string) {
   });
 }
 
+// Fetch a single page hero by page_key
+export function usePageHero(pageKey: string) {
+  return useQuery({
+    queryKey: ['cms', 'page_heroes', pageKey],
+    queryFn: async () => {
+      const { data } = await supabase.from('page_heroes' as any).select('*').eq('page_key', pageKey).maybeSingle();
+      return data as any;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 // Type definitions for CMS content
 export interface SiteSettings {
   id: string;
