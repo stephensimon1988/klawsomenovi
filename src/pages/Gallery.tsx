@@ -1,12 +1,13 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
-import { useCmsTable } from '@/hooks/useCmsContent';
+import { useCmsTable, usePageHero } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 
 interface GalleryPhoto { id: string; section: string; caption: string; image_url: string; sort_order: number; }
 
 const Gallery = () => {
   const { data: photos } = useCmsTable<GalleryPhoto>('gallery_photos');
+  const { data: hero } = usePageHero('gallery');
 
   // Group by section
   const grouped = (photos || []).reduce<Record<string, GalleryPhoto[]>>((acc, p) => {
@@ -27,10 +28,10 @@ const Gallery = () => {
       <KawaiiNav />
 
       <PageHero
-        eyebrow="Moments"
-        title={<>Klawsome<br/>Gallery</>}
-        subtitle="From the build-out to grand opening to every birthday after — a look inside the arcade."
-        imageUrl="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp"
+        eyebrow={hero?.eyebrow || 'Moments'}
+        title={hero?.title || 'Klawsome Gallery'}
+        subtitle={hero?.subtitle || 'From the build-out to grand opening to every birthday after.'}
+        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f9d4fe0-5f54-4077-be1b-a5c20318ebbe/klawsome+in+the+news.webp'}
       />
 
       {Object.entries(grouped).map(([section, items]) => (

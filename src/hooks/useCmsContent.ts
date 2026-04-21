@@ -37,6 +37,18 @@ export function useCmsSingle<T = Record<string, unknown>>(table: string) {
   });
 }
 
+// Fetch a single page hero by page_key
+export function usePageHero(pageKey: string) {
+  return useQuery({
+    queryKey: ['cms', 'page_heroes', pageKey],
+    queryFn: async () => {
+      const { data } = await supabase.from('page_heroes' as any).select('*').eq('page_key', pageKey).maybeSingle();
+      return data as any;
+    },
+    staleTime: 5 * 60 * 1000,
+  });
+}
+
 // Type definitions for CMS content
 export interface SiteSettings {
   id: string;
@@ -178,5 +190,59 @@ export interface BusinessHowStep {
   title: string;
   description: string;
   icon: string;
+  sort_order: number;
+}
+
+export interface PageHero {
+  id: string;
+  page_key: string;
+  eyebrow: string;
+  title: string;
+  subtitle: string;
+  image_url: string;
+  cta_text: string;
+  cta_url: string;
+  sort_order: number;
+}
+
+export interface OurStorySection {
+  id: string;
+  eyebrow: string;
+  title: string;
+  body: string;
+  sort_order: number;
+}
+
+export interface Review {
+  id: string;
+  author_name: string;
+  author_role: string;
+  review_text: string;
+  rating: number;
+  is_active: boolean;
+  sort_order: number;
+}
+
+export interface GiftCardsContent {
+  id: string;
+  eyebrow: string;
+  headline: string;
+  body_1: string;
+  body_2: string;
+  cta_text: string;
+  cta_url: string;
+}
+
+export interface GiftCardImage {
+  id: string;
+  image_url: string;
+  alt_text: string;
+  sort_order: number;
+}
+
+export interface RewardsBenefit {
+  id: string;
+  title: string;
+  body: string;
   sort_order: number;
 }

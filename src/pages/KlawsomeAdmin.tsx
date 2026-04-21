@@ -9,7 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle } from 'lucide-react';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout } from 'lucide-react';
 
 import { toast } from 'sonner';
 
@@ -385,7 +385,12 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
             <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
             <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            
+            <TabsTrigger value="heroes" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Layout className="w-3 h-3 mr-1" />Page Heroes</TabsTrigger>
+            <TabsTrigger value="reviews" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Star className="w-3 h-3 mr-1" />Reviews</TabsTrigger>
+            <TabsTrigger value="giftcards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Gift className="w-3 h-3 mr-1" />Gift Cards</TabsTrigger>
+            <TabsTrigger value="rewards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Trophy className="w-3 h-3 mr-1" />Rewards</TabsTrigger>
+            <TabsTrigger value="gallery" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Image className="w-3 h-3 mr-1" />Gallery</TabsTrigger>
+            <TabsTrigger value="ourstory" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><BookOpen className="w-3 h-3 mr-1" />Our Story</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -597,7 +602,137 @@ const KlawsomeAdmin = () => {
             </Card>
           </TabsContent>
 
+          {/* ─── Page Heroes ─── */}
+          <TabsContent value="heroes">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white font-heading">Page Hero Banners</CardTitle>
+                <p className="text-white/50 text-xs font-body mt-1">Edit the eyebrow, title, subtitle, and background image for each secondary page (Rewards, Gallery, FAQ, News, Our Story, Careers, Business, Birthdays).</p>
+              </CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="page_heroes" columns={[
+                  { key: 'page_key', label: 'Page', width: '110px' },
+                  { key: 'eyebrow', label: 'Eyebrow' },
+                  { key: 'title', label: 'Title' },
+                  { key: 'subtitle', label: 'Subtitle', type: 'textarea' },
+                  { key: 'image_url', label: 'Background Image URL' },
+                  { key: 'cta_text', label: 'CTA Text' },
+                  { key: 'cta_url', label: 'CTA URL' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
+          {/* ─── Reviews ─── */}
+          <TabsContent value="reviews">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Homepage Reviews</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="reviews" columns={[
+                  { key: 'author_name', label: 'Author' },
+                  { key: 'author_role', label: 'Role' },
+                  { key: 'review_text', label: 'Review', type: 'textarea' },
+                  { key: 'is_active', label: 'Active', type: 'bool' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Gift Cards ─── */}
+          <TabsContent value="giftcards" className="space-y-6">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Gift Cards Section Copy</CardTitle></CardHeader>
+              <CardContent>
+                <SingleRowEditor password={storedPassword} table="gift_cards_content" fields={[
+                  { key: 'eyebrow', label: 'Eyebrow' },
+                  { key: 'headline', label: 'Headline' },
+                  { key: 'body_1', label: 'Paragraph 1', multiline: true },
+                  { key: 'body_2', label: 'Paragraph 2', multiline: true },
+                  { key: 'cta_text', label: 'Button Text' },
+                  { key: 'cta_url', label: 'Button URL' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Gift Card Images</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="gift_card_images" columns={[
+                  { key: 'image_url', label: 'Image URL' },
+                  { key: 'alt_text', label: 'Alt Text' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Rewards ─── */}
+          <TabsContent value="rewards" className="space-y-6">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Membership Benefits</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="rewards_benefits" columns={[
+                  { key: 'title', label: 'Title' },
+                  { key: 'body', label: 'Body', type: 'textarea' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Loyalty Tiers</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="rewards_tiers" columns={[
+                  { key: 'tier_name', label: 'Tier Name' },
+                  { key: 'min_points', label: 'Min Points' },
+                  { key: 'benefit', label: 'Benefit / Earn Rate' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Points Redemptions</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="rewards_redemptions" columns={[
+                  { key: 'points', label: 'Points' },
+                  { key: 'reward', label: 'Reward' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Gallery ─── */}
+          <TabsContent value="gallery">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white font-heading">Gallery Photos</CardTitle>
+                <p className="text-white/50 text-xs font-body mt-1">Section keys: beginning, private, semi-private, gallery</p>
+              </CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="gallery_photos" columns={[
+                  { key: 'section', label: 'Section', width: '120px' },
+                  { key: 'image_url', label: 'Image URL' },
+                  { key: 'caption', label: 'Caption' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Our Story ─── */}
+          <TabsContent value="ourstory">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader><CardTitle className="text-white font-heading">Our Story Sections</CardTitle></CardHeader>
+              <CardContent>
+                <MultiRowEditor password={storedPassword} table="our_story_sections" columns={[
+                  { key: 'eyebrow', label: 'Eyebrow' },
+                  { key: 'title', label: 'Title' },
+                  { key: 'body', label: 'Body', type: 'textarea' },
+                  { key: 'sort_order', label: 'Order', width: '60px' },
+                ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
 
         </Tabs>
       </div>

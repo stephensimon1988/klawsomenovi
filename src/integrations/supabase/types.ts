@@ -242,6 +242,60 @@ export type Database = {
         }
         Relationships: []
       }
+      gift_card_images: {
+        Row: {
+          alt_text: string
+          id: string
+          image_url: string
+          sort_order: number
+        }
+        Insert: {
+          alt_text?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Update: {
+          alt_text?: string
+          id?: string
+          image_url?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      gift_cards_content: {
+        Row: {
+          body_1: string
+          body_2: string
+          cta_text: string
+          cta_url: string
+          eyebrow: string
+          headline: string
+          id: string
+          updated_at: string
+        }
+        Insert: {
+          body_1?: string
+          body_2?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          headline?: string
+          id?: string
+          updated_at?: string
+        }
+        Update: {
+          body_1?: string
+          body_2?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          headline?: string
+          id?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       homepage_content: {
         Row: {
           about_subtitle: string | null
@@ -410,6 +464,66 @@ export type Database = {
         }
         Relationships: []
       }
+      our_story_sections: {
+        Row: {
+          body: string
+          eyebrow: string
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          body?: string
+          eyebrow?: string
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Update: {
+          body?: string
+          eyebrow?: string
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Relationships: []
+      }
+      page_heroes: {
+        Row: {
+          cta_text: string
+          cta_url: string
+          eyebrow: string
+          id: string
+          image_url: string
+          page_key: string
+          sort_order: number
+          subtitle: string
+          title: string
+        }
+        Insert: {
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          page_key: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+        }
+        Update: {
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          page_key?: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+        }
+        Relationships: []
+      }
       page_sections: {
         Row: {
           animation: string
@@ -503,6 +617,57 @@ export type Database = {
           name?: string
           price?: string | null
           sort_order?: number
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_name: string
+          author_role: string
+          id: string
+          is_active: boolean
+          rating: number
+          review_text: string
+          sort_order: number
+        }
+        Insert: {
+          author_name?: string
+          author_role?: string
+          id?: string
+          is_active?: boolean
+          rating?: number
+          review_text?: string
+          sort_order?: number
+        }
+        Update: {
+          author_name?: string
+          author_role?: string
+          id?: string
+          is_active?: boolean
+          rating?: number
+          review_text?: string
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      rewards_benefits: {
+        Row: {
+          body: string
+          id: string
+          sort_order: number
+          title: string
+        }
+        Insert: {
+          body?: string
+          id?: string
+          sort_order?: number
+          title?: string
+        }
+        Update: {
+          body?: string
+          id?: string
+          sort_order?: number
+          title?: string
         }
         Relationships: []
       }

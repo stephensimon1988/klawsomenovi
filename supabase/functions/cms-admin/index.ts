@@ -11,6 +11,9 @@ const TABLES_ALLOWED = [
   'token_tiers', 'news_articles', 'birthdays_content', 'party_options',
   'faq_items', 'invite_templates', 'job_listings', 'business_sections',
   'business_pricing_tiers', 'business_how_steps',
+  'page_heroes', 'our_story_sections', 'reviews', 'gift_cards_content',
+  'gift_card_images', 'rewards_benefits', 'rewards_tiers', 'rewards_redemptions',
+  'gallery_photos',
 ];
 
 serve(async (req) => {
