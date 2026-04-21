@@ -9,7 +9,8 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout } from 'lucide-react';
+import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout, ImageIcon } from 'lucide-react';
+import ImageLibraryEditor from '@/components/admin/ImageLibraryEditor';
 
 import { toast } from 'sonner';
 
@@ -391,6 +392,7 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="rewards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Trophy className="w-3 h-3 mr-1" />Rewards</TabsTrigger>
             <TabsTrigger value="gallery" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Image className="w-3 h-3 mr-1" />Gallery</TabsTrigger>
             <TabsTrigger value="ourstory" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><BookOpen className="w-3 h-3 mr-1" />Our Story</TabsTrigger>
+            <TabsTrigger value="imagelib" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><ImageIcon className="w-3 h-3 mr-1" />Image Library</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -730,6 +732,19 @@ const KlawsomeAdmin = () => {
                   { key: 'body', label: 'Body', type: 'textarea' },
                   { key: 'sort_order', label: 'Order', width: '60px' },
                 ]} />
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* ─── Image Library ─── */}
+          <TabsContent value="imagelib">
+            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+              <CardHeader>
+                <CardTitle className="text-white font-heading">Image Library</CardTitle>
+                <p className="text-white/50 text-xs font-body mt-1">Seeded with images pulled from klawsomenovi.com. Click any image to copy its URL, then paste it into any image field across the admin.</p>
+              </CardHeader>
+              <CardContent>
+                <ImageLibraryEditor password={storedPassword} />
               </CardContent>
             </Card>
           </TabsContent>

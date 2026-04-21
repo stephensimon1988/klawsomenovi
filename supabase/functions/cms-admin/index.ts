@@ -13,7 +13,7 @@ const TABLES_ALLOWED = [
   'business_pricing_tiers', 'business_how_steps',
   'page_heroes', 'our_story_sections', 'reviews', 'gift_cards_content',
   'gift_card_images', 'rewards_benefits', 'rewards_tiers', 'rewards_redemptions',
-  'gallery_photos',
+  'gallery_photos', 'image_library',
 ];
 
 serve(async (req) => {
