@@ -135,6 +135,10 @@ const KawaiiDivider = ({
   return (
     <div
       aria-hidden
+      data-kawaii-divider
+      data-divider-variant={variant}
+      data-divider-from={from}
+      data-divider-to={to}
       className={cn('w-full overflow-hidden leading-[0]', className)}
       style={{ backgroundColor: fromColor }}
     >
