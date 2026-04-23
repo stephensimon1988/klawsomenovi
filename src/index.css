@@ -13,33 +13,33 @@ html {
 @layer base {
   :root {
     --background: 0 0% 100%;
-    --foreground: 216 50% 15%;
+    --foreground: 216 50% 22%;
 
     --card: 0 0% 100%;
-    --card-foreground: 216 50% 15%;
+    --card-foreground: 216 50% 22%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 216 50% 15%;
+    --popover-foreground: 216 50% 22%;
 
     /* Coral red — main brand */
     --primary: 351 76% 62%;
     --primary-foreground: 0 0% 100%;
 
-    /* Soft neutral */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 216 50% 15%;
+    /* Baby blue — soft section background */
+    --secondary: 190 75% 91%;
+    --secondary-foreground: 216 50% 22%;
 
-    --muted: 220 14% 96%;
-    --muted-foreground: 216 20% 46%;
+    --muted: 340 60% 92%;
+    --muted-foreground: 216 30% 35%;
 
-    --accent: 50 84% 70%;
-    --accent-foreground: 50 60% 20%;
+    --accent: 340 60% 85%;
+    --accent-foreground: 216 50% 22%;
 
     --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
+    --border: 216 30% 88%;
+    --input: 216 30% 88%;
     --ring: 351 76% 62%;
 
     --radius: 0.75rem;
