@@ -31,35 +31,32 @@ const Rental = () => {
       />
 
       {packages && packages.length > 0 && (
-        <section className="section-y section-x bg-foreground text-background">
+        <section className="section-y section-x bg-secondary/50">
           <div className="ds-container">
-            <div className="flex items-baseline gap-6 mb-12">
-              <span className="font-heading font-bold text-2xl text-background/60 tabular-nums">
-                {String(packages.length).padStart(2, '0')}
-              </span>
-              <span className="flex-1 h-px bg-background/20" />
-              <p className="text-xs font-heading font-bold uppercase tracking-[0.2em] text-background/70">
-                Choose Your Package
+            <div className="max-w-2xl mb-16">
+              <p className="ds-eyebrow">Choose Your Package</p>
+              <h2 className="ds-h2 mb-6">Pricing that fits every event</h2>
+              <p className="ds-lead">
+                From small parties to full buyouts, pick the package that matches your day.
               </p>
             </div>
-            <h2 className="font-heading font-bold uppercase leading-[0.95] tracking-tight text-[clamp(2.5rem,6vw,5rem)] mb-16 max-w-4xl">
-              Pricing That Fits Every Event
-            </h2>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-background/15 rounded-3xl overflow-hidden">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {packages.map((p) => (
                 <div
                   key={p.id}
-                  className={`p-8 flex flex-col ${
+                  className={`flex flex-col rounded-2xl p-8 ${
                     p.is_highlight
                       ? 'bg-primary text-primary-foreground'
-                      : 'bg-foreground text-background'
+                      : 'bg-background border border-border'
                   }`}
                 >
-                  <h3 className="font-heading font-bold uppercase text-2xl mb-3">{p.name}</h3>
-                  <p className="text-5xl font-heading font-bold mb-4 leading-none">{p.price}</p>
+                  <h3 className="ds-h3 mb-2">{p.name}</h3>
+                  <p className="text-4xl font-heading font-bold mb-4 leading-none">
+                    {p.price}
+                  </p>
                   <p
                     className={`text-sm font-body mb-6 ${
-                      p.is_highlight ? 'text-primary-foreground/80' : 'text-background/70'
+                      p.is_highlight ? 'text-primary-foreground/85' : 'text-muted-foreground'
                     }`}
                   >
                     {p.description}
@@ -68,12 +65,12 @@ const Rental = () => {
                     className={`space-y-3 text-sm font-body flex-1 border-t pt-6 ${
                       p.is_highlight
                         ? 'border-primary-foreground/30 text-primary-foreground/90'
-                        : 'border-background/15 text-background/85'
+                        : 'border-border text-foreground/80'
                     }`}
                   >
                     {(p.features || []).map((f, i) => (
                       <li key={i} className="flex gap-3">
-                        <span className={p.is_highlight ? 'text-primary-foreground' : 'text-background/60'}>→</span>
+                        <span className={p.is_highlight ? 'text-primary-foreground' : 'text-primary'}>✓</span>
                         <span>{f}</span>
                       </li>
                     ))}
@@ -81,10 +78,10 @@ const Rental = () => {
                   {p.cta_text && (
                     <a
                       href={p.cta_url || '#scheduling'}
-                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-[0.2em] px-6 py-4 transition-all ${
+                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
                         p.is_highlight
                           ? 'bg-background text-foreground hover:bg-background/90'
-                          : 'bg-background text-foreground hover:bg-primary hover:text-primary-foreground'
+                          : 'bg-foreground text-background hover:bg-foreground/90'
                       }`}
                     >
                       {p.cta_text}

@@ -29,49 +29,30 @@ const Press = () => {
       />
       <section className="section-y section-x">
         <div className="ds-container">
-          <div className="flex items-baseline gap-6 mb-16">
-            <span className="font-heading font-bold text-2xl text-primary tabular-nums">
-              {String((articles || []).length).padStart(2, '0')}
-            </span>
-            <span className="flex-1 h-px bg-foreground/15" />
-            <p className="ds-eyebrow !mb-0">Featured Coverage</p>
+          <div className="max-w-2xl mb-16">
+            <p className="ds-eyebrow">Featured Coverage</p>
+            <h2 className="ds-h2">In the spotlight</h2>
           </div>
-          <div className="divide-y divide-foreground/10 border-y border-foreground/10">
-            {(articles || []).map((a, idx) => {
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            {(articles || []).map((a) => {
               const Wrapper = a.url ? 'a' : 'div';
               const props = a.url ? { href: a.url, target: '_blank', rel: 'noopener noreferrer' } : {};
               return (
                 <Wrapper
                   key={a.id}
                   {...props}
-                  className="group grid grid-cols-12 gap-6 py-8 md:py-12 items-baseline hover:bg-secondary/30 transition-colors px-2 md:px-4"
+                  className="group flex flex-col rounded-2xl bg-secondary/40 p-8 hover:bg-secondary/60 transition-colors"
                 >
-                  <span className="col-span-1 font-heading font-bold tabular-nums text-primary text-sm md:text-base pt-2">
-                    {String(idx + 1).padStart(2, '0')}
-                  </span>
-                  <div className="col-span-11 md:col-span-3">
-                    {a.outlet && (
-                      <p className="text-xs font-heading font-bold uppercase tracking-[0.2em] text-foreground/60">
-                        {a.outlet}
-                      </p>
-                    )}
-                    {a.date && (
-                      <p className="text-xs text-muted-foreground font-body mt-2">{a.date}</p>
-                    )}
-                  </div>
-                  <div className="col-start-2 col-span-11 md:col-start-5 md:col-span-7">
-                    <h3 className="font-heading font-bold uppercase leading-[1.05] text-2xl md:text-4xl mb-3 group-hover:text-primary transition-colors">
-                      {a.title}
-                      {a.url && (
-                        <span className="inline-block ml-3 transition-transform group-hover:translate-x-1">→</span>
-                      )}
-                    </h3>
-                    {a.excerpt && (
-                      <p className="text-base font-body text-foreground/70 max-w-2xl">
-                        {a.excerpt}
-                      </p>
-                    )}
-                  </div>
+                  {a.outlet && <p className="ds-eyebrow">{a.outlet}</p>}
+                  <h3 className="ds-h3 mb-3 group-hover:text-primary transition-colors">
+                    {a.title}
+                  </h3>
+                  {a.excerpt && (
+                    <p className="ds-body mb-4">{a.excerpt}</p>
+                  )}
+                  {a.date && (
+                    <p className="text-xs text-muted-foreground font-body mt-auto pt-2">{a.date}</p>
+                  )}
                 </Wrapper>
               );
             })}
