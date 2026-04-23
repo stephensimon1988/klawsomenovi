@@ -41,7 +41,7 @@ const Index = () => {
       </section>
       <KawaiiDivider variant="scallop" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiStory />
-      <KawaiiDivider variant="cloud" from="white" to="hsl(var(--klawsome-red))" stroke="baby-pink" />
+      <KawaiiDivider variant="cloud" from="white" to="red" stroke="baby-pink" />
       <KawaiiFooter />
     </div>
   );
