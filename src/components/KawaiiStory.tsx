@@ -7,7 +7,7 @@ const KawaiiStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
 
   return (
-    <section id="story" className="section-y section-x bg-secondary/50 relative overflow-hidden">
+    <section id="story" className="section-y section-x bg-secondary relative overflow-hidden">
       <LottieAccent type="sparkle" className="absolute bottom-8 right-12 opacity-15" size={80} />
 
       <div className="ds-container-narrow">

@@ -20,7 +20,7 @@ const KawaiiVisit = () => {
     : '11 a.m. to 9 p.m.';
 
   return (
-    <section id="visit" className="section-y section-x bg-background">
+    <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
       <div className="ds-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div ref={imageRef} style={{ opacity: 0 }}>
