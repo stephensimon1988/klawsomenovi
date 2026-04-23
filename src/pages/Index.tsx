@@ -16,7 +16,9 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
       <KawaiiHero />
-      <KawaiiDivider variant="wave" from="white" to="baby-blue" stroke="baby-pink" />
+      {/* Hero ends on a dark image; About is baby-blue. Make the divider a solid
+          baby-blue band (no white gap) so it sits flush on the About section. */}
+      <KawaiiDivider variant="wave" from="baby-blue" to="baby-blue" stroke="white" />
       <KawaiiAbout />
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiVisit />
@@ -28,7 +30,9 @@ const Index = () => {
       <KawaiiNews />
       <KawaiiDivider variant="zigzag-soft" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiGiftCards />
-      <KawaiiDivider variant="wave" from="white" to="baby-pink" stroke="baby-blue" flip />
+      {/* GiftCards is white, Scheduling is baby-pink. Top must be white, bottom pink.
+          Removed `flip` which was inverting the colors and causing a stacked gap. */}
+      <KawaiiDivider variant="wave" from="white" to="baby-pink" stroke="baby-blue" />
       {/* Scheduling section */}
       <section id="scheduling" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
         <div className="ds-container-narrow">
