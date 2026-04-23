@@ -14,6 +14,7 @@ const TABLES_ALLOWED = [
   'page_heroes', 'our_story_sections', 'reviews', 'gift_cards_content',
   'gift_card_images', 'rewards_benefits', 'rewards_tiers', 'rewards_redemptions',
   'gallery_photos', 'image_library',
+  'page_content_sections', 'team_members', 'press_articles', 'rental_packages',
 ];
 
 serve(async (req) => {
