@@ -9,6 +9,7 @@ import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
+import DividerAudit from '@/components/DividerAudit';
 
 const Index = () => {
   return (
@@ -43,6 +44,7 @@ const Index = () => {
       <KawaiiStory />
       <KawaiiDivider variant="cloud" from="baby-blue" to="baby-pink" stroke="white" />
       <KawaiiFooter />
+      <DividerAudit />
     </div>
   );
 };
