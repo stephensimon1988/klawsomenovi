@@ -34,26 +34,59 @@ const Team = () => {
               Team bios coming soon. Add team members in the admin dashboard.
             </p>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {members.map((m) => (
-                <div key={m.id} className="rounded-2xl border border-border bg-background overflow-hidden">
-                  {m.image_url && (
-                    <img src={m.image_url} alt={m.name} loading="lazy" className="w-full aspect-square object-cover" />
-                  )}
-                  <div className="p-6">
-                    <h3 className="ds-h3 mb-1">{m.name}</h3>
-                    {m.role && <p className="text-sm text-primary font-heading font-bold mb-3">{m.role}</p>}
-                    {m.bio && <p className="text-sm font-body text-foreground/80 mb-3 whitespace-pre-line">{m.bio}</p>}
+            <>
+              <div className="flex items-baseline gap-6 mb-16">
+                <span className="font-heading font-bold text-2xl text-primary tabular-nums">
+                  {String(members.length).padStart(2, '0')}
+                </span>
+                <span className="flex-1 h-px bg-foreground/15" />
+                <p className="ds-eyebrow !mb-0">The Crew</p>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+                {members.map((m, idx) => (
+                  <div key={m.id} className="group flex flex-col">
+                    <div className="relative overflow-hidden rounded-3xl bg-secondary/40 mb-6">
+                      {m.image_url ? (
+                        <img
+                          src={m.image_url}
+                          alt={m.name}
+                          loading="lazy"
+                          className="w-full aspect-[4/5] object-cover transition-transform duration-700 group-hover:scale-105"
+                        />
+                      ) : (
+                        <div className="w-full aspect-[4/5]" />
+                      )}
+                      <span className="absolute top-4 left-4 font-heading font-bold tabular-nums text-white text-sm bg-foreground/70 backdrop-blur rounded-full px-3 py-1">
+                        {String(idx + 1).padStart(2, '0')}
+                      </span>
+                    </div>
+                    <h3 className="font-heading font-bold uppercase text-3xl leading-[1.05] mb-1">
+                      {m.name}
+                    </h3>
+                    {m.role && (
+                      <p className="text-xs text-primary font-heading font-bold uppercase tracking-[0.2em] mb-4">
+                        {m.role}
+                      </p>
+                    )}
+                    {m.bio && (
+                      <p className="text-base font-body text-foreground/75 mb-3 whitespace-pre-line leading-relaxed">
+                        {m.bio}
+                      </p>
+                    )}
                     {m.favorite_plush && (
-                      <p className="text-sm font-body"><span className="font-bold">Favorite plush:</span> {m.favorite_plush}</p>
+                      <p className="text-sm font-body text-foreground/70">
+                        <span className="font-bold">Favorite plush:</span> {m.favorite_plush}
+                      </p>
                     )}
                     {m.fun_facts && (
-                      <p className="text-sm font-body mt-2 text-foreground/70 whitespace-pre-line">{m.fun_facts}</p>
+                      <p className="text-sm font-body mt-2 text-foreground/60 whitespace-pre-line">
+                        {m.fun_facts}
+                      </p>
                     )}
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            </>
           )}
         </div>
       </section>
