@@ -200,10 +200,10 @@ html {
   .section-y-lg   { @apply py-28 md:py-32; }            /* generous, for hero-adjacent */
   .section-x      { @apply px-6 lg:px-12; }             /* horizontal gutters */
 
-  /* Container — single source of truth: max 1280px, centered */
-  .ds-container   { @apply container mx-auto max-w-[1280px]; }
+  /* Container — single source of truth: matches nav width (max 1536px), centered */
+  .ds-container   { @apply container mx-auto max-w-[1536px]; }
   .ds-container-narrow { @apply container mx-auto max-w-3xl; }   /* prose / single-column */
-  .ds-container-wide   { @apply container mx-auto max-w-[1280px]; }
+  .ds-container-wide   { @apply container mx-auto max-w-[1536px]; }
 
   /* Section header pattern (eyebrow + h2 + optional intro) */
   .ds-eyebrow {

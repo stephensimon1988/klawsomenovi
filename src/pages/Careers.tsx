@@ -26,8 +26,8 @@ const Careers = () => {
 
       {/* In-Store Jobs */}
       {inStoreJobs.length > 0 && (
-        <section className="py-16 px-4">
-          <div className="container mx-auto max-w-4xl">
+        <section className="section-y section-x">
+          <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">In-Store Positions</h2>
             <div className="space-y-10">
               {inStoreJobs.map((job) => (
@@ -60,8 +60,8 @@ const Careers = () => {
 
       {/* Hybrid / Paid Jobs */}
       {hybridJobs.length > 0 && (
-        <section className="py-16 px-4 bg-primary">
-          <div className="container mx-auto max-w-4xl">
+        <section className="section-y section-x bg-primary">
+          <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Paid Jobs</h2>
             <div className="grid md:grid-cols-3 gap-6">
               {hybridJobs.map((job) => (
@@ -92,8 +92,8 @@ const Careers = () => {
 
       {/* Unpaid Opportunities */}
       {unpaidJobs.length > 0 && (
-        <section className="py-16 px-4 bg-klawsome-navy">
-          <div className="container mx-auto max-w-4xl">
+        <section className="section-y section-x bg-klawsome-navy">
+          <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
             <div className="space-y-8">
               {unpaidJobs.map((job) => (
