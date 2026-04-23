@@ -19,17 +19,17 @@ const Index = () => {
       <KawaiiAbout />
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiVisit />
-      <KawaiiDivider variant="cloud" from="baby-pink" to="navy" stroke="baby-pink" />
+      <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="white" />
       <KawaiiTokenPrices />
-      <KawaiiDivider variant="bumps" from="navy" to="white" stroke="baby-pink" />
+      <KawaiiDivider variant="bumps" from="red" to="white" stroke="baby-pink" />
       <KawaiiReviews />
-      <KawaiiDivider variant="petals" from="white" to="baby-pink" stroke="baby-blue" />
+      <KawaiiDivider variant="petals" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiNews />
-      <KawaiiDivider variant="zigzag-soft" from="baby-pink" to="white" stroke="baby-blue" />
+      <KawaiiDivider variant="zigzag-soft" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiGiftCards />
-      <KawaiiDivider variant="wave" from="white" to="baby-blue" stroke="baby-pink" flip />
+      <KawaiiDivider variant="wave" from="white" to="baby-pink" stroke="baby-blue" flip />
       {/* Scheduling section */}
-      <section id="scheduling" className="section-y section-x bg-secondary">
+      <section id="scheduling" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
         <div className="ds-container-narrow">
           <p className="ds-eyebrow">Schedule</p>
           <h2 className="ds-h2 mb-4">Book Your Visit</h2>
@@ -39,9 +39,9 @@ const Index = () => {
           </div>
         </div>
       </section>
-      <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
+      <KawaiiDivider variant="scallop" from="baby-pink" to="baby-blue" stroke="white" />
       <KawaiiStory />
-      <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="baby-blue" />
+      <KawaiiDivider variant="cloud" from="baby-blue" to="baby-pink" stroke="white" />
       <KawaiiFooter />
     </div>
   );

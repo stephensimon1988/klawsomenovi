@@ -20,7 +20,7 @@ const KawaiiTokenPrices = () => {
   const tiers = dbTiers && dbTiers.length > 0 ? dbTiers : fallbackTiers;
 
   return (
-    <section id="tokens" className="section-y section-x bg-klawsome-navy relative overflow-hidden">
+    <section id="tokens" className="section-y section-x bg-primary relative overflow-hidden">
       <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-20" size={70} />
 
       <div className="ds-container relative z-10">

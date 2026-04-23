@@ -1,6 +1,7 @@
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 import { Button } from './ui/button';
+import KawaiiDivider from './KawaiiDivider';
 
 const KawaiiFooter = () => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
@@ -14,24 +15,26 @@ const KawaiiFooter = () => {
 
   return (
     <>
-      {/* Pre-footer CTA — red kawaii block */}
-      <section className="py-32 px-6 lg:px-12 bg-primary relative overflow-hidden">
+      {/* Pre-footer CTA */}
+      <section className="py-32 px-6 lg:px-12 bg-[hsl(var(--klawsome-baby-pink))] relative overflow-hidden">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-white leading-[0.95] uppercase mb-8">
+          <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-foreground leading-[0.95] uppercase mb-8">
             Ready to<br />Play?
           </h2>
-          <p className="text-white/85 font-body text-lg mb-10 max-w-md mx-auto">
+          <p className="text-foreground/80 font-body text-lg mb-10 max-w-md mx-auto">
             Come see what all the buzz is about. We're here and ready for you.
           </p>
           <Button
             asChild
             size="lg"
-            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-white hover:bg-white/90 text-primary uppercase"
+            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
           >
             <a href="#scheduling">Book Your Visit</a>
           </Button>
         </div>
       </section>
+
+      <KawaiiDivider variant="scallop" from="baby-pink" to="red" stroke="white" />
 
       {/* Minimal footer — red */}
       <footer id="contact" className="py-16 px-6 lg:px-12 bg-primary border-t border-white/15">
