@@ -488,6 +488,54 @@ export type Database = {
         }
         Relationships: []
       }
+      page_content_sections: {
+        Row: {
+          body: string
+          created_at: string
+          cta_text: string
+          cta_url: string
+          eyebrow: string
+          headline: string
+          id: string
+          image_url: string
+          list_items: Json
+          page_key: string
+          section_key: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          body?: string
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          headline?: string
+          id?: string
+          image_url?: string
+          list_items?: Json
+          page_key: string
+          section_key: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          body?: string
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          headline?: string
+          id?: string
+          image_url?: string
+          list_items?: Json
+          page_key?: string
+          section_key?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       page_heroes: {
         Row: {
           cta_text: string
@@ -616,6 +664,81 @@ export type Database = {
           id?: string
           name?: string
           price?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      press_articles: {
+        Row: {
+          created_at: string
+          date: string
+          excerpt: string
+          id: string
+          image_url: string
+          is_active: boolean
+          outlet: string
+          sort_order: number
+          title: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          outlet?: string
+          sort_order?: number
+          title?: string
+          url?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          outlet?: string
+          sort_order?: number
+          title?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      rental_packages: {
+        Row: {
+          cta_text: string
+          cta_url: string
+          description: string
+          features: Json
+          id: string
+          is_highlight: boolean
+          name: string
+          price: string
+          sort_order: number
+        }
+        Insert: {
+          cta_text?: string
+          cta_url?: string
+          description?: string
+          features?: Json
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+        }
+        Update: {
+          cta_text?: string
+          cta_url?: string
+          description?: string
+          features?: Json
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
           sort_order?: number
         }
         Relationships: []
@@ -828,6 +951,45 @@ export type Database = {
           id?: string
           is_closed?: boolean
           open_time?: string | null
+          sort_order?: number
+        }
+        Relationships: []
+      }
+      team_members: {
+        Row: {
+          bio: string
+          created_at: string
+          favorite_plush: string
+          fun_facts: string
+          id: string
+          image_url: string
+          is_active: boolean
+          name: string
+          role: string
+          sort_order: number
+        }
+        Insert: {
+          bio?: string
+          created_at?: string
+          favorite_plush?: string
+          fun_facts?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name?: string
+          role?: string
+          sort_order?: number
+        }
+        Update: {
+          bio?: string
+          created_at?: string
+          favorite_plush?: string
+          fun_facts?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          name?: string
+          role?: string
           sort_order?: number
         }
         Relationships: []
