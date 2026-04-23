@@ -23,9 +23,9 @@ const Index = () => {
       <KawaiiTokenPrices />
       <KawaiiDivider variant="bumps" from="navy" to="white" stroke="baby-pink" />
       <KawaiiReviews />
-      <KawaiiDivider variant="petals" from="white" to="white" stroke="baby-pink" />
+      <KawaiiDivider variant="petals" from="white" to="baby-pink" stroke="baby-blue" />
       <KawaiiNews />
-      <KawaiiDivider variant="zigzag-soft" from="white" to="white" stroke="baby-pink" />
+      <KawaiiDivider variant="zigzag-soft" from="baby-pink" to="white" stroke="baby-blue" />
       <KawaiiGiftCards />
       <KawaiiDivider variant="wave" from="white" to="baby-blue" stroke="baby-pink" flip />
       {/* Scheduling section */}
@@ -39,9 +39,9 @@ const Index = () => {
           </div>
         </div>
       </section>
-      <KawaiiDivider variant="scallop" from="baby-blue" to="baby-blue" stroke="baby-pink" />
+      <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiStory />
-      <KawaiiDivider variant="cloud" from="baby-blue" to="red" stroke="baby-pink" />
+      <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="baby-blue" />
       <KawaiiFooter />
     </div>
   );

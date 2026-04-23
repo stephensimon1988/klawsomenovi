@@ -51,36 +51,44 @@ const KawaiiDivider = ({
   const toColor = COLOR_MAP[to];
   const strokeColor = COLOR_MAP[stroke];
 
-  // Each variant defines a path that fills the BOTTOM portion of a 1920x200 viewBox
-  // with the `to` color. The top is filled with the `from` color via background.
-  const PATHS: Record<DividerVariant, { d: string; dash?: string }> = {
+  // For each variant we define:
+  //   fill: a closed path filling the BOTTOM portion with the `to` color
+  //   line: just the top edge curve (used for the dashed kawaii outline so the
+  //         dashes only appear ON the curve — never along sides or bottom)
+  const PATHS: Record<DividerVariant, { fill: string; line: string; dash?: string }> = {
     wave: {
-      d: 'M0,100 C320,40 640,160 960,100 C1280,40 1600,160 1920,100 L1920,200 L0,200 Z',
+      fill: 'M0,100 C320,40 640,160 960,100 C1280,40 1600,160 1920,100 L1920,200 L0,200 Z',
+      line: 'M0,100 C320,40 640,160 960,100 C1280,40 1600,160 1920,100',
       dash: '12 8',
     },
     scallop: {
-      d: 'M0,80 Q120,200 240,80 T480,80 T720,80 T960,80 T1200,80 T1440,80 T1680,80 T1920,80 L1920,200 L0,200 Z',
+      fill: 'M0,80 Q120,200 240,80 T480,80 T720,80 T960,80 T1200,80 T1440,80 T1680,80 T1920,80 L1920,200 L0,200 Z',
+      line: 'M0,80 Q120,200 240,80 T480,80 T720,80 T960,80 T1200,80 T1440,80 T1680,80 T1920,80',
       dash: '6 6',
     },
     cloud: {
-      d: 'M0,140 C100,80 200,80 300,140 C400,80 500,80 600,140 C700,80 800,80 900,140 C1000,80 1100,80 1200,140 C1300,80 1400,80 1500,140 C1600,80 1700,80 1800,140 C1850,110 1900,110 1920,130 L1920,200 L0,200 Z',
+      fill: 'M0,140 C100,80 200,80 300,140 C400,80 500,80 600,140 C700,80 800,80 900,140 C1000,80 1100,80 1200,140 C1300,80 1400,80 1500,140 C1600,80 1700,80 1800,140 C1850,110 1900,110 1920,130 L1920,200 L0,200 Z',
+      line: 'M0,140 C100,80 200,80 300,140 C400,80 500,80 600,140 C700,80 800,80 900,140 C1000,80 1100,80 1200,140 C1300,80 1400,80 1500,140 C1600,80 1700,80 1800,140 C1850,110 1900,110 1920,130',
       dash: '10 6',
     },
     bumps: {
-      d: 'M0,120 C160,20 320,20 480,120 C640,20 800,20 960,120 C1120,20 1280,20 1440,120 C1600,20 1760,20 1920,120 L1920,200 L0,200 Z',
+      fill: 'M0,120 C160,20 320,20 480,120 C640,20 800,20 960,120 C1120,20 1280,20 1440,120 C1600,20 1760,20 1920,120 L1920,200 L0,200 Z',
+      line: 'M0,120 C160,20 320,20 480,120 C640,20 800,20 960,120 C1120,20 1280,20 1440,120 C1600,20 1760,20 1920,120',
       dash: '14 10',
     },
     'zigzag-soft': {
-      d: 'M0,80 Q160,140 320,80 Q480,20 640,80 Q800,140 960,80 Q1120,20 1280,80 Q1440,140 1600,80 Q1760,20 1920,80 L1920,200 L0,200 Z',
+      fill: 'M0,80 Q160,140 320,80 Q480,20 640,80 Q800,140 960,80 Q1120,20 1280,80 Q1440,140 1600,80 Q1760,20 1920,80 L1920,200 L0,200 Z',
+      line: 'M0,80 Q160,140 320,80 Q480,20 640,80 Q800,140 960,80 Q1120,20 1280,80 Q1440,140 1600,80 Q1760,20 1920,80',
       dash: '8 6',
     },
     petals: {
-      d: 'M0,100 Q96,40 192,100 Q288,160 384,100 Q480,40 576,100 Q672,160 768,100 Q864,40 960,100 Q1056,160 1152,100 Q1248,40 1344,100 Q1440,160 1536,100 Q1632,40 1728,100 Q1824,160 1920,100 L1920,200 L0,200 Z',
+      fill: 'M0,100 Q96,40 192,100 Q288,160 384,100 Q480,40 576,100 Q672,160 768,100 Q864,40 960,100 Q1056,160 1152,100 Q1248,40 1344,100 Q1440,160 1536,100 Q1632,40 1728,100 Q1824,160 1920,100 L1920,200 L0,200 Z',
+      line: 'M0,100 Q96,40 192,100 Q288,160 384,100 Q480,40 576,100 Q672,160 768,100 Q864,40 960,100 Q1056,160 1152,100 Q1248,40 1344,100 Q1440,160 1536,100 Q1632,40 1728,100 Q1824,160 1920,100',
       dash: '4 6',
     },
   };
 
-  const { d, dash } = PATHS[variant];
+  const { fill, line, dash } = PATHS[variant];
 
   return (
     <div
@@ -97,16 +105,16 @@ const KawaiiDivider = ({
           transform: flip ? 'scaleY(-1)' : undefined,
         }}
       >
-        <path d={d} fill={toColor} />
+        <path d={fill} fill={toColor} />
         {dash && (
           <path
-            d={d}
+            d={line}
             fill="none"
             stroke={strokeColor}
             strokeWidth={3}
             strokeDasharray={dash}
             strokeLinecap="round"
-            opacity={0.85}
+            opacity={0.9}
           />
         )}
       </svg>

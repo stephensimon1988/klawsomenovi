@@ -26,7 +26,7 @@ const KawaiiNews = () => {
   const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
 
   return (
-    <section id="news" className="section-y section-x bg-background">
+    <section id="news" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
       <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
           <p className="ds-eyebrow">Press</p>
