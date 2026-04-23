@@ -26,7 +26,7 @@ const KawaiiAbout = () => {
   ];
 
   return (
-    <section id="about" className="section-y section-x bg-secondary/50 relative overflow-hidden">
+    <section id="about" className="section-y section-x bg-secondary relative overflow-hidden">
       <LottieAccent type="sparkle" className="absolute top-12 left-12 opacity-20" size={80} />
 
       <div className="ds-container">
