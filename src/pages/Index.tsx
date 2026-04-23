@@ -8,20 +8,28 @@ import KawaiiNews from '@/components/KawaiiNews';
 import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiDivider from '@/components/KawaiiDivider';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
       <KawaiiHero />
+      <KawaiiDivider variant="wave" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiAbout />
+      <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiVisit />
+      <KawaiiDivider variant="cloud" from="baby-pink" to="white" stroke="baby-blue" />
       <KawaiiTokenPrices />
+      <KawaiiDivider variant="bumps" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiReviews />
+      <KawaiiDivider variant="petals" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiNews />
+      <KawaiiDivider variant="zigzag-soft" from="white" to="baby-pink" stroke="baby-blue" />
       <KawaiiGiftCards />
+      <KawaiiDivider variant="wave" from="baby-pink" to="baby-blue" stroke="white" flip />
       {/* Scheduling section */}
-      <section id="scheduling" className="section-y section-x bg-secondary/50">
+      <section id="scheduling" className="section-y section-x bg-secondary">
         <div className="ds-container-narrow">
           <p className="ds-eyebrow">Schedule</p>
           <h2 className="ds-h2 mb-4">Book Your Visit</h2>
@@ -31,7 +39,9 @@ const Index = () => {
           </div>
         </div>
       </section>
+      <KawaiiDivider variant="scallop" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiStory />
+      <KawaiiDivider variant="cloud" from="white" to="red" stroke="baby-pink" />
       <KawaiiFooter />
     </div>
   );
