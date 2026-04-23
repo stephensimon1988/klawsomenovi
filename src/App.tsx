@@ -14,6 +14,13 @@ import Rewards from "./pages/Rewards.tsx";
 import Gallery from "./pages/Gallery.tsx";
 import OurStory from "./pages/OurStory.tsx";
 import Faq from "./pages/Faq.tsx";
+import Rental from "./pages/Rental.tsx";
+import Store from "./pages/Store.tsx";
+import Community from "./pages/Community.tsx";
+import InfoHub from "./pages/InfoHub.tsx";
+import Team from "./pages/Team.tsx";
+import Contact from "./pages/Contact.tsx";
+import Press from "./pages/Press.tsx";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +40,13 @@ const App = () => (
           <Route path="/gallery" element={<Gallery />} />
           <Route path="/our-story" element={<OurStory />} />
           <Route path="/faq" element={<Faq />} />
+          <Route path="/rental" element={<Rental />} />
+          <Route path="/store" element={<Store />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/info-hub" element={<InfoHub />} />
+          <Route path="/team" element={<Team />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/press" element={<Press />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
