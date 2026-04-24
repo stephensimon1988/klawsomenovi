@@ -342,6 +342,28 @@ const KlawsomeAdmin = () => {
     }
   }, []);
 
+  // Hide admin route from search engines
+  useEffect(() => {
+    const prevTitle = document.title;
+    document.title = 'Admin · Klawsome Arcade';
+
+    const robots = document.createElement('meta');
+    robots.name = 'robots';
+    robots.content = 'noindex, nofollow, noarchive, nosnippet, noimageindex';
+    document.head.appendChild(robots);
+
+    const googlebot = document.createElement('meta');
+    googlebot.name = 'googlebot';
+    googlebot.content = 'noindex, nofollow';
+    document.head.appendChild(googlebot);
+
+    return () => {
+      document.title = prevTitle;
+      robots.remove();
+      googlebot.remove();
+    };
+  }, []);
+
   if (!authenticated) {
     return (
       <div className="min-h-screen bg-klawsome-navy flex items-center justify-center p-4">
