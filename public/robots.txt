@@ -1,8 +1,15 @@
+# Klawsome Arcade — robots.txt
+User-agent: *
+Allow: /
+Disallow: /klawsome-admin
+
 User-agent: Googlebot
 Allow: /
+Disallow: /klawsome-admin
 
 User-agent: Bingbot
 Allow: /
+Disallow: /klawsome-admin
 
 User-agent: Twitterbot
 Allow: /
@@ -10,5 +17,4 @@ Allow: /
 User-agent: facebookexternalhit
 Allow: /
 
-User-agent: *
-Allow: /
+Sitemap: https://klawsomearcade.com/sitemap.xml
