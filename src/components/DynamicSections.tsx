@@ -1,4 +1,5 @@
 import { useCmsTable } from '@/hooks/useCmsContent';
+import { Sparkles } from 'lucide-react';
 
 export interface PageContentSection {
   id: string;
@@ -33,28 +34,29 @@ const DynamicSections = ({ pageKey }: { pageKey: string }) => {
             className={`section-y section-x ${alt ? 'bg-secondary/50' : ''}`}
           >
             <div className="ds-container">
-              <div
-                className={`grid gap-10 md:gap-16 items-center ${
-                  hasImage ? 'md:grid-cols-12' : 'md:grid-cols-1'
-                }`}
-              >
-                {hasImage && (
-                  <div
-                    className={`md:col-span-6 ${flip ? 'md:order-2' : 'md:order-1'}`}
-                  >
+              <div className="grid gap-10 md:gap-16 items-center md:grid-cols-12">
+                <div
+                  className={`md:col-span-6 ${flip ? 'md:order-2' : 'md:order-1'}`}
+                >
+                  {hasImage ? (
                     <img
                       src={s.image_url}
                       alt={s.headline}
                       loading="lazy"
                       className="ds-img-hero"
                     />
-                  </div>
-                )}
+                  ) : (
+                    <div
+                      aria-hidden
+                      className="ds-img-hero flex items-center justify-center bg-gradient-to-br from-[hsl(var(--klawsome-baby-pink))] via-[hsl(var(--klawsome-baby-blue))]/60 to-[hsl(var(--klawsome-baby-pink))] text-foreground/70"
+                    >
+                      <Sparkles className="w-20 h-20 opacity-70" strokeWidth={1.5} />
+                    </div>
+                  )}
+                </div>
 
                 <div
-                  className={`${
-                    hasImage ? 'md:col-span-6' : 'md:col-span-12 max-w-2xl'
-                  } ${flip ? 'md:order-1' : 'md:order-2'}`}
+                  className={`md:col-span-6 ${flip ? 'md:order-1' : 'md:order-2'}`}
                 >
                   {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
                   {s.headline && <h2 className="ds-h2 mb-6">{s.headline}</h2>}

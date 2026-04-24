@@ -3,6 +3,7 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import { useCmsTable, type Review } from '@/hooks/useCmsContent';
+import reviewsImage from '@/assets/kawaii-reviews.jpg';
 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
@@ -43,18 +44,28 @@ const KawaiiReviews = () => {
   return (
     <section id="reviews" className="section-y section-x bg-background">
       <div className="ds-container">
-        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
-          <p className="ds-eyebrow">Testimonials</p>
-          <h2 className="ds-h2 mb-4">
-            Guests love us
-          </h2>
-          <div className="flex items-center gap-2 mb-2">
-            {[...Array(5)].map((_, i) => (
-              <Star key={i} className={`w-5 h-5 ${i < displayStars ? 'text-accent fill-accent' : 'text-border'}`} />
-            ))}
-            <span className="text-muted-foreground font-body text-sm ml-2">
-              {rating} out of 5{reviewCount && ` · ${reviewCount} reviews`}
-            </span>
+        <div ref={headerRef} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center mb-16" style={{ opacity: 0 }}>
+          <div className="md:col-span-5">
+            <img
+              src={reviewsImage}
+              alt="Happy Klawsome guests holding plush prizes"
+              loading="lazy"
+              width={1024}
+              height={1024}
+              className="ds-img-hero"
+            />
+          </div>
+          <div className="md:col-span-7">
+            <p className="ds-eyebrow">Testimonials</p>
+            <h2 className="ds-h2 mb-4">Guests love us</h2>
+            <div className="flex items-center gap-2 mb-2">
+              {[...Array(5)].map((_, i) => (
+                <Star key={i} className={`w-5 h-5 ${i < displayStars ? 'text-accent fill-accent' : 'text-border'}`} />
+              ))}
+              <span className="text-muted-foreground font-body text-sm ml-2">
+                {rating} out of 5{reviewCount && ` · ${reviewCount} reviews`}
+              </span>
+            </div>
           </div>
         </div>
 
