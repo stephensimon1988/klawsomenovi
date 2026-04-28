@@ -232,7 +232,7 @@ html {
   }
 
   /* Image aspect ratios — always pair with object-cover */
-  .ds-img-hero  { @apply w-full aspect-[16/9]  object-cover rounded-2xl; }
+  .ds-img-hero  { @apply w-full aspect-square object-cover rounded-2xl; }
   .ds-img-card  { @apply w-full aspect-[4/3]   object-cover; }
   .ds-img-thumb { @apply w-full aspect-square  object-cover; }
   .ds-img-portrait { @apply w-full aspect-[4/5] object-cover rounded-2xl; }
