@@ -21,7 +21,6 @@ import Community from "./pages/Community.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
 import Team from "./pages/Team.tsx";
 import Contact from "./pages/Contact.tsx";
-import Press from "./pages/Press.tsx";
 
 const queryClient = new QueryClient();
 
@@ -48,7 +47,6 @@ const App = () => (
           <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
-          <Route path="/press" element={<Press />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
