@@ -22,7 +22,6 @@ const moreLinks = [
   { label: 'Team', href: '/team' },
   { label: 'Community', href: '/community' },
   { label: 'News', href: '/news' },
-  { label: 'Press', href: '/press' },
   { label: 'Info Hub', href: '/info-hub' },
   { label: 'Contact', href: '/contact' },
   { label: 'FAQ', href: '/faq' },

@@ -418,7 +418,6 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="rental" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Truck className="w-3 h-3 mr-1" />Rental</TabsTrigger>
             <TabsTrigger value="pagesections" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><FileText className="w-3 h-3 mr-1" />Page Sections</TabsTrigger>
             <TabsTrigger value="team" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Users className="w-3 h-3 mr-1" />Team</TabsTrigger>
-            <TabsTrigger value="press" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Mic className="w-3 h-3 mr-1" />Press</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -833,25 +832,6 @@ const KlawsomeAdmin = () => {
                   { key: 'favorite_plush', label: 'Favorite Plush' },
                   { key: 'fun_facts', label: 'Fun Facts', type: 'textarea' },
                   { key: 'image_url', label: 'Image URL' },
-                  { key: 'is_active', label: 'Active', type: 'bool' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
-
-          {/* ─── Press ─── */}
-          <TabsContent value="press">
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Press Articles</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="press_articles" columns={[
-                  { key: 'outlet', label: 'Outlet' },
-                  { key: 'title', label: 'Title' },
-                  { key: 'excerpt', label: 'Excerpt', type: 'textarea' },
-                  { key: 'url', label: 'URL' },
-                  { key: 'image_url', label: 'Image URL' },
-                  { key: 'date', label: 'Date' },
                   { key: 'is_active', label: 'Active', type: 'bool' },
                   { key: 'sort_order', label: 'Order', width: '60px' },
                 ]} />
