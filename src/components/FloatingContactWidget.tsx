@@ -58,13 +58,13 @@ const FloatingContactWidget = () => {
             aria-label="Contact us"
           >
             <span className="block">We'd love to</span>
-            <span className="block text-klawsome-pink">hear from you!</span>
+            <span className="block text-primary">hear from you!</span>
             <span
               role="button"
               tabIndex={0}
               onClick={(e) => { e.stopPropagation(); setBubbleVisible(false); }}
               onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.stopPropagation(); setBubbleVisible(false); } }}
-              className="absolute -top-2 -left-2 bg-klawsome-navy text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-klawsome-pink cursor-pointer"
+              className="absolute -top-2 -left-2 bg-klawsome-navy text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-primary cursor-pointer"
               aria-label="Hide message"
             >
               <X className="w-3 h-3" />
