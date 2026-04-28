@@ -21,6 +21,7 @@ import Community from "./pages/Community.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
 import Team from "./pages/Team.tsx";
 import Contact from "./pages/Contact.tsx";
+import FloatingContactWidget from "./components/FloatingContactWidget";
 
 const queryClient = new QueryClient();
 
@@ -51,6 +52,7 @@ const App = () => (
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <FloatingContactWidget />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
