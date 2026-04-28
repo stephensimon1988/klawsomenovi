@@ -668,45 +668,6 @@ export type Database = {
         }
         Relationships: []
       }
-      press_articles: {
-        Row: {
-          created_at: string
-          date: string
-          excerpt: string
-          id: string
-          image_url: string
-          is_active: boolean
-          outlet: string
-          sort_order: number
-          title: string
-          url: string
-        }
-        Insert: {
-          created_at?: string
-          date?: string
-          excerpt?: string
-          id?: string
-          image_url?: string
-          is_active?: boolean
-          outlet?: string
-          sort_order?: number
-          title?: string
-          url?: string
-        }
-        Update: {
-          created_at?: string
-          date?: string
-          excerpt?: string
-          id?: string
-          image_url?: string
-          is_active?: boolean
-          outlet?: string
-          sort_order?: number
-          title?: string
-          url?: string
-        }
-        Relationships: []
-      }
       rental_packages: {
         Row: {
           cta_text: string
