@@ -1,4 +1,5 @@
 import { ReactNode } from 'react';
+import KawaiiDivider from './KawaiiDivider';
 
 interface PageHeroProps {
   eyebrow?: string;
@@ -18,21 +19,24 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : DEFAULT_HERO;
   return (
-    <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
-      <div
-        className="absolute inset-0 bg-cover bg-center"
-        style={{ backgroundImage: `url('${bg}')` }}
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15" />
-      <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
-        <div className={`max-w-3xl ${alignCls}`}>
-          {eyebrow && <p className="ds-eyebrow mb-6 text-white/80">{eyebrow}</p>}
-          <h1 className="ds-h1 text-white mb-6">{title}</h1>
-          {subtitle && <p className="ds-lead text-white/80 max-w-2xl mb-8">{subtitle}</p>}
-          {children}
+    <>
+      <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
+        <div
+          className="absolute inset-0 bg-cover bg-center"
+          style={{ backgroundImage: `url('${bg}')` }}
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15" />
+        <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
+          <div className={`max-w-3xl ${alignCls}`}>
+            {eyebrow && <p className="ds-eyebrow mb-6 text-white/80">{eyebrow}</p>}
+            <h1 className="ds-h1 text-white mb-6">{title}</h1>
+            {subtitle && <p className="ds-lead text-white/80 max-w-2xl mb-8">{subtitle}</p>}
+            {children}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+      <KawaiiDivider variant="wave" from="navy" to="white" stroke="baby-pink" height={80} />
+    </>
   );
 };
 
