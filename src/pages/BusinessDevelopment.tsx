@@ -336,6 +336,7 @@ const BusinessDevelopment = () => {
       </section>
 
       {/* OPPORTUNITY 2 — PARTNER */}
+      <KawaiiDivider variant="petals" from="white" to="navy" stroke="baby-pink" height={90} />
       <section id="partner">
         <div className="relative overflow-hidden py-16 px-6 text-center bg-klawsome-navy">
           <span aria-hidden className="absolute font-bold text-[220px] text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">02</span>
@@ -386,6 +387,7 @@ const BusinessDevelopment = () => {
       </section>
 
       {/* OPPORTUNITY 3 — PLUSHIE */}
+      <KawaiiDivider variant="bumps" from="muted-soft" to="baby-pink" stroke="yellow" height={90} />
       <section id="plushie">
         <div className="relative overflow-hidden py-16 px-6 text-center" style={{ background: 'linear-gradient(135deg, hsl(var(--klawsome-baby-pink)) 0%, hsl(var(--kawaii-pink)) 100%)' }}>
           <span aria-hidden className="absolute font-bold text-[220px] text-white/15 right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
