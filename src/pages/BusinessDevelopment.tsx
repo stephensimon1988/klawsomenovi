@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { MapPin, Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -111,6 +111,42 @@ const fallbackPlushieSteps = [
 const BusinessDevelopment = () => {
   const [formData, setFormData] = useState({ name: '', email: '', opportunity: '', business_type: '', message: '' });
   const [submitted, setSubmitted] = useState(false);
+  const [activeTab, setActiveTab] = useState<'hosted' | 'partner' | 'plushie'>('hosted');
+  const tabsBarRef = useRef<HTMLDivElement>(null);
+
+  const tabs = [
+    { id: 'hosted', label: '🎰 Host a Machine in Your Business' },
+    { id: 'partner', label: '⭐ Become a Klawsome Partner' },
+    { id: 'plushie', label: '🧸 Custom Plushie Orders' },
+  ] as const;
+
+  const handleTabClick = (id: 'hosted' | 'partner' | 'plushie') => {
+    setActiveTab(id);
+    const el = document.getElementById(id);
+    if (el) {
+      const offset = (tabsBarRef.current?.offsetHeight || 0) + 12;
+      const top = el.getBoundingClientRect().top + window.scrollY - offset;
+      window.scrollTo({ top, behavior: 'smooth' });
+    }
+  };
+
+  useEffect(() => {
+    const ids: Array<'hosted' | 'partner' | 'plushie'> = ['hosted', 'partner', 'plushie'];
+    const handler = () => {
+      const offset = (tabsBarRef.current?.offsetHeight || 0) + 80;
+      let current: 'hosted' | 'partner' | 'plushie' = 'hosted';
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const top = el.getBoundingClientRect().top;
+        if (top - offset <= 0) current = id;
+      }
+      setActiveTab(current);
+    };
+    handler();
+    window.addEventListener('scroll', handler, { passive: true });
+    return () => window.removeEventListener('scroll', handler);
+  }, []);
 
   const { data: hero } = usePageHero('business-development');
   const { data: dbSections } = useCmsTable<BusinessSection>('business_sections');
@@ -182,13 +218,39 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
-      {/* OPPORTUNITY NAV PILLS */}
-      <div className="bg-muted/40 py-7 px-6 text-center border-b border-border">
-        <p className="text-xs font-heading font-black text-muted-foreground tracking-[1.5px] uppercase mb-4">Our Opportunities</p>
-        <div className="flex flex-wrap gap-3 justify-center">
-          <a href="#hosted" className="bg-white border-2 border-kawaii-mint text-kawaii-mint hover:bg-kawaii-mint/10 font-heading font-bold text-sm px-5 py-2.5 rounded-full transition-all" style={{ color: 'hsl(var(--kawaii-mint))', borderColor: 'hsl(var(--kawaii-mint))' }}>🎰 Host a Machine in Your Business</a>
-          <a href="#partner" className="bg-white border-2 border-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/10 font-heading font-bold text-sm px-5 py-2.5 rounded-full transition-all">⭐ Become a Klawsome Partner</a>
-          <a href="#plushie" className="bg-white border-2 border-primary text-primary hover:bg-primary/10 font-heading font-bold text-sm px-5 py-2.5 rounded-full transition-all">🧸 Custom Plushie Orders</a>
+      {/* OPPORTUNITY TABS (sticky) */}
+      <div ref={tabsBarRef} className="sticky top-0 z-40 bg-muted/80 backdrop-blur-md border-b border-border">
+        <div className="ds-container px-6 py-4">
+          <p className="text-xs font-heading font-black text-muted-foreground tracking-[1.5px] uppercase mb-3 text-center">Our Opportunities</p>
+          <div role="tablist" aria-label="Opportunities" className="flex flex-wrap gap-2 sm:gap-3 justify-center">
+            {tabs.map((t) => {
+              const isActive = activeTab === t.id;
+              return (
+                <button
+                  key={t.id}
+                  role="tab"
+                  aria-selected={isActive}
+                  aria-controls={t.id}
+                  onClick={() => handleTabClick(t.id)}
+                  className={`font-heading font-bold text-sm px-5 py-2.5 rounded-full border-2 transition-all ${
+                    isActive
+                      ? t.id === 'hosted'
+                        ? 'bg-[hsl(var(--kawaii-mint))] border-[hsl(var(--kawaii-mint))] text-white shadow-md'
+                        : t.id === 'partner'
+                        ? 'bg-klawsome-yellow border-klawsome-yellow text-klawsome-navy shadow-md'
+                        : 'bg-primary border-primary text-white shadow-md'
+                      : t.id === 'hosted'
+                      ? 'bg-white border-[hsl(var(--kawaii-mint))] text-[hsl(var(--kawaii-mint))] hover:bg-[hsl(var(--kawaii-mint)/0.1)]'
+                      : t.id === 'partner'
+                      ? 'bg-white border-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/10'
+                      : 'bg-white border-primary text-primary hover:bg-primary/10'
+                  }`}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
