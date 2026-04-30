@@ -124,7 +124,8 @@ const BusinessDevelopment = () => {
     setActiveTab(id);
     const el = document.getElementById(id);
     if (el) {
-      const offset = (tabsBarRef.current?.offsetHeight || 0) + 12;
+      const navHeight = 80;
+      const offset = navHeight + (tabsBarRef.current?.offsetHeight || 0) + 12;
       const top = el.getBoundingClientRect().top + window.scrollY - offset;
       window.scrollTo({ top, behavior: 'smooth' });
     }
@@ -133,7 +134,8 @@ const BusinessDevelopment = () => {
   useEffect(() => {
     const ids: Array<'hosted' | 'partner' | 'plushie'> = ['hosted', 'partner', 'plushie'];
     const handler = () => {
-      const offset = (tabsBarRef.current?.offsetHeight || 0) + 80;
+      const navHeight = 80;
+      const offset = navHeight + (tabsBarRef.current?.offsetHeight || 0) + 24;
       let current: 'hosted' | 'partner' | 'plushie' = 'hosted';
       for (const id of ids) {
         const el = document.getElementById(id);
@@ -218,8 +220,8 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
-      {/* OPPORTUNITY TABS (sticky) */}
-      <div ref={tabsBarRef} className="sticky top-0 z-40 bg-muted/80 backdrop-blur-md border-b border-border">
+      {/* OPPORTUNITY TABS (sticky below nav) */}
+      <div ref={tabsBarRef} className="sticky top-20 z-30 bg-muted/90 backdrop-blur-md border-b border-border shadow-sm">
         <div className="ds-container px-6 py-4">
           <p className="text-xs font-heading font-black text-muted-foreground tracking-[1.5px] uppercase mb-3 text-center">Our Opportunities</p>
           <div role="tablist" aria-label="Opportunities" className="flex flex-wrap gap-2 sm:gap-3 justify-center">
