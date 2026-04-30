@@ -14,7 +14,16 @@
  */
 import { cn } from '@/lib/utils';
 
-type ColorKey = 'white' | 'baby-blue' | 'baby-pink' | 'red' | 'navy';
+type ColorKey =
+  | 'white'
+  | 'baby-blue'
+  | 'baby-pink'
+  | 'red'
+  | 'navy'
+  | 'yellow'
+  | 'mint'
+  | 'secondary-soft'
+  | 'muted-soft';
 
 const COLOR_MAP: Record<ColorKey, string> = {
   white: 'hsl(var(--klawsome-white))',
@@ -22,6 +31,12 @@ const COLOR_MAP: Record<ColorKey, string> = {
   'baby-pink': 'hsl(var(--klawsome-baby-pink))',
   red: 'hsl(var(--klawsome-red))',
   navy: 'hsl(var(--klawsome-navy))',
+  yellow: 'hsl(var(--klawsome-yellow))',
+  mint: 'hsl(var(--kawaii-mint))',
+  // Approximate matches for translucent section backgrounds (bg-secondary/40, bg-muted/30)
+  // sitting on top of white — these blend close to very pale baby-blue/baby-pink.
+  'secondary-soft': 'hsl(190 75% 96%)',
+  'muted-soft': 'hsl(340 60% 96%)',
 };
 
 export type DividerVariant =

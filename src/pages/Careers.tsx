@@ -1,6 +1,7 @@
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 
@@ -60,6 +61,8 @@ const Careers = () => {
 
       {/* Hybrid / Paid Jobs */}
       {hybridJobs.length > 0 && (
+        <>
+        <KawaiiDivider variant="scallop" from="navy" to="red" stroke="yellow" height={90} />
         <section className="section-y section-x bg-primary">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Paid Jobs</h2>
@@ -88,10 +91,13 @@ const Careers = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* Unpaid Opportunities */}
       {unpaidJobs.length > 0 && (
+        <>
+        <KawaiiDivider variant="cloud" from={hybridJobs.length > 0 ? 'red' : 'navy'} to="navy" stroke="baby-pink" height={90} />
         <section className="section-y section-x bg-klawsome-navy">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
@@ -122,6 +128,7 @@ const Careers = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       <KawaiiFooter />

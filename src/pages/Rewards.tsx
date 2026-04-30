@@ -1,5 +1,6 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { Button } from '@/components/ui/button';
 import { useCmsTable, usePageHero, type RewardsBenefit } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
@@ -47,6 +48,7 @@ const Rewards = () => {
       </section>
 
       {/* Tiers */}
+      <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
       <section className="section-y section-x bg-foreground text-background">
         <div className="ds-container">
           <p className="ds-eyebrow">Lifetime Tiers</p>
@@ -71,6 +73,7 @@ const Rewards = () => {
       </section>
 
       {/* Redemptions */}
+      <KawaiiDivider variant="bumps" from="navy" to="white" stroke="yellow" height={90} />
       <section className="section-y section-x">
         <div className="ds-container">
           <p className="ds-eyebrow">Points Redeemable</p>

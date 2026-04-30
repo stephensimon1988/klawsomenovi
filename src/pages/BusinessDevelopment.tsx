@@ -4,6 +4,7 @@ import { MapPin, Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { toast } from 'sonner';
 import {
   useCmsTable,
@@ -462,6 +463,7 @@ const BusinessDevelopment = () => {
       </section>
 
       {/* HOW IT WORKS */}
+      <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
       <section className="bg-klawsome-navy py-20 px-6 text-center">
         <div className="ds-container">
           <p className="text-xs font-heading font-black text-klawsome-yellow tracking-[3px] uppercase mb-3">The Process</p>
@@ -481,6 +483,7 @@ const BusinessDevelopment = () => {
       </section>
 
       {/* CONTACT FORM */}
+      <KawaiiDivider variant="bumps" from="navy" to="secondary-soft" stroke="yellow" height={90} />
       <section id="contact" className="bg-secondary/30 py-20 px-6">
         <div className="ds-container max-w-3xl">
           <div className="text-center mb-10">
