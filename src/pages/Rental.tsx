@@ -2,6 +2,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import DynamicSections from '@/components/DynamicSections';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { usePageHero, useCmsTable } from '@/hooks/useCmsContent';
 
 interface RentalPackage {
@@ -31,6 +32,8 @@ const Rental = () => {
       />
 
       {packages && packages.length > 0 && (
+        <>
+        <KawaiiDivider variant="wave" from="white" to="secondary-soft" stroke="baby-blue" height={90} />
         <section className="section-y section-x bg-secondary/50">
           <div className="ds-container">
             <div className="max-w-2xl mb-16">
@@ -93,6 +96,8 @@ const Rental = () => {
             </div>
           </div>
         </section>
+        <KawaiiDivider variant="scallop" from="secondary-soft" to="white" stroke="baby-pink" height={90} />
+        </>
       )}
 
       <DynamicSections pageKey="rental" />
