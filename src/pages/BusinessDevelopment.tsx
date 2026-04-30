@@ -168,7 +168,7 @@ const BusinessDevelopment = () => {
             <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-black text-xs tracking-[2px] uppercase px-5 py-2 rounded-full mb-7">
               {heroBadge}
             </span>
-            <h1 className="text-5xl md:text-7xl font-bold text-white mb-6 leading-tight">
+            <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight">
               {heroTitle.split(' ').slice(0, -1).join(' ')}<br />
               <span className="text-klawsome-yellow">{heroTitle.split(' ').slice(-1)[0]}</span>
             </h1>
@@ -198,7 +198,7 @@ const BusinessDevelopment = () => {
           <span aria-hidden className="absolute font-bold text-[220px] text-white/10 right-[-10px] top-[-40px] leading-none pointer-events-none select-none">01</span>
           <div className="ds-container relative z-10">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 01</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">Host a Klawsome Machine<br />in Your Business</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Host a Klawsome Machine<br />in Your Business</h2>
             <div className="inline-flex items-center gap-2 bg-white/20 border-2 border-white/40 text-white font-bold text-sm px-5 py-2.5 rounded-full mb-7">
               <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
             </div>
@@ -277,7 +277,7 @@ const BusinessDevelopment = () => {
           <div className="ds-container relative z-10">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 02</p>
             <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">Become a<br />Klawsome Partner</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Become a<br />Klawsome Partner</h2>
             <p className="text-white/75 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">{partner.subtitle}</p>
             <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 shadow-lg">
               <a href="#contact">Become a Partner →</a>
@@ -326,7 +326,7 @@ const BusinessDevelopment = () => {
           <span aria-hidden className="absolute font-bold text-[220px] text-white/15 right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
           <div className="ds-container relative z-10">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-5 leading-tight">Custom Plushie Orders</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Custom Plushie Orders</h2>
             <p className="text-white/85 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">{plushie.subtitle}</p>
             <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-navy hover:bg-klawsome-navy/90 text-white shadow-lg">
               <a href="#contact">Request a Quote →</a>
@@ -401,7 +401,7 @@ const BusinessDevelopment = () => {
       <section className="bg-klawsome-navy py-20 px-6 text-center">
         <div className="ds-container">
           <p className="text-xs font-heading font-black text-klawsome-yellow tracking-[3px] uppercase mb-3">The Process</p>
-          <h2 className="text-4xl md:text-5xl font-bold text-white mb-4">Getting Started is Easy</h2>
+          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Getting Started is Easy</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 mt-12">
             {howSteps.map((step) => (
               <div key={step.id} className="text-center">
@@ -421,7 +421,7 @@ const BusinessDevelopment = () => {
         <div className="ds-container max-w-3xl">
           <div className="text-center mb-10">
             <p className="text-xs font-heading font-black text-primary tracking-[3px] uppercase mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
-            <h2 className="text-4xl md:text-5xl font-bold text-foreground mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
+            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
             <p className="text-muted-foreground font-body font-semibold max-w-md mx-auto">{contactIntro?.body || "Tell us which opportunity excites you and we'll take it from there."}</p>
           </div>
 
