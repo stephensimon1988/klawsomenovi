@@ -4,6 +4,7 @@ import { ChevronDown } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
@@ -92,6 +93,8 @@ const Birthdays = () => {
         </div>
       </section>
 
+      <KawaiiDivider variant="scallop" from="navy" to="red" stroke="yellow" height={90} />
+
       {/* Party Options */}
       <section className="py-20 px-4 bg-primary">
         <div className="container mx-auto max-w-5xl">
@@ -130,6 +133,8 @@ const Birthdays = () => {
 
       {/* FAQ */}
       {faqItems.length > 0 && (
+        <>
+        <KawaiiDivider variant="cloud" from="red" to="navy" stroke="baby-pink" height={90} />
         <section className="py-20 px-4 bg-klawsome-navy">
           <div className="container mx-auto max-w-3xl">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-10 text-center">Frequently Asked Questions</h2>
@@ -140,10 +145,13 @@ const Birthdays = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* Invite Templates */}
       {templates && templates.length > 0 && (
+        <>
+        <KawaiiDivider variant="bumps" from="navy" to="red" stroke="yellow" height={90} />
         <section className="py-20 px-4 bg-primary">
           <div className="container mx-auto max-w-3xl text-center">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
@@ -164,6 +172,7 @@ const Birthdays = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       <KawaiiFooter />
