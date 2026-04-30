@@ -1,5 +1,6 @@
 import { useCmsTable } from '@/hooks/useCmsContent';
 import { Sparkles } from 'lucide-react';
+import KawaiiDivider, { DividerVariant } from './KawaiiDivider';
 
 export interface PageContentSection {
   id: string;
@@ -21,18 +22,30 @@ const DynamicSections = ({ pageKey }: { pageKey: string }) => {
 
   if (!sections.length) return null;
 
+  // Cycle of cute divider variants for variety between sections.
+  const VARIANT_CYCLE: DividerVariant[] = ['wave', 'scallop', 'cloud', 'bumps', 'petals', 'zigzag-soft', 'brush', 'blob'];
+
   return (
     <div className="space-y-0">
       {sections.map((s, i) => {
         const alt = i % 2 === 1;
         const flip = i % 2 === 1;
         const hasImage = !!s.image_url;
+        // Section bg: white (alt=false) or secondary/50 (alt=true).
+        // Treat as 'white' / 'secondary-soft' for divider matching.
+        const prevColor = i === 0 ? 'white' : ((i - 1) % 2 === 1 ? 'secondary-soft' : 'white');
+        const thisColor = alt ? 'secondary-soft' : 'white';
+        const variant = VARIANT_CYCLE[i % VARIANT_CYCLE.length];
+        const stroke = thisColor === 'white' ? 'baby-pink' : 'baby-blue';
 
         return (
-          <section
-            key={s.id}
-            className={`section-y section-x ${alt ? 'bg-secondary/50' : ''}`}
-          >
+          <div key={s.id}>
+            {prevColor !== thisColor && (
+              <KawaiiDivider variant={variant} from={prevColor as any} to={thisColor as any} stroke={stroke as any} height={90} />
+            )}
+            <section
+              className={`section-y section-x ${alt ? 'bg-secondary/50' : ''}`}
+            >
             <div className="ds-container">
               <div className="grid gap-10 md:gap-16 items-center md:grid-cols-12">
                 <div
@@ -85,7 +98,8 @@ const DynamicSections = ({ pageKey }: { pageKey: string }) => {
                 </div>
               </div>
             </div>
-          </section>
+            </section>
+          </div>
         );
       })}
     </div>
