@@ -8,6 +8,7 @@ import NotFound from "./pages/NotFound.tsx";
 import KlawsomeAdmin from "./pages/KlawsomeAdmin.tsx";
 import Business from "./pages/Business.tsx";
 import BusinessDevelopment from "./pages/BusinessDevelopment.tsx";
+import BusinessDevelopment2 from "./pages/BusinessDevelopment2.tsx";
 import Birthdays from "./pages/Birthdays.tsx";
 import Careers from "./pages/Careers.tsx";
 import News from "./pages/News.tsx";
@@ -35,6 +36,7 @@ const App = () => (
           <Route path="/" element={<Index />} />
           <Route path="/business" element={<Business />} />
           <Route path="/business-development" element={<BusinessDevelopment />} />
+          <Route path="/business-development-2" element={<BusinessDevelopment2 />} />
           <Route path="/birthdays" element={<Birthdays />} />
           <Route path="/careers" element={<Careers />} />
           <Route path="/news" element={<News />} />
