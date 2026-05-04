@@ -11,6 +11,7 @@ const KawaiiFooter = () => {
   const address = settings?.address || '42768 Grand River Ave, Suite C-140, Novi, MI 48375';
   const instagram = settings?.instagram_url || 'https://www.instagram.com/klawsomenovi/';
   const facebook = settings?.facebook_url || 'https://www.facebook.com/klawsomenovi';
+  const tiktok = settings?.tiktok_url || 'https://www.tiktok.com/@klawsomenovi';
   const mapsUrl = settings?.google_maps_url || 'https://www.google.com/maps/place/42768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375';
 
   return (
@@ -62,6 +63,7 @@ const KawaiiFooter = () => {
                 <div className="space-y-2">
                   {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" className="block text-white/75 text-sm hover:text-white transition-colors font-body">Instagram</a>}
                   {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" className="block text-white/75 text-sm hover:text-white transition-colors font-body">Facebook</a>}
+                  {tiktok && <a href={tiktok} target="_blank" rel="noopener noreferrer" className="block text-white/75 text-sm hover:text-white transition-colors font-body">TikTok</a>}
                 </div>
               </div>
 

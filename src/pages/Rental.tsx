@@ -17,9 +17,21 @@ interface RentalPackage {
   sort_order: number;
 }
 
+interface GalleryPhoto {
+  id: string;
+  section: string;
+  caption: string;
+  image_url: string;
+  sort_order: number;
+}
+
 const Rental = () => {
   const { data: hero } = usePageHero('rental');
   const { data: packages } = useCmsTable<RentalPackage>('rental_packages');
+  const { data: photos } = useCmsTable<GalleryPhoto>('gallery_photos');
+  const eventPhotos = (photos || [])
+    .filter((p) => p.section === 'private_party' || p.section === 'semi_private')
+    .slice(0, 8);
 
   return (
     <div className="min-h-screen bg-background">
@@ -101,6 +113,63 @@ const Rental = () => {
       )}
 
       <DynamicSections pageKey="rental" />
+
+      {eventPhotos.length > 0 && (
+        <>
+          <KawaiiDivider variant="cloud" from="white" to="baby-pink" stroke="baby-blue" height={90} />
+          <section className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
+            <div className="ds-container">
+              <div className="max-w-2xl mb-12">
+                <p className="ds-eyebrow">Real Events</p>
+                <h2 className="ds-h2 mb-4">From our parties to yours</h2>
+                <p className="ds-lead">
+                  A peek at recent rentals — KFT pop-ups, Onezo, Halloween at the house, and birthdays we've hosted.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                {eventPhotos.map((p) => (
+                  <figure key={p.id} className="overflow-hidden rounded-2xl bg-background">
+                    <img
+                      src={p.image_url}
+                      alt={p.caption || 'Klawsome event photo'}
+                      loading="lazy"
+                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                    />
+                  </figure>
+                ))}
+              </div>
+              <div className="mt-10">
+                <a
+                  href="/gallery"
+                  className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 hover:bg-foreground/90 transition-colors"
+                >
+                  See full gallery <span>→</span>
+                </a>
+              </div>
+            </div>
+          </section>
+        </>
+      )}
+
+      <KawaiiDivider variant="scallop" from="baby-pink" to="white" stroke="baby-blue" height={90} />
+      <section className="section-y section-x">
+        <div className="ds-container max-w-3xl text-center">
+          <p className="ds-eyebrow">Required Paperwork</p>
+          <h2 className="ds-h2 mb-4">Liability Release Waiver</h2>
+          <p className="ds-lead mb-8">
+            All rental hosts must sign a liability release waiver before the event begins. Download, review, and bring it with you — or we'll send it digitally with your booking confirmation.
+          </p>
+          <a
+            href="/klawsome-rental-waiver.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+          >
+            Download Waiver (PDF) <span>↓</span>
+          </a>
+        </div>
+      </section>
+
       <KawaiiFooter />
     </div>
   );
