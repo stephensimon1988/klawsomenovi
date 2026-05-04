@@ -1,5 +1,4 @@
 import { ReactNode } from 'react';
-import KawaiiDivider from './KawaiiDivider';
 
 interface PageHeroProps {
   eyebrow?: string;
@@ -52,7 +51,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
           </div>
         </div>
       </section>
-      <KawaiiDivider variant="wave" from="navy" to="white" stroke="baby-pink" height={80} />
+      <div aria-hidden className="h-px w-full bg-border" />
     </>
   );
 };
