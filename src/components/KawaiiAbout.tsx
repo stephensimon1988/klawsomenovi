@@ -46,9 +46,12 @@ const KawaiiAbout = () => {
               <div className="aspect-[4/3] w-full flex items-center justify-center mb-6 rounded-2xl bg-secondary/40 p-8">
                 {step.icon && /^https?:\/\//.test(step.icon) ? (
                   <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
+                ) : step.icon && step.icon.startsWith('/steps/') ? (
+                  // Legacy 3D step gifs — replace with cartoon kawaii art
+                  <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-40 max-w-full object-contain" />
                 ) : step.icon && step.icon.startsWith('/') ? (
                   <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
-                ) : step.icon ? (
+                ) : step.icon && step.icon.length <= 4 ? (
                   <span className="text-6xl" aria-hidden>{step.icon}</span>
                 ) : (
                   <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-40 max-w-full object-contain" />
