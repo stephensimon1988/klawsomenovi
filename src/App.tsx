@@ -23,6 +23,7 @@ import InfoHub from "./pages/InfoHub.tsx";
 import Team from "./pages/Team.tsx";
 import Contact from "./pages/Contact.tsx";
 import FloatingContactWidget from "./components/FloatingContactWidget";
+import BackToTop from "./components/BackToTop";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="*" element={<NotFound />} />
         </Routes>
         <FloatingContactWidget />
+        <BackToTop />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
