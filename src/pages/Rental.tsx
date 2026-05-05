@@ -58,18 +58,20 @@ const Rental = () => {
                 From small parties to full buyouts, pick the package that matches your day.
               </p>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-              {packages.map((p) => (
+            {(() => {
+              const mainPackages = packages.filter((p) => !/add[- ]?on/i.test(p.name));
+              const addOns = packages.filter((p) => /add[- ]?on/i.test(p.name));
+              const renderCard = (p: RentalPackage, compact = false) => (
                 <div
                   key={p.id}
-                  className={`flex flex-col rounded-2xl p-8 ${
+                  className={`flex flex-col rounded-2xl ${compact ? 'p-6' : 'p-8'} ${
                     p.is_highlight
                       ? 'bg-primary text-primary-foreground'
                       : 'bg-background border border-border'
                   }`}
                 >
                   <h3 className="ds-h3 mb-2">{p.name}</h3>
-                  <p className="text-4xl font-heading font-bold mb-4 leading-none">
+                  <p className={`${compact ? 'text-3xl' : 'text-4xl'} font-heading font-bold mb-4 leading-none`}>
                     {p.price}
                   </p>
                   <p
@@ -107,8 +109,22 @@ const Rental = () => {
                     </a>
                   )}
                 </div>
-              ))}
-            </div>
+              );
+              return (
+                <>
+                  {mainPackages.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                      {mainPackages.map((p) => renderCard(p))}
+                    </div>
+                  )}
+                  {addOns.length > 0 && (
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      {addOns.map((p) => renderCard(p, true))}
+                    </div>
+                  )}
+                </>
+              );
+            })()}
           </div>
         </section>
         <KawaiiDivider variant="scallop" from="secondary-soft" to="white" stroke="baby-pink" height={90} />
