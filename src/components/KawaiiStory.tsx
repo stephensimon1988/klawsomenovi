@@ -1,7 +1,7 @@
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
-import storyImage from '@/assets/kawaii-story.jpg';
+import storyImage from '@/assets/kawaii-art/community_collaboration.png';
 
 const KawaiiStory = () => {
   const ref = useGsapScroll<HTMLDivElement>({ type: 'scaleIn', duration: 1 });

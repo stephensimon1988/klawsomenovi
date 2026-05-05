@@ -10,7 +10,7 @@ import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import DividerAudit from '@/components/DividerAudit';
-import scheduleImage from '@/assets/kawaii-schedule.jpg';
+import scheduleImage from '@/assets/kawaii-art/community_sakura-novi.png';
 
 const Index = () => {
   return (
