@@ -9,7 +9,7 @@ const navLinks = [
   { label: 'HOME', href: '#hero' },
   { label: 'BIRTHDAYS', href: '/birthdays' },
   { label: 'RENTAL', href: '/rental' },
-  { label: 'GIFT CARDS', href: '#giftcards' },
+  { label: 'GIFT CARDS', href: 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order' },
   { label: 'CAREERS', href: '/careers' },
 ];
 
@@ -47,6 +47,10 @@ const KawaiiNav = () => {
 
   const handleNav = useCallback((href: string) => {
     setIsOpen(false);
+    if (href.startsWith('http')) {
+      window.open(href, '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (href.startsWith('/')) {
       navigate(href);
       return;
