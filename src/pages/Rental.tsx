@@ -45,7 +45,6 @@ const Rental = () => {
 
       {packages && packages.length > 0 && (
         <>
-        <KawaiiDivider variant="wave" from="white" to="secondary-soft" stroke="baby-blue" height={90} />
         <section className="section-y section-x bg-secondary/50">
           <div className="ds-container">
             <div className="max-w-2xl mb-16">
