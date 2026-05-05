@@ -105,7 +105,7 @@ const Birthdays = () => {
                 <img
                   src={partyImages[i] || partyImages[0]}
                   alt={opt.name}
-                  className="w-full h-56 object-cover"
+                  className="w-full aspect-square object-cover"
                   loading="lazy"
                 />
                 <div className="p-6">
