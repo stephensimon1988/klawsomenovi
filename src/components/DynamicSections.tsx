@@ -16,9 +16,11 @@ export interface PageContentSection {
   sort_order: number;
 }
 
-const DynamicSections = ({ pageKey }: { pageKey: string }) => {
+const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string; excludeSectionKeys?: string[] }) => {
   const { data: all } = useCmsTable<PageContentSection>('page_content_sections');
-  const sections = (all || []).filter((s) => s.page_key === pageKey);
+  const sections = (all || []).filter(
+    (s) => s.page_key === pageKey && !excludeSectionKeys.includes(s.section_key),
+  );
 
   if (!sections.length) return null;
 
