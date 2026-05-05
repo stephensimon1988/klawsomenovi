@@ -202,7 +202,7 @@ const BusinessDevelopment2 = () => {
 
       {/* STICKY TABS — kawaii style */}
       <div ref={tabsBarRef} className="sticky top-20 z-30 bg-[hsl(var(--klawsome-baby-pink))]/95 backdrop-blur-md border-b-2 border-white/40 shadow-sm">
-        <div className="ds-container section-x py-4">
+        <div className="ds-container section-x py-[1.5em]">
           <p className="ds-eyebrow text-center mb-3">Our Opportunities</p>
           <div role="tablist" aria-label="Opportunities" className="flex flex-wrap gap-2 sm:gap-3 justify-center">
             {tabs.map((t) => {
@@ -229,7 +229,6 @@ const BusinessDevelopment2 = () => {
       </div>
 
       {/* HOSTED — baby blue band like homepage About */}
-      <KawaiiDivider variant="wave" from="baby-pink" to="baby-blue" stroke="white" />
       <section id="hosted" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
         <div className="ds-container max-w-5xl">
           <div className="text-center mb-12">
