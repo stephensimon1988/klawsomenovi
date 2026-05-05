@@ -47,7 +47,7 @@ const KawaiiGiftCards = () => {
                 key={img.id}
                 src={img.image_url}
                 alt={img.alt_text}
-                className="ds-img-thumb rounded-2xl"
+                className="w-full h-auto object-contain rounded-2xl"
                 loading="lazy"
               />
             ))}
