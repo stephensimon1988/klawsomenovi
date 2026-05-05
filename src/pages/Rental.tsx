@@ -3,7 +3,9 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import DynamicSections from '@/components/DynamicSections';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import { usePageHero, useCmsTable } from '@/hooks/useCmsContent';
+import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import rentalFaqImage from '@/assets/kawaii-art/rental_rental-faq.png';
 
 interface RentalPackage {
   id: string;
@@ -29,6 +31,8 @@ const Rental = () => {
   const { data: hero } = usePageHero('rental');
   const { data: packages } = useCmsTable<RentalPackage>('rental_packages');
   const { data: photos } = useCmsTable<GalleryPhoto>('gallery_photos');
+  const { data: faqAll } = useCmsTable<FaqItem>('faq_items');
+  const rentalFaqs = (faqAll || []).filter((f) => f.page === 'rental').slice(0, 15);
   const eventPhotos = (photos || [])
     .filter((p) => p.section === 'private_party' || p.section === 'semi_private')
     .slice(0, 8);
@@ -111,7 +115,48 @@ const Rental = () => {
         </>
       )}
 
-      <DynamicSections pageKey="rental" />
+      <DynamicSections pageKey="rental" excludeSectionKeys={['rental-faq']} />
+
+      {rentalFaqs.length > 0 && (
+        <section className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
+          <div className="ds-container">
+            <div className="grid lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <p className="ds-eyebrow">FAQ</p>
+                <h2 className="ds-h2 mb-8">Frequently Asked Questions</h2>
+                <Accordion type="single" collapsible className="w-full">
+                  {rentalFaqs.map((item) => (
+                    <AccordionItem key={item.id} value={item.id} className="border-b border-foreground/15">
+                      <AccordionTrigger className="text-left font-heading font-bold text-base md:text-lg py-5 hover:no-underline">
+                        {item.question}
+                      </AccordionTrigger>
+                      <AccordionContent className="font-body text-base leading-relaxed text-foreground/75 pb-5">
+                        {item.answer}
+                      </AccordionContent>
+                    </AccordionItem>
+                  ))}
+                </Accordion>
+                <div className="mt-10">
+                  <a
+                    href="/faq"
+                    className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+                  >
+                    See all FAQs <span>→</span>
+                  </a>
+                </div>
+              </div>
+              <div className="order-first lg:order-last">
+                <img
+                  src={rentalFaqImage}
+                  alt="Kawaii claw machine FAQ"
+                  loading="lazy"
+                  className="w-full max-w-md mx-auto"
+                />
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
 
       {eventPhotos.length > 0 && (
         <>
