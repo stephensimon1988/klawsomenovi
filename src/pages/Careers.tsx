@@ -30,16 +30,16 @@ const Careers = () => {
         <section className="section-y section-x">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">In-Store Positions</h2>
-            <div className="space-y-10">
+            <div className="grid md:grid-cols-2 gap-8">
               {inStoreJobs.map((job) => (
-                <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden md:flex">
+                <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
                   {job.image_url && (
-                    <img src={job.image_url} alt={job.title} className="w-full md:w-72 h-56 md:h-auto object-cover flex-shrink-0" loading="lazy" />
+                    <img src={job.image_url} alt={job.title} className="w-full h-56 object-cover" loading="lazy" />
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-3">
                       {job.job_desc_url && (
                         <Button asChild className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
                           <a href={job.job_desc_url} target="_blank" rel="noopener noreferrer">View Job Description</a>
@@ -103,16 +103,16 @@ const Careers = () => {
         <section className="section-y section-x bg-klawsome-navy">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
-            <div className="space-y-8">
+            <div className="grid md:grid-cols-2 gap-8">
               {unpaidJobs.map((job) => (
-                <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden md:flex">
+                <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
                   {job.image_url && (
-                    <img src={job.image_url} alt={job.title} className="w-full md:w-56 h-48 md:h-auto object-cover flex-shrink-0" loading="lazy" />
+                    <img src={job.image_url} alt={job.title} className="w-full h-56 object-cover" loading="lazy" />
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
-                    <div className="flex gap-3">
+                    <div className="flex flex-wrap gap-3">
                       {job.job_desc_url && (
                         <Button asChild size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
                           <a href={job.job_desc_url} target="_blank" rel="noopener noreferrer">View Job Description</a>
