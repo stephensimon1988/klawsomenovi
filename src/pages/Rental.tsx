@@ -118,6 +118,8 @@ const Rental = () => {
       <DynamicSections pageKey="rental" excludeSectionKeys={['rental-faq']} />
 
       {rentalFaqs.length > 0 && (
+        <>
+        <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
         <section className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
@@ -156,11 +158,12 @@ const Rental = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {eventPhotos.length > 0 && (
         <>
-          <KawaiiDivider variant="cloud" from="secondary-soft" to="baby-pink" stroke="baby-blue" height={90} />
+          <KawaiiDivider variant="scallop" from={rentalFaqs.length > 0 ? 'baby-blue' : 'secondary-soft'} to="baby-pink" stroke="white" height={90} />
           <section className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
             <div className="ds-container">
               <div className="max-w-2xl mb-12">
