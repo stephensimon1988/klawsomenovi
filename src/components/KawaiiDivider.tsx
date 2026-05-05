@@ -154,7 +154,7 @@ const KawaiiDivider = ({
       data-divider-variant={variant}
       data-divider-from={from}
       data-divider-to={to}
-      className={cn('w-full overflow-hidden leading-[0]', className)}
+      className={cn('w-full overflow-hidden leading-[0] -mb-[2px]', className)}
       style={{ backgroundColor: fromColor }}
     >
       <svg

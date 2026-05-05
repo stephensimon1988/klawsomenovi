@@ -53,7 +53,7 @@ const KawaiiFooter = () => {
                 <h4 className="font-heading font-bold text-white text-xs tracking-wider uppercase mb-4">Contact</h4>
                 <div className="space-y-2">
                   <a href={`mailto:${email}`} className="block text-white/75 text-sm hover:text-white transition-colors font-body">{email}</a>
-                  <a href="mailto:events@klawsomenovi.com" className="block text-white/75 text-sm hover:text-white transition-colors font-body">events@klawsomenovi.com</a>
+                  <a href="mailto:info@klawsomenovi.com" className="block text-white/75 text-sm hover:text-white transition-colors font-body">info@klawsomenovi.com</a>
                   <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="block text-white/75 text-sm hover:text-white transition-colors font-body">{phone}</a>
                 </div>
               </div>
