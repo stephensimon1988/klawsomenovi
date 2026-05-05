@@ -2,9 +2,9 @@ import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type HomepageContent, type HomepageStep } from '@/hooks/useCmsContent';
-import playKlawImg from '@/assets/play-klaw-machines.gif';
-import winPlushiesImg from '@/assets/win-plushies.gif';
-import tradeUpImg from '@/assets/trade-up.gif';
+import playKlawImg from '@/assets/kawaii-art/store_tokens.png';
+import winPlushiesImg from '@/assets/kawaii-art/store_small-plush.png';
+import tradeUpImg from '@/assets/kawaii-art/store_trade-up.png';
 
 const fallbackImages = [playKlawImg, winPlushiesImg, tradeUpImg];
 
@@ -46,9 +46,12 @@ const KawaiiAbout = () => {
               <div className="aspect-[4/3] w-full flex items-center justify-center mb-6 rounded-2xl bg-secondary/40 p-8">
                 {step.icon && /^https?:\/\//.test(step.icon) ? (
                   <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
+                ) : step.icon && step.icon.startsWith('/steps/') ? (
+                  // Legacy 3D step gifs — replace with cartoon kawaii art
+                  <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-40 max-w-full object-contain" />
                 ) : step.icon && step.icon.startsWith('/') ? (
                   <img src={step.icon} alt={step.title} className="max-h-40 max-w-full object-contain" />
-                ) : step.icon ? (
+                ) : step.icon && step.icon.length <= 4 ? (
                   <span className="text-6xl" aria-hidden>{step.icon}</span>
                 ) : (
                   <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-40 max-w-full object-contain" />
