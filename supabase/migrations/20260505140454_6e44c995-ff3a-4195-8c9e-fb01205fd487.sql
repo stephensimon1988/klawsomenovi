@@ -1,0 +1,3 @@
+UPDATE page_content_sections SET image_url='https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-claw/community_collaboration.png' WHERE id='02c75f8d-0ad9-4a08-977b-99a217fcf9e0';
+UPDATE page_content_sections SET image_url='https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-claw/contact_events.png' WHERE id='2bc54b50-771b-4fba-ba6e-07845fb43d5d';
+UPDATE page_content_sections SET image_url='https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-claw/community_culture.png' WHERE id='d0453978-98b2-4782-8764-494c1b715faa';
