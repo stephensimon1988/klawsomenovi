@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import { useCmsTable, type Review } from '@/hooks/useCmsContent';
-import reviewsImage from '@/assets/kawaii-reviews.jpg';
+import reviewsImage from '@/assets/kawaii-art/community_culture.png';
 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
