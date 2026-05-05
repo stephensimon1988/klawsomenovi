@@ -175,7 +175,7 @@ const Birthdays = () => {
         </>
       )}
 
-      <KawaiiFooter />
+      <KawaiiFooter prevColor={(templates && templates.length > 0) ? 'red' : (faqItems.length > 0 ? 'navy' : 'red')} />
     </div>
   );
 };

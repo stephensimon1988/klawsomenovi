@@ -16,7 +16,7 @@ const Contact = () => {
         imageUrl={hero?.image_url || ''}
       />
       <DynamicSections pageKey="contact" />
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="secondary-soft" />
     </div>
   );
 };

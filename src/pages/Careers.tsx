@@ -131,7 +131,7 @@ const Careers = () => {
         </>
       )}
 
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="navy" />
     </div>
   );
 };

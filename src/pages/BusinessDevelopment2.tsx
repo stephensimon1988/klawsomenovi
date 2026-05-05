@@ -482,7 +482,7 @@ const BusinessDevelopment2 = () => {
       </section>
 
       <KawaiiDivider variant="cloud" from="baby-blue" to="baby-pink" stroke="white" />
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="baby-pink" />
     </div>
   );
 };

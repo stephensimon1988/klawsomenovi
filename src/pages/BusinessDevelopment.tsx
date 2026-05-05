@@ -549,7 +549,7 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="secondary-soft" />
     </div>
   );
 };
