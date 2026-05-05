@@ -2,9 +2,12 @@ import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 import { Button } from './ui/button';
 import KawaiiDivider from './KawaiiDivider';
+import { useLocation } from 'react-router-dom';
 
 const KawaiiFooter = () => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
+  const { pathname } = useLocation();
+  const showReadyToPlay = ['/', '/birthdays', '/faq'].includes(pathname);
 
   const email = settings?.email || 'team@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
@@ -16,7 +19,8 @@ const KawaiiFooter = () => {
 
   return (
     <>
-      {/* Pre-footer CTA */}
+      {/* Pre-footer CTA — homepage, birthdays, faq only */}
+      {showReadyToPlay && (
       <section className="py-32 px-6 lg:px-12 bg-[hsl(var(--klawsome-baby-pink))] relative overflow-hidden">
         <div className="container mx-auto max-w-4xl text-center">
           <h2 className="text-5xl md:text-7xl lg:text-8xl font-heading font-bold text-foreground leading-[0.95] uppercase mb-8">
@@ -34,8 +38,9 @@ const KawaiiFooter = () => {
           </Button>
         </div>
       </section>
+      )}
 
-      <KawaiiDivider variant="scallop" from="baby-pink" to="red" stroke="white" />
+      <KawaiiDivider variant="scallop" from={showReadyToPlay ? 'baby-pink' : 'white'} to="red" stroke="white" />
 
       {/* Minimal footer — red */}
       <footer id="contact" className="py-16 px-6 lg:px-12 bg-primary border-t border-white/15">
