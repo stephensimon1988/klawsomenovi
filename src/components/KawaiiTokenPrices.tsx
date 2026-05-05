@@ -1,6 +1,8 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import LottieAccent from './LottieAccent';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
+import tokensImage from '@/assets/kawaii-art/store_tokens.png';
+import animalsImage from '@/assets/kawaii-art/store_small-plush.png';
 
 const fallbackTiers = [
   { price: '$10', tokens: '10', bonus: '—', is_highlight: false },
