@@ -17,9 +17,6 @@ const Index = () => {
     <div className="min-h-screen bg-background">
       <KawaiiNav />
       <KawaiiHero />
-      {/* Hero ends on a dark image; About is baby-blue. Make the divider a solid
-          baby-blue band (no white gap) so it sits flush on the About section. */}
-      <KawaiiDivider variant="wave" from="baby-blue" to="baby-blue" stroke="white" />
       <KawaiiAbout />
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiVisit />
