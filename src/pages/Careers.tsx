@@ -133,7 +133,15 @@ const Careers = () => {
         </>
       )}
 
-      <KawaiiFooter prevColor="navy" />
+      <KawaiiFooter
+        prevColor={
+          unpaidJobs.length > 0
+            ? 'navy'
+            : hybridJobs.length > 0
+              ? 'red'
+              : 'navy'
+        }
+      />
     </div>
   );
 };
