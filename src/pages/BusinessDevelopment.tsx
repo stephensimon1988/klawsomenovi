@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
+import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import {
   useCmsTable,
@@ -116,9 +117,9 @@ const BusinessDevelopment = () => {
   const tabsBarRef = useRef<HTMLDivElement>(null);
 
   const tabs = [
-    { id: 'hosted', label: '🎰 Host a Machine in Your Business' },
-    { id: 'partner', label: '⭐ Become a Klawsome Partner' },
-    { id: 'plushie', label: '🧸 Custom Plushie Orders' },
+    { id: 'hosted', label: '🎰 Host a Machine' },
+    { id: 'partner', label: '⭐ Become a Partner' },
+    { id: 'plushie', label: '🧸 Custom Plushies' },
   ] as const;
 
   const handleTabClick = (id: 'hosted' | 'partner' | 'plushie') => {
@@ -184,47 +185,25 @@ const BusinessDevelopment = () => {
     toast.success("Thanks! We'll be in touch within 1–2 business days.");
   };
 
-  const heroBadge = hero?.eyebrow || '🤝 For Businesses & Partners';
-  const heroTitle = hero?.title || 'Grow With Klawsome!';
-  const heroSubtitle = hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator. Pick your path below.";
-  const heroCta = hero?.cta_text || 'Get in Touch →';
-
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
 
-      {/* HERO */}
-      <section className="relative overflow-hidden bg-klawsome-navy pt-32 pb-24 px-6 text-center">
-        <div className="absolute inset-0 opacity-60" style={{
-          backgroundImage: 'radial-gradient(ellipse at 20% 50%, hsl(var(--klawsome-red) / 0.3) 0%, transparent 55%), radial-gradient(ellipse at 80% 30%, hsl(var(--kawaii-mint) / 0.25) 0%, transparent 50%), radial-gradient(ellipse at 55% 85%, hsl(var(--klawsome-yellow) / 0.2) 0%, transparent 45%)',
-        }} />
-        <div className="absolute inset-0 pointer-events-none opacity-40" style={{
-          backgroundImage: 'radial-gradient(circle, hsl(var(--klawsome-baby-pink) / 0.2) 1.5px, transparent 1.5px)',
-          backgroundSize: '28px 28px',
-        }} />
-        <div className="ds-container relative z-10">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-black text-xs tracking-[2px] uppercase px-5 py-2 rounded-full mb-7">
-              {heroBadge}
-            </span>
-            <h1 className="text-4xl md:text-6xl font-heading font-bold text-white mb-6 leading-tight">
-              {heroTitle.split(' ').slice(0, -1).join(' ')}<br />
-              <span className="text-klawsome-yellow">{heroTitle.split(' ').slice(-1)[0]}</span>
-            </h1>
-            <p className="text-base md:text-lg text-white/75 max-w-xl mx-auto mb-10 font-body font-semibold leading-relaxed">
-              {heroSubtitle}
-            </p>
-            <Button asChild size="lg" className="rounded-full px-10 py-6 text-base font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-xl hover:scale-105 transition-all">
-              <a href="#contact">{heroCta}</a>
-            </Button>
-          </motion.div>
-        </div>
-      </section>
+      <PageHero
+        eyebrow={hero?.eyebrow || '🤝 For Businesses & Partners'}
+        title={hero?.title || 'Grow With Klawsome'}
+        subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
+        imageUrl={hero?.image_url || ''}
+      >
+        <Button asChild size="lg" className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+          <a href="#contact">{hero?.cta_text || 'Get in Touch'}</a>
+        </Button>
+      </PageHero>
 
-      {/* OPPORTUNITY TABS (sticky below nav) */}
-      <div ref={tabsBarRef} className="sticky top-20 z-30 bg-muted/90 backdrop-blur-md border-b border-border shadow-sm">
-        <div className="ds-container px-6 py-4">
-          <p className="text-xs font-heading font-black text-muted-foreground tracking-[1.5px] uppercase mb-3 text-center">Our Opportunities</p>
+      {/* STICKY TABS — kawaii style */}
+      <div ref={tabsBarRef} className="sticky top-20 z-30 bg-[hsl(var(--klawsome-baby-pink))]/95 backdrop-blur-md border-b-2 border-white/40 shadow-sm">
+        <div className="ds-container section-x py-[1.5em]">
+          <p className="ds-eyebrow text-center mb-3">Our Opportunities</p>
           <div role="tablist" aria-label="Opportunities" className="flex flex-wrap gap-2 sm:gap-3 justify-center">
             {tabs.map((t) => {
               const isActive = activeTab === t.id;
@@ -237,15 +216,7 @@ const BusinessDevelopment = () => {
                   onClick={() => handleTabClick(t.id)}
                   className={`font-heading font-bold text-sm px-5 py-2.5 rounded-full border-2 transition-all ${
                     isActive
-                      ? t.id === 'hosted'
-                        ? 'bg-[hsl(var(--kawaii-mint))] border-[hsl(var(--kawaii-mint))] text-white shadow-md'
-                        : t.id === 'partner'
-                        ? 'bg-klawsome-yellow border-klawsome-yellow text-klawsome-navy shadow-md'
-                        : 'bg-primary border-primary text-white shadow-md'
-                      : t.id === 'hosted'
-                      ? 'bg-white border-[hsl(var(--kawaii-mint))] text-[hsl(var(--kawaii-mint))] hover:bg-[hsl(var(--kawaii-mint)/0.1)]'
-                      : t.id === 'partner'
-                      ? 'bg-white border-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/10'
+                      ? 'bg-primary border-primary text-white shadow-md'
                       : 'bg-white border-primary text-primary hover:bg-primary/10'
                   }`}
                 >
@@ -257,245 +228,205 @@ const BusinessDevelopment = () => {
         </div>
       </div>
 
-      {/* OPPORTUNITY 1 — HOSTED MACHINE */}
-      <section id="hosted">
-        <div className="relative overflow-hidden py-16 px-6 text-center" style={{ background: 'linear-gradient(135deg, hsl(var(--kawaii-mint)) 0%, hsl(var(--kawaii-mint) / 0.7) 100%)' }}>
-          <span aria-hidden className="absolute font-bold text-[220px] text-white/10 right-[-10px] top-[-40px] leading-none pointer-events-none select-none">01</span>
-          <div className="ds-container relative z-10">
-            <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 01</p>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Host a Klawsome Machine<br />in Your Business</h2>
-            <div className="inline-flex items-center gap-2 bg-white/20 border-2 border-white/40 text-white font-bold text-sm px-5 py-2.5 rounded-full mb-7">
-              <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375) only
+      {/* HOSTED — baby blue band like homepage About */}
+      <section id="hosted" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
+        <div className="ds-container max-w-5xl">
+          <div className="text-center mb-12">
+            <p className="ds-eyebrow mb-3">Opportunity 01</p>
+            <h2 className="ds-h2 mb-4">Host a Klawsome Machine<br />in Your Business</h2>
+            <div className="inline-flex items-center gap-2 bg-white/70 border-2 border-white text-foreground font-bold text-sm px-5 py-2.5 rounded-full mb-6">
+              <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375)
             </div>
-            <p className="text-white/85 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
-              {hosted.subtitle}
-            </p>
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-navy hover:bg-klawsome-navy/90 text-white shadow-lg">
-              <a href="#contact">Apply for a Hosted Machine</a>
-            </Button>
+            <p className="ds-lead max-w-2xl mx-auto">{hosted.subtitle}</p>
           </div>
-        </div>
 
-        <div className="bg-white py-16 px-6">
-          <div className="ds-container max-w-5xl">
-            {/* Profit banner */}
-            <div className="bg-klawsome-navy rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-7 mb-12">
-              <div>
-                <h3 className="font-heading text-2xl font-bold text-white mb-2">You earn 10% of every token played.</h3>
-                <p className="text-white/70 font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
-              </div>
-              <span className="font-bold text-6xl text-klawsome-yellow whitespace-nowrap">🎯 10%</span>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-7 mb-12 shadow-md">
+            <div>
+              <h3 className="font-heading text-2xl font-bold text-foreground mb-2">You earn 10% of every token played.</h3>
+              <p className="text-muted-foreground font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
             </div>
+            <span className="font-bold text-6xl text-primary whitespace-nowrap">🎯 10%</span>
+          </motion.div>
 
-            <h3 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-2">What each side handles</h3>
-            <p className="text-muted-foreground font-body font-semibold mb-7">A truly hands-off opportunity for your business.</p>
-
-            <div className="grid md:grid-cols-2 gap-6 mb-12">
-              <div className="bg-secondary/40 rounded-3xl p-8 border-t-[5px]" style={{ borderTopColor: 'hsl(var(--kawaii-mint))' }}>
-                <h4 className="font-heading text-xl font-bold text-foreground mb-1">Klawsome Takes Care Of</h4>
-                <p className="text-sm text-muted-foreground font-bold mb-5">We do the heavy lifting</p>
-                <ul className="space-y-3">
-                  {hosted.bullet_points.map((item) => (
-                    <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-foreground/90">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full flex items-center justify-center mt-0.5" style={{ background: 'hsl(var(--kawaii-mint) / 0.2)', color: 'hsl(var(--kawaii-mint))' }}><Check className="w-3 h-3" /></span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-              <div className="bg-secondary/40 rounded-3xl p-8 border-t-[5px] border-primary">
-                <h4 className="font-heading text-xl font-bold text-foreground mb-1">Your Business Provides</h4>
-                <p className="text-sm text-muted-foreground font-bold mb-5">That's really it</p>
-                <ul className="space-y-3">
-                  {businessProvides.map((item) => (
-                    <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-foreground/90">
-                      <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/15 text-primary flex items-center justify-center mt-0.5"><Check className="w-3 h-3" /></span>
-                      {item}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+          <div className="grid md:grid-cols-2 gap-6 mb-12">
+            <div className="bg-white rounded-3xl p-8 border-t-[5px] border-primary shadow-sm">
+              <h4 className="font-heading text-xl font-bold text-foreground mb-1">Klawsome Takes Care Of</h4>
+              <p className="text-sm text-muted-foreground font-bold mb-5">We do the heavy lifting</p>
+              <ul className="space-y-3">
+                {hosted.bullet_points.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-foreground/90">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-primary/15 text-primary flex items-center justify-center mt-0.5"><Check className="w-3 h-3" /></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
-
-            <h3 className="font-heading text-2xl font-bold text-foreground mb-5">Perfect for high-traffic spots</h3>
-            <div className="flex flex-wrap gap-3 mb-12">
-              {venues.map((v) => (
-                <span key={v} className="bg-secondary/30 border-2 border-border rounded-full px-5 py-2.5 font-heading font-bold text-sm text-foreground hover:bg-klawsome-yellow/30 hover:border-klawsome-yellow transition-all cursor-default">
-                  {v}
-                </span>
-              ))}
+            <div className="bg-white rounded-3xl p-8 border-t-[5px] border-[hsl(var(--klawsome-yellow))] shadow-sm">
+              <h4 className="font-heading text-xl font-bold text-foreground mb-1">Your Business Provides</h4>
+              <p className="text-sm text-muted-foreground font-bold mb-5">That's really it</p>
+              <ul className="space-y-3">
+                {businessProvides.map((item) => (
+                  <li key={item} className="flex items-start gap-3 font-body font-bold text-sm text-foreground/90">
+                    <span className="flex-shrink-0 w-5 h-5 rounded-full bg-[hsl(var(--klawsome-yellow)/0.3)] text-foreground flex items-center justify-center mt-0.5"><Check className="w-3 h-3" /></span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
             </div>
+          </div>
 
-            <div className="text-center">
-              <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold text-white shadow-lg" style={{ backgroundColor: 'hsl(var(--kawaii-mint))' }}>
-                <a href="#contact">Apply for a Hosted Machine →</a>
-              </Button>
-            </div>
+          <h3 className="font-heading text-2xl font-bold text-foreground mb-5 text-center">Perfect for high-traffic spots</h3>
+          <div className="flex flex-wrap gap-3 mb-12 justify-center">
+            {venues.map((v) => (
+              <span key={v} className="bg-white border-2 border-white rounded-full px-5 py-2.5 font-heading font-bold text-sm text-foreground hover:bg-[hsl(var(--klawsome-yellow)/0.4)] transition-all cursor-default shadow-sm">
+                {v}
+              </span>
+            ))}
+          </div>
+
+          <div className="text-center">
+            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
+              <a href="#contact">Apply for a Hosted Machine →</a>
+            </Button>
           </div>
         </div>
       </section>
 
-      {/* OPPORTUNITY 2 — PARTNER */}
-      <KawaiiDivider variant="petals" from="white" to="navy" stroke="baby-pink" height={90} />
-      <section id="partner">
-        <div className="relative overflow-hidden py-16 px-6 text-center bg-klawsome-navy">
-          <span aria-hidden className="absolute font-bold text-[220px] text-white/[0.05] right-[-10px] top-[-40px] leading-none pointer-events-none select-none">02</span>
-          <div className="ds-container relative z-10">
-            <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 02</p>
-            <span className="inline-block bg-klawsome-yellow text-klawsome-navy font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Become a<br />Klawsome Partner</h2>
-            <p className="text-white/75 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">{partner.subtitle}</p>
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 shadow-lg">
-              <a href="#contact">Become a Partner →</a>
+      {/* PARTNER — baby pink band */}
+      <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
+      <section id="partner" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
+        <div className="ds-container max-w-5xl">
+          <div className="text-center mb-12">
+            <p className="ds-eyebrow mb-3">Opportunity 02</p>
+            <span className="inline-block bg-[hsl(var(--klawsome-yellow))] text-foreground font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
+            <h2 className="ds-h2 mb-4">Become a Klawsome Partner</h2>
+            <p className="ds-lead max-w-2xl mx-auto">{partner.subtitle}</p>
+          </div>
+
+          <div className="bg-white rounded-3xl p-10 mb-10 shadow-md">
+            <h3 className="font-heading text-2xl font-bold text-foreground mb-3">{partnerWhy?.headline || "Why we're not calling this a franchise"}</h3>
+            <p className="text-muted-foreground font-body font-semibold leading-relaxed">{partnerWhy?.body}</p>
+          </div>
+
+          <h3 className="font-heading text-3xl font-bold text-foreground mb-5 text-center">What Klawsome Supplies</h3>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
+            {partnerIncludesItems.map((item) => (
+              <div key={item.title} className="bg-white rounded-2xl p-7 shadow-md border-b-4 border-[hsl(var(--klawsome-yellow))] hover:-translate-y-1 transition-transform">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <h5 className="font-heading text-lg font-bold text-foreground mb-2">{item.title}</h5>
+                <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{item.desc}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="bg-white rounded-3xl p-10 mb-10 flex flex-col md:flex-row gap-7 items-start shadow-md">
+            <div className="text-5xl flex-shrink-0">{freedomBox?.eyebrow || '💡'}</div>
+            <div>
+              <h4 className="font-heading text-2xl font-bold text-primary mb-3">{freedomBox?.headline || 'Pair it with your other concepts'}</h4>
+              <p className="text-muted-foreground font-body font-semibold leading-relaxed">{freedomBox?.body}</p>
+            </div>
+          </div>
+
+          <div className="text-center">
+            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
+              <a href="#contact">Let's Talk Partnership →</a>
             </Button>
           </div>
         </div>
+      </section>
 
-        <div className="bg-muted/30 py-16 px-6">
-          <div className="ds-container max-w-5xl">
-            <div className="bg-white rounded-3xl p-10 mb-10 shadow-lg">
-              <h3 className="font-heading text-2xl font-bold text-klawsome-navy mb-3">{partnerWhy?.headline || "Why we're not calling this a franchise"}</h3>
-              <p className="text-muted-foreground font-body font-semibold leading-relaxed">{partnerWhy?.body}</p>
-            </div>
+      {/* PLUSHIE — coral red like homepage tokens */}
+      <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="white" />
+      <section id="plushie" className="section-y section-x bg-primary">
+        <div className="ds-container max-w-5xl">
+          <div className="text-center mb-12">
+            <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
+            <h2 className="ds-h2 text-white mb-4">Custom Plushie Orders</h2>
+            <p className="ds-lead text-white/85 max-w-2xl mx-auto">{plushie.subtitle}</p>
+          </div>
 
-            <h3 className="font-heading text-3xl font-bold text-foreground mb-5">What Klawsome Supplies</h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
-              {partnerIncludesItems.map((item) => (
-                <div key={item.title} className="bg-white rounded-2xl p-7 shadow-md border-b-4 border-klawsome-yellow hover:-translate-y-1 transition-transform">
-                  <div className="text-3xl mb-3">{item.icon}</div>
-                  <h5 className="font-heading text-lg font-bold text-klawsome-navy mb-2">{item.title}</h5>
-                  <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{item.desc}</p>
+          <div className="bg-white/95 rounded-r-2xl border-l-[5px] border-[hsl(var(--klawsome-yellow))] p-6 mb-12 flex items-center gap-4 shadow-md">
+            <span className="text-3xl flex-shrink-0">{minOrder?.eyebrow || '📦'}</span>
+            <p className="font-body font-bold text-foreground leading-relaxed">
+              <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
+            </p>
+          </div>
+
+          <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2 text-center">Pricing by complexity</h3>
+          <p className="text-white/80 font-semibold mb-7 text-center">All prices are per unit, based on minimum 100-unit orders.</p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
+            {pricingTiers.map((tier, idx) => {
+              const isHighlight = tier.is_highlight || idx === 1;
+              return (
+                <div key={tier.id} className={`rounded-3xl p-8 text-center transition-transform hover:-translate-y-1 bg-white shadow-md ${isHighlight ? 'border-4 border-[hsl(var(--klawsome-yellow))]' : 'border-2 border-white'}`}>
+                  <div className="text-xs font-heading font-black tracking-[2px] uppercase mb-3 text-primary">
+                    {tier.features?.[0] || 'Plushie'}
+                  </div>
+                  <h5 className="font-heading text-lg font-bold mb-2 text-foreground">{tier.name}</h5>
+                  <div className="font-bold text-5xl leading-none mb-2 text-foreground">{tier.price}</div>
+                  <div className="text-sm font-bold text-muted-foreground">per unit</div>
+                  {tier.features?.[1] && (
+                    <p className="text-sm font-semibold mt-3 leading-relaxed text-muted-foreground">{tier.features[1]}</p>
+                  )}
+                </div>
+              );
+            })}
+          </div>
+
+          <div className="bg-white/95 rounded-3xl p-9 mb-10 shadow-md">
+            <h3 className="font-heading text-2xl font-bold text-foreground mb-6 text-center">{plushieHow?.headline || 'How it works'}</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+              {plushieHowItems.map((step) => (
+                <div key={step.title} className="text-center">
+                  <div className="text-3xl mb-2">{step.icon}</div>
+                  <h6 className="font-heading text-base font-bold text-foreground mb-1">{step.title}</h6>
+                  <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.desc}</p>
                 </div>
               ))}
             </div>
-
-            <div className="bg-klawsome-navy rounded-3xl p-10 mb-10 flex flex-col md:flex-row gap-7 items-start">
-              <div className="text-5xl flex-shrink-0">{freedomBox?.eyebrow || '💡'}</div>
-              <div>
-                <h4 className="font-heading text-2xl font-bold text-klawsome-yellow mb-3">{freedomBox?.headline || 'Pair it with your other concepts'}</h4>
-                <p className="text-white/75 font-body font-semibold leading-relaxed">{freedomBox?.body}</p>
-              </div>
-            </div>
-
-            <div className="text-center">
-              <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 shadow-lg">
-                <a href="#contact">Let's Talk Partnership →</a>
-              </Button>
-            </div>
           </div>
-        </div>
-      </section>
 
-      {/* OPPORTUNITY 3 — PLUSHIE */}
-      <KawaiiDivider variant="bumps" from="muted-soft" to="baby-pink" stroke="yellow" height={90} />
-      <section id="plushie">
-        <div className="relative overflow-hidden py-16 px-6 text-center" style={{ background: 'linear-gradient(135deg, hsl(var(--klawsome-baby-pink)) 0%, hsl(var(--kawaii-pink)) 100%)' }}>
-          <span aria-hidden className="absolute font-bold text-[220px] text-white/15 right-[-10px] top-[-40px] leading-none pointer-events-none select-none">03</span>
-          <div className="ds-container relative z-10">
-            <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 leading-tight">Custom Plushie Orders</h2>
-            <p className="text-white/85 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">{plushie.subtitle}</p>
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-klawsome-navy hover:bg-klawsome-navy/90 text-white shadow-lg">
-              <a href="#contact">Request a Quote →</a>
+          <div className="text-center">
+            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-white hover:bg-white/90 text-primary shadow-lg">
+              <a href="#contact">Start Your Custom Order →</a>
             </Button>
           </div>
         </div>
-
-        <div className="bg-white py-16 px-6">
-          <div className="ds-container max-w-5xl">
-            <div className="bg-muted/40 rounded-r-2xl border-l-[5px] border-primary p-6 mb-12 flex items-center gap-4">
-              <span className="text-3xl flex-shrink-0">{minOrder?.eyebrow || '📦'}</span>
-              <p className="font-body font-bold text-foreground leading-relaxed">
-                <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
-              </p>
-            </div>
-
-            <h3 className="font-heading text-2xl md:text-3xl font-bold text-foreground mb-2">Pricing by complexity</h3>
-            <p className="text-muted-foreground font-semibold mb-7">All prices are per unit, based on minimum 100-unit orders.</p>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-              {pricingTiers.map((tier, idx) => {
-                const isDark = idx === 2;
-                const isHighlight = tier.is_highlight || idx === 1;
-                return (
-                  <div
-                    key={tier.id}
-                    className={`rounded-3xl p-8 text-center transition-transform hover:-translate-y-1 ${
-                      isDark
-                        ? 'bg-klawsome-navy border-2 border-klawsome-navy'
-                        : isHighlight
-                        ? 'bg-secondary/30 border-2 border-primary'
-                        : 'bg-secondary/30 border-2 border-border'
-                    }`}
-                  >
-                    <div className={`text-xs font-heading font-black tracking-[2px] uppercase mb-3 ${isDark ? 'text-klawsome-yellow' : 'text-primary'}`}>
-                      {tier.features?.[0] || 'Plushie'}
-                    </div>
-                    <h5 className={`font-heading text-lg font-bold mb-2 ${isDark ? 'text-white' : 'text-klawsome-navy'}`}>{tier.name}</h5>
-                    <div className={`font-bold text-5xl leading-none mb-2 ${isDark ? 'text-klawsome-yellow' : 'text-klawsome-navy'}`}>{tier.price}</div>
-                    <div className={`text-sm font-bold ${isDark ? 'text-white/60' : 'text-muted-foreground'}`}>per unit</div>
-                    {tier.features?.[1] && (
-                      <p className={`text-sm font-semibold mt-3 leading-relaxed ${isDark ? 'text-white/65' : 'text-muted-foreground'}`}>{tier.features[1]}</p>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
-
-            <div className="bg-muted/40 rounded-3xl p-9 mb-10">
-              <h3 className="font-heading text-2xl font-bold text-klawsome-navy mb-6">{plushieHow?.headline || 'How it works'}</h3>
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-                {plushieHowItems.map((step) => (
-                  <div key={step.title} className="text-center">
-                    <div className="text-3xl mb-2">{step.icon}</div>
-                    <h6 className="font-heading text-base font-bold text-klawsome-navy mb-1">{step.title}</h6>
-                    <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.desc}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="text-center">
-              <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
-                <a href="#contact">Start Your Custom Order →</a>
-              </Button>
-            </div>
-          </div>
-        </div>
       </section>
 
-      {/* HOW IT WORKS */}
-      <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
-      <section className="bg-klawsome-navy py-20 px-6 text-center">
-        <div className="ds-container">
-          <p className="text-xs font-heading font-black text-klawsome-yellow tracking-[3px] uppercase mb-3">The Process</p>
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">Getting Started is Easy</h2>
+      {/* HOW IT WORKS — white */}
+      <KawaiiDivider variant="bumps" from="red" to="white" stroke="baby-pink" />
+      <section className="section-y section-x bg-background">
+        <div className="ds-container text-center">
+          <p className="ds-eyebrow mb-3">The Process</p>
+          <h2 className="ds-h2 mb-4">Getting Started is Easy</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 mt-12">
             {howSteps.map((step) => (
               <div key={step.id} className="text-center">
-                <div className="w-14 h-14 bg-klawsome-yellow text-klawsome-navy font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                <div className="w-14 h-14 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                   {step.icon}
                 </div>
-                <h4 className="font-heading text-lg font-bold text-white mb-2">{step.title}</h4>
-                <p className="text-sm text-white/60 font-semibold leading-relaxed">{step.description}</p>
+                <h4 className="font-heading text-lg font-bold text-foreground mb-2">{step.title}</h4>
+                <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CONTACT FORM */}
-      <KawaiiDivider variant="bumps" from="navy" to="secondary-soft" stroke="yellow" height={90} />
-      <section id="contact" className="bg-secondary/30 py-20 px-6">
+      {/* CONTACT — baby blue */}
+      <KawaiiDivider variant="petals" from="white" to="baby-blue" stroke="baby-pink" />
+      <section id="contact" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
         <div className="ds-container max-w-3xl">
           <div className="text-center mb-10">
-            <p className="text-xs font-heading font-black text-primary tracking-[3px] uppercase mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-foreground mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
-            <p className="text-muted-foreground font-body font-semibold max-w-md mx-auto">{contactIntro?.body || "Tell us which opportunity excites you and we'll take it from there."}</p>
+            <p className="ds-eyebrow mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
+            <h2 className="ds-h2 mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
+            <p className="ds-lead max-w-md mx-auto">{contactIntro?.body || "Tell us which opportunity excites you and we'll take it from there."}</p>
           </div>
 
           {submitted ? (
-            <div className="bg-white rounded-2xl border-2 p-8 text-center" style={{ borderColor: 'hsl(var(--kawaii-mint))', color: 'hsl(var(--kawaii-mint))' }}>
+            <div className="bg-white rounded-2xl border-2 border-primary p-8 text-center text-primary shadow-md">
               <Sparkles className="w-10 h-10 mx-auto mb-3" />
               <p className="font-heading font-bold text-lg">Thanks! We'll be in touch within 1–2 business days.</p>
             </div>
@@ -549,7 +480,8 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
-      <KawaiiFooter prevColor="secondary-soft" />
+      <KawaiiDivider variant="cloud" from="baby-blue" to="baby-pink" stroke="white" />
+      <KawaiiFooter prevColor="baby-pink" />
     </div>
   );
 };
