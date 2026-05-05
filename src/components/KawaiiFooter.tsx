@@ -4,7 +4,14 @@ import { Button } from './ui/button';
 import KawaiiDivider from './KawaiiDivider';
 import { useLocation } from 'react-router-dom';
 
-const KawaiiFooter = () => {
+type FooterPrevColor = 'white' | 'baby-pink' | 'baby-blue' | 'red' | 'navy' | 'secondary-soft' | 'muted-soft';
+
+interface KawaiiFooterProps {
+  /** Color of the section sitting directly above the footer block. Defaults to white. */
+  prevColor?: FooterPrevColor;
+}
+
+const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { pathname } = useLocation();
   const showReadyToPlay = ['/', '/birthdays', '/faq'].includes(pathname);
@@ -19,6 +26,17 @@ const KawaiiFooter = () => {
 
   return (
     <>
+      {/* Transition from page → CTA (baby-pink) when CTA shown, else page → red footer */}
+      {showReadyToPlay ? (
+        prevColor !== 'baby-pink' && (
+          <KawaiiDivider variant="wave" from={prevColor} to="baby-pink" stroke="white" />
+        )
+      ) : (
+        prevColor !== 'red' && (
+          <KawaiiDivider variant="scallop" from={prevColor} to="red" stroke="white" />
+        )
+      )}
+
       {/* Pre-footer CTA — homepage, birthdays, faq only */}
       {showReadyToPlay && (
       <section className="py-32 px-6 lg:px-12 bg-[hsl(var(--klawsome-baby-pink))] relative overflow-hidden">
@@ -40,7 +58,9 @@ const KawaiiFooter = () => {
       </section>
       )}
 
-      <KawaiiDivider variant="scallop" from={showReadyToPlay ? 'baby-pink' : 'white'} to="red" stroke="white" />
+      {showReadyToPlay && (
+        <KawaiiDivider variant="scallop" from="baby-pink" to="red" stroke="white" />
+      )}
 
       {/* Minimal footer — red */}
       <footer id="contact" className="py-16 px-6 lg:px-12 bg-primary border-t border-white/15">

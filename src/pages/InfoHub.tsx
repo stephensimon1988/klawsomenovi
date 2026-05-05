@@ -16,7 +16,7 @@ const InfoHub = () => {
         imageUrl={hero?.image_url || ''}
       />
       <DynamicSections pageKey="info-hub" />
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="secondary-soft" />
     </div>
   );
 };

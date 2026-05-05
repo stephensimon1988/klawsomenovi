@@ -116,7 +116,7 @@ const Rental = () => {
 
       {eventPhotos.length > 0 && (
         <>
-          <KawaiiDivider variant="cloud" from="white" to="baby-pink" stroke="baby-blue" height={90} />
+          <KawaiiDivider variant="cloud" from="secondary-soft" to="baby-pink" stroke="baby-blue" height={90} />
           <section className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
             <div className="ds-container">
               <div className="max-w-2xl mb-12">
