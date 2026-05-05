@@ -2,9 +2,9 @@ import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type HomepageContent, type HomepageStep } from '@/hooks/useCmsContent';
-import playKlawImg from '@/assets/play-klaw-machines.gif';
-import winPlushiesImg from '@/assets/win-plushies.gif';
-import tradeUpImg from '@/assets/trade-up.gif';
+import playKlawImg from '@/assets/kawaii-art/store_tokens.png';
+import winPlushiesImg from '@/assets/kawaii-art/store_small-plush.png';
+import tradeUpImg from '@/assets/kawaii-art/store_trade-up.png';
 
 const fallbackImages = [playKlawImg, winPlushiesImg, tradeUpImg];
 

@@ -34,7 +34,7 @@ const KawaiiTokenPrices = () => {
         <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto">
           <img
             ref={coinRef}
-            src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef608b3b-4731-45e2-a37e-250a45e15d52/coinstack-klawsome.png"
+            src={tokensImage}
             alt="Stack of Klawsome tokens"
             className="w-40 lg:w-52 object-contain will-change-transform"
             loading="lazy"
@@ -69,7 +69,7 @@ const KawaiiTokenPrices = () => {
 
           <img
             ref={animalsRef}
-            src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b3785d35-704f-459b-be7a-69ddb204602a/klawsome+animals.png"
+            src={animalsImage}
             alt="Klawsome kawaii animals"
             className="w-40 lg:w-52 object-contain hidden lg:block will-change-transform"
             loading="lazy"
