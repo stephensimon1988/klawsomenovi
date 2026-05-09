@@ -4,6 +4,7 @@ import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { Button } from './ui/button';
+import NavClaw from './NavClaw';
 
 const navLinks = [
   { label: 'HOME', href: '#hero' },
@@ -36,6 +37,8 @@ const KawaiiNav = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [moreOpen, setMoreOpen] = useState(false);
+  const [clawActive, setClawActive] = useState(false);
+  const [pointerX, setPointerX] = useState<number | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -65,7 +68,13 @@ const KawaiiNav = () => {
   }, [navigate, location.pathname]);
 
   return (
-    <nav className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}>
+    <nav
+      onMouseEnter={() => !isOpen && setClawActive(true)}
+      onMouseLeave={() => setClawActive(false)}
+      onMouseMove={(e) => setPointerX(e.clientX)}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
+    >
+      <NavClaw active={clawActive && !isOpen} pointerX={pointerX} />
       <div className="ds-container section-x">
         <div className="flex items-center justify-between h-20">
           <button onClick={() => handleNav('#hero')} className="flex items-center">
