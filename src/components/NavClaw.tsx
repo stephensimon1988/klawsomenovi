@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, animate } from 'framer-motion';
 import navClaw from '@/assets/nav-claw.png';
 
-const CLAW_WIDTH = 100;
+const CLAW_WIDTH = 60;
 // image aspect ~ 1053 / 1716
 const CLAW_HEIGHT = Math.round((CLAW_WIDTH * 1716) / 1053);
 const DROP_BOTTOM = 50; // bottom edge of claw 50px below top of viewport
