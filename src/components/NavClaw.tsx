@@ -5,7 +5,7 @@ import navClaw from '@/assets/nav-claw.png';
 const CLAW_WIDTH = 100;
 // image aspect ~ 1053 / 1716
 const CLAW_HEIGHT = Math.round((CLAW_WIDTH * 1716) / 1053);
-const DROP_BOTTOM = 100; // bottom edge of claw 100px below top of viewport
+const DROP_BOTTOM = 50; // bottom edge of claw 50px below top of viewport
 const DROPPED_Y = DROP_BOTTOM - CLAW_HEIGHT; // top offset when dropped (negative)
 const HIDDEN_Y = -CLAW_HEIGHT - 20;
 
