@@ -59,7 +59,7 @@ const NavClaw = ({ active, pointerX }: NavClawProps) => {
     <motion.div
       aria-hidden
       className="fixed top-0 z-40 pointer-events-none"
-      style={{ x: xSpring, y: ySpring, width: CLAW_WIDTH, translateX: '-50%' }}
+      style={{ left: xSpring, y: ySpring, width: CLAW_WIDTH, marginLeft: -CLAW_WIDTH / 2 }}
     >
       <img
         src={navClaw}
