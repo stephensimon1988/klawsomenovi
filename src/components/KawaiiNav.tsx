@@ -75,7 +75,7 @@ const KawaiiNav = () => {
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
     >
       <NavClaw active={clawActive && !isOpen} pointerX={pointerX} />
-      <div className="ds-container section-x">
+      <div className="ds-container section-x relative z-[60]">
         <div className="flex items-center justify-between h-20">
           <button onClick={() => handleNav('#hero')} className="flex items-center">
             <img src={klawsomeLogo} alt="Klawsome" className="h-10 w-auto" />
@@ -86,7 +86,7 @@ const KawaiiNav = () => {
               <button
                 key={link.label}
                 onClick={() => handleNav(link.href)}
-                className={`font-heading font-bold text-xs tracking-[0.15em] transition-colors duration-200 ${
+                className={`nav-link-glow font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 ${
                   scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
                 }`}
               >
@@ -99,7 +99,7 @@ const KawaiiNav = () => {
               onMouseLeave={() => setMoreOpen(false)}
             >
               <button
-                className={`flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-colors duration-200 ${
+                className={`nav-link-glow flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 ${
                   scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
                 }`}
               >

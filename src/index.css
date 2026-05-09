@@ -176,6 +176,15 @@ html {
   .glow-coral { --glow-color: var(--klawsome-red); }
   .glow-yellow { --glow-color: var(--klawsome-yellow); }
 
+  /* Nav link branded red glow on hover */
+  .nav-link-glow {
+    transition: color 300ms ease-in-out, box-shadow 300ms ease-in-out, text-shadow 300ms ease-in-out;
+  }
+  .nav-link-glow:hover {
+    text-shadow: 0 0 12px hsl(var(--klawsome-red) / 0.9);
+    box-shadow: 0 0 18px 2px hsl(var(--klawsome-red) / 0.45);
+  }
+
   /* Manifest-style marquee */
   .marquee-track {
     display: flex;
