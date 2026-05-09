@@ -186,6 +186,10 @@ html {
     text-shadow: 0 0 12px hsl(var(--klawsome-red));
     box-shadow: 0 0 18px 2px hsl(var(--klawsome-red));
   }
+  .nav-link-glow-scrolled:hover {
+    text-shadow: 0 0 12px hsl(0 0% 100%);
+    box-shadow: 0 0 18px 2px hsl(0 0% 100%);
+  }
 
   /* Manifest-style marquee */
   .marquee-track {
