@@ -36,22 +36,11 @@ const hashPath = () => {
 
 const pickGalleryHero = () => GALLERY_HEROES[hashPath() % GALLERY_HEROES.length];
 
-const TITLE_COLORS = [
-  'hsl(var(--klawsome-white))',
-  'hsl(var(--klawsome-baby-blue))',
-  'hsl(var(--klawsome-baby-pink))',
-  'hsl(var(--klawsome-yellow))',
-  'hsl(var(--klawsome-red))',
-  'hsl(217 90% 70%)', // logo blue
-];
-
-const pickTitleColor = () => TITLE_COLORS[hashPath() % TITLE_COLORS.length];
-
 const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg' }: PageHeroProps) => {
   const minH = height === 'lg' ? 'min-h-[70vh]' : 'min-h-[55vh]';
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
-  const titleColor = pickTitleColor();
+  const titleColor = 'hsl(var(--klawsome-navy))';
   return (
     <>
       <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
@@ -59,12 +48,12 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${bg}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/40 to-black/15" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
         <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
           <div className={`max-w-3xl ${alignCls}`}>
-            {eyebrow && <p className="ds-eyebrow mb-6 text-white/80">{eyebrow}</p>}
+            {eyebrow && <p className="ds-eyebrow mb-6" style={{ color: titleColor }}>{eyebrow}</p>}
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
-            {subtitle && <p className="ds-lead text-white/80 max-w-2xl mb-8">{subtitle}</p>}
+            {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
           </div>
         </div>
