@@ -86,8 +86,8 @@ const KawaiiNav = () => {
               <button
                 key={link.label}
                 onClick={() => handleNav(link.href)}
-                className={`nav-link-glow font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 ${
-                  scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
+                className={`nav-link-glow font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white ${
+                  scrolled ? 'nav-link-glow-scrolled text-foreground/60' : 'text-white/70'
                 }`}
               >
                 {link.label}
@@ -99,8 +99,8 @@ const KawaiiNav = () => {
               onMouseLeave={() => setMoreOpen(false)}
             >
               <button
-                className={`nav-link-glow flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 ${
-                  scrolled ? 'text-foreground/60 hover:text-foreground' : 'text-white/70 hover:text-white'
+                className={`nav-link-glow flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white ${
+                  scrolled ? 'nav-link-glow-scrolled text-foreground/60' : 'text-white/70'
                 }`}
               >
                 MORE <ChevronDown className="w-3 h-3" />
