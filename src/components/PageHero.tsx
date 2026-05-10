@@ -1,4 +1,6 @@
 import { ReactNode } from 'react';
+import { Button } from '@/components/ui/button';
+import { Link } from 'react-router-dom';
 
 interface PageHeroProps {
   eyebrow?: string;
@@ -51,10 +53,14 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
         <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
         <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
           <div className={`max-w-3xl ${alignCls}`}>
-            {eyebrow && <p className="ds-eyebrow mb-6" style={{ color: titleColor }}>{eyebrow}</p>}
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
+            <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
+              <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+                <Link to="/rewards">Join Today</Link>
+              </Button>
+            </div>
           </div>
         </div>
       </section>
