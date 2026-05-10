@@ -48,14 +48,14 @@ const Birthdays = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}')` }}
         />
-        <div className="absolute inset-0 bg-klawsome-navy/70" />
+        <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
         <div className="relative z-10 text-center px-4">
           <img
             src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0aa66e68-edcd-41bb-a162-6c4d5453b16e/klawsomebirthday.png"
             alt="Klawsome Birthday"
             className="w-64 md:w-80 mx-auto mb-6"
           />
-          <h1 className="text-4xl md:text-6xl font-heading font-bold text-white">
+          <h1 className="text-4xl md:text-6xl font-heading font-bold" style={{ color: 'hsl(var(--klawsome-navy))' }}>
             {content?.hero_headline || 'Celebrate your birthday with'} <span className="kawaii-text-gradient">Klawsome!</span>
           </h1>
         </div>
