@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import { MapPin, Check, Sparkles } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
