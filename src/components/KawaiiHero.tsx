@@ -58,13 +58,13 @@ const KawaiiHero = () => {
           bottom: '-60px',
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-black/10" />
+      <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
 
       <LottieAccent type="sparkle" className="absolute top-24 right-12 opacity-30 z-10" size={80} />
 
       <div className="relative z-10 ds-container section-x pb-24 pt-32">
         <div ref={textRef} className="max-w-3xl">
-          <h1 className="ds-h1 text-white mb-6" style={{ opacity: 0 }}>
+          <h1 className="ds-h1 mb-6" style={{ opacity: 0, color: 'hsl(var(--klawsome-navy))' }}>
             {headlineParts.map((part, i) => (
               <span key={i} className="block">
                 {part}
@@ -72,7 +72,7 @@ const KawaiiHero = () => {
             ))}
           </h1>
 
-          <p className="ds-lead text-white/70 max-w-xl mb-10" style={{ opacity: 0 }}>
+          <p className="ds-lead max-w-xl mb-10" style={{ opacity: 0, color: 'hsl(var(--klawsome-navy) / 0.8)' }}>
             {subheadline}
           </p>
 
