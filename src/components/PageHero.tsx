@@ -10,6 +10,7 @@ interface PageHeroProps {
   children?: ReactNode;
   align?: 'left' | 'center';
   height?: 'md' | 'lg';
+  hideJoinCta?: boolean;
 }
 
 // Curated real photos pulled from the Gallery — used as deterministic
@@ -38,7 +39,7 @@ const hashPath = () => {
 
 const pickGalleryHero = () => GALLERY_HEROES[hashPath() % GALLERY_HEROES.length];
 
-const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg' }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false }: PageHeroProps) => {
   const minH = height === 'lg' ? 'min-h-[70vh]' : 'min-h-[55vh]';
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
@@ -56,11 +57,13 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
-            <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
-              <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-                <Link to="/rewards">Join Today</Link>
-              </Button>
-            </div>
+            {!hideJoinCta && (
+              <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
+                <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+                  <Link to="/rewards">Join Today</Link>
+                </Button>
+              </div>
+            )}
           </div>
         </div>
       </section>

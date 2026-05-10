@@ -194,39 +194,28 @@ const BusinessDevelopment = () => {
         title={hero?.title || 'Grow With Klawsome'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
         imageUrl={hero?.image_url || ''}
+        hideJoinCta
       >
-        <Button asChild size="lg" className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-          <a href="#contact">{hero?.cta_text || 'Get in Touch'}</a>
-        </Button>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-2">
+          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <a href="#contact">{hero?.cta_text || 'Get in Touch'}</a>
+          </Button>
+          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <button type="button" onClick={() => handleTabClick('hosted')}>🎰 Host a Machine</button>
+          </Button>
+          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <button type="button" onClick={() => handleTabClick('partner')}>⭐ Become a Partner</button>
+          </Button>
+          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <button type="button" onClick={() => handleTabClick('plushie')}>🧸 Custom Plushies</button>
+          </Button>
+          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <Link to="/rewards">Join Today</Link>
+          </Button>
+        </div>
       </PageHero>
 
-      {/* STICKY TABS — kawaii style */}
-      <div ref={tabsBarRef} className="sticky top-20 z-30 bg-[hsl(var(--klawsome-baby-pink))]/95 backdrop-blur-md border-b-2 border-white/40 shadow-sm">
-        <div className="ds-container section-x py-[1.5em]">
-          <p className="ds-eyebrow text-center mb-3">Our Opportunities</p>
-          <div role="tablist" aria-label="Opportunities" className="flex flex-wrap gap-2 sm:gap-3 justify-center">
-            {tabs.map((t) => {
-              const isActive = activeTab === t.id;
-              return (
-                <button
-                  key={t.id}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-controls={t.id}
-                  onClick={() => handleTabClick(t.id)}
-                  className={`font-heading font-bold text-sm px-5 py-2.5 rounded-full border-2 transition-all ${
-                    isActive
-                      ? 'bg-primary border-primary text-white shadow-md'
-                      : 'bg-white border-primary text-primary hover:bg-primary/10'
-                  }`}
-                >
-                  {t.label}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+      <div ref={tabsBarRef} aria-hidden className="hidden" />
 
       {/* HOSTED — baby blue band like homepage About */}
       <section id="hosted" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
