@@ -1,115 +1,67 @@
-# Klawsome Master Feedback — Audit & Outstanding Items
+## Goal
 
-I parsed the Word doc (18 pages, embedded images included). Below is a page-by-page audit against the current codebase, flagged as **DONE**, **NOT DONE**, or **PARTIAL / NEEDS REVIEW**.
+Replace every "kawaii illustration" reference in the site with images from the storage folder `site-images/kawaii-real-characters/` (30 new files). Leave real photography (Squarespace URLs, friends/family photos) untouched.
 
----
+## Scope — what gets swapped
 
-## Global / Branding
+**A. CMS table `page_content_sections` (30 rows, currently `…/kawaii-claw/*.png`)**
 
-- **NOT DONE** — Mobile responsiveness pass (explicit ask: "optimize for mobile views not just laptop")
-- **NOT DONE** — Acquire `klawsomemobile.com` domain (user-side task, not code)
-- **NOT DONE** — Change favicon / tab icon to the Filipino sun (currently `/favicon.png`)
-- **NOT DONE** — Overall lighter/brighter palette like luckypuppyarcade.com; lighten all photo filters (increase red/blue opacity, avoid 100% white text on photos)
-- **NOT DONE** — Use NEW event photos from the two Google Drive folders + Filipino Blessing folder
-- **NOT DONE** — Use logo-animal vector files consistently throughout the site
-- **NOT DONE** — Replace white body/heading text with dark blue (with lightened photos behind)
-- **PARTIAL** — Scroll-to-top on route change: `BackToTop` exists but there is no global `ScrollToTop` on route change. Need to add one so page-links land at top.
-- **NOT DONE** — Email address fix: `KawaiiFooter.tsx:81` still uses `info@klawsomenovi.com` → change to `team@klawsomenovi.com`
-- **NOT DONE** — Add new pages: "Tips to Win Claw Machines" and "Fundraising"
-- **NOT DONE** — More movement/animation; feature video and Instagram content more prominently (Lucky Puppy style)
+Apply a one-to-one mapping via a single SQL migration (UPDATE statements). Proposed pairings (theme-matched):
 
-## Homepage
+```text
+community/rooted           → 24_kawaii_spring_picnic_with_delightful_friends.png
+community/sakura-novi      → 27_spring_picnic_under_cherry_blossoms.png
+community/collaboration    → 06_kawaii_animal_dance_party_celebration.png
+community/culture          → 30_whimsical_garden_tea_party_with_friends.png
+community/partner-with-us  → 03_claw_machine_team_application_adventure.png
+contact/general            → 17_kawaii_arcade_with_cheerful_tips_sign.png
+contact/events             → 02_celebrating_in_pastel_arcade_paradise.png
+contact/phone              → 19_kawaii_claw_machine_planning_session.png
+contact/visit              → 26_planning_a_cute_claw_machine_adventure.png
+info-hub/gallery           → 14_kawaii_arcade_prize_celebration.png
+info-hub/location          → 05_cute_road_trip_to_the_arcade.png
+info-hub/sakura-novi       → 25_kawaii_tea_party_in_pastel_paradise.png
+info-hub/policies          → 22_kawaii_crafting_fun_with_adorable_animals.png
+info-hub/accessibility     → 08_kawaii_animals_shopping_in_a_cozy_room.png
+info-hub/media-kit         → 28_storytime_under_the_starry_sky.png
+rental/intro               → 18_kawaii_birthday_party_celebration_scene.png
+rental/how-it-works        → 09_kawaii_arcade_claw_machine_adventure.png
+rental/perfect-for         → 29_whimsical_birthday_party_in_pastel_colors.png
+rental/prizes              → 16_kawaii_arcade_prize_winners_with_plushies.png
+rental/delivery            → 07_kawaii_animal_friends_in_plush_arcade.png
+rental/rental-faq          → 01_baking_sweetness_with_cute_animal_friends.png
+store/welcome              → 11_kawaii_arcade_fun_with_plush_prizes.png
+store/philosophy           → 04_cozy_bedtime_story_in_a_blanket_fort.png
+store/small-plush          → 12_kawaii_arcade_fun_with_plushies.png
+store/medium-plush         → 13_kawaii_arcade_plushie_hug_fest.png
+store/large-plush          → 15_kawaii_arcade_prize_haven.png
+store/rare-plush           → 20_kawaii_claw_machine_plush_collection.png
+store/trade-up             → 23_kawaii_friends_at_the_claw_machine.png
+store/special              → 21_kawaii_coin_pusher_paradise_playtime.png
+store/tokens               → 10_kawaii_arcade_fun_with_cute_animals.png
+```
 
-- **NOT DONE** — Add TikTok link at bottom (footer has TikTok text link, but ask is to surface it more prominently alongside FB/IG/YT icons)
-- **NOT DONE** — Add a pop-up cat on right-hand side to engage with social media / send a message (like current live site). `FloatingContactWidget` exists but needs the cat character + social engagement framing.
-- **NOT DONE** — Reduce visible wordiness; bury SEO copy in FAQ at bottom; keep customer-facing copy aesthetic
-- **NOT DONE** — "How to Play": restore the original wavy-decoration look, remove numbered steps, fewer words
-- **NOT DONE** — Visit/Find Us: de-word, remove duplicate hours mentions
-- **NOT DONE** — Token prices: revert to the simpler original layout (bonus % + Top Pick badge) instead of the current package-grid pricing table
-- **NOT DONE** — Reviews: live-link to actual Google rating + count; curate only featured reviews; tone animals to Klawsome style/colors
-- **NOT DONE** — Add stronger social proof block: TikTok videos, Instagram reels, Google reviews, MSU feature, press mentions, UGC
-- **NOT DONE** — Delete the standalone "Schedule / Book Your Visit" section (redundant with top-right Book Now button)
-- **NOT DONE** — Delete the duplicate "Ready to Play / Book Your Visit" CTA section
-- **NOT DONE** — Replace static gift-card section with a scrolling "always visible" floating button cluster (Book Party / Gift Cards / Store) that follows the user as they scroll
-- **NOT DONE** — Fox chat widget feels too small; make it bigger
+**B. Local fallback imports (3 components)** — point at the new storage URLs so non-CMS render paths also show the new art:
 
-## Rental Page
+- `src/components/KawaiiStory.tsx` — fallback `community_collaboration.png` → `06_kawaii_animal_dance_party_celebration.png`
+- `src/components/KawaiiReviews.tsx` — fallback `community_culture.png` → `30_whimsical_garden_tea_party_with_friends.png`
+- `src/pages/Rental.tsx` — fallback `rental_rental-faq.png` → `01_baking_sweetness_with_cute_animal_friends.png`
 
-- **NOT DONE** — Delete the "(~every 3 tries)" copy
-- **NOT DONE** — Add new add-on: "One extra claw machine — $245 (coming soon)"
-- **NOT DONE** — Add new add-on: "Extra hour — $145/machine"
-- **NOT DONE** — Add KFT / Onezo / Halloween-at-our-house photos
-- **NOT DONE** — Draft liability release / waiver (tip-over, electrocution, injury — 0 liability)
-- **NOT DONE** — Generate additional FAQ entries
-- **NOT DONE** — Swap hero illustration to use the three logo animals (vectors from Anna Jain)
+## Out of scope (not touched)
 
-## Store Page
+- Squarespace family/event photos in `page_heroes` and `page_sections.bg_image_url` (these are real photography, not kawaii illustrations).
+- `homepage_content.hero_image_url` / `story_image_url` (also real photos).
+- Logo, favicon, gift card images, gallery photos.
 
-- **PARTIAL** — Reimagined as Amazon/Walmart-style storefront (Shopify storefront was just built ✅). Outstanding: actually sell plushies & items — needs real product data populated in Shopify
+## Technical details
 
-## Birthdays / Events Page
+- One Supabase migration with 30 `UPDATE public.page_content_sections SET image_url=… WHERE page_key=… AND section_key=…;` statements using full public URLs `https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-real-characters/<file>.png`.
+- Three small component edits to change the fallback import to a URL string (or keep as `import` from new path if we mirror locally — but using the storage URL avoids bloating the bundle).
+- No schema changes, no RLS changes, no new dependencies.
 
-- **NOT DONE** — Use orange gradient on "Klawsome!" wordmark; delete the white text variant
-- **NOT DONE** — Delete the redundant "Klawsome wants to celebrate you! / free gift" header copy above the graphic
-- **NOT DONE** — Delete the "Are tables and chairs provided?" FAQ (redundant with seating/space question)
-- **NOT DONE** — Delete the entire "Hosting a Klawsome Event? — invite templates" section (`Birthdays.tsx:165` still present — PDFs aren't editable so they're not useful)
-- **NOT DONE** — Delete the standalone "Ready to Play / Book Your Visit" CTA at the bottom of Birthdays
+## Verification
 
-## Gift Cards
+- After migration, query the 30 rows to confirm new URLs.
+- Visit `/community`, `/contact`, `/info-hub`, `/rental`, `/store`, and the homepage to spot-check images load.
 
-- **NOT DONE** — Make designs generic (remove Valentine's Day + Easter specifics)
-- **NOT DONE** — Use Klawsome-style animals on the cards
-
-## Careers
-
-- **NOT DONE** — Replace generic job-card imagery with the individual logo animals
-
-## Our Story
-
-- **NOT DONE** — Add family photos (pull from `klawsomenovi.com/ourstory`)
-- **NOT DONE** — Remove the "Team" page entirely (currently at `src/pages/Team.tsx`, routed in `App.tsx`)
-
-## Community Outreach
-
-- **NOT DONE** — Use photos Agnes sent via email
-- **NOT DONE** — Pull content from Canva flyer
-- **NOT DONE** — Add three event photo-album sections: Novi Community Fest / Kalayaan PH Independence Day / Novi Public Library Paaralang-Pilipino
-
-## News
-
-- **NOT DONE** — Refresh article list from `linktr.ee/klawsomenovi`
-
-## Information Architecture
-
-- **NOT DONE** — Combine Info Hub + Contact + FAQ into a single page (currently three separate pages: `InfoHub.tsx`, `Contact.tsx`, `Faq.tsx`)
-
-## Gallery / Sakura Novi / Media Kit
-
-- **NOT DONE** — Improve text legibility on hero (Gallery page)
-- **NOT DONE** — Replace generic illustrations with logo-animal vectors throughout
-
----
-
-## Already Done (✅)
-
-- TikTok link present in footer
-- `BackToTop` button exists
-- Shopify storefront on `/store`
-- Acuity scheduling iframe updated
-
----
-
-## Recommended Implementation Order
-
-Since this is a large backlog, I recommend tackling it in waves rather than one giant batch. Suggested grouping:
-
-1. **Quick global fixes** (1 batch): email correction, favicon to Filipino sun, scroll-to-top on route change, delete Team page + route, delete duplicate CTA sections, delete invite-templates block, delete "Are tables and chairs" FAQ, delete "(~every 3 tries)" copy
-2. **Rental page content** (1 batch): new add-ons, waiver PDF draft, new FAQ items, photo swap to logo animals
-3. **Homepage restructure** (1 batch): revert How-to-Play to wavy/simpler, revert token-price layout, delete redundant Schedule + Ready-to-Play sections, add floating scroll CTA cluster, enlarge Fox chat
-4. **Social proof + reviews** (1 batch): live Google rating, curated reviews, TikTok/IG/press strip
-5. **Branding lightening pass** (1 batch): lighter photo filters, dark-blue text, logo-animal vectors throughout, brighter palette tuning
-6. **IA consolidation** (1 batch): merge Info Hub + Contact + FAQ into one page
-7. **Content updates** (1 batch): Our Story family photos, Community Outreach albums, News refresh, Gift Cards generic redesign, Careers animal swap
-8. **New pages** (1 batch): Tips to Win + Fundraising
-
-Tell me which wave you'd like to start with, or say "do all of wave 1" and I'll knock out the quick fixes first.
+If the proposed pairings look off for any specific section, tell me which ones to swap and I'll re-map before running the migration.
