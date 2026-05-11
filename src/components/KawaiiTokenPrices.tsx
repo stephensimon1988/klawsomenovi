@@ -1,8 +1,6 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import LottieAccent from './LottieAccent';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
-import tokensImage from '@/assets/kawaii-art/store_philosophy.png';
-import animalsImage from '@/assets/kawaii-art/community_partner-with-us.png';
 
 const fallbackTiers = [
   { price: '$10', tokens: '10', bonus: '—', is_highlight: false },
@@ -14,9 +12,7 @@ const fallbackTiers = [
 
 const KawaiiTokenPrices = () => {
   const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp' });
-  const coinRef = useGsapScroll<HTMLImageElement>({ type: 'slideLeft', distance: 80, duration: 1.2 });
-  const tableRef = useGsapStagger<HTMLDivElement>({ type: 'slideRight', stagger: 0.1, distance: 40 });
-  const animalsRef = useGsapScroll<HTMLImageElement>({ type: 'slideRight', distance: 80, duration: 1.2, delay: 0.2 });
+  const tableRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.08, distance: 40 });
 
   const { data: dbTiers } = useCmsTable<TokenTier>('token_tiers');
   const tiers = dbTiers && dbTiers.length > 0 ? dbTiers : fallbackTiers;
@@ -33,50 +29,33 @@ const KawaiiTokenPrices = () => {
           </h2>
         </div>
 
-        <div className="flex flex-col lg:flex-row items-center justify-center gap-12 max-w-5xl mx-auto">
-          <img
-            ref={coinRef}
-            src={tokensImage}
-            alt="Stack of Klawsome tokens"
-            className="w-40 lg:w-52 object-contain will-change-transform"
-            loading="lazy"
+        <div ref={tableRef} className="w-full max-w-4xl mx-auto">
+          <div
+            className="grid grid-cols-3 text-center font-heading font-bold text-white text-3xl md:text-4xl pb-6 border-b border-white/20"
             style={{ opacity: 0 }}
-          />
-
-          <div ref={tableRef} className="flex-1 w-full max-w-lg">
-            <div className="grid grid-cols-3 gap-px text-center font-heading font-bold text-white/40 text-xs tracking-wider uppercase mb-4" style={{ opacity: 0 }}>
-              <span>Price</span>
-              <span>Tokens</span>
-              <span>Bonus</span>
-            </div>
-            {tiers.map((tier: any) => (
-              <div
-                key={tier.price}
-                className={`grid grid-cols-3 gap-px text-center py-4 border-t border-white/10 font-body ${
-                  tier.is_highlight
-                    ? 'bg-klawsome-yellow/15 border border-klawsome-yellow/30 rounded-xl text-klawsome-yellow font-bold'
-                    : 'text-white'
-                }`}
-                style={{ opacity: 0 }}
-              >
-                <span className="font-heading font-bold text-lg">{tier.price}</span>
-                <span>{tier.tokens}</span>
-                <span>{tier.bonus}</span>
-              </div>
-            ))}
-            {tiers.some((t: any) => t.is_highlight) && (
-              <p className="text-klawsome-yellow/60 text-xs font-body text-center mt-4">⭐ Top Pick — Best value!</p>
-            )}
+          >
+            <span>Price</span>
+            <span>Tokens</span>
+            <span>Bonus</span>
           </div>
-
-          <img
-            ref={animalsRef}
-            src={animalsImage}
-            alt="Klawsome kawaii animals"
-            className="w-40 lg:w-52 object-contain hidden lg:block will-change-transform"
-            loading="lazy"
-            style={{ opacity: 0 }}
-          />
+          {tiers.map((tier: any) => (
+            <div
+              key={tier.price}
+              className={`grid grid-cols-3 text-center items-center py-6 font-heading font-bold text-2xl md:text-3xl ${
+                tier.is_highlight
+                  ? 'bg-klawsome-yellow/15 border border-klawsome-yellow/30 rounded-2xl text-klawsome-yellow my-2'
+                  : 'text-white'
+              }`}
+              style={{ opacity: 0 }}
+            >
+              <span>{tier.price}</span>
+              <span>{tier.tokens}</span>
+              <span>{tier.bonus}</span>
+            </div>
+          ))}
+          {tiers.some((t: any) => t.is_highlight) && (
+            <p className="text-klawsome-yellow/70 text-sm font-body text-center mt-6">⭐ Top Pick — Best value!</p>
+          )}
         </div>
       </div>
     </section>
