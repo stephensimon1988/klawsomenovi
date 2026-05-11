@@ -1,7 +1,7 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
-import DynamicSections from '@/components/DynamicSections';
+import { Storefront } from '@/components/shopify/Storefront';
 import { usePageHero } from '@/hooks/useCmsContent';
 
 const Store = () => {
@@ -15,7 +15,7 @@ const Store = () => {
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || ''}
       />
-      <DynamicSections pageKey="store" />
+      <Storefront />
       <KawaiiFooter />
     </div>
   );
