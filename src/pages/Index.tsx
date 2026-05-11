@@ -51,7 +51,7 @@ const Index = () => {
           </div>
           <div className="rounded-2xl border border-border bg-background overflow-hidden">
             <iframe
-              src="https://app.acuityscheduling.com/schedule.php?owner=klawsome"
+              src="https://klawsome.as.me/schedule/366e2b9b"
               title="Klawsome Acuity Scheduling"
               frameBorder="0"
               scrolling="no"
