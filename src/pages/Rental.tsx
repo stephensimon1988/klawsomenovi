@@ -5,7 +5,7 @@ import DynamicSections from '@/components/DynamicSections';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import rentalFaqImage from '@/assets/kawaii-art/rental_rental-faq.png';
+const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-real-characters/01_baking_sweetness_with_cute_animal_friends.png';
 
 interface RentalPackage {
   id: string;
