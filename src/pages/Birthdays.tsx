@@ -72,19 +72,6 @@ const Birthdays = () => {
           <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 text-center">Party Rules</h2>
 
           <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20 mb-12">
-            <h3 className="font-heading font-bold text-xl text-white mb-4">Klawsome Wants To Celebrate You!</h3>
-            <p className="text-white/70 font-body leading-relaxed mb-6">
-              {content?.promo_text || 'Come in anytime during our regular hours and we\'ll provide a personalized birthday gift bag and balloon for the celebrant. No purchase is necessary — simply subscribe to our newsletter to redeem.'}
-            </p>
-            <img
-              src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/80256d92-709b-4da7-afc3-707621daf4de/Bday+Gif.gif"
-              alt="Birthday gift promotion"
-              className="rounded-kawaii w-full max-w-sm mx-auto"
-              loading="lazy"
-            />
-          </div>
-
-          <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20 mb-12">
             <h3 className="font-heading font-bold text-xl text-white mb-4">Looking to Host a Birthday Party?</h3>
             <p className="text-white/70 font-body leading-relaxed mb-4">
               {content?.rules_text || 'Please notify Klawsome two weeks in advance for parties.'}
@@ -154,33 +141,7 @@ const Birthdays = () => {
       )}
 
       {/* Invite Templates */}
-      {templates && templates.length > 0 && (
-        <>
-        <KawaiiDivider variant="bumps" from="navy" to="red" stroke="yellow" height={90} />
-        <section className="py-20 px-4 bg-primary">
-          <div className="container mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-4">
-              Hosting a Klawsome Event?
-            </h2>
-            <p className="text-white/70 font-body mb-10">Enjoy one of our complimentary invite templates! Click to download.</p>
-            <div className="grid grid-cols-2 gap-6 max-w-lg mx-auto">
-              {templates.map((t) => (
-                <a key={t.id} href={t.url} target="_blank" rel="noopener noreferrer" className="rounded-kawaii overflow-hidden border border-white/20 hover:border-white/40 transition-colors">
-                  <img
-                    src={t.thumbnail_url}
-                    alt={t.name}
-                    className="w-full"
-                    loading="lazy"
-                  />
-                </a>
-              ))}
-            </div>
-          </div>
-        </section>
-        </>
-      )}
-
-      <KawaiiFooter prevColor={(templates && templates.length > 0) ? 'red' : (faqItems.length > 0 ? 'navy' : 'red')} />
+      <KawaiiFooter prevColor={faqItems.length > 0 ? 'navy' : 'red'} />
     </div>
   );
 };

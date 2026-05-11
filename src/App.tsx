@@ -19,10 +19,10 @@ import Rental from "./pages/Rental.tsx";
 import Store from "./pages/Store.tsx";
 import Community from "./pages/Community.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
-import Team from "./pages/Team.tsx";
 import Contact from "./pages/Contact.tsx";
 import FloatingContactWidget from "./components/FloatingContactWidget";
 import BackToTop from "./components/BackToTop";
+import ScrollToTop from "./components/ScrollToTop";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +32,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/business" element={<Business />} />
@@ -47,7 +48,6 @@ const App = () => (
           <Route path="/store" element={<Store />} />
           <Route path="/community" element={<Community />} />
           <Route path="/info-hub" element={<InfoHub />} />
-          <Route path="/team" element={<Team />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
