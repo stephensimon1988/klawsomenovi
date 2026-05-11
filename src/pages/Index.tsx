@@ -38,31 +38,7 @@ const Index = () => {
       <KawaiiNews />
       <KawaiiDivider variant="zigzag-soft" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiGiftCards />
-      {/* GiftCards is white, Scheduling is baby-pink. Top must be white, bottom pink.
-          Removed `flip` which was inverting the colors and causing a stacked gap. */}
-      <KawaiiDivider variant="wave" from="white" to="baby-pink" stroke="baby-blue" />
-      {/* Scheduling section */}
-      <section id="scheduling" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="ds-container">
-          <div className="text-center max-w-3xl mx-auto mb-10">
-            <p className="ds-eyebrow">Schedule</p>
-            <h2 className="ds-h2 mb-4">Book Your Visit</h2>
-            <p className="ds-lead">Schedule your next Klawsome adventure!</p>
-          </div>
-          <div className="rounded-2xl border border-border bg-background overflow-hidden">
-            <iframe
-              src="https://klawsome.as.me/schedule/366e2b9b"
-              title="Klawsome Acuity Scheduling"
-              frameBorder="0"
-              scrolling="no"
-              width="100%"
-              height="800"
-              className="w-full block"
-            />
-          </div>
-        </div>
-      </section>
-      <KawaiiDivider variant="scallop" from="baby-pink" to="baby-blue" stroke="white" />
+      <KawaiiDivider variant="scallop" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiStory />
       <KawaiiFooter prevColor="baby-blue" />
       <DividerAudit />
