@@ -10,7 +10,6 @@ import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import DividerAudit from '@/components/DividerAudit';
-import scheduleImage from '@/assets/kawaii-art/community_sakura-novi.png';
 
 const Index = () => {
   return (
@@ -34,25 +33,20 @@ const Index = () => {
       {/* Scheduling section */}
       <section id="scheduling" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
         <div className="ds-container">
-          <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-center">
-            <div className="md:col-span-5">
-              <img
-                src={scheduleImage}
-                alt="Kawaii scheduling calendar with plush characters"
-                loading="lazy"
-                width={1024}
-                height={1024}
-                className="ds-img-hero"
-              />
-            </div>
-            <div className="md:col-span-7">
-              <p className="ds-eyebrow">Schedule</p>
-              <h2 className="ds-h2 mb-4">Book Your Visit</h2>
-              <p className="ds-lead mb-10">Schedule your next Klawsome adventure!</p>
-              <div className="rounded-2xl border border-border bg-background p-16 text-muted-foreground text-center font-body">
-                Acuity scheduling form coming soon
-              </div>
-            </div>
+          <div className="text-center max-w-3xl mx-auto mb-10">
+            <p className="ds-eyebrow">Schedule</p>
+            <h2 className="ds-h2 mb-4">Book Your Visit</h2>
+            <p className="ds-lead">Schedule your next Klawsome adventure!</p>
+          </div>
+          <div className="rounded-2xl border border-border bg-background overflow-hidden">
+            <iframe
+              src="https://app.acuityscheduling.com/schedule.php?owner=klawsome"
+              title="Klawsome Acuity Scheduling"
+              width="100%"
+              height="800"
+              frameBorder="0"
+              className="w-full"
+            />
           </div>
         </div>
       </section>
