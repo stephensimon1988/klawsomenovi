@@ -1,7 +1,6 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
-import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
-import { useCmsSingle, useCmsTable, type HomepageContent, type HomepageStep } from '@/hooks/useCmsContent';
+import { useCmsTable, type HomepageStep } from '@/hooks/useCmsContent';
 
 const fallbackImages = [
   '/steps/play-klaw-machines.gif',
@@ -12,13 +11,8 @@ const fallbackImages = [
 const KawaiiAbout = () => {
   const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp', distance: 60 });
   const gridRef = useGsapStagger<HTMLDivElement>({ type: 'scaleIn', stagger: 0.2, duration: 0.9 });
-  const ctaRef = useGsapScroll<HTMLDivElement>({ type: 'fadeIn', delay: 0.5 });
 
-  const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
   const { data: steps } = useCmsTable<HomepageStep>('homepage_steps');
-
-  const aboutTitle = content?.about_title || 'From tokens to prizes in four moves';
-  const aboutSubtitle = content?.about_subtitle || "It's simple. Buy tokens, play the machines you want, win what you grab, and trade up for something bigger. That's the whole game.";
 
   const displaySteps = steps?.length ? steps : [
     { id: '1', icon: '/steps/play-klaw-machines.gif', title: 'Buy Tokens', description: '', sort_order: 0 },
