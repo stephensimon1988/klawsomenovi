@@ -10,8 +10,19 @@ import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import DividerAudit from '@/components/DividerAudit';
+import { useEffect } from 'react';
 
 const Index = () => {
+  useEffect(() => {
+    const id = 'acuity-embed-script';
+    if (document.getElementById(id)) return;
+    const s = document.createElement('script');
+    s.id = id;
+    s.src = 'https://embed.acuityscheduling.com/js/embed.js';
+    s.async = true;
+    document.body.appendChild(s);
+  }, []);
+
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
@@ -40,10 +51,13 @@ const Index = () => {
           </div>
           <div className="rounded-2xl border border-border bg-background overflow-hidden">
             <iframe
-              src="https://klawsome.as.me/"
+              src="https://app.acuityscheduling.com/schedule.php?owner=klawsome"
               title="Klawsome Acuity Scheduling"
               frameBorder="0"
-              className="w-full h-screen block"
+              scrolling="no"
+              width="100%"
+              height="800"
+              className="w-full block"
             />
           </div>
         </div>
