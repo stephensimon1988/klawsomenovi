@@ -40,12 +40,10 @@ const Index = () => {
           </div>
           <div className="rounded-2xl border border-border bg-background overflow-hidden">
             <iframe
-              src="https://app.acuityscheduling.com/schedule.php?owner=klawsome"
+              src="https://klawsome.as.me/"
               title="Klawsome Acuity Scheduling"
-              width="100%"
-              height="800"
               frameBorder="0"
-              className="w-full"
+              className="w-full h-screen block"
             />
           </div>
         </div>
