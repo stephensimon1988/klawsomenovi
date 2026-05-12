@@ -78,29 +78,7 @@ const Birthdays = () => {
         title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}
-      >
-        <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full mb-6">
-          {[
-            { label: 'About', id: 'about' },
-            { label: 'Visit', id: 'visit' },
-            { label: 'Tokens', id: 'tokens' },
-            { label: 'Reviews', id: 'reviews' },
-            { label: 'News', id: 'news' },
-            { label: 'Gift Cards', id: 'giftcards' },
-            { label: 'Our Story', id: 'story' },
-            { label: 'Book', id: 'scheduling' },
-          ].map((l) => (
-            <Button
-              key={l.id}
-              asChild
-              size="heroSm"
-              className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
-            >
-              <a href={`/#${l.id}`}>{l.label}</a>
-            </Button>
-          ))}
-        </nav>
-      </PageHero>
+      />
 
       {/* Party Rules */}
       <section className="py-20 px-6 lg:px-12 bg-klawsome-navy">
