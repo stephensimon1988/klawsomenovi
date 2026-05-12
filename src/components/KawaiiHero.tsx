@@ -101,16 +101,16 @@ const KawaiiHero = () => {
           </p>
 
           <div className="space-y-5" style={{ opacity: 0 }}>
-            <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
+            <nav aria-label="Jump to section" className="flex flex-wrap gap-2">
               {jumpLinks.map((l) => (
-                <Button
+                <button
                   key={l.id}
-                  size="heroSm"
+                  type="button"
                   onClick={() => scrollTo(l.id)}
-                  className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+                  className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                 >
                   {l.label}
-                </Button>
+                </button>
               ))}
             </nav>
           </div>
@@ -126,14 +126,14 @@ const KawaiiHero = () => {
         <div className="ds-container section-x py-2">
           <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
             {jumpLinks.map((l) => (
-              <Button
+              <button
                 key={l.id}
-                size="heroSm"
+                type="button"
                 onClick={() => scrollTo(l.id)}
-                className="px-2.5 py-1.5 text-[10px] sm:px-5 sm:py-2.5 sm:text-xs bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+                className="inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
               >
                 {l.label}
-              </Button>
+              </button>
             ))}
           </div>
         </div>
