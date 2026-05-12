@@ -5,8 +5,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
  * Global Acuity booking modal. Open from anywhere by dispatching:
  *   window.dispatchEvent(new Event('open-booking'))
  */
-const BOOKING_URL =
-  'https://app.acuityscheduling.com/schedule.php?owner=37086470';
+const BOOKING_URL = 'https://klawsome.as.me/schedule/366e2b9b';
 
 export const openBookingModal = () => {
   window.dispatchEvent(new Event('open-booking'));
