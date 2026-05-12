@@ -1,4 +1,4 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
 
@@ -46,6 +46,22 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
   const titleColor = 'hsl(var(--klawsome-navy))';
   const links = jumpLinks ?? [];
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
+
+  useEffect(() => {
+    if (!sentinelRef.current || links.length === 0) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setStuck(!entry.isIntersecting && entry.boundingClientRect.top < 0),
+      { threshold: 0 }
+    );
+    obs.observe(sentinelRef.current);
+    return () => obs.disconnect();
+  }, [links.length]);
+
+  const linkBtnClass =
+    'inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]';
+
   return (
     <>
       <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
@@ -62,11 +78,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             {links.length > 0 && (
               <nav aria-label="Jump to section" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>
                 {links.map((l) => (
-                  <a
-                    key={l.id}
-                    href={`#${l.id}`}
-                    className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
-                  >
+                  <a key={l.id} href={`#${l.id}`} className={linkBtnClass}>
                     {l.label}
                   </a>
                 ))}
@@ -81,8 +93,31 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             )}
           </div>
         </div>
+        <div ref={sentinelRef} className="absolute bottom-0 left-0 h-px w-px" aria-hidden="true" />
       </section>
       <div aria-hidden className="h-px w-full bg-border" />
+      {links.length > 0 && (
+        <nav
+          aria-label="Jump to section (sticky)"
+          className={`fixed top-20 left-0 right-0 z-40 bg-klawsome-yellow shadow-md transition-all duration-300 ${
+            stuck ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0 pointer-events-none'
+          }`}
+        >
+          <div className="ds-container section-x py-2">
+            <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
+              {links.map((l) => (
+                <a
+                  key={l.id}
+                  href={`#${l.id}`}
+                  className="inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-navy)/0.4)]"
+                >
+                  {l.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </nav>
+      )}
     </>
   );
 };
