@@ -41,23 +41,6 @@ const KawaiiVisit = () => {
               Klawsome sits at {address}. Open Tuesday through Sunday, {hoursText}, closed Mondays.
             </p>
 
-            <div className="grid grid-cols-2 gap-8 mb-10">
-              <div className="flex items-start gap-3">
-                <MapPin className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <h3 className="font-heading font-bold text-foreground text-sm mb-1">Easy access</h3>
-                  <p className="text-muted-foreground text-sm font-body leading-relaxed">Right in Novi's center, simple to find.</p>
-                </div>
-              </div>
-              <div className="flex items-start gap-3">
-                <Clock className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                <div>
-                  <h3 className="font-heading font-bold text-foreground text-sm mb-1">Hours matter</h3>
-                  <p className="text-muted-foreground text-sm font-body leading-relaxed">Tue–Sun, {hoursText}.</p>
-                </div>
-              </div>
-            </div>
-
             <div className="flex gap-4">
               <Button asChild className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
                 <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Directions</a>
