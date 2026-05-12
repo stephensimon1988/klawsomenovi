@@ -107,6 +107,16 @@ export default {
           "0%, 100%": { opacity: "1", transform: "scale(1)" },
           "50%": { opacity: "0.5", transform: "scale(0.8)" },
         },
+        "glow-pulse": {
+          "0%, 100%": {
+            boxShadow: "0 0 0 0 rgba(255,255,255,0.7), 0 0 20px 4px rgba(255,255,255,0.4)",
+            transform: "scale(1)",
+          },
+          "50%": {
+            boxShadow: "0 0 0 14px rgba(255,255,255,0), 0 0 40px 10px rgba(255,255,255,0.6)",
+            transform: "scale(1.02)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -114,6 +124,7 @@ export default {
         float: "float 3s ease-in-out infinite",
         wiggle: "wiggle 2s ease-in-out infinite",
         sparkle: "sparkle 2s ease-in-out infinite",
+        "glow-pulse": "glow-pulse 2s ease-in-out infinite",
       },
     },
   },

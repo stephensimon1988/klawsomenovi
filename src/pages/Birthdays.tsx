@@ -182,11 +182,17 @@ const Birthdays = () => {
             ))}
           </div>
 
-          <div className="text-center mt-10">
-            <p className="text-white/70 font-body text-sm mb-4">Photography Rental also available — 1 hour @ $49</p>
-            <Button onClick={openBookingModal} size="lg" className="rounded-full px-8 py-6 text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-              Book Your Event
-            </Button>
+          <div className="mt-6 grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+            <div />
+            <div className="col-span-2 flex justify-end">
+              <Button
+                onClick={openBookingModal}
+                size="lg"
+                className="w-full rounded-full py-6 text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse"
+              >
+                Book Your Event
+              </Button>
+            </div>
           </div>
         </div>
       </section>
