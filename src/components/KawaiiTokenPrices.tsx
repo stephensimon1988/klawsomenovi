@@ -29,33 +29,43 @@ const KawaiiTokenPrices = () => {
           </h2>
         </div>
 
-        <div ref={tableRef} className="w-full max-w-4xl mx-auto">
-          <div
-            className="grid grid-cols-3 text-center font-heading font-bold text-white text-3xl md:text-4xl pb-6 border-b border-white/20"
-            style={{ opacity: 0 }}
-          >
-            <span>Price</span>
-            <span>Tokens</span>
-            <span>Bonus</span>
+        <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-center max-w-6xl mx-auto">
+          <div className="md:col-span-5">
+            <img
+              src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.png"
+              alt="Klawsome characters with tokens"
+              loading="lazy"
+              className="w-full h-auto"
+            />
           </div>
-          {tiers.map((tier: any) => (
+          <div ref={tableRef} className="md:col-span-7 w-full">
             <div
-              key={tier.price}
-              className={`grid grid-cols-3 text-center items-center py-6 font-heading font-bold text-2xl md:text-3xl ${
-                tier.is_highlight
-                  ? 'bg-klawsome-yellow/15 border border-klawsome-yellow/30 rounded-2xl text-klawsome-yellow my-2'
-                  : 'text-white'
-              }`}
+              className="grid grid-cols-3 text-center font-heading font-bold text-white text-2xl md:text-3xl pb-6 border-b border-white/20"
               style={{ opacity: 0 }}
             >
-              <span>{tier.price}</span>
-              <span>{tier.tokens}</span>
-              <span>{tier.bonus}</span>
+              <span>Price</span>
+              <span>Tokens</span>
+              <span>Bonus</span>
             </div>
-          ))}
-          {tiers.some((t: any) => t.is_highlight) && (
-            <p className="text-klawsome-yellow/70 text-sm font-body text-center mt-6">⭐ Top Pick — Best value!</p>
-          )}
+            {tiers.map((tier: any) => (
+              <div
+                key={tier.price}
+                className={`grid grid-cols-3 text-center items-center py-5 font-heading font-bold text-xl md:text-2xl ${
+                  tier.is_highlight
+                    ? 'bg-klawsome-yellow/15 border border-klawsome-yellow/30 rounded-2xl text-klawsome-yellow my-2'
+                    : 'text-white'
+                }`}
+                style={{ opacity: 0 }}
+              >
+                <span>{tier.price}</span>
+                <span>{tier.tokens}</span>
+                <span>{tier.bonus}</span>
+              </div>
+            ))}
+            {tiers.some((t: any) => t.is_highlight) && (
+              <p className="text-klawsome-yellow/70 text-sm font-body text-center mt-6">⭐ Top Pick — Best value!</p>
+            )}
+          </div>
         </div>
       </div>
     </section>

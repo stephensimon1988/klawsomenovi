@@ -1,0 +1,1 @@
+UPDATE public.token_tiers SET is_highlight = (price = '$100');
