@@ -4,6 +4,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
+import { openBookingModal } from './BookNowDialog';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -86,7 +87,7 @@ const KawaiiHero = () => {
             </Button>
             <Button
               size="lg"
-              onClick={() => document.getElementById('scheduling')?.scrollIntoView({ behavior: 'smooth' })}
+              onClick={openBookingModal}
               className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20 uppercase"
             >
               Reserve

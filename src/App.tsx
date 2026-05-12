@@ -23,6 +23,7 @@ import Contact from "./pages/Contact.tsx";
 import FloatingContactWidget from "./components/FloatingContactWidget";
 import BackToTop from "./components/BackToTop";
 import ScrollToTop from "./components/ScrollToTop";
+import BookNowDialog from "./components/BookNowDialog";
 
 const queryClient = new QueryClient();
 
@@ -55,6 +56,7 @@ const App = () => (
         </Routes>
         <FloatingContactWidget />
         <BackToTop />
+        <BookNowDialog />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>

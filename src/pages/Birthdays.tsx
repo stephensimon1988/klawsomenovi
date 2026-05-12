@@ -6,6 +6,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
+import { openBookingModal } from '@/components/BookNowDialog';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
@@ -70,11 +71,11 @@ const Birthdays = () => {
       <section className="py-20 px-6 lg:px-12 bg-klawsome-navy">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="rounded-kawaii overflow-hidden bg-white/5 border border-white/10">
+            <div className="rounded-kawaii overflow-hidden">
               <img
                 src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.png"
                 alt="Kawaii characters celebrating a birthday party"
-                className="w-full aspect-square object-contain p-6"
+                className="w-full aspect-square object-contain"
                 loading="lazy"
               />
             </div>
@@ -94,8 +95,8 @@ const Birthdays = () => {
               </p>
 
               <div className="flex gap-4 flex-wrap">
-                <Button asChild className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-white text-klawsome-navy hover:bg-white/90 uppercase">
-                  <a href={`mailto:${bookingEmail}`}>Book Now</a>
+                <Button onClick={openBookingModal} className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-white text-klawsome-navy hover:bg-white/90 uppercase">
+                  Book Now
                 </Button>
                 <Button asChild variant="outline" className="rounded-full px-8 font-heading font-bold text-xs tracking-wider border-white/30 bg-transparent text-white hover:bg-white/10 uppercase">
                   <a href="#party-options">See Options</a>
@@ -137,8 +138,8 @@ const Birthdays = () => {
 
           <div className="text-center mt-10">
             <p className="text-white/70 font-body text-sm mb-4">Photography Rental also available — 1 hour @ $49</p>
-            <Button asChild size="lg" className="rounded-full px-8 py-6 text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-              <a href={`mailto:${bookingEmail}`}>Book Your Event</a>
+            <Button onClick={openBookingModal} size="lg" className="rounded-full px-8 py-6 text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+              Book Your Event
             </Button>
           </div>
         </div>
