@@ -78,10 +78,15 @@ const Birthdays = () => {
         title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}
+        jumpLinks={[
+          { label: 'Party Rules', id: 'party-rules' },
+          { label: 'Packages', id: 'party-options' },
+          ...(faqItems.length > 0 ? [{ label: 'FAQ', id: 'birthday-faq' }] : []),
+        ]}
       />
 
       {/* Party Rules */}
-      <section className="py-20 px-6 lg:px-12 bg-klawsome-navy">
+      <section id="party-rules" className="py-20 px-6 lg:px-12 bg-klawsome-navy">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="rounded-kawaii overflow-hidden">
