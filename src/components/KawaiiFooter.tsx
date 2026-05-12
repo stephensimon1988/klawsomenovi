@@ -18,7 +18,7 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
 
   const email = settings?.email || 'team@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
-  const address = settings?.address || '42768 Grand River Ave, Suite C-140, Novi, MI 48375';
+  const address = settings?.address || '42768 Grand River Ave Suite C-140, Novi, MI 48375';
   const instagram = settings?.instagram_url || 'https://www.instagram.com/klawsomenovi/';
   const facebook = settings?.facebook_url || 'https://www.facebook.com/klawsomenovi';
   const tiktok = settings?.tiktok_url || 'https://www.tiktok.com/@klawsomenovi';
