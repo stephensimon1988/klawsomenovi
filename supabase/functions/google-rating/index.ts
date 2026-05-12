@@ -10,9 +10,13 @@ serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
 
+  // Cache for 6 hours at the CDN/browser layer so the rating refreshes ~4x/day
+  const CACHE_HEADER = "public, max-age=21600, s-maxage=21600";
+
   try {
     const apiKey = Deno.env.get("GOOGLE_MAPS_API_KEY");
     if (!apiKey) {
+      console.warn("GOOGLE_MAPS_API_KEY not set, returning fallback");
       return new Response(
         JSON.stringify({ rating: 4.9, reviewCount: null, source: "fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -30,13 +34,14 @@ serve(async (req) => {
           "X-Goog-FieldMask": "places.rating,places.userRatingCount",
         },
         body: JSON.stringify({
-          textQuery: "Klawsome 42768 Grand River Ave Novi MI",
+          textQuery: "Klawsome! Novi Michigan",
         }),
       }
     );
 
     if (!searchRes.ok) {
-      console.error("Google Places API error:", await searchRes.text());
+      const errText = await searchRes.text();
+      console.error("Google Places API error:", searchRes.status, errText);
       return new Response(
         JSON.stringify({ rating: 4.9, reviewCount: null, source: "fallback" }),
         { headers: { ...corsHeaders, "Content-Type": "application/json" } }
@@ -44,6 +49,7 @@ serve(async (req) => {
     }
 
     const data = await searchRes.json();
+    console.log("Places API response:", JSON.stringify(data));
     const place = data.places?.[0];
 
     return new Response(
@@ -56,7 +62,7 @@ serve(async (req) => {
         headers: {
           ...corsHeaders,
           "Content-Type": "application/json",
-          "Cache-Control": "public, max-age=86400",
+          "Cache-Control": CACHE_HEADER,
         },
       }
     );
