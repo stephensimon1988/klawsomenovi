@@ -290,7 +290,7 @@ const Birthdays = () => {
       )}
 
       {/* Invite Templates */}
-      <KawaiiFooter prevColor={faqItems.length > 0 ? 'navy' : 'red'} />
+      <KawaiiFooter prevColor={faqItems.length > 0 ? 'navy' : 'baby-pink'} />
     </div>
   );
 };
