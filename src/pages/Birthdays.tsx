@@ -148,16 +148,16 @@ const Birthdays = () => {
             Compare our two birthday party options and pick the one that's right for your celebration.
           </p>
 
-          <div className="rounded-kawaii overflow-hidden border border-white/20 bg-white/5 backdrop-blur-sm">
+          <div className="rounded-kawaii overflow-hidden border border-white/20 bg-klawsome-navy/40 backdrop-blur-sm">
             {/* Header */}
-            <div className="grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
-              <div className="p-4 md:p-6" />
-              <div className="p-4 md:p-6 text-center bg-primary border-l border-white/20">
-                <p className="font-heading font-bold text-white text-lg md:text-2xl uppercase">Private</p>
+            <div className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+              <div className="p-3 md:p-6" />
+              <div className="p-3 md:p-6 text-center bg-primary border-l border-white/20">
+                <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Private</p>
                 <p className="text-white/80 font-body text-xs mt-1">{privateOpt?.price || '$250'}</p>
               </div>
-              <div className="p-4 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
-                <p className="font-heading font-bold text-klawsome-navy text-lg md:text-2xl uppercase">Semi-Private</p>
+              <div className="p-3 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
+                <p className="font-heading font-bold text-klawsome-navy text-base md:text-2xl uppercase leading-tight">Semi-Private</p>
                 <p className="text-klawsome-navy/80 font-body text-xs mt-1">{semiOpt?.price || '$250'}</p>
               </div>
             </div>
@@ -166,29 +166,29 @@ const Birthdays = () => {
             {comparisonRows.map((row, i) => (
               <div
                 key={i}
-                className={`grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
+                className={`grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
               >
-                <div className="p-4 md:p-6">
-                  <p className="font-heading font-bold text-white text-sm md:text-base">{row.label}</p>
+                <div className="p-3 md:p-6">
+                  <p className="font-heading font-bold text-white text-xs md:text-base leading-tight">{row.label}</p>
                   {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
                 </div>
-                <div className="p-4 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
                   <Cell value={row.private} color="red" />
                 </div>
-                <div className="p-4 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
                   <Cell value={row.semi} color="yellow" />
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="mt-6 grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+          <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
             <div />
             <div className="col-span-2 flex justify-end">
               <Button
                 onClick={openBookingModal}
                 size="lg"
-                className="w-full rounded-full py-6 text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse"
+                className="w-full rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
               >
                 Book Your Event
               </Button>

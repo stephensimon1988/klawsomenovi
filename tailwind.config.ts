@@ -117,6 +117,14 @@ export default {
             transform: "scale(1.02)",
           },
         },
+        "glow-pulse-sm": {
+          "0%, 100%": {
+            boxShadow: "0 0 0 0 rgba(255,255,255,0.35), 0 0 8px 2px rgba(255,255,255,0.2)",
+          },
+          "50%": {
+            boxShadow: "0 0 0 6px rgba(255,255,255,0), 0 0 14px 4px rgba(255,255,255,0.3)",
+          },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -125,6 +133,7 @@ export default {
         wiggle: "wiggle 2s ease-in-out infinite",
         sparkle: "sparkle 2s ease-in-out infinite",
         "glow-pulse": "glow-pulse 2s ease-in-out infinite",
+        "glow-pulse-sm": "glow-pulse-sm 2.4s ease-in-out infinite",
       },
     },
   },
