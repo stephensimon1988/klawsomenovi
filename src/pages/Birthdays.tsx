@@ -88,7 +88,7 @@ const Birthdays = () => {
             {content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
           </h1>
           <div className="mt-8 flex justify-center pb-12">
-            <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
+            <Button asChild size="hero" className="bg-primary hover:bg-primary/90 text-white">
               <a href="/rewards">Join Today</a>
             </Button>
           </div>
@@ -122,11 +122,11 @@ const Birthdays = () => {
                 and expect a response within three business days.
               </p>
 
-              <div className="flex gap-4 flex-wrap">
-                <Button onClick={openBookingModal} className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-white text-klawsome-navy hover:bg-white/90 uppercase">
-                  Book Now
+              <div className="flex gap-3 flex-wrap">
+                <Button size="hero" onClick={openBookingModal} className="bg-white text-klawsome-navy hover:bg-white/90">
+                  Book a Birthday Party
                 </Button>
-                <Button asChild variant="outline" className="rounded-full px-8 font-heading font-bold text-xs tracking-wider border-white/30 bg-transparent text-white hover:bg-white/10 uppercase">
+                <Button asChild size="hero" variant="heroGhost">
                   <a href="#party-options">See Options</a>
                 </Button>
               </div>
