@@ -5,7 +5,7 @@ import DynamicSections from '@/components/DynamicSections';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-candy.png';
+const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.png';
 
 interface RentalPackage {
   id: string;
