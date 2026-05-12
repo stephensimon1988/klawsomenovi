@@ -48,6 +48,20 @@ const KawaiiHero = () => {
 
   const headlineParts = headline.split('\n');
 
+  const jumpLinks: { label: string; id: string }[] = [
+    { label: 'About', id: 'about' },
+    { label: 'Visit', id: 'visit' },
+    { label: 'Tokens', id: 'tokens' },
+    { label: 'Reviews', id: 'reviews' },
+    { label: 'News', id: 'news' },
+    { label: 'Gift Cards', id: 'giftcards' },
+    { label: 'Our Story', id: 'story' },
+    { label: 'Book', id: 'scheduling' },
+  ];
+
+  const scrollTo = (id: string) =>
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
   return (
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-end overflow-hidden">
       <div
@@ -77,21 +91,31 @@ const KawaiiHero = () => {
             {subheadline}
           </p>
 
-          <div className="flex flex-wrap items-center gap-4" style={{ opacity: 0 }}>
-            <Button
-              size="lg"
-              onClick={() => document.getElementById('tokens')?.scrollIntoView({ behavior: 'smooth' })}
-              className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
-            >
-              {ctaText}
-            </Button>
-            <Button
-              size="lg"
-              onClick={openBookingModal}
-              className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-white/10 backdrop-blur-sm text-white hover:bg-white/20 border border-white/20 uppercase"
-            >
-              Reserve
-            </Button>
+          <div className="space-y-5" style={{ opacity: 0 }}>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button
+                size="hero"
+                onClick={() => scrollTo('tokens')}
+                className="bg-primary hover:bg-primary/90 text-white"
+              >
+                {ctaText}
+              </Button>
+              <Button size="hero" variant="heroGhost" onClick={openBookingModal}>
+                Book Now
+              </Button>
+            </div>
+            <nav aria-label="Jump to section" className="flex flex-wrap gap-2">
+              {jumpLinks.map((l) => (
+                <Button
+                  key={l.id}
+                  size="heroSm"
+                  variant="heroGhost"
+                  onClick={() => scrollTo(l.id)}
+                >
+                  {l.label}
+                </Button>
+              ))}
+            </nav>
           </div>
         </div>
       </div>
