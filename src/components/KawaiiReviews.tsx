@@ -44,7 +44,7 @@ const KawaiiReviews = () => {
   return (
     <section id="reviews" className="section-y section-x bg-background">
       <div className="ds-container">
-        <div ref={headerRef} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center mb-16" style={{ opacity: 0 }}>
+        <div ref={headerRef} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center mb-16 max-w-6xl mx-auto" style={{ opacity: 0 }}>
           <div className="md:col-span-5">
             <img
               src={reviewsImage}
