@@ -5,7 +5,8 @@ import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import { useCmsSingle, useCmsTable, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
+import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
@@ -30,6 +31,7 @@ const Birthdays = () => {
   const { data: partyOptions } = useCmsTable<PartyOption>('party_options');
   const { data: allFaqs } = useCmsTable<FaqItem>('faq_items');
   const { data: templates } = useCmsTable<InviteTemplate>('invite_templates');
+  const { data: hero } = usePageHero('birthdays');
 
   const faqItems = allFaqs?.filter(f => f.page === 'birthdays') || [];
   const bookingEmail = content?.booking_email || 'events@klawsomenovi.com';
@@ -71,29 +73,34 @@ const Birthdays = () => {
     <div className="min-h-screen bg-klawsome-navy">
       <KawaiiNav />
 
-      {/* Hero */}
-      <section className="relative min-h-[50vh] flex items-center justify-center overflow-hidden pt-16">
-        <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}')` }}
-        />
-        <div className="absolute inset-0 bg-white/55" />
-        <div className="relative z-10 text-center px-4">
-          <img
-            src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0aa66e68-edcd-41bb-a162-6c4d5453b16e/klawsomebirthday.png"
-            alt="Klawsome Birthday"
-            className="w-64 md:w-80 mx-auto mb-6"
-          />
-          <h1 className="text-4xl md:text-6xl font-heading font-bold" style={{ color: 'hsl(var(--klawsome-navy))' }}>
-            {content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
-          </h1>
-          <div className="mt-8 flex justify-center pb-12">
-            <Button asChild size="hero" className="bg-primary hover:bg-primary/90 text-white">
-              <a href="/rewards">Join Today</a>
+      <PageHero
+        eyebrow={hero?.eyebrow || 'Birthdays'}
+        title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
+        subtitle={hero?.subtitle}
+        imageUrl={hero?.image_url || content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}
+      >
+        <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full mb-6">
+          {[
+            { label: 'About', id: 'about' },
+            { label: 'Visit', id: 'visit' },
+            { label: 'Tokens', id: 'tokens' },
+            { label: 'Reviews', id: 'reviews' },
+            { label: 'News', id: 'news' },
+            { label: 'Gift Cards', id: 'giftcards' },
+            { label: 'Our Story', id: 'story' },
+            { label: 'Book', id: 'scheduling' },
+          ].map((l) => (
+            <Button
+              key={l.id}
+              asChild
+              size="heroSm"
+              className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+            >
+              <a href={`/#${l.id}`}>{l.label}</a>
             </Button>
-          </div>
-        </div>
-      </section>
+          ))}
+        </nav>
+      </PageHero>
 
       {/* Party Rules */}
       <section className="py-20 px-6 lg:px-12 bg-klawsome-navy">
