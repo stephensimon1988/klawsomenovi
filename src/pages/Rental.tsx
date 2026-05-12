@@ -45,11 +45,17 @@ const Rental = () => {
         title={hero?.title || 'Make Your Event Unforgettable'}
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || ''}
+        jumpLinks={[
+          ...(packages && packages.length > 0 ? [{ label: 'Packages', id: 'packages' }] : []),
+          ...(rentalFaqs.length > 0 ? [{ label: 'FAQ', id: 'rental-faq' }] : []),
+          ...(eventPhotos.length > 0 ? [{ label: 'Gallery', id: 'event-gallery' }] : []),
+          { label: 'Waiver', id: 'waiver' },
+        ]}
       />
 
       {packages && packages.length > 0 && (
         <>
-        <section className="section-y section-x bg-secondary/50">
+        <section id="packages" className="section-y section-x bg-secondary/50">
           <div className="ds-container">
             <div className="max-w-2xl mb-16">
               <p className="ds-eyebrow">Choose Your Package</p>
@@ -136,7 +142,7 @@ const Rental = () => {
       {rentalFaqs.length > 0 && (
         <>
         <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
-        <section className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
+        <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
               <div>
@@ -180,7 +186,7 @@ const Rental = () => {
       {eventPhotos.length > 0 && (
         <>
           <KawaiiDivider variant="scallop" from={rentalFaqs.length > 0 ? 'baby-blue' : 'secondary-soft'} to="baby-pink" stroke="white" height={90} />
-          <section className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
+          <section id="event-gallery" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
             <div className="ds-container">
               <div className="max-w-2xl mb-12">
                 <p className="ds-eyebrow">Real Events</p>
@@ -215,7 +221,7 @@ const Rental = () => {
       )}
 
       <KawaiiDivider variant="scallop" from="baby-pink" to="white" stroke="baby-blue" height={90} />
-      <section className="section-y section-x">
+      <section id="waiver" className="section-y section-x">
         <div className="ds-container max-w-3xl text-center">
           <p className="ds-eyebrow">Required Paperwork</p>
           <h2 className="ds-h2 mb-4">Liability Release Waiver</h2>
