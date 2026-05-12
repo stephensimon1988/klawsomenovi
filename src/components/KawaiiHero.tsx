@@ -119,8 +119,8 @@ const KawaiiHero = () => {
       <div ref={sentinelRef} className="absolute bottom-0 left-0 h-px w-px" aria-hidden="true" />
       <nav
         aria-label="Jump to section (sticky)"
-        className={`fixed top-0 left-0 right-0 z-40 bg-klawsome-yellow shadow-md transition-transform duration-300 ${
-          stuck ? 'translate-y-0' : '-translate-y-full'
+        className={`fixed top-20 left-0 right-0 z-40 bg-klawsome-yellow shadow-md transition-all duration-300 ${
+          stuck ? 'translate-y-0 opacity-100' : '-translate-y-4 opacity-0 pointer-events-none'
         }`}
       >
         <div className="ds-container section-x py-2">
