@@ -46,12 +46,6 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
   const titleColor = 'hsl(var(--klawsome-navy))';
   const links = jumpLinks ?? [];
-  const colsClass =
-    links.length >= 6 ? 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-8'
-    : links.length === 5 ? 'grid-cols-2 sm:grid-cols-5'
-    : links.length === 4 ? 'grid-cols-2 sm:grid-cols-4'
-    : links.length === 3 ? 'grid-cols-3'
-    : 'grid-cols-2';
   return (
     <>
       <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
@@ -66,16 +60,15 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
             {links.length > 0 && (
-              <nav aria-label="Jump to section" className={`grid ${colsClass} gap-2 w-full mb-6 ${align === 'center' ? 'mx-auto' : ''}`}>
+              <nav aria-label="Jump to section" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>
                 {links.map((l) => (
-                  <Button
+                  <a
                     key={l.id}
-                    asChild
-                    size="heroSm"
-                    className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+                    href={`#${l.id}`}
+                    className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
-                    <a href={`#${l.id}`}>{l.label}</a>
-                  </Button>
+                    {l.label}
+                  </a>
                 ))}
               </nav>
             )}
