@@ -45,7 +45,7 @@ const KawaiiReviews = () => {
     <section id="reviews" className="section-y section-x bg-background">
       <div className="ds-container">
         <div ref={headerRef} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center mb-16 max-w-6xl mx-auto" style={{ opacity: 0 }}>
-          <div className="md:col-span-5">
+          <div className="md:col-span-6">
             <img
               src={reviewsImage}
               alt="Happy Klawsome guests holding plush prizes"
@@ -55,7 +55,7 @@ const KawaiiReviews = () => {
               className="ds-img-hero"
             />
           </div>
-          <div className="md:col-span-7">
+          <div className="md:col-span-6">
             <p className="ds-eyebrow">Testimonials</p>
             <h2 className="ds-h2 mb-4">Guests love us</h2>
             <div className="flex items-center gap-2 mb-2">
