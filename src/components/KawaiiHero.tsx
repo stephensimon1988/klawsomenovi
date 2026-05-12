@@ -100,17 +100,14 @@ const KawaiiHero = () => {
               >
                 {ctaText}
               </Button>
-              <Button size="hero" variant="heroGhost" onClick={openBookingModal}>
-                Book Now
-              </Button>
             </div>
-            <nav aria-label="Jump to section" className="flex flex-wrap gap-2">
+            <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
               {jumpLinks.map((l) => (
                 <Button
                   key={l.id}
                   size="heroSm"
-                  variant="heroGhost"
                   onClick={() => scrollTo(l.id)}
+                  className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
                 >
                   {l.label}
                 </Button>
