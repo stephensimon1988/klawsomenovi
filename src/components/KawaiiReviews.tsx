@@ -55,7 +55,7 @@ const KawaiiReviews = () => {
               className="ds-img-hero"
             />
           </div>
-          <div className="md:col-span-7">
+          <div className="md:col-span-6">
             <p className="ds-eyebrow">Testimonials</p>
             <h2 className="ds-h2 mb-4">Guests love us</h2>
             <div className="flex items-center gap-2 mb-2">
