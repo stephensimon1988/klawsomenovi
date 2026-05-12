@@ -157,6 +157,16 @@ const KawaiiDivider = ({
       className={cn('w-full overflow-hidden leading-[0] -mb-[2px]', className)}
       style={{ backgroundColor: fromColor }}
     >
+      <div
+        className="block"
+        style={{
+          width: '110vw',
+          marginLeft: '-5vw',
+          transform: 'translate3d(var(--divider-x, 0px), 0, 0)',
+          willChange: 'transform',
+          transition: 'transform 200ms ease-out',
+        }}
+      >
       <svg
         viewBox="0 0 1920 200"
         preserveAspectRatio="none"
@@ -179,6 +189,7 @@ const KawaiiDivider = ({
           />
         )}
       </svg>
+      </div>
     </div>
   );
 };
