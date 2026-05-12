@@ -73,7 +73,7 @@ const KawaiiHero = () => {
           bottom: '-60px',
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
+      <div className="absolute inset-0 bg-white/55" />
 
       <LottieAccent type="sparkle" className="absolute top-24 right-12 opacity-30 z-10" size={80} />
 
@@ -92,15 +92,6 @@ const KawaiiHero = () => {
           </p>
 
           <div className="space-y-5" style={{ opacity: 0 }}>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button
-                size="hero"
-                onClick={() => scrollTo('tokens')}
-                className="bg-primary hover:bg-primary/90 text-white"
-              >
-                {ctaText}
-              </Button>
-            </div>
             <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
               {jumpLinks.map((l) => (
                 <Button

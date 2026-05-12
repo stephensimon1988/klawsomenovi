@@ -77,7 +77,7 @@ const Birthdays = () => {
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
+        <div className="absolute inset-0 bg-white/55" />
         <div className="relative z-10 text-center px-4">
           <img
             src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0aa66e68-edcd-41bb-a162-6c4d5453b16e/klawsomebirthday.png"
