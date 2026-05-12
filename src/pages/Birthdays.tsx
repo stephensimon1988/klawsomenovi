@@ -81,6 +81,7 @@ const Birthdays = () => {
         jumpLinks={[
           { label: 'Party Rules', id: 'party-rules' },
           { label: 'Packages', id: 'party-options' },
+          { label: 'Add-Ons', id: 'add-ons' },
           ...(faqItems.length > 0 ? [{ label: 'FAQ', id: 'birthday-faq' }] : []),
         ]}
       />
@@ -190,7 +191,7 @@ const Birthdays = () => {
       {/* FAQ */}
       {faqItems.length > 0 && (
         <>
-        <KawaiiDivider variant="cloud" from="red" to="navy" stroke="baby-pink" height={90} />
+        <KawaiiDivider variant="cloud" from="baby-pink" to="navy" stroke="white" height={90} />
         <section id="birthday-faq" className="py-20 px-4 bg-klawsome-navy">
           <div className="container mx-auto max-w-3xl">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-10 text-center">Frequently Asked Questions</h2>
