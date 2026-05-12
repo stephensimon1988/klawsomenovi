@@ -67,20 +67,41 @@ const Birthdays = () => {
       </section>
 
       {/* Party Rules */}
-      <section className="py-20 px-4 bg-klawsome-navy">
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-8 text-center">Party Rules</h2>
+      <section className="py-20 px-6 lg:px-12 bg-klawsome-navy">
+        <div className="container mx-auto max-w-6xl">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+            <div className="rounded-kawaii overflow-hidden bg-white/5 border border-white/10">
+              <img
+                src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.png"
+                alt="Kawaii characters celebrating a birthday party"
+                className="w-full aspect-square object-contain p-6"
+                loading="lazy"
+              />
+            </div>
 
-          <div className="bg-white/10 backdrop-blur-sm rounded-kawaii p-8 border border-white/20 mb-12">
-            <h3 className="font-heading font-bold text-xl text-white mb-4">Looking to Host a Birthday Party?</h3>
-            <p className="text-white/70 font-body leading-relaxed mb-4">
-              {content?.rules_text || 'Please notify Klawsome two weeks in advance for parties.'}
-            </p>
-            <p className="text-white/70 font-body text-sm mt-4">
-              For more information and BEFORE booking your event, please contact{' '}
-              <a href={`mailto:${bookingEmail}`} className="text-primary hover:underline">{bookingEmail}</a>{' '}
-              and expect a response within three business days.
-            </p>
+            <div>
+              <p className="ds-eyebrow text-primary mb-3">Party Rules</p>
+              <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-6">
+                Looking to Host a Birthday Party?
+              </h2>
+              <p className="text-white/80 font-body leading-relaxed mb-6 text-lg">
+                {content?.rules_text || 'Please notify Klawsome two weeks in advance for parties.'}
+              </p>
+              <p className="text-white/70 font-body text-sm mb-10">
+                For more information and BEFORE booking your event, please contact{' '}
+                <a href={`mailto:${bookingEmail}`} className="text-primary hover:underline">{bookingEmail}</a>{' '}
+                and expect a response within three business days.
+              </p>
+
+              <div className="flex gap-4 flex-wrap">
+                <Button asChild className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-white text-klawsome-navy hover:bg-white/90 uppercase">
+                  <a href={`mailto:${bookingEmail}`}>Book Now</a>
+                </Button>
+                <Button asChild variant="outline" className="rounded-full px-8 font-heading font-bold text-xs tracking-wider border-white/30 bg-transparent text-white hover:bg-white/10 uppercase">
+                  <a href="#party-options">See Options</a>
+                </Button>
+              </div>
+            </div>
           </div>
         </div>
       </section>
