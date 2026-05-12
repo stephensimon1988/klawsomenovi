@@ -2,6 +2,8 @@ import { Button } from './ui/button';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type GiftCardsContent, type GiftCardImage } from '@/hooks/useCmsContent';
+import giftcardBirthday from '@/assets/giftcard-birthday.png';
+import giftcardPink from '@/assets/giftcard-pink.png';
 
 const KawaiiGiftCards = () => {
   const textRef = useGsapScroll<HTMLDivElement>({ type: 'slideLeft', distance: 80, duration: 1 });
@@ -10,8 +12,8 @@ const KawaiiGiftCards = () => {
   const { data: images } = useCmsTable<GiftCardImage>('gift_card_images');
 
   const displayImages = (images && images.length > 0) ? images : [
-    { id: '1', image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/53ec5cfa-3e70-4278-95c0-3ab584efdb9a/CVday+gift+cards.png', alt_text: "Valentine's Day Klawsome gift card", sort_order: 1 },
-    { id: '2', image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/96257c57-bcd1-43d5-afcd-5d19b8c5e106/easter+card.jpg', alt_text: 'Easter Klawsome gift card', sort_order: 2 },
+    { id: '1', image_url: giftcardBirthday, alt_text: 'Happy Birthday Klawsome gift card', sort_order: 1 },
+    { id: '2', image_url: giftcardPink, alt_text: 'Klawsome pink gift card', sort_order: 2 },
   ];
 
   return (
@@ -25,10 +27,7 @@ const KawaiiGiftCards = () => {
             <h2 className="ds-h2 mb-6">
               {content?.headline || 'Give the gift of Klawsome'}
             </h2>
-            <p className="ds-lead mb-4">
-              {content?.body_1 || "Want to make someone's day more special? Klawsome's got you."}
-            </p>
-            <p className="ds-body mb-10">
+            <p className="ds-lead mb-10">
               {content?.body_2 || 'Choose from one of many designs.'}
             </p>
             <Button
