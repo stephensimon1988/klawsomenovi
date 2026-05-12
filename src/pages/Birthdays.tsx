@@ -56,9 +56,9 @@ const Birthdays = () => {
             className="w-64 md:w-80 mx-auto mb-6"
           />
           <h1 className="text-4xl md:text-6xl font-heading font-bold" style={{ color: 'hsl(var(--klawsome-navy))' }}>
-            {content?.hero_headline || 'Celebrate your birthday with'} <span className="kawaii-text-gradient">Klawsome!</span>
+            {content?.hero_headline || 'Celebrate your birthday with'} Klawsome!
           </h1>
-          <div className="mt-8 flex justify-center">
+          <div className="mt-8 flex justify-center pb-12">
             <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
               <a href="/rewards">Join Today</a>
             </Button>
