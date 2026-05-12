@@ -1,61 +1,36 @@
 ## Goal
 
-1. Standardize the pill-shaped CTA buttons used in headers/heroes (like "Book a Birthday Party" / "Reserve") into a single reusable size so padding is consistent everywhere.
-2. On the homepage hero, replace the lone "Reserve" button with a row of buttons — one per page section — that smooth-scrolls to that section.
+Animate `KawaiiDivider` so each divider is wider than the viewport and slides horizontally based on the user's mouse X position — a subtle parallax that feels alive but never causes a horizontal scrollbar.
 
-## Part 1 — Shared header button size
+## Behavior
 
-Right now each hero/header re-declares `rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider uppercase` inline. We'll move that into the existing `Button` component as a new size variant.
+- Each divider's inner SVG renders at **110vw** width, centered (so there's ~5vw of bleed on each side).
+- The divider container clips overflow (`overflow-hidden`) so the extra width never affects page scroll.
+- As the mouse moves across the page horizontally, the inner SVG translates left/right within its ~10vw of slack:
+  - Mouse at far left → SVG shifted ~+5vw (showing left bleed pulled in)
+  - Mouse at far right → SVG shifted ~-5vw
+  - Mouse centered → SVG centered
+- Movement is smoothed (eased / lerped) so it feels gentle, not twitchy.
+- Respects `prefers-reduced-motion`: stays centered, no tracking.
+- On touch / no-pointer devices: stays centered (no listener attached).
 
-**Implementation**
-- In `src/components/ui/button.tsx`, add a new size to `buttonVariants`:
-  - `hero: "h-auto rounded-full px-8 py-3.5 text-sm font-heading font-bold tracking-wider uppercase"`
-  - Padding values tuned to match the screenshot (equal-feel top/bottom and left/right, pill shape).
-- Optionally add two visual variants reused in headers:
-  - `variant: "heroSolid"` → solid primary pink
-  - `variant: "heroGhost"` → translucent white glass (`bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20`)
-- Refactor existing call sites to use `<Button size="hero" variant="heroSolid">…`:
-  - `KawaiiHero.tsx` (Play / Reserve)
-  - `Birthdays.tsx` hero ("Book a Birthday Party" / "Reserve")
-  - Any other page hero pair (Rental, Careers, etc.) using the same pattern
+## Implementation
 
-Result: one place controls header-button sizing across the whole site.
+1. **`KawaiiDivider.tsx`**
+   - Wrap the `<svg>` in an inner element styled `width: 110vw; margin-left: -5vw;` (or `left: -5vw; position: relative`). Outer wrapper keeps `w-full overflow-hidden`.
+   - Apply a CSS variable for the horizontal offset, e.g. `transform: translate3d(var(--divider-x, 0px), 0, 0)` on the inner element, with a short `transition` for smoothing.
 
-## Part 2 — Homepage hero "jump buttons"
+2. **Global mouse tracker** (single listener, not per-divider)
+   - Add a small hook `useDividerParallax` mounted once (e.g. in `App.tsx` or a tiny `<DividerParallax />` component rendered inside `App`).
+   - On `pointermove`, compute normalized X: `nx = (clientX / innerWidth) * 2 - 1` (range -1..1).
+   - Use `requestAnimationFrame` + lerp toward target for smoothing.
+   - Write the value to `document.documentElement.style.setProperty('--divider-x', `${nx * -vwPx * 0.05}px`)` (≈5vw max shift, inverted so movement feels "natural" — image follows cursor rather than runs away; we'll pick the direction that feels best during build).
+   - Skip when `matchMedia('(prefers-reduced-motion: reduce)').matches` or `matchMedia('(pointer: coarse)').matches`.
 
-Replace the single "Reserve" button in `KawaiiHero` with a row of buttons that scroll to each top-level section on `/`. Keep the primary "Play" CTA as-is on the left.
-
-**Sections to expose** (matching `Index.tsx` order):
-About · Visit · Tokens · Reviews · News · Gift Cards · Story · Book
-
-Each section already has (or will get) a stable `id` so `scrollIntoView` works. We'll audit and add missing IDs (`about`, `visit`, `reviews`, `news`, `gift-cards`, `story`) on the corresponding components.
-
-**Layout**
-- Primary "Play" button stays prominent (solid pink).
-- A horizontal, wrap-friendly row of ghost pill buttons (the new `heroGhost` variant) sits beside/under it.
-- On mobile they wrap to two rows; on desktop one line.
-
-### What to call them
-
-A few options — pick one and I'll use it everywhere (component name, aria-label, internal docs):
-
-- **Jump Links** — clearest, common UI term for in-page anchors
-- **Quick Links** — friendly, marketing-y
-- **Section Pills** — describes the shape
-- **Explore Buttons / "Explore the Arcade"** — on-brand kawaii framing
-- **Hero Chips** — if we want to lean shape-first
-
-My recommendation: **Jump Links**, presented under a small "Explore" eyebrow label above the row.
-
-## Files touched
-
-- `src/components/ui/button.tsx` — new `hero` size + optional `heroSolid` / `heroGhost` variants
-- `src/components/KawaiiHero.tsx` — swap Reserve for jump-link row; use new size
-- `src/pages/Birthdays.tsx` — adopt new size on the two hero buttons
-- Section components missing IDs (`KawaiiAbout`, `KawaiiVisit`, `KawaiiReviews`, `KawaiiNews`, `KawaiiGiftCards`, `KawaiiStory`) — add `id="…"` to their root `<section>`
-- (Optional) other page heroes that share the pill pattern, swept to use `size="hero"`
+3. **No per-page changes required.** All existing `<KawaiiDivider />` usages benefit automatically.
 
 ## Out of scope
 
-- No changes to nav bar `BOOK NOW` button styling unless you also want it unified (happy to include).
-- No new data, no CMS changes — section labels are static for now.
+- No changes to divider shapes, colors, heights, or section backgrounds.
+- No vertical parallax, no scroll-based animation (mouse-driven only, per request).
+- No changes to non-divider elements.

@@ -24,6 +24,7 @@ import FloatingContactWidget from "./components/FloatingContactWidget";
 import BackToTop from "./components/BackToTop";
 import ScrollToTop from "./components/ScrollToTop";
 import BookNowDialog from "./components/BookNowDialog";
+import DividerParallax from "./components/DividerParallax";
 
 const queryClient = new QueryClient();
 
@@ -34,6 +35,7 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <ScrollToTop />
+        <DividerParallax />
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/business" element={<Business />} />
