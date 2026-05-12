@@ -70,7 +70,34 @@ const KawaiiReviews = () => {
         </div>
 
         <div ref={carouselRef} className="relative max-w-6xl mx-auto" style={{ opacity: 0 }}>
-          <div className="overflow-hidden px-2 py-4">
+          {/* Mobile: stacked, first 3 reviews only */}
+          <div className="md:hidden flex flex-col gap-4 px-2 py-4">
+            {reviews.slice(0, 3).map((review, index) => (
+              <div
+                key={index}
+                className="w-full bg-background border border-border rounded-2xl px-6 py-6 flex flex-col glow-hover glow-pink"
+              >
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 text-accent fill-accent" />
+                  ))}
+                </div>
+                <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                    <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
+                  </div>
+                  <div>
+                    <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
+                    <p className="text-muted-foreground text-xs font-body">{review.role}</p>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* Desktop: carousel */}
+          <div className="hidden md:block overflow-hidden px-2 py-4">
             <div
               className="flex gap-6 transition-transform duration-700 ease-out"
               style={{ transform: `translateX(-${currentIndex * (100 / visibleCount + 2)}%)` }}
@@ -100,14 +127,14 @@ const KawaiiReviews = () => {
             </div>
           </div>
 
-          <button onClick={prev} disabled={currentIndex === 0} className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
+          <button onClick={prev} disabled={currentIndex === 0} className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 w-10 h-10 rounded-full bg-background border border-border items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
             <ChevronLeft className="w-5 h-5 text-foreground" />
           </button>
-          <button onClick={next} disabled={currentIndex >= maxIndex} className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border flex items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
+          <button onClick={next} disabled={currentIndex >= maxIndex} className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 w-10 h-10 rounded-full bg-background border border-border items-center justify-center hover:bg-secondary transition-colors disabled:opacity-30">
             <ChevronRight className="w-5 h-5 text-foreground" />
           </button>
 
-          <div className="flex items-center justify-center gap-2 mt-8">
+          <div className="hidden md:flex items-center justify-center gap-2 mt-8">
             {Array.from({ length: maxIndex + 1 }).map((_, i) => (
               <button key={i} onClick={() => setCurrentIndex(i)} className={`w-2 h-2 rounded-full transition-colors ${i === currentIndex ? 'bg-foreground' : 'bg-border'}`} />
             ))}
