@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from './ui/button';
@@ -10,6 +10,8 @@ const KawaiiHero = () => {
   const sectionRef = useRef<HTMLElement>(null);
   const textRef = useRef<HTMLDivElement>(null);
   const bgRef = useRef<HTMLDivElement>(null);
+  const sentinelRef = useRef<HTMLDivElement>(null);
+  const [stuck, setStuck] = useState(false);
 
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
 
@@ -41,6 +43,16 @@ const KawaiiHero = () => {
     }, sectionRef);
 
     return () => ctx.revert();
+  }, []);
+
+  useEffect(() => {
+    if (!sentinelRef.current) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => setStuck(!entry.isIntersecting && entry.boundingClientRect.top < 0),
+      { threshold: 0 }
+    );
+    obs.observe(sentinelRef.current);
+    return () => obs.disconnect();
   }, []);
 
   const headlineParts = headline.split('\n');
@@ -104,6 +116,28 @@ const KawaiiHero = () => {
           </div>
         </div>
       </div>
+      <div ref={sentinelRef} className="absolute bottom-0 left-0 h-px w-px" aria-hidden="true" />
+      <nav
+        aria-label="Jump to section (sticky)"
+        className={`fixed top-0 left-0 right-0 z-40 bg-klawsome-yellow shadow-md transition-transform duration-300 ${
+          stuck ? 'translate-y-0' : '-translate-y-full'
+        }`}
+      >
+        <div className="ds-container section-x py-2">
+          <div className="flex flex-wrap justify-center gap-2">
+            {jumpLinks.map((l) => (
+              <Button
+                key={l.id}
+                size="heroSm"
+                onClick={() => scrollTo(l.id)}
+                className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+              >
+                {l.label}
+              </Button>
+            ))}
+          </div>
+        </div>
+      </nav>
     </section>
   );
 };
