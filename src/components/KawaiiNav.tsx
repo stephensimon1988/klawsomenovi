@@ -5,6 +5,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { Button } from './ui/button';
 import NavClaw from './NavClaw';
+import { openBookingModal } from './BookNowDialog';
 
 const navLinks = [
   { label: 'HOME', href: '#hero' },
@@ -131,7 +132,7 @@ const KawaiiNav = () => {
             </div>
             <Button
               size="sm"
-              onClick={() => handleNav('#scheduling')}
+              onClick={openBookingModal}
               className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white"
             >
               BOOK NOW
@@ -174,7 +175,7 @@ const KawaiiNav = () => {
                   </button>
                 ))}
               </div>
-              <Button size="sm" onClick={() => handleNav('#scheduling')} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white w-full">
+              <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white w-full">
                 BOOK NOW
               </Button>
             </div>
