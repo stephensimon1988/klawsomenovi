@@ -4,8 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
-import { openBookingModal } from './BookNowDialog';
-
 gsap.registerPlugin(ScrollTrigger);
 
 const KawaiiHero = () => {
@@ -17,7 +15,6 @@ const KawaiiHero = () => {
 
   const headline = content?.hero_headline || "Michigan's first stand-alone claw arcade";
   const subheadline = content?.hero_subheadline || 'Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes.';
-  const ctaText = content?.hero_cta_text || 'Play';
   const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg';
 
   useEffect(() => {
