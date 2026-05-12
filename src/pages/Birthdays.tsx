@@ -191,7 +191,7 @@ const Birthdays = () => {
       {faqItems.length > 0 && (
         <>
         <KawaiiDivider variant="cloud" from="red" to="navy" stroke="baby-pink" height={90} />
-        <section className="py-20 px-4 bg-klawsome-navy">
+        <section id="birthday-faq" className="py-20 px-4 bg-klawsome-navy">
           <div className="container mx-auto max-w-3xl">
             <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-10 text-center">Frequently Asked Questions</h2>
             <div className="bg-white/5 rounded-kawaii p-6 md:p-8 border border-white/10">
