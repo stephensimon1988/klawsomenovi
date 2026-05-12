@@ -200,7 +200,27 @@ const Birthdays = () => {
             Take your party to the next level with these optional upgrades.
           </p>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          {/* Themed Decoration Packages — split into 2 cards on top */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col border-l-4 border-l-primary">
+              <p className="ds-eyebrow text-primary mb-2">Decor</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Private Event Decorations</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$129</p>
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+                Tablecloths, paper plates / silverware / napkins, and two balloon bouquets or one large balloon arch attached to the table.
+              </p>
+            </div>
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col border-l-4 border-l-klawsome-yellow">
+              <p className="ds-eyebrow text-primary mb-2">Decor</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Paris Baguette Basic Decor</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$89</p>
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+                For semi-private events. Tablecloth, paper plates / silverware / napkins, and a balloon bouquet on the table. Wall hangings not allowed; color scheme can be requested.
+              </p>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* Costume Animal Show */}
             <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
               <p className="ds-eyebrow text-primary mb-2">Live Show</p>
@@ -229,28 +249,6 @@ const Birthdays = () => {
               <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
                 An XL plushie of the birthday celebrant's choice — at the 19 Plushies trade-in price or smaller.
               </p>
-            </div>
-
-            {/* Themed Decoration Packages */}
-            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
-              <p className="ds-eyebrow text-primary mb-2">Decor</p>
-              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Themed Decoration Packages</h3>
-              <div className="space-y-4 flex-1">
-                <div className="border-l-4 border-primary pl-3">
-                  <p className="font-heading font-bold text-klawsome-navy text-sm">Private Event Decorations</p>
-                  <p className="text-2xl font-heading font-bold text-primary leading-none my-1">$129</p>
-                  <p className="text-klawsome-navy/80 font-body text-xs leading-relaxed">
-                    Tablecloths, paper plates / silverware / napkins, and two balloon bouquets or one large balloon arch attached to the table.
-                  </p>
-                </div>
-                <div className="border-l-4 border-klawsome-yellow pl-3">
-                  <p className="font-heading font-bold text-klawsome-navy text-sm">Paris Baguette Basic Decor</p>
-                  <p className="text-2xl font-heading font-bold text-primary leading-none my-1">$89</p>
-                  <p className="text-klawsome-navy/80 font-body text-xs leading-relaxed">
-                    For semi-private events. Tablecloth, paper plates / silverware / napkins, and a balloon bouquet on the table. Wall hangings not allowed; color scheme can be requested.
-                  </p>
-                </div>
-              </div>
             </div>
 
             {/* Photography Rental */}
