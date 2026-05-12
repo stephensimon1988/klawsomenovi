@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown } from 'lucide-react';
+import { ChevronDown, Check, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
@@ -34,10 +34,38 @@ const Birthdays = () => {
   const faqItems = allFaqs?.filter(f => f.page === 'birthdays') || [];
   const bookingEmail = content?.booking_email || 'events@klawsomenovi.com';
 
-  const partyImages = [
-    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b423ffd5-9411-4093-96d5-b7dc4a6149b3/IMG-20251123-WA0064.jpg',
-    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.jpg',
+  const privateOpt = (partyOptions || []).find(o => /private/i.test(o.name) && !/semi/i.test(o.name));
+  const semiOpt = (partyOptions || []).find(o => /semi/i.test(o.name));
+
+  const comparisonRows: { label: string; desc?: string; private: boolean | string; semi: boolean | string }[] = [
+    { label: '325 Klaw Machine Tokens', desc: 'Plenty of tokens for everyone to play.', private: true, semi: true },
+    { label: 'Exclusive private space', desc: 'Klawsome closed to the public during your event.', private: true, semi: false },
+    { label: 'Play time', desc: 'How long guests get to play games.', private: '1 hour + 30 min setup', semi: 'Unlimited during business hours' },
+    { label: 'Location', desc: 'Where your party is hosted.', private: 'Klawsome (closed hours)', semi: 'Paris Baguette next door' },
+    { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
+    { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: true, semi: false },
+    { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu (cost TBD)' },
+    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full setup available', semi: 'Simple decor only' },
+    { label: 'Wall hangings / advance setup', desc: 'Hang banners or arrive early to set up.', private: true, semi: false },
   ];
+
+  const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
+    if (typeof value === 'string') {
+      return <span className="text-white/90 font-body text-xs md:text-sm">{value}</span>;
+    }
+    if (value) {
+      return (
+        <div className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center mx-auto ${color === 'red' ? 'bg-primary' : 'bg-klawsome-yellow'}`}>
+          <Check className={`w-5 h-5 ${color === 'red' ? 'text-white' : 'text-klawsome-navy'}`} strokeWidth={3} />
+        </div>
+      );
+    }
+    return (
+      <div className="w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center mx-auto bg-white/10">
+        <X className="w-5 h-5 text-white/40" strokeWidth={2.5} />
+      </div>
+    );
+  };
 
   return (
     <div className="min-h-screen bg-klawsome-navy">
@@ -109,28 +137,46 @@ const Birthdays = () => {
 
       <KawaiiDivider variant="scallop" from="navy" to="red" stroke="yellow" height={90} />
 
-      {/* Party Options */}
-      <section className="py-20 px-4 bg-primary">
+      {/* Party Options — Comparison Table */}
+      <section id="party-options" className="py-20 px-4 bg-primary">
         <div className="container mx-auto max-w-5xl">
-          <h2 className="text-3xl md:text-4xl font-heading font-bold text-white mb-12 text-center">Party Options</h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            {(partyOptions || []).map((opt, i) => (
-              <div key={opt.id} className="bg-white/15 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden">
-                <img
-                  src={partyImages[i] || partyImages[0]}
-                  alt={opt.name}
-                  className="w-full aspect-square object-cover"
-                  loading="lazy"
-                />
-                <div className="p-6">
-                  <h3 className="font-heading font-bold text-2xl text-white mb-3">{opt.name}</h3>
-                  <p className="text-white/70 font-body text-sm mb-3">{opt.description}</p>
-                  <ul className="space-y-2 text-white/70 font-body text-sm mb-4">
-                    {(opt.features || []).map((f, fi) => (
-                      <li key={fi}>• {f}</li>
-                    ))}
-                  </ul>
-                  <p className="font-heading font-bold text-white">{opt.price}</p>
+          <p className="ds-eyebrow text-klawsome-yellow mb-3 text-center">Party Options</p>
+          <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4 text-center uppercase">
+            Package Comparison
+          </h2>
+          <p className="text-white/80 font-body text-center mb-12 max-w-2xl mx-auto">
+            Compare our two birthday party options and pick the one that's right for your celebration.
+          </p>
+
+          <div className="rounded-kawaii overflow-hidden border border-white/20 bg-white/5 backdrop-blur-sm">
+            {/* Header */}
+            <div className="grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+              <div className="p-4 md:p-6" />
+              <div className="p-4 md:p-6 text-center bg-primary border-l border-white/20">
+                <p className="font-heading font-bold text-white text-lg md:text-2xl uppercase">Private</p>
+                <p className="text-white/80 font-body text-xs mt-1">{privateOpt?.price || '$250'}</p>
+              </div>
+              <div className="p-4 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
+                <p className="font-heading font-bold text-klawsome-navy text-lg md:text-2xl uppercase">Semi-Private</p>
+                <p className="text-klawsome-navy/80 font-body text-xs mt-1">{semiOpt?.price || '$250'}</p>
+              </div>
+            </div>
+
+            {/* Rows */}
+            {comparisonRows.map((row, i) => (
+              <div
+                key={i}
+                className={`grid grid-cols-[1.5fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
+              >
+                <div className="p-4 md:p-6">
+                  <p className="font-heading font-bold text-white text-sm md:text-base">{row.label}</p>
+                  {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
+                </div>
+                <div className="p-4 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                  <Cell value={row.private} color="red" />
+                </div>
+                <div className="p-4 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                  <Cell value={row.semi} color="yellow" />
                 </div>
               </div>
             ))}
