@@ -15,6 +15,9 @@ const OurStory = () => {
 
   const VARIANTS: DividerVariant[] = ['wave', 'scallop', 'cloud', 'bumps', 'petals', 'zigzag-soft', 'brush', 'blob'];
 
+  const slugify = (s: string) =>
+    s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40);
+
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
@@ -23,10 +26,17 @@ const OurStory = () => {
         eyebrow={hero?.eyebrow || 'About Us'}
         title={title}
         imageUrl={image}
+        jumpLinks={[
+          { label: 'Intro', id: 'story-intro' },
+          ...((sections || []).slice(0, 7).map((s) => ({
+            label: s.title.length > 18 ? s.title.slice(0, 16) + '…' : s.title,
+            id: `story-${slugify(s.title)}`,
+          }))),
+        ]}
       />
 
       {/* Intro */}
-      <section className="section-y section-x">
+      <section id="story-intro" className="section-y section-x">
         <div className="ds-container-narrow">
           <p className="ds-lead text-foreground text-2xl md:text-3xl">
             {body}
@@ -45,7 +55,7 @@ const OurStory = () => {
             {prevColor !== thisColor && (
               <KawaiiDivider variant={variant} from={prevColor as any} to={thisColor as any} stroke={stroke as any} height={90} />
             )}
-            <section className={`section-y section-x ${idx % 2 === 0 ? 'bg-secondary/40' : ''}`}>
+            <section id={`story-${slugify(s.title)}`} className={`section-y section-x ${idx % 2 === 0 ? 'bg-secondary/40' : ''}`}>
               <div className="ds-container-narrow">
                 {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
                 <h2 className="ds-h2 uppercase mb-10">{s.title}</h2>
