@@ -40,7 +40,22 @@ const Index = () => {
       <KawaiiGiftCards />
       <KawaiiDivider variant="scallop" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiStory />
-      <KawaiiFooter prevColor="baby-blue" />
+      <KawaiiDivider variant="wave" from="baby-blue" to="white" stroke="baby-pink" />
+      <section id="scheduling" className="py-20 px-6 lg:px-12 bg-background">
+        <div className="container mx-auto max-w-5xl text-center mb-10">
+          <p className="ds-eyebrow text-primary mb-3">Book Your Visit</p>
+          <h2 className="ds-h2">Reserve your time at Klawsome</h2>
+        </div>
+        <div className="container mx-auto max-w-4xl rounded-kawaii overflow-hidden border border-border bg-white">
+          <iframe
+            src="https://klawsome.as.me/schedule/366e2b9b"
+            title="Schedule with Klawsome"
+            className="block w-full"
+            style={{ height: '100vh', border: 0 }}
+          />
+        </div>
+      </section>
+      <KawaiiFooter prevColor="white" />
       <DividerAudit />
     </div>
   );
