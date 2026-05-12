@@ -3,7 +3,7 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import { useCmsTable, type Review } from '@/hooks/useCmsContent';
-const reviewsImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-real-characters/30_whimsical_garden_tea_party_with_friends.png';
+const reviewsImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-party-lollipops.png';
 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
