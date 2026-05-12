@@ -10,7 +10,7 @@ const KawaiiVisit = () => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: hours } = useCmsTable<StoreHour>('store_hours');
 
-  const address = settings?.address || '42768 Grand River Ave, Suite C-140, Novi, MI 48375';
+  const address = settings?.address || '42768 Grand River Ave Suite C-140, Novi, MI 48375';
   const mapsUrl = settings?.google_maps_url || 'https://www.google.com/maps/place/42768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375';
   const phone = settings?.phone || '(248) 938-4093';
 
