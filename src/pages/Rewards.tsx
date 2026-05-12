@@ -23,6 +23,11 @@ const Rewards = () => {
         title={hero?.title || 'Rewards Program'}
         subtitle={hero?.subtitle || 'Your claw game, upgraded.'}
         imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg'}
+        jumpLinks={[
+          { label: 'Benefits', id: 'benefits' },
+          { label: 'Tiers', id: 'tiers' },
+          { label: 'Redeem', id: 'redemptions' },
+        ]}
       >
         {hero?.cta_text && hero?.cta_url && (
         <Button asChild size="lg" className="rounded-full px-8 font-heading font-bold tracking-wider bg-white text-foreground hover:bg-white/90 uppercase">
@@ -32,7 +37,7 @@ const Rewards = () => {
       </PageHero>
 
       {/* Benefits */}
-      <section className="section-y section-x">
+      <section id="benefits" className="section-y section-x">
         <div className="ds-container">
           <p className="ds-eyebrow">Membership Benefits</p>
           <h2 className="ds-h2 uppercase mb-16 max-w-2xl">Built for the people who play.</h2>
@@ -49,7 +54,7 @@ const Rewards = () => {
 
       {/* Tiers */}
       <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
-      <section className="section-y section-x bg-foreground text-background">
+      <section id="tiers" className="section-y section-x bg-foreground text-background">
         <div className="ds-container">
           <p className="ds-eyebrow">Lifetime Tiers</p>
           <h2 className="ds-h2 uppercase mb-16 text-background">Climb the ranks.</h2>
@@ -74,7 +79,7 @@ const Rewards = () => {
 
       {/* Redemptions */}
       <KawaiiDivider variant="bumps" from="navy" to="white" stroke="yellow" height={90} />
-      <section className="section-y section-x">
+      <section id="redemptions" className="section-y section-x">
         <div className="ds-container">
           <p className="ds-eyebrow">Points Redeemable</p>
           <h2 className="ds-h2 uppercase mb-16">Cash in for something cute.</h2>
