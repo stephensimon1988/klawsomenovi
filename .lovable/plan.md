@@ -1,67 +1,61 @@
 ## Goal
 
-Replace every "kawaii illustration" reference in the site with images from the storage folder `site-images/kawaii-real-characters/` (30 new files). Leave real photography (Squarespace URLs, friends/family photos) untouched.
+1. Standardize the pill-shaped CTA buttons used in headers/heroes (like "Book a Birthday Party" / "Reserve") into a single reusable size so padding is consistent everywhere.
+2. On the homepage hero, replace the lone "Reserve" button with a row of buttons — one per page section — that smooth-scrolls to that section.
 
-## Scope — what gets swapped
+## Part 1 — Shared header button size
 
-**A. CMS table `page_content_sections` (30 rows, currently `…/kawaii-claw/*.png`)**
+Right now each hero/header re-declares `rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider uppercase` inline. We'll move that into the existing `Button` component as a new size variant.
 
-Apply a one-to-one mapping via a single SQL migration (UPDATE statements). Proposed pairings (theme-matched):
+**Implementation**
+- In `src/components/ui/button.tsx`, add a new size to `buttonVariants`:
+  - `hero: "h-auto rounded-full px-8 py-3.5 text-sm font-heading font-bold tracking-wider uppercase"`
+  - Padding values tuned to match the screenshot (equal-feel top/bottom and left/right, pill shape).
+- Optionally add two visual variants reused in headers:
+  - `variant: "heroSolid"` → solid primary pink
+  - `variant: "heroGhost"` → translucent white glass (`bg-white/10 backdrop-blur-sm border border-white/20 text-white hover:bg-white/20`)
+- Refactor existing call sites to use `<Button size="hero" variant="heroSolid">…`:
+  - `KawaiiHero.tsx` (Play / Reserve)
+  - `Birthdays.tsx` hero ("Book a Birthday Party" / "Reserve")
+  - Any other page hero pair (Rental, Careers, etc.) using the same pattern
 
-```text
-community/rooted           → 24_kawaii_spring_picnic_with_delightful_friends.png
-community/sakura-novi      → 27_spring_picnic_under_cherry_blossoms.png
-community/collaboration    → 06_kawaii_animal_dance_party_celebration.png
-community/culture          → 30_whimsical_garden_tea_party_with_friends.png
-community/partner-with-us  → 03_claw_machine_team_application_adventure.png
-contact/general            → 17_kawaii_arcade_with_cheerful_tips_sign.png
-contact/events             → 02_celebrating_in_pastel_arcade_paradise.png
-contact/phone              → 19_kawaii_claw_machine_planning_session.png
-contact/visit              → 26_planning_a_cute_claw_machine_adventure.png
-info-hub/gallery           → 14_kawaii_arcade_prize_celebration.png
-info-hub/location          → 05_cute_road_trip_to_the_arcade.png
-info-hub/sakura-novi       → 25_kawaii_tea_party_in_pastel_paradise.png
-info-hub/policies          → 22_kawaii_crafting_fun_with_adorable_animals.png
-info-hub/accessibility     → 08_kawaii_animals_shopping_in_a_cozy_room.png
-info-hub/media-kit         → 28_storytime_under_the_starry_sky.png
-rental/intro               → 18_kawaii_birthday_party_celebration_scene.png
-rental/how-it-works        → 09_kawaii_arcade_claw_machine_adventure.png
-rental/perfect-for         → 29_whimsical_birthday_party_in_pastel_colors.png
-rental/prizes              → 16_kawaii_arcade_prize_winners_with_plushies.png
-rental/delivery            → 07_kawaii_animal_friends_in_plush_arcade.png
-rental/rental-faq          → 01_baking_sweetness_with_cute_animal_friends.png
-store/welcome              → 11_kawaii_arcade_fun_with_plush_prizes.png
-store/philosophy           → 04_cozy_bedtime_story_in_a_blanket_fort.png
-store/small-plush          → 12_kawaii_arcade_fun_with_plushies.png
-store/medium-plush         → 13_kawaii_arcade_plushie_hug_fest.png
-store/large-plush          → 15_kawaii_arcade_prize_haven.png
-store/rare-plush           → 20_kawaii_claw_machine_plush_collection.png
-store/trade-up             → 23_kawaii_friends_at_the_claw_machine.png
-store/special              → 21_kawaii_coin_pusher_paradise_playtime.png
-store/tokens               → 10_kawaii_arcade_fun_with_cute_animals.png
-```
+Result: one place controls header-button sizing across the whole site.
 
-**B. Local fallback imports (3 components)** — point at the new storage URLs so non-CMS render paths also show the new art:
+## Part 2 — Homepage hero "jump buttons"
 
-- `src/components/KawaiiStory.tsx` — fallback `community_collaboration.png` → `06_kawaii_animal_dance_party_celebration.png`
-- `src/components/KawaiiReviews.tsx` — fallback `community_culture.png` → `30_whimsical_garden_tea_party_with_friends.png`
-- `src/pages/Rental.tsx` — fallback `rental_rental-faq.png` → `01_baking_sweetness_with_cute_animal_friends.png`
+Replace the single "Reserve" button in `KawaiiHero` with a row of buttons that scroll to each top-level section on `/`. Keep the primary "Play" CTA as-is on the left.
 
-## Out of scope (not touched)
+**Sections to expose** (matching `Index.tsx` order):
+About · Visit · Tokens · Reviews · News · Gift Cards · Story · Book
 
-- Squarespace family/event photos in `page_heroes` and `page_sections.bg_image_url` (these are real photography, not kawaii illustrations).
-- `homepage_content.hero_image_url` / `story_image_url` (also real photos).
-- Logo, favicon, gift card images, gallery photos.
+Each section already has (or will get) a stable `id` so `scrollIntoView` works. We'll audit and add missing IDs (`about`, `visit`, `reviews`, `news`, `gift-cards`, `story`) on the corresponding components.
 
-## Technical details
+**Layout**
+- Primary "Play" button stays prominent (solid pink).
+- A horizontal, wrap-friendly row of ghost pill buttons (the new `heroGhost` variant) sits beside/under it.
+- On mobile they wrap to two rows; on desktop one line.
 
-- One Supabase migration with 30 `UPDATE public.page_content_sections SET image_url=… WHERE page_key=… AND section_key=…;` statements using full public URLs `https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/kawaii-real-characters/<file>.png`.
-- Three small component edits to change the fallback import to a URL string (or keep as `import` from new path if we mirror locally — but using the storage URL avoids bloating the bundle).
-- No schema changes, no RLS changes, no new dependencies.
+### What to call them
 
-## Verification
+A few options — pick one and I'll use it everywhere (component name, aria-label, internal docs):
 
-- After migration, query the 30 rows to confirm new URLs.
-- Visit `/community`, `/contact`, `/info-hub`, `/rental`, `/store`, and the homepage to spot-check images load.
+- **Jump Links** — clearest, common UI term for in-page anchors
+- **Quick Links** — friendly, marketing-y
+- **Section Pills** — describes the shape
+- **Explore Buttons / "Explore the Arcade"** — on-brand kawaii framing
+- **Hero Chips** — if we want to lean shape-first
 
-If the proposed pairings look off for any specific section, tell me which ones to swap and I'll re-map before running the migration.
+My recommendation: **Jump Links**, presented under a small "Explore" eyebrow label above the row.
+
+## Files touched
+
+- `src/components/ui/button.tsx` — new `hero` size + optional `heroSolid` / `heroGhost` variants
+- `src/components/KawaiiHero.tsx` — swap Reserve for jump-link row; use new size
+- `src/pages/Birthdays.tsx` — adopt new size on the two hero buttons
+- Section components missing IDs (`KawaiiAbout`, `KawaiiVisit`, `KawaiiReviews`, `KawaiiNews`, `KawaiiGiftCards`, `KawaiiStory`) — add `id="…"` to their root `<section>`
+- (Optional) other page heroes that share the pill pattern, swept to use `size="hero"`
+
+## Out of scope
+
+- No changes to nav bar `BOOK NOW` button styling unless you also want it unified (happy to include).
+- No new data, no CMS changes — section labels are static for now.
