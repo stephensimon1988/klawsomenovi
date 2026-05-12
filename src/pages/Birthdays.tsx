@@ -188,6 +188,90 @@ const Birthdays = () => {
         </div>
       </section>
 
+      {/* Add-Ons */}
+      <KawaiiDivider variant="bumps" from="red" to="baby-pink" stroke="white" height={90} />
+      <section id="add-ons" className="py-20 px-4 bg-[hsl(var(--klawsome-baby-pink))]">
+        <div className="container mx-auto max-w-6xl">
+          <p className="ds-eyebrow text-klawsome-navy mb-3 text-center">Options & Add-Ons</p>
+          <h2 className="text-3xl md:text-5xl font-heading font-bold text-klawsome-navy mb-4 text-center uppercase">
+            Make It Extra Special
+          </h2>
+          <p className="text-klawsome-navy/80 font-body text-center mb-12 max-w-2xl mx-auto">
+            Take your party to the next level with these optional upgrades.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Costume Animal Show */}
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
+              <p className="ds-eyebrow text-primary mb-2">Live Show</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Costume Animal Show</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$89<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / 30 min</span></p>
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed mb-4 flex-1">
+                A costumed character makes a special appearance at your party.
+              </p>
+              <div>
+                <p className="text-xs uppercase tracking-wider font-heading font-bold text-klawsome-navy/60 mb-2">Choose your character</p>
+                <div className="flex flex-wrap gap-2">
+                  {['Pikachu', 'Cinnamoroll', 'Hello Kitty', 'Kuromi', 'Bluey'].map((c) => (
+                    <span key={c} className="text-xs font-heading font-bold bg-klawsome-yellow text-klawsome-navy px-3 py-1.5 rounded-full">
+                      {c}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* XL Plushie */}
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
+              <p className="ds-eyebrow text-primary mb-2">Gift</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">XL Plushie</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$89</p>
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+                An XL plushie of the birthday celebrant's choice — at the 19 Plushies trade-in price or smaller.
+              </p>
+            </div>
+
+            {/* Themed Decoration Packages */}
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
+              <p className="ds-eyebrow text-primary mb-2">Decor</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Themed Decoration Packages</h3>
+              <div className="space-y-4 flex-1">
+                <div className="border-l-4 border-primary pl-3">
+                  <p className="font-heading font-bold text-klawsome-navy text-sm">Private Event Decorations</p>
+                  <p className="text-2xl font-heading font-bold text-primary leading-none my-1">$129</p>
+                  <p className="text-klawsome-navy/80 font-body text-xs leading-relaxed">
+                    Tablecloths, paper plates / silverware / napkins, and two balloon bouquets or one large balloon arch attached to the table.
+                  </p>
+                </div>
+                <div className="border-l-4 border-klawsome-yellow pl-3">
+                  <p className="font-heading font-bold text-klawsome-navy text-sm">Paris Baguette Basic Decor</p>
+                  <p className="text-2xl font-heading font-bold text-primary leading-none my-1">$89</p>
+                  <p className="text-klawsome-navy/80 font-body text-xs leading-relaxed">
+                    For semi-private events. Tablecloth, paper plates / silverware / napkins, and a balloon bouquet on the table. Wall hangings not allowed; color scheme can be requested.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Photography Rental */}
+            <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
+              <p className="ds-eyebrow text-primary mb-2">Photo Session</p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Photography Rental</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$49<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / hour</span></p>
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+                Rent our facility for a 1-hour photography session — perfect for capturing the celebration.
+              </p>
+            </div>
+          </div>
+
+          <div className="mt-10 text-center">
+            <Button onClick={openBookingModal} size="hero" className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
+              Add These to Your Booking
+            </Button>
+          </div>
+        </div>
+      </section>
+
       {/* FAQ */}
       {faqItems.length > 0 && (
         <>
