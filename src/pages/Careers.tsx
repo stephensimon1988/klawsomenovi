@@ -23,11 +23,16 @@ const Careers = () => {
         subtitle={hero?.subtitle || 'Join the Klawsome team and help create a fun, welcoming experience for everyone!'}
         imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg'}
         height="md"
+        jumpLinks={[
+          ...(inStoreJobs.length > 0 ? [{ label: 'In-Store', id: 'in-store' }] : []),
+          ...(hybridJobs.length > 0 ? [{ label: 'Hybrid / Paid', id: 'hybrid-paid' }] : []),
+          ...(unpaidJobs.length > 0 ? [{ label: 'Unpaid Opps', id: 'unpaid-opps' }] : []),
+        ]}
       />
 
       {/* In-Store Jobs */}
       {inStoreJobs.length > 0 && (
-        <section className="section-y section-x">
+        <section id="in-store" className="section-y section-x">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">In-Store Positions</h2>
             <div className="grid md:grid-cols-2 gap-8">
@@ -65,7 +70,7 @@ const Careers = () => {
         {inStoreJobs.length > 0 && (
           <KawaiiDivider variant="scallop" from="navy" to="red" stroke="yellow" height={90} />
         )}
-        <section className="section-y section-x bg-primary">
+        <section id="hybrid-paid" className="section-y section-x bg-primary">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Paid Jobs</h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -100,7 +105,7 @@ const Careers = () => {
       {unpaidJobs.length > 0 && (
         <>
         <KawaiiDivider variant="cloud" from={hybridJobs.length > 0 ? 'red' : 'navy'} to="navy" stroke="baby-pink" height={90} />
-        <section className="section-y section-x bg-klawsome-navy">
+        <section id="unpaid-opps" className="section-y section-x bg-klawsome-navy">
           <div className="ds-container max-w-4xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
             <div className="grid md:grid-cols-2 gap-8">
