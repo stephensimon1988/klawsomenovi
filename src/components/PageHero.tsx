@@ -11,6 +11,7 @@ interface PageHeroProps {
   align?: 'left' | 'center';
   height?: 'md' | 'lg';
   hideJoinCta?: boolean;
+  jumpLinks?: { label: string; id: string }[];
 }
 
 // Curated real photos pulled from the Gallery — used as deterministic
@@ -39,21 +40,18 @@ const hashPath = () => {
 
 const pickGalleryHero = () => GALLERY_HEROES[hashPath() % GALLERY_HEROES.length];
 
-const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false, jumpLinks }: PageHeroProps) => {
   const minH = height === 'lg' ? 'min-h-[70vh]' : 'min-h-[55vh]';
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
   const titleColor = 'hsl(var(--klawsome-navy))';
-  const jumpLinks = [
-    { label: 'About', id: 'about' },
-    { label: 'Visit', id: 'visit' },
-    { label: 'Tokens', id: 'tokens' },
-    { label: 'Reviews', id: 'reviews' },
-    { label: 'News', id: 'news' },
-    { label: 'Gift Cards', id: 'giftcards' },
-    { label: 'Our Story', id: 'story' },
-    { label: 'Book', id: 'scheduling' },
-  ];
+  const links = jumpLinks ?? [];
+  const colsClass =
+    links.length >= 6 ? 'grid-cols-2 sm:grid-cols-4 lg:grid-cols-8'
+    : links.length === 5 ? 'grid-cols-2 sm:grid-cols-5'
+    : links.length === 4 ? 'grid-cols-2 sm:grid-cols-4'
+    : links.length === 3 ? 'grid-cols-3'
+    : 'grid-cols-2';
   return (
     <>
       <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
@@ -67,18 +65,20 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
-            <nav aria-label="Jump to section" className={`grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full mb-6 ${align === 'center' ? 'mx-auto' : ''}`}>
-              {jumpLinks.map((l) => (
-                <Button
-                  key={l.id}
-                  asChild
-                  size="heroSm"
-                  className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
-                >
-                  <a href={`/#${l.id}`}>{l.label}</a>
-                </Button>
-              ))}
-            </nav>
+            {links.length > 0 && (
+              <nav aria-label="Jump to section" className={`grid ${colsClass} gap-2 w-full mb-6 ${align === 'center' ? 'mx-auto' : ''}`}>
+                {links.map((l) => (
+                  <Button
+                    key={l.id}
+                    asChild
+                    size="heroSm"
+                    className="w-full bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+                  >
+                    <a href={`#${l.id}`}>{l.label}</a>
+                  </Button>
+                ))}
+              </nav>
+            )}
             {!hideJoinCta && (
               <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
                 <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
