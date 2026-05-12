@@ -13,8 +13,8 @@ interface KawaiiFooterProps {
 
 const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
-  const { pathname } = useLocation();
-  const showReadyToPlay = ['/', '/birthdays', '/faq'].includes(pathname);
+  useLocation();
+  const showReadyToPlay = false;
 
   const email = settings?.email || 'team@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
@@ -27,14 +27,8 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   return (
     <>
       {/* Transition from page → CTA (baby-pink) when CTA shown, else page → red footer */}
-      {showReadyToPlay ? (
-        prevColor !== 'baby-pink' && (
-          <KawaiiDivider variant="wave" from={prevColor} to="baby-pink" stroke="white" />
-        )
-      ) : (
-        prevColor !== 'red' && (
-          <KawaiiDivider variant="scallop" from={prevColor} to="red" stroke="white" />
-        )
+      {prevColor !== 'red' && (
+        <KawaiiDivider variant="scallop" from={prevColor} to="red" stroke="white" />
       )}
 
       {/* Pre-footer CTA — homepage, birthdays, faq only */}
