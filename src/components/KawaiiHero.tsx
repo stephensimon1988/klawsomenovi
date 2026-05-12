@@ -124,13 +124,13 @@ const KawaiiHero = () => {
         }`}
       >
         <div className="ds-container section-x py-2">
-          <div className="flex flex-wrap justify-center gap-2">
+          <div className="flex flex-wrap justify-center gap-1.5 sm:gap-2">
             {jumpLinks.map((l) => (
               <Button
                 key={l.id}
                 size="heroSm"
                 onClick={() => scrollTo(l.id)}
-                className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
+                className="px-2.5 py-1.5 text-[10px] sm:px-5 sm:py-2.5 sm:text-xs bg-klawsome-navy text-white hover:bg-klawsome-navy/90 border border-klawsome-navy shadow-md"
               >
                 {l.label}
               </Button>
