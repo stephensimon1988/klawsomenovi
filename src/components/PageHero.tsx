@@ -12,6 +12,7 @@ interface PageHeroProps {
   height?: 'md' | 'lg';
   hideJoinCta?: boolean;
   jumpLinks?: { label: string; id: string }[];
+  overlay?: 'gradient' | 'white';
 }
 
 // Curated real photos pulled from the Gallery — used as deterministic
@@ -40,7 +41,7 @@ const hashPath = () => {
 
 const pickGalleryHero = () => GALLERY_HEROES[hashPath() % GALLERY_HEROES.length];
 
-const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false, jumpLinks }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false, jumpLinks, overlay = 'gradient' }: PageHeroProps) => {
   const minH = height === 'lg' ? 'min-h-[70vh]' : 'min-h-[55vh]';
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
@@ -69,7 +70,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${bg}')` }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
+        <div className={overlay === 'white' ? 'absolute inset-0 bg-white/55' : 'absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20'} />
         <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
           <div className={`max-w-3xl ${alignCls}`}>
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>

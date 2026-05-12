@@ -78,6 +78,7 @@ const Birthdays = () => {
         title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}
+        overlay="white"
         jumpLinks={[
           { label: 'Party Rules', id: 'party-rules' },
           { label: 'Packages', id: 'party-options' },
