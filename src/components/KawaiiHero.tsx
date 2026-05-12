@@ -4,8 +4,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
-import { openBookingModal } from './BookNowDialog';
-
 gsap.registerPlugin(ScrollTrigger);
 
 const KawaiiHero = () => {
@@ -17,7 +15,6 @@ const KawaiiHero = () => {
 
   const headline = content?.hero_headline || "Michigan's first stand-alone claw arcade";
   const subheadline = content?.hero_subheadline || 'Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes.';
-  const ctaText = content?.hero_cta_text || 'Play';
   const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg';
 
   useEffect(() => {
@@ -73,7 +70,7 @@ const KawaiiHero = () => {
           bottom: '-60px',
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20" />
+      <div className="absolute inset-0 bg-white/55" />
 
       <LottieAccent type="sparkle" className="absolute top-24 right-12 opacity-30 z-10" size={80} />
 
@@ -92,15 +89,6 @@ const KawaiiHero = () => {
           </p>
 
           <div className="space-y-5" style={{ opacity: 0 }}>
-            <div className="flex flex-wrap items-center gap-3">
-              <Button
-                size="hero"
-                onClick={() => scrollTo('tokens')}
-                className="bg-primary hover:bg-primary/90 text-white"
-              >
-                {ctaText}
-              </Button>
-            </div>
             <nav aria-label="Jump to section" className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2 w-full">
               {jumpLinks.map((l) => (
                 <Button
