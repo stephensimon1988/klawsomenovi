@@ -1,6 +1,7 @@
 import { ReactNode, useEffect, useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Link } from 'react-router-dom';
+import { openBookingModal } from './BookNowDialog';
 
 interface PageHeroProps {
   eyebrow?: string;
@@ -76,15 +77,22 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
-            {links.length > 0 && (
-              <nav aria-label="Jump to section" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>
-                {links.map((l) => (
-                  <a key={l.id} href={`#${l.id}`} className={linkBtnClass}>
-                    {l.label}
-                  </a>
-                ))}
-              </nav>
-            )}
+            <nav aria-label="Quick actions" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>
+              <button type="button" onClick={openBookingModal} className={linkBtnClass}>
+                Book Now
+              </button>
+              <a
+                href="https://app.squareup.com/gift/ML1R35ZH9VKRW/order"
+                target="_blank"
+                rel="noopener noreferrer"
+                className={linkBtnClass}
+              >
+                Buy Gift Card
+              </a>
+              <Link to="/store" className={linkBtnClass}>
+                Buy Plushies
+              </Link>
+            </nav>
             {!hideJoinCta && (
               <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
                 <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
