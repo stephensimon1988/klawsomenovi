@@ -12,9 +12,11 @@ const HIDDEN_Y = -CLAW_HEIGHT - 20;
 interface NavClawProps {
   active: boolean;
   pointerX: number | null;
+  minX?: number;
+  maxX?: number;
 }
 
-const NavClaw = ({ active, pointerX }: NavClawProps) => {
+const NavClaw = ({ active, pointerX, minX, maxX }: NavClawProps) => {
   const [enabled, setEnabled] = useState(false);
   const x = useMotionValue(typeof window !== 'undefined' ? window.innerWidth / 2 : 0);
   const y = useMotionValue(HIDDEN_Y);
@@ -49,9 +51,11 @@ const NavClaw = ({ active, pointerX }: NavClawProps) => {
   useEffect(() => {
     if (!enabled || pointerX == null) return;
     const half = CLAW_WIDTH / 2;
-    const clamped = Math.max(half, Math.min(window.innerWidth - half, pointerX));
+    const lo = (minX ?? 0) + half;
+    const hi = (maxX ?? window.innerWidth) - half;
+    const clamped = Math.max(lo, Math.min(hi, pointerX));
     x.set(clamped);
-  }, [pointerX, enabled, x]);
+  }, [pointerX, enabled, x, minX, maxX]);
 
   if (!enabled) return null;
 
