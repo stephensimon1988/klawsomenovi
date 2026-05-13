@@ -217,7 +217,7 @@ const Rental = () => {
         <KawaiiDivider variant="cloud" from="red" to="baby-blue" stroke="baby-pink" height={90} />
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container">
-            <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div className="w-full">
               <div>
                 <p className="ds-eyebrow">FAQ</p>
                 <h2 className="ds-h2 mb-8">Frequently Asked Questions</h2>
@@ -241,14 +241,6 @@ const Rental = () => {
                     See all FAQs <span>→</span>
                   </a>
                 </div>
-              </div>
-              <div className="order-first lg:order-last">
-                <img
-                  src={rentalFaqImage}
-                  alt="Kawaii claw machine FAQ"
-                  loading="lazy"
-                  className="w-full max-w-md mx-auto"
-                />
               </div>
             </div>
           </div>
