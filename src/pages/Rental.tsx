@@ -5,6 +5,8 @@ import DynamicSections from '@/components/DynamicSections';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { Button } from '@/components/ui/button';
+import { openBookingModal } from '@/components/BookNowDialog';
 const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.png';
 
 interface RentalPackage {
@@ -62,7 +64,6 @@ const Rental = () => {
               const addOns = packages.filter((p) => /add[- ]?on/i.test(p.name));
               const partyPkg = mainPackages.find((p) => /^party package$/i.test(p.name)) || mainPackages[0];
               const extendedPkg = mainPackages.find((p) => /extended/i.test(p.name)) || mainPackages[1];
-              const bookHref = extendedPkg?.cta_url || partyPkg?.cta_url || '#scheduling';
               const comparisonRows: { label: string; desc?: string; party: string | boolean; extended: string | boolean }[] = [
                 { label: 'Claw Machines', desc: 'Number of machines included.', party: '1', extended: '1' },
                 { label: 'Play Time', desc: 'How long guests get to play.', party: '1 hour', extended: '2 hours' },
@@ -121,26 +122,25 @@ const Rental = () => {
                         : 'border-border text-foreground/80'
                     }`}
                   >
-                    {(p.features || []).map((f, i) => (
+                    {(p.features || []).filter((f) => !/coming soon/i.test(f)).map((f, i) => (
                       <li key={i} className="flex gap-3">
                         <span className={p.is_highlight ? 'text-primary-foreground' : 'text-primary'}>✓</span>
                         <span>{f}</span>
                       </li>
                     ))}
                   </ul>
-                  {p.cta_text && (
-                    <a
-                      href={p.cta_url || '#scheduling'}
-                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
-                        p.is_highlight
-                          ? 'bg-background text-foreground hover:bg-background/90'
-                          : 'bg-foreground text-background hover:bg-foreground/90'
-                      }`}
-                    >
-                      {p.cta_text}
-                      <span>→</span>
-                    </a>
-                  )}
+                  <button
+                    type="button"
+                    onClick={openBookingModal}
+                    className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
+                      p.is_highlight
+                        ? 'bg-background text-foreground hover:bg-background/90'
+                        : 'bg-foreground text-background hover:bg-foreground/90'
+                    }`}
+                  >
+                    Add to Rental
+                    <span>→</span>
+                  </button>
                 </div>
               );
               return (
@@ -190,12 +190,13 @@ const Rental = () => {
                   <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
                     <div />
                     <div className="col-span-2 flex justify-end">
-                      <a
-                        href={bookHref}
-                        className="w-full inline-flex items-center justify-center rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 transition-colors"
+                      <Button
+                        onClick={openBookingModal}
+                        size="lg"
+                        className="w-full rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
                       >
                         Book Your Event
-                      </a>
+                      </Button>
                     </div>
                   </div>
 
