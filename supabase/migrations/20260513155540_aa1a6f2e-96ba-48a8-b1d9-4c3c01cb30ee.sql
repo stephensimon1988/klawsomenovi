@@ -1,0 +1,1 @@
+DELETE FROM public.page_content_sections WHERE id IN ('2bc54b50-771b-4fba-ba6e-07845fb43d5d','d0453978-98b2-4782-8764-494c1b715faa','5c270363-456d-490f-8c26-52be0c93a317');
