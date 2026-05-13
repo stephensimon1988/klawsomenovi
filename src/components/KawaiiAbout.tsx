@@ -32,7 +32,7 @@ const KawaiiAbout = () => {
         <div ref={gridRef} className="grid md:grid-cols-3 gap-10 w-full">
           {displaySteps.map((step, index) => (
             <div key={step.id} className="flex flex-col items-center text-center">
-              <div className="h-40 w-full flex items-center justify-center mb-6">
+              <div className="h-64 md:h-72 w-full flex items-center justify-center mb-8">
                 {step.icon && /^https?:\/\//.test(step.icon) ? (
                   <img src={step.icon} alt={step.title} className="max-h-full max-w-full object-contain" />
                 ) : step.icon && step.icon.startsWith('/') ? (
@@ -43,7 +43,7 @@ const KawaiiAbout = () => {
                   <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
                 )}
               </div>
-              <h3 className="ds-h3">{step.title}</h3>
+              <h3 className="ds-h3 text-2xl md:text-3xl">{step.title}</h3>
             </div>
           ))}
         </div>
