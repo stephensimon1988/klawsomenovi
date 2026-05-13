@@ -46,17 +46,17 @@ const Careers = () => {
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
                     <div className="flex flex-wrap gap-3">
-                      {job.job_desc_url && (
-                        <JobDescriptionDialog
-                          title={job.title}
-                          url={job.job_desc_url}
-                          trigger={
-                            <Button className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-                              View Job Description
-                            </Button>
-                          }
-                        />
-                      )}
+                      <JobDescriptionDialog
+                        title={job.title}
+                        url={job.job_desc_url}
+                        applyUrl={job.apply_url}
+                        fallbackDescription={job.description}
+                        trigger={
+                          <Button className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+                            View Job Description
+                          </Button>
+                        }
+                      />
                       {job.apply_url && (
                         <Button asChild className="rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
                           <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
@@ -89,17 +89,17 @@ const Careers = () => {
                   />
                   <h3 className="font-heading font-bold text-lg text-white mb-4">{job.title}</h3>
                   <div className="flex flex-col gap-2">
-                    {job.job_desc_url && (
-                      <JobDescriptionDialog
-                        title={job.title}
-                        url={job.job_desc_url}
-                        trigger={
-                          <Button size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-                            Job Description
-                          </Button>
-                        }
-                      />
-                    )}
+                    <JobDescriptionDialog
+                      title={job.title}
+                      url={job.job_desc_url}
+                      applyUrl={job.apply_url}
+                      fallbackDescription={job.description}
+                      trigger={
+                        <Button size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+                          Job Description
+                        </Button>
+                      }
+                    />
                     {job.apply_url && (
                       <Button asChild size="sm" className="rounded-full font-heading font-bold bg-white/20 text-white hover:bg-white/30">
                         <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
@@ -131,17 +131,17 @@ const Careers = () => {
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
                     <div className="flex flex-wrap gap-3">
-                      {job.job_desc_url && (
-                        <JobDescriptionDialog
-                          title={job.title}
-                          url={job.job_desc_url}
-                          trigger={
-                            <Button size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-                              View Job Description
-                            </Button>
-                          }
-                        />
-                      )}
+                      <JobDescriptionDialog
+                        title={job.title}
+                        url={job.job_desc_url}
+                        applyUrl={job.apply_url}
+                        fallbackDescription={job.description}
+                        trigger={
+                          <Button size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+                            View Job Description
+                          </Button>
+                        }
+                      />
                       {job.apply_url && (
                         <Button asChild size="sm" className="rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
                           <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
