@@ -55,18 +55,45 @@ const Rental = () => {
 
       {packages && packages.length > 0 && (
         <>
-        <section id="packages" className="section-y section-x bg-secondary/50">
-          <div className="ds-container">
-            <div className="max-w-2xl mb-16">
-              <p className="ds-eyebrow">Choose Your Package</p>
-              <h2 className="ds-h2 mb-6">Pricing that fits every event</h2>
-              <p className="ds-lead">
-                From small parties to full buyouts, pick the package that matches your day.
-              </p>
-            </div>
+        <section id="packages" className="py-20 px-4 bg-primary">
+          <div className="container mx-auto max-w-5xl">
             {(() => {
               const mainPackages = packages.filter((p) => !/add[- ]?on/i.test(p.name));
               const addOns = packages.filter((p) => /add[- ]?on/i.test(p.name));
+              const partyPkg = mainPackages.find((p) => /^party package$/i.test(p.name)) || mainPackages[0];
+              const extendedPkg = mainPackages.find((p) => /extended/i.test(p.name)) || mainPackages[1];
+              const bookHref = extendedPkg?.cta_url || partyPkg?.cta_url || '#scheduling';
+              const comparisonRows: { label: string; desc?: string; party: string | boolean; extended: string | boolean }[] = [
+                { label: 'Claw Machines', desc: 'Number of machines included.', party: '1', extended: '1' },
+                { label: 'Play Time', desc: 'How long guests get to play.', party: '1 hour', extended: '2 hours' },
+                { label: 'Filled with Your Product', desc: '5–10 inch plush, 0–5 lbs.', party: true, extended: true },
+                { label: '40 Plushies of Your Choice', desc: 'Subject to in-stock availability.', party: false, extended: true },
+                { label: 'Free Delivery within 20 Miles', party: true, extended: true },
+                { label: 'Full Delivery and Setup', party: true, extended: true },
+                { label: 'Easy Win Difficulty', party: true, extended: true },
+                { label: 'Free-Play Mode', party: true, extended: true },
+              ];
+              const Cell = ({ value, color }: { value: string | boolean; color: 'red' | 'yellow' }) => {
+                if (value === true) {
+                  return (
+                    <span
+                      className={`inline-flex h-7 w-7 md:h-9 md:w-9 items-center justify-center rounded-full ${
+                        color === 'yellow' ? 'bg-klawsome-yellow text-klawsome-navy' : 'bg-primary text-white'
+                      }`}
+                    >
+                      ✓
+                    </span>
+                  );
+                }
+                if (value === false) {
+                  return (
+                    <span className="inline-flex h-7 w-7 md:h-9 md:w-9 items-center justify-center rounded-full bg-white/15 text-white/70">
+                      ✕
+                    </span>
+                  );
+                }
+                return <span className="text-white font-body text-xs md:text-sm text-center">{value}</span>;
+              };
               const renderCard = (p: RentalPackage, compact = false) => (
                 <div
                   key={p.id}
@@ -118,13 +145,62 @@ const Rental = () => {
               );
               return (
                 <>
-                  {mainPackages.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                      {mainPackages.map((p) => renderCard(p))}
+                  <p className="ds-eyebrow text-klawsome-yellow mb-3 text-center">Choose Your Package</p>
+                  <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4 text-center uppercase">
+                    Package Comparison
+                  </h2>
+                  <p className="text-white/80 font-body text-center mb-12 max-w-2xl mx-auto">
+                    Compare our two rental packages and pick the one that's right for your event.
+                  </p>
+
+                  <div className="rounded-kawaii overflow-hidden border border-white/20 bg-klawsome-navy/40 backdrop-blur-sm">
+                    {/* Header */}
+                    <div className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+                      <div className="p-3 md:p-6" />
+                      <div className="p-3 md:p-6 text-center bg-primary border-l border-white/20">
+                        <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Party Package</p>
+                        <p className="text-white/80 font-body text-xs mt-1">{partyPkg?.price || '$445'}</p>
+                      </div>
+                      <div className="p-3 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
+                        <p className="font-heading font-bold text-klawsome-navy text-base md:text-2xl uppercase leading-tight">Extended Party</p>
+                        <p className="text-klawsome-navy/80 font-body text-xs mt-1">{extendedPkg?.price || '$645'}</p>
+                      </div>
                     </div>
-                  )}
+
+                    {/* Rows */}
+                    {comparisonRows.map((row, i) => (
+                      <div
+                        key={i}
+                        className={`grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
+                      >
+                        <div className="p-3 md:p-6">
+                          <p className="font-heading font-bold text-white text-xs md:text-base leading-tight">{row.label}</p>
+                          {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
+                        </div>
+                        <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                          <Cell value={row.party} color="red" />
+                        </div>
+                        <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                          <Cell value={row.extended} color="yellow" />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+
+                  <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
+                    <div />
+                    <div className="col-span-2 flex justify-end">
+                      <a
+                        href={bookHref}
+                        className="w-full inline-flex items-center justify-center rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 transition-colors"
+                      >
+                        Book Your Event
+                      </a>
+                    </div>
+                  </div>
+
                   {addOns.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
                       {addOns.map((p) => renderCard(p, true))}
                     </div>
                   )}
@@ -133,7 +209,7 @@ const Rental = () => {
             })()}
           </div>
         </section>
-        <KawaiiDivider variant="scallop" from="secondary-soft" to="white" stroke="baby-pink" height={90} />
+        <KawaiiDivider variant="scallop" from="red" to="white" stroke="baby-pink" height={90} />
         </>
       )}
 
