@@ -1,9 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { Button } from './ui/button';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
+import { openBookingModal } from './BookNowDialog';
+import { Link } from 'react-router-dom';
 gsap.registerPlugin(ScrollTrigger);
 
 const KawaiiHero = () => {
@@ -101,17 +102,28 @@ const KawaiiHero = () => {
           </p>
 
           <div className="space-y-5" style={{ opacity: 0 }}>
-            <nav aria-label="Jump to section" className="flex flex-wrap gap-2">
-              {jumpLinks.map((l) => (
-                <button
-                  key={l.id}
-                  type="button"
-                  onClick={() => scrollTo(l.id)}
-                  className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
-                >
-                  {l.label}
-                </button>
-              ))}
+            <nav aria-label="Quick actions" className="flex flex-wrap gap-2">
+              <button
+                type="button"
+                onClick={openBookingModal}
+                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+              >
+                Book Now
+              </button>
+              <a
+                href="https://app.squareup.com/gift/ML1R35ZH9VKRW/order"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+              >
+                Buy Gift Card
+              </a>
+              <Link
+                to="/store"
+                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+              >
+                Buy Plushies
+              </Link>
             </nav>
           </div>
         </div>
