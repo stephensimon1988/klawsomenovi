@@ -1,36 +1,34 @@
-## Goal
+## Plan: Careers page improvements
 
-Animate `KawaiiDivider` so each divider is wider than the viewport and slides horizontally based on the user's mouse X position — a subtle parallax that feels alive but never causes a horizontal scrollbar.
+### 1. Upload PDFs to storage
+Copy the 5 uploaded PDFs into the `images` storage bucket under `careers/`:
+- `Summer_Intern.pdf`
+- `Assistant_General_Manager.pdf`
+- `Corporate_Development_Fellow.pdf`
+- `General_Manager.pdf`
+- `Store_Associate.pdf`
 
-## Behavior
+### 2. Update `job_listings` data
+Rename + relink the 5 PDF-backed jobs and set `apply_url` to mailto links for all 7 listings.
 
-- Each divider's inner SVG renders at **110vw** width, centered (so there's ~5vw of bleed on each side).
-- The divider container clips overflow (`overflow-hidden`) so the extra width never affects page scroll.
-- As the mouse moves across the page horizontally, the inner SVG translates left/right within its ~10vw of slack:
-  - Mouse at far left → SVG shifted ~+5vw (showing left bleed pulled in)
-  - Mouse at far right → SVG shifted ~-5vw
-  - Mouse centered → SVG centered
-- Movement is smoothed (eased / lerped) so it feels gentle, not twitchy.
-- Respects `prefers-reduced-motion`: stays centered, no tracking.
-- On touch / no-pointer devices: stays centered (no listener attached).
+| Current title | New title | job_desc_url | apply_url |
+|---|---|---|---|
+| Internship (Unpaid) | Summer Intern | …/Summer_Intern.pdf | mailto:team@klawsomenovi.com?subject=Application%3A%20Summer%20Intern |
+| Assistant Store Manager | Assistant General Manager | …/Assistant_General_Manager.pdf | mailto:…Assistant%20General%20Manager |
+| Corporate Development Fellow (Founder's Office, Unpaid) | Corporate Development Fellow | …/Corporate_Development_Fellow.pdf | mailto:…Corporate%20Development%20Fellow |
+| General Manager | (same) | …/General_Manager.pdf | mailto:…General%20Manager |
+| Store Associate | (same) | …/Store_Associate.pdf | mailto:…Store%20Associate |
+| Events Assistant Manager | (same, keep existing Google Doc URL) | unchanged | mailto:…Events%20Assistant%20Manager |
+| Purchasing Specialist | (same, keep existing Google Doc URL) | unchanged | mailto:…Purchasing%20Specialist |
 
-## Implementation
+### 3. Careers.tsx UI changes
+- **Wider columns**: change in-store and unpaid grids from `md:grid-cols-2` to single column or `lg:grid-cols-2` with a wider `max-w-4xl` → `max-w-6xl`; change hybrid `md:grid-cols-3` → `md:grid-cols-2` with `max-w-5xl` so each card is meaningfully wider.
+- **Job Description button**: instead of `<a target="_blank">`, open a shadcn `Dialog` modal containing a PDF viewer (`<iframe src={job_desc_url}>` at ~75vh) with the job title as the dialog header and a "Open in new tab" fallback link.
+- **Apply Here button**: render as `<a href={job.apply_url}>` (already mailto from step 2). No code logic change beyond ensuring it stays a plain anchor.
 
-1. **`KawaiiDivider.tsx`**
-   - Wrap the `<svg>` in an inner element styled `width: 110vw; margin-left: -5vw;` (or `left: -5vw; position: relative`). Outer wrapper keeps `w-full overflow-hidden`.
-   - Apply a CSS variable for the horizontal offset, e.g. `transform: translate3d(var(--divider-x, 0px), 0, 0)` on the inner element, with a short `transition` for smoothing.
-
-2. **Global mouse tracker** (single listener, not per-divider)
-   - Add a small hook `useDividerParallax` mounted once (e.g. in `App.tsx` or a tiny `<DividerParallax />` component rendered inside `App`).
-   - On `pointermove`, compute normalized X: `nx = (clientX / innerWidth) * 2 - 1` (range -1..1).
-   - Use `requestAnimationFrame` + lerp toward target for smoothing.
-   - Write the value to `document.documentElement.style.setProperty('--divider-x', `${nx * -vwPx * 0.05}px`)` (≈5vw max shift, inverted so movement feels "natural" — image follows cursor rather than runs away; we'll pick the direction that feels best during build).
-   - Skip when `matchMedia('(prefers-reduced-motion: reduce)').matches` or `matchMedia('(pointer: coarse)').matches`.
-
-3. **No per-page changes required.** All existing `<KawaiiDivider />` usages benefit automatically.
-
-## Out of scope
-
-- No changes to divider shapes, colors, heights, or section backgrounds.
-- No vertical parallax, no scroll-based animation (mouse-driven only, per request).
-- No changes to non-divider elements.
+### Technical notes
+- New component `JobDescriptionDialog.tsx` wrapping shadcn `Dialog` + iframe.
+- mailto subjects URL-encoded (`%20`, `%3A`).
+- Storage upload via `supabase--storage_upload` to bucket `images`, path `careers/<file>.pdf`.
+- Data update via `supabase--insert` (UPDATE statements on `job_listings`).
+- No schema changes; no migration needed.
