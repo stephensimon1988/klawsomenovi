@@ -64,7 +64,7 @@ const Rental = () => {
               const addOns = packages.filter((p) => /add[- ]?on/i.test(p.name));
               const partyPkg = mainPackages.find((p) => /^party package$/i.test(p.name)) || mainPackages[0];
               const extendedPkg = mainPackages.find((p) => /extended/i.test(p.name)) || mainPackages[1];
-              const bookHref = extendedPkg?.cta_url || partyPkg?.cta_url || '#scheduling';
+              void extendedPkg; void partyPkg;
               const comparisonRows: { label: string; desc?: string; party: string | boolean; extended: string | boolean }[] = [
                 { label: 'Claw Machines', desc: 'Number of machines included.', party: '1', extended: '1' },
                 { label: 'Play Time', desc: 'How long guests get to play.', party: '1 hour', extended: '2 hours' },
