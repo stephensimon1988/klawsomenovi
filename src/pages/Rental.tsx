@@ -209,13 +209,12 @@ const Rental = () => {
             })()}
           </div>
         </section>
-        <KawaiiDivider variant="scallop" from="red" to="white" stroke="baby-pink" height={90} />
         </>
       )}
 
       {rentalFaqs.length > 0 && (
         <>
-        <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
+        <KawaiiDivider variant="cloud" from="red" to="baby-blue" stroke="baby-pink" height={90} />
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container">
             <div className="grid lg:grid-cols-2 gap-16 items-center">
