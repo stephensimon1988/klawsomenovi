@@ -1,49 +1,32 @@
 ## Goal
 
-On `/rental`, replace the two side-by-side "Party Package" / "Extended Party Package" cards with a comparison-table layout that mirrors the "Package Comparison" table on `/birthdays`. Add-on cards below stay unchanged.
+In `PageHero.tsx`, the row of jump-link pills currently rendered inside the hero (above "Join Rewards Today") will be replaced with the same 3 CTAs on every page:
 
-## Scope
+1. **Book Now** — opens the global Acuity booking modal (`openBookingModal()` from `BookNowDialog`)
+2. **Buy Gift Card** — links to `https://app.squareup.com/gift/ML1R35ZH9VKRW/order` (new tab)
+3. **Buy Plushies** — links to `/store`
 
-Frontend-only edit to `src/pages/Rental.tsx`. No DB changes — data continues to come from `rental_packages`.
+These are the same destinations already used elsewhere in the site (top nav + `KawaiiGiftCards` section), so behavior stays consistent.
 
-## New section design
+The sticky **yellow sub-nav** that slides in on scroll (the second `<nav>` block in `PageHero.tsx`) keeps its current behavior — it continues to render the per-page `jumpLinks` prop (FAQ, Waiver, Gallery, etc.) as in-page anchors.
 
-Match Birthdays styling:
+## Changes
 
-- Section background: `bg-primary` (Klawsome red), white text
-- Eyebrow "Choose Your Package" + heading "Package Comparison" + lead copy, all centered
-- Table container: `rounded-kawaii`, white/20 borders, `bg-klawsome-navy/40 backdrop-blur-sm`
-- Header row: empty cell + "Party Package" column (red bg, white text) + "Extended Party Package" column highlighted (`bg-klawsome-yellow`, navy text), each with the price beneath
-- Body rows: alternating `bg-white/5`, label on left, check / x / text in each column
-- Footer: yellow "Book Your Event" CTA aligned right, linking to first package's `cta_url` (or `#scheduling` fallback)
+**File: `src/components/PageHero.tsx`**
 
-## Comparison rows
+- Remove the in-hero `<nav aria-label="Jump to section">` block (currently rendered when `links.length > 0`).
+- In its place, render a fixed 3-button CTA row, always shown, regardless of `jumpLinks`:
+  - Book Now → `<button onClick={openBookingModal}>`
+  - Buy Gift Card → `<a href="https://app.squareup.com/gift/ML1R35ZH9VKRW/order" target="_blank" rel="noopener noreferrer">`
+  - Buy Plushies → `<Link to="/store">`
+- Reuse the existing `linkBtnClass` styling so the pills match the current look (kawaii-navy bg, yellow hover lift).
+- Respect `align === 'center'` for justification.
+- Keep the sticky yellow sub-nav (`fixed top-20 ...`) untouched — it still iterates `links` for in-page anchors.
+- Add `import { openBookingModal } from './BookNowDialog'`.
 
-Built from the two packages' feature lists. Party = ✓ where the feature exists in Party Package, Extended = ✓ where it exists in Extended (Extended also inherits Party's via "Everything in Party Package"). Final row set:
+No changes to any other file. The `jumpLinks` prop continues to drive only the sticky yellow nav.
 
-| Label | Party | Extended |
-|---|---|---|
-| Claw Machines | 1 | 1 |
-| Play Time | 1 hour | 2 hours |
-| Filled with your product (5–10 in, 0–5 lbs) | ✓ | ✓ |
-| 40 plushies of your choice (subject to stock) | ✗ | ✓ |
-| Free delivery within 20 miles | ✓ | ✓ |
-| Full delivery and setup | ✓ | ✓ |
-| Easy win difficulty | ✓ | ✓ |
-| Free-play mode | ✓ | ✓ |
+## Out of scope
 
-Rows defined as a local const array in the file (similar to `comparisonRows` in Birthdays). The two package records are looked up by name (`Party Package`, `Extended Party Package`) so prices stay CMS-driven.
-
-## Add-ons
-
-Existing "Add-On" cards block (renderCard with compact=true) stays exactly as-is, rendered below the comparison table.
-
-## Dividers
-
-Existing `KawaiiDivider` after the section is kept. Section bg changes from `bg-secondary/50` to `bg-primary` — verify the divider `from`/`to` colors still match adjacent sections per the divider memory rule, and adjust if needed (likely change preceding hero-to-packages transition and the trailing divider's `from` to `red`).
-
-## Technical notes
-
-- Add a small `Cell` helper component (mirrors Birthdays) that renders ✓ / ✗ / arbitrary text given a value
-- Reuse Tailwind tokens already in the project (`klawsome-yellow`, `klawsome-navy`, `primary`, `rounded-kawaii`)
-- No new dependencies, no schema changes
+- Top site nav (`KawaiiNav.tsx`) — unchanged.
+- Per-page `jumpLinks={...}` definitions — unchanged.
