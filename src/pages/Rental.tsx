@@ -213,8 +213,6 @@ const Rental = () => {
         </>
       )}
 
-      <DynamicSections pageKey="rental" excludeSectionKeys={['rental-faq']} />
-
       {rentalFaqs.length > 0 && (
         <>
         <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
