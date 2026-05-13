@@ -1,7 +1,6 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
-import DynamicSections from '@/components/DynamicSections';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
@@ -213,8 +212,6 @@ const Rental = () => {
         <KawaiiDivider variant="scallop" from="red" to="white" stroke="baby-pink" height={90} />
         </>
       )}
-
-      <DynamicSections pageKey="rental" excludeSectionKeys={['rental-faq']} />
 
       {rentalFaqs.length > 0 && (
         <>
