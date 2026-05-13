@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -40,6 +40,8 @@ const KawaiiNav = () => {
   const [moreOpen, setMoreOpen] = useState(false);
   const [clawActive, setClawActive] = useState(false);
   const [pointerX, setPointerX] = useState<number | null>(null);
+  const linksRef = useRef<HTMLDivElement>(null);
+  const [bounds, setBounds] = useState<{ min: number; max: number } | null>(null);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -72,17 +74,23 @@ const KawaiiNav = () => {
     <nav
       onMouseEnter={() => !isOpen && setClawActive(true)}
       onMouseLeave={() => setClawActive(false)}
-      onMouseMove={(e) => setPointerX(e.clientX)}
+      onMouseMove={(e) => {
+        const rect = linksRef.current?.getBoundingClientRect();
+        if (rect) {
+          setBounds({ min: rect.left, max: rect.right });
+        }
+        setPointerX(e.clientX);
+      }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
     >
-      <NavClaw active={clawActive && !isOpen} pointerX={pointerX} />
+      <NavClaw active={clawActive && !isOpen} pointerX={pointerX} minX={bounds?.min} maxX={bounds?.max} />
       <div className="ds-container section-x relative z-[60]">
         <div className="flex items-center justify-between h-20">
           <button onClick={() => handleNav('#hero')} className="flex items-center">
             <img src={klawsomeLogo} alt="Klawsome" className="h-10 w-auto" />
           </button>
 
-          <div className="hidden md:flex items-center gap-10">
+          <div ref={linksRef} className="hidden md:flex items-center gap-10">
             {navLinks.map((link) => (
               <button
                 key={link.label}
