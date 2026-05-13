@@ -1,34 +1,49 @@
-## Plan: Careers page improvements
+## Goal
 
-### 1. Upload PDFs to storage
-Copy the 5 uploaded PDFs into the `images` storage bucket under `careers/`:
-- `Summer_Intern.pdf`
-- `Assistant_General_Manager.pdf`
-- `Corporate_Development_Fellow.pdf`
-- `General_Manager.pdf`
-- `Store_Associate.pdf`
+On `/rental`, replace the two side-by-side "Party Package" / "Extended Party Package" cards with a comparison-table layout that mirrors the "Package Comparison" table on `/birthdays`. Add-on cards below stay unchanged.
 
-### 2. Update `job_listings` data
-Rename + relink the 5 PDF-backed jobs and set `apply_url` to mailto links for all 7 listings.
+## Scope
 
-| Current title | New title | job_desc_url | apply_url |
-|---|---|---|---|
-| Internship (Unpaid) | Summer Intern | …/Summer_Intern.pdf | mailto:team@klawsomenovi.com?subject=Application%3A%20Summer%20Intern |
-| Assistant Store Manager | Assistant General Manager | …/Assistant_General_Manager.pdf | mailto:…Assistant%20General%20Manager |
-| Corporate Development Fellow (Founder's Office, Unpaid) | Corporate Development Fellow | …/Corporate_Development_Fellow.pdf | mailto:…Corporate%20Development%20Fellow |
-| General Manager | (same) | …/General_Manager.pdf | mailto:…General%20Manager |
-| Store Associate | (same) | …/Store_Associate.pdf | mailto:…Store%20Associate |
-| Events Assistant Manager | (same, keep existing Google Doc URL) | unchanged | mailto:…Events%20Assistant%20Manager |
-| Purchasing Specialist | (same, keep existing Google Doc URL) | unchanged | mailto:…Purchasing%20Specialist |
+Frontend-only edit to `src/pages/Rental.tsx`. No DB changes — data continues to come from `rental_packages`.
 
-### 3. Careers.tsx UI changes
-- **Wider columns**: change in-store and unpaid grids from `md:grid-cols-2` to single column or `lg:grid-cols-2` with a wider `max-w-4xl` → `max-w-6xl`; change hybrid `md:grid-cols-3` → `md:grid-cols-2` with `max-w-5xl` so each card is meaningfully wider.
-- **Job Description button**: instead of `<a target="_blank">`, open a shadcn `Dialog` modal containing a PDF viewer (`<iframe src={job_desc_url}>` at ~75vh) with the job title as the dialog header and a "Open in new tab" fallback link.
-- **Apply Here button**: render as `<a href={job.apply_url}>` (already mailto from step 2). No code logic change beyond ensuring it stays a plain anchor.
+## New section design
 
-### Technical notes
-- New component `JobDescriptionDialog.tsx` wrapping shadcn `Dialog` + iframe.
-- mailto subjects URL-encoded (`%20`, `%3A`).
-- Storage upload via `supabase--storage_upload` to bucket `images`, path `careers/<file>.pdf`.
-- Data update via `supabase--insert` (UPDATE statements on `job_listings`).
-- No schema changes; no migration needed.
+Match Birthdays styling:
+
+- Section background: `bg-primary` (Klawsome red), white text
+- Eyebrow "Choose Your Package" + heading "Package Comparison" + lead copy, all centered
+- Table container: `rounded-kawaii`, white/20 borders, `bg-klawsome-navy/40 backdrop-blur-sm`
+- Header row: empty cell + "Party Package" column (red bg, white text) + "Extended Party Package" column highlighted (`bg-klawsome-yellow`, navy text), each with the price beneath
+- Body rows: alternating `bg-white/5`, label on left, check / x / text in each column
+- Footer: yellow "Book Your Event" CTA aligned right, linking to first package's `cta_url` (or `#scheduling` fallback)
+
+## Comparison rows
+
+Built from the two packages' feature lists. Party = ✓ where the feature exists in Party Package, Extended = ✓ where it exists in Extended (Extended also inherits Party's via "Everything in Party Package"). Final row set:
+
+| Label | Party | Extended |
+|---|---|---|
+| Claw Machines | 1 | 1 |
+| Play Time | 1 hour | 2 hours |
+| Filled with your product (5–10 in, 0–5 lbs) | ✓ | ✓ |
+| 40 plushies of your choice (subject to stock) | ✗ | ✓ |
+| Free delivery within 20 miles | ✓ | ✓ |
+| Full delivery and setup | ✓ | ✓ |
+| Easy win difficulty | ✓ | ✓ |
+| Free-play mode | ✓ | ✓ |
+
+Rows defined as a local const array in the file (similar to `comparisonRows` in Birthdays). The two package records are looked up by name (`Party Package`, `Extended Party Package`) so prices stay CMS-driven.
+
+## Add-ons
+
+Existing "Add-On" cards block (renderCard with compact=true) stays exactly as-is, rendered below the comparison table.
+
+## Dividers
+
+Existing `KawaiiDivider` after the section is kept. Section bg changes from `bg-secondary/50` to `bg-primary` — verify the divider `from`/`to` colors still match adjacent sections per the divider memory rule, and adjust if needed (likely change preceding hero-to-packages transition and the trailing divider's `from` to `red`).
+
+## Technical notes
+
+- Add a small `Cell` helper component (mirrors Birthdays) that renders ✓ / ✗ / arbitrary text given a value
+- Reuse Tailwind tokens already in the project (`klawsome-yellow`, `klawsome-navy`, `primary`, `rounded-kawaii`)
+- No new dependencies, no schema changes
