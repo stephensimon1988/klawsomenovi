@@ -29,7 +29,7 @@ const GALLERY_HEROES = [
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.jpg',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/fa35626f-d9ca-4cdf-bbe0-27ed04fe3de1/unnamed+%285%29.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/33b38672-5286-4f40-a9bd-96bf778cf5a6/unnamed+%286%29.webp',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg',
+  '/images/klawsome-storefront.jpg',
 ];
 
 const hashPath = () => {

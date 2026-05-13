@@ -25,7 +25,7 @@ const KawaiiVisit = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div ref={imageRef} style={{ opacity: 0 }}>
             <img
-              src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg"
+              src="/images/klawsome-storefront.jpg"
               alt="Klawsome arcade storefront"
               className="ds-img-portrait"
               loading="lazy"
