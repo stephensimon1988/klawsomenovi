@@ -16,7 +16,7 @@ const Contact = () => {
         subtitle={hero?.subtitle}
         imageUrl={hero?.image_url || ''}
       />
-      <section className="bg-secondary-soft py-16 md:py-24">
+      <section className="bg-klawsome-baby-blue py-16 md:py-24">
         <div className="container mx-auto px-4">
           <div className="grid gap-10 md:grid-cols-2 md:gap-14 items-center max-w-6xl mx-auto">
             <div className="rounded-3xl overflow-hidden shadow-xl">
