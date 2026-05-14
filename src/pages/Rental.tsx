@@ -216,32 +216,28 @@ const Rental = () => {
         <>
         <KawaiiDivider variant="cloud" from="red" to="baby-blue" stroke="baby-pink" height={90} />
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
-          <div className="ds-container">
-            <div className="w-full">
-              <div>
-                <p className="ds-eyebrow">FAQ</p>
-                <h2 className="ds-h2 mb-8">Frequently Asked Questions</h2>
-                <Accordion type="single" collapsible className="w-full">
-                  {rentalFaqs.map((item) => (
-                    <AccordionItem key={item.id} value={item.id} className="border-b border-foreground/15">
-                      <AccordionTrigger className="text-left font-heading font-bold text-base md:text-lg py-5 hover:no-underline">
-                        {item.question}
-                      </AccordionTrigger>
-                      <AccordionContent className="font-body text-base leading-relaxed text-foreground/75 pb-5">
-                        {item.answer}
-                      </AccordionContent>
-                    </AccordionItem>
-                  ))}
-                </Accordion>
-                <div className="mt-10">
-                  <a
-                    href="/faq"
-                    className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
-                  >
-                    See all FAQs <span>→</span>
-                  </a>
-                </div>
-              </div>
+          <div className="ds-container-narrow">
+            <p className="ds-eyebrow">FAQ</p>
+            <h2 className="ds-h2 mb-8">Frequently Asked Questions</h2>
+            <Accordion type="single" collapsible className="w-full">
+              {rentalFaqs.map((item) => (
+                <AccordionItem key={item.id} value={item.id} className="border-b border-border">
+                  <AccordionTrigger className="text-left font-heading font-bold text-lg md:text-xl py-6 hover:no-underline">
+                    {item.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="font-body text-base md:text-lg leading-relaxed text-muted-foreground pb-6">
+                    {item.answer}
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
+            </Accordion>
+            <div className="mt-10">
+              <a
+                href="/faq"
+                className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+              >
+                See all FAQs <span>→</span>
+              </a>
             </div>
           </div>
         </section>
