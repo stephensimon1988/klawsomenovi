@@ -79,7 +79,7 @@ const Birthdays = () => {
         eyebrow={hero?.eyebrow || 'Birthdays'}
         title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
         subtitle={hero?.subtitle}
-        imageUrl={hero?.image_url || content?.hero_image_url || birthdaysHero}
+        imageUrl={birthdaysHero}
         overlay="white"
         jumpLinks={[
           { label: 'Party Rules', id: 'party-rules' },
