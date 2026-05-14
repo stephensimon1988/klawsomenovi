@@ -66,8 +66,8 @@ const OurStory = () => {
             <section id={`story-${slugify(s.title)}`} className={`section-y section-x ${idx % 2 === 0 ? 'bg-secondary/40' : ''}`}>
               {sideImage ? (
                 <div className="ds-container">
-                  <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-center">
-                    <div className={`md:col-span-5 ${imageOnLeft ? 'md:order-1' : 'md:order-2'}`}>
+                  <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+                    <div className={imageOnLeft ? 'md:order-1' : 'md:order-2'}>
                       <img
                         src={sideImage}
                         alt={s.title}
@@ -75,7 +75,7 @@ const OurStory = () => {
                         className="w-full h-auto rounded-kawaii shadow-lg object-cover aspect-[4/5]"
                       />
                     </div>
-                    <div className={`md:col-span-7 ${imageOnLeft ? 'md:order-2' : 'md:order-1'}`}>
+                    <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>
                       {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
                       <h2 className="ds-h2 uppercase mb-10">{s.title}</h2>
                       <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
