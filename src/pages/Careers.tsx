@@ -44,7 +44,10 @@ const Careers = () => {
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
-                    <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
+                    <p 
+                      className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
+                      dangerouslySetInnerHTML={{ __html: job.description }}
+                    />
                     <div className="flex flex-wrap gap-3">
                       <JobDescriptionDialog
                         title={job.title}
@@ -129,7 +132,10 @@ const Careers = () => {
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
-                    <p className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1">{job.description}</p>
+                    <p 
+                      className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
+                      dangerouslySetInnerHTML={{ __html: job.description }}
+                    />
                     <div className="flex flex-wrap gap-3">
                       <JobDescriptionDialog
                         title={job.title}
