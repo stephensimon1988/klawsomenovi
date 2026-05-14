@@ -354,7 +354,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "8f0c8648-c365-4c4f-8c3f-435564c607a6",
       "question": "What are the available token bundles?",
-       "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $319 → 250 + 75 bonus.",
+       "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $249 → 250 + 75 bonus.",
       "page": "general",
       "sort_order": 106
     },
@@ -438,7 +438,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "c0eb46a0-3cf6-4289-b50e-47a4cbec596f",
       "question": "How many tokens should I purchase?",
-      "answer": "We recommend the following: 325 tokens ($319 package) per group of five kids. This breaks down to 50 tokens per child, with 75 tokens in reserve to give out to kids that need help. Please note you may only purchase additional tokens (beyond basic $319 package) in-store for events.",
+      "answer": "We recommend the following: 325 tokens ($249 package) per group of five kids. This breaks down to 50 tokens per child, with 75 tokens in reserve to give out to kids that need help. Please note you may only purchase additional tokens (beyond basic $249 package) in-store for events.",
       "page": "general",
       "sort_order": 6
     },
@@ -2974,7 +2974,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "18b5511a-819a-4c0f-9eeb-a57aaf6b36fd",
       "name": "Private",
       "description": "In-house party at Klawsome",
-      "price": "$319",
+      "price": "$249",
       "features": [
         "Includes 325 Klaw Machine Tokens",
         "Exclusive Private Space",
@@ -2989,7 +2989,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "7f384971-c90c-4acb-9042-74577d7690ea",
       "name": "Reserved Semi-Private",
       "description": "Table for one hour at Paris Baguette (Klawsome!'s nextdoor neighbor)",
-      "price": "$319",
+      "price": "$249",
       "features": [
         "Includes 325 Klaw Machine Tokens",
         "Table for 1 hour at Paris Baguette",
@@ -4924,7 +4924,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "76c1b0ab-e056-476b-8e73-786c3fb1b43c",
-      "price": "$319",
+      "price": "$249",
       "tokens": "250 + 75",
       "bonus": "30%",
       "is_highlight": false,
