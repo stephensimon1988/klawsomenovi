@@ -8,7 +8,8 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
-import birthdaysHero from '@/assets/birthdays-hero.png';
+ import birthdaysHero from '@/assets/birthdays-hero.png';
+ import pandaCatFoxParty from '@/assets/panda-cat-fox-party.jpg';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
@@ -93,12 +94,12 @@ const Birthdays = () => {
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div className="rounded-kawaii overflow-hidden">
-              <img
-                src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.png"
-                alt="Kawaii characters celebrating a birthday party"
-                className="w-full aspect-square object-contain"
-                loading="lazy"
-              />
+               <img
+                 src={pandaCatFoxParty}
+                 alt="Kawaii characters celebrating a birthday party"
+                 className="w-full aspect-square object-cover rounded-kawaii"
+                 loading="lazy"
+               />
             </div>
 
             <div>
