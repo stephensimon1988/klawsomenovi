@@ -18,6 +18,7 @@ import Faq from "./pages/Faq.tsx";
 import Rental from "./pages/Rental.tsx";
 import Store from "./pages/Store.tsx";
 import Community from "./pages/Community.tsx";
+import CommunityPartners from "./pages/CommunityPartners.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
 import Contact from "./pages/Contact.tsx";
 import Unsubscribe from "./pages/Unsubscribe.tsx";
@@ -51,6 +52,7 @@ const App = () => (
           <Route path="/rental" element={<Rental />} />
           <Route path="/store" element={<Store />} />
           <Route path="/community" element={<Community />} />
+          <Route path="/community-partners" element={<CommunityPartners />} />
           <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
