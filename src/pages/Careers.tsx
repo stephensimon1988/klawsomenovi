@@ -5,6 +5,33 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import JobDescriptionDialog from '@/components/JobDescriptionDialog';
+import { GraduationCap, Crown, PartyPopper, ShoppingCart, TrendingUp, Sparkles, type LucideIcon } from 'lucide-react';
+
+const ROLE_META: Record<string, { icon: LucideIcon; tagline: string }> = {
+  'Summer Intern': {
+    icon: GraduationCap,
+    tagline: 'A 2–3 month mentorship in your field — part-time, hybrid, ends with a recommendation letter.',
+  },
+  'General Manager': {
+    icon: Crown,
+    tagline: 'Lead day-to-day operations, coach the team, and own the in-store experience.',
+  },
+  'Events Assistant Manager': {
+    icon: PartyPopper,
+    tagline: 'Help plan and run birthdays, group parties, and special events from start to finish.',
+  },
+  'Purchasing Specialist': {
+    icon: ShoppingCart,
+    tagline: 'Source the cutest plushies and keep every claw machine perfectly stocked.',
+  },
+  'Corporate Development Fellow': {
+    icon: TrendingUp,
+    tagline: 'Research markets and shape the story that grows Klawsome beyond a single location.',
+  },
+};
+
+const getRoleMeta = (title: string) =>
+  ROLE_META[title] || { icon: Sparkles, tagline: 'Join the Klawsome team and help create joyful moments.' };
 
 const Careers = () => {
   const { data: allJobs } = useCmsTable<JobListing>('job_listings');
@@ -78,39 +105,47 @@ const Careers = () => {
       {hybridJobs.length > 0 && (
         <>
         {inStoreJobs.length > 0 && (
-          <KawaiiDivider variant="scallop" from="navy" to="red" stroke="yellow" height={90} />
+          <KawaiiDivider variant="scallop" from="navy" to="baby-blue" stroke="white" height={90} />
         )}
-        <section id="hybrid-paid" className="section-y section-x bg-primary">
+        <section id="hybrid-paid" className="section-y section-x bg-klawsome-baby-blue">
           <div className="ds-container max-w-5xl">
-            <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Paid Jobs</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {hybridJobs.map((job) => (
-                <div key={job.id} className="bg-white/15 rounded-kawaii border border-white/20 p-6 text-center">
-                  <img
-                    src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/8184018c-90f9-4412-a17e-7bdfbbdd62a9/klaw-penguin.png"
-                    alt="" className="w-20 mx-auto mb-4" loading="lazy"
-                  />
-                  <h3 className="font-heading font-bold text-lg text-white mb-4">{job.title}</h3>
-                  <div className="flex flex-col gap-2">
-                    <JobDescriptionDialog
-                      title={job.title}
-                      url={job.job_desc_url}
-                      applyUrl={job.apply_url}
-                      fallbackDescription={job.description}
-                      trigger={
-                        <Button size="sm" className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-                          Job Description
+            <h2 className="text-2xl md:text-3xl font-heading font-bold text-klawsome-navy mb-10 text-center">Hybrid / Paid Jobs</h2>
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+              {hybridJobs.map((job) => {
+                const { icon: Icon, tagline } = getRoleMeta(job.title);
+                return (
+                  <div
+                    key={job.id}
+                    className="bg-white rounded-kawaii border border-klawsome-navy/10 shadow-sm p-6 text-center flex flex-col items-center transition-transform hover:-translate-y-1"
+                  >
+                    <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-4">
+                      <Icon className="w-8 h-8 text-primary" strokeWidth={2} />
+                    </div>
+                    <h3 className="font-heading font-bold text-lg text-klawsome-navy mb-2">{job.title}</h3>
+                    <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed mb-5 flex-1">
+                      {tagline}
+                    </p>
+                    <div className="flex flex-col gap-2 w-full">
+                      <JobDescriptionDialog
+                        title={job.title}
+                        url={job.job_desc_url}
+                        applyUrl={job.apply_url}
+                        fallbackDescription={job.description}
+                        trigger={
+                          <Button size="sm" className="w-full rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+                            Job Description
+                          </Button>
+                        }
+                      />
+                      {job.apply_url && (
+                        <Button asChild size="sm" className="w-full rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
+                          <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
                         </Button>
-                      }
-                    />
-                    {job.apply_url && (
-                      <Button asChild size="sm" className="rounded-full font-heading font-bold bg-white/20 text-white hover:bg-white/30">
-                        <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
-                      </Button>
-                    )}
+                      )}
+                    </div>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </section>
@@ -120,7 +155,7 @@ const Careers = () => {
       {/* Unpaid Opportunities */}
       {unpaidJobs.length > 0 && (
         <>
-        <KawaiiDivider variant="cloud" from={hybridJobs.length > 0 ? 'red' : 'navy'} to="navy" stroke="baby-pink" height={90} />
+        <KawaiiDivider variant="cloud" from={hybridJobs.length > 0 ? 'baby-blue' : 'navy'} to="navy" stroke="white" height={90} />
         <section id="unpaid-opps" className="section-y section-x bg-klawsome-navy">
           <div className="ds-container max-w-6xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
