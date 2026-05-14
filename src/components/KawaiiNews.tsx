@@ -1,6 +1,8 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsTable, type NewsArticle } from '@/hooks/useCmsContent';
 
+import newsCollage from '@/assets/news-collage.jpg';
+
 const fallbackArticles = [
   {
     image_url: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg',
@@ -60,7 +62,7 @@ const KawaiiNews = () => {
             >
               <div className="overflow-hidden">
                 <img
-                  src={article.image_url}
+                  src={article.image_url === 'src/assets/news-collage.jpg' ? newsCollage : article.image_url}
                   alt={article.title}
                   className="ds-img-card group-hover:scale-105 transition-transform duration-500"
                   loading="lazy"
