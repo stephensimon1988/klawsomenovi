@@ -324,7 +324,7 @@ const Rental = () => {
           <KawaiiDivider variant="scallop" from={rentalFaqs.length > 0 ? 'baby-blue' : 'secondary-soft'} to="baby-pink" stroke="white" height={90} />
           <section id="event-gallery" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
             <div className="ds-container">
-              <div className="max-w-2xl mb-12">
+              <div className="max-w-2xl mb-12 mx-auto text-center">
                 <p className="ds-eyebrow">Real Events</p>
                 <h2 className="ds-h2 mb-4">From our parties to yours</h2>
                 <p className="ds-lead">
@@ -343,7 +343,7 @@ const Rental = () => {
                   </figure>
                 ))}
               </div>
-              <div className="mt-10">
+              <div className="mt-10 flex justify-center">
                 <a
                   href="/gallery"
                   className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 hover:bg-foreground/90 transition-colors"
