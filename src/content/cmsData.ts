@@ -1021,7 +1021,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "WXYZ Detroit",
       "date": "2026",
       "url": "https://www.wxyz.com/news/voices/michigans-first-asian-inspired-mixed-use-development-draws-crowds-in-novi",
-      "image_url": "/src/assets/news-collage.jpg",
+      "image_url": "src/assets/news-collage.jpg",
       "is_active": true,
       "sort_order": -2,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
