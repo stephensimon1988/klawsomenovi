@@ -80,7 +80,7 @@ const Contact = () => {
           </div>
         </div>
       </section>
-      <KawaiiFooter prevColor="secondary-soft" />
+      <KawaiiFooter prevColor="baby-blue" />
     </div>
   );
 };
