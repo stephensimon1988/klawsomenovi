@@ -55,7 +55,8 @@ const Birthdays = () => {
     { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: "Bring any food you'd like", semi: "Paris Baguette or Cloud Boba (depending what you like)" },
     { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu' },
     { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full set up - $119', semi: 'Simple set up - $89' },
-    { label: 'Wall hangings / advance setup', desc: 'Hang banners or arrive early to set up.', private: true, semi: false },
+    { label: 'Ability to choose plushies in one machine', desc: 'Pick the plushies featured in one machine for your party.', private: true, semi: true },
+    { label: 'Choose machine color and music', desc: 'Customize the vibe with your color and music picks.', private: true, semi: false },
   ];
 
   const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
