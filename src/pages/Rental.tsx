@@ -215,7 +215,7 @@ const Rental = () => {
 
       {rentalFaqs.length > 0 && (
         <>
-        <KawaiiDivider variant="cloud" from="red" to="baby-blue" stroke="baby-pink" height={90} />
+        <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container-narrow">
             <p className="ds-eyebrow">FAQ</p>
