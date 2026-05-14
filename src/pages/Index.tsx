@@ -9,7 +9,6 @@ import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import DividerAudit from '@/components/DividerAudit';
 import { useEffect } from 'react';
 
 const Index = () => {
