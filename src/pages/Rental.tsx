@@ -50,6 +50,7 @@ const Rental = () => {
         imageUrl={hero?.image_url || ''}
         jumpLinks={[
           ...(packages && packages.length > 0 ? [{ label: 'Packages', id: 'packages' }] : []),
+          { label: 'Why Klawsome', id: 'why-klawsome' },
           ...(rentalFaqs.length > 0 ? [{ label: 'FAQ', id: 'rental-faq' }] : []),
           ...(eventPhotos.length > 0 ? [{ label: 'Gallery', id: 'event-gallery' }] : []),
           { label: 'Waiver', id: 'waiver' },
@@ -215,7 +216,7 @@ const Rental = () => {
         </>
       )}
 
-      <section className="section-y section-x bg-white">
+      <section id="why-klawsome" className="section-y section-x bg-white scroll-mt-32">
         <div className="ds-container max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
