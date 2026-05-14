@@ -2974,7 +2974,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "18b5511a-819a-4c0f-9eeb-a57aaf6b36fd",
       "name": "Private",
       "description": "In-house party at Klawsome",
-      "price": "$249",
+      "price": "$319",
       "features": [
         "Includes 325 Klaw Machine Tokens",
         "Exclusive Private Space",
