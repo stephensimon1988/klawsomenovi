@@ -159,7 +159,7 @@ const Rental = () => {
                     <div className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
                       <div className="p-3 md:p-6" />
                       <div className="p-3 md:p-6 text-center bg-primary border-l border-white/20">
-                        <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Party Package</p>
+                        <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Party<br /> Package</p>
                         <p className="text-white/80 font-body text-xs mt-1">{partyPkg?.price || '$445'}</p>
                       </div>
                       <div className="p-3 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
