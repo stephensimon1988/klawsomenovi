@@ -210,8 +210,55 @@ const Rental = () => {
             })()}
           </div>
         </section>
+        <KawaiiDivider variant="cloud" from="red" to="white" stroke="baby-pink" height={90} />
         </>
       )}
+
+      <section className="section-y section-x bg-white">
+        <div className="ds-container">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
+            <div className="space-y-6">
+              <img
+                src={rentalFamilyImage}
+                alt="Adult and child playing a claw machine together"
+                loading="lazy"
+                className="w-full rounded-2xl object-cover"
+                width={1024}
+                height={768}
+              />
+              <div>
+                <h2 className="ds-h2 mb-4">Why Rent from Klawsome?</h2>
+                <p className="ds-lead text-muted-foreground mb-4">
+                  Klawsome brings the fun of the claw machine arcade directly to your event. Our machines are great for birthdays, company parties, school events, fundraisers, trade shows, and community celebrations in Novi and the surrounding Michigan area.
+                </p>
+                <p className="ds-lead text-muted-foreground">
+                  We take care of the setup, support, and pickup so you can focus on your guests.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={openBookingModal}
+                className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+              >
+                Book Now
+              </button>
+            </div>
+            <div className="space-y-6 md:pt-8">
+              <h2 className="ds-h2">Ready to Book?</h2>
+              <p className="ds-lead text-muted-foreground">
+                Contact Klawsome to request a claw machine rental quote.
+              </p>
+              <button
+                type="button"
+                onClick={openBookingModal}
+                className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+              >
+                Book Now
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
 
       {rentalFaqs.length > 0 && (
         <>
