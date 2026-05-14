@@ -43,8 +43,8 @@ const Rental = () => {
       <KawaiiNav />
       <PageHero
         eyebrow={hero?.eyebrow || 'Rental'}
-        title={hero?.title || 'Make Your Event Unforgettable'}
-        subtitle={hero?.subtitle}
+        title={hero?.title || 'Bring the Arcade to Your Event'}
+        subtitle={hero?.subtitle || 'Interactive claw machine rentals with plush prizes, delivery, setup, and nonstop fun for guests of all ages.'}
         imageUrl={hero?.image_url || ''}
         jumpLinks={[
           ...(packages && packages.length > 0 ? [{ label: 'Packages', id: 'packages' }] : []),
