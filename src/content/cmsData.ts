@@ -1005,6 +1005,39 @@ export const cmsData: Record<string, any[]> = {
   ],
   "news_articles": [
     {
+      "id": "news-spartan-msu-2026",
+      "title": "Klawsome: A Filipino-American Family's Claw Arcade",
+      "source": "Spartan Story Hub (MSU)",
+      "date": "April 2026",
+      "url": "https://spartan.msu.edu/spartan-story-hub/news/2026/04/klawsome-filipino-claw-arcade",
+      "image_url": "/images/klawsome-storefront.jpg",
+      "is_active": true,
+      "sort_order": -3,
+      "created_at": "2026-04-14T15:05:34.646269+00:00"
+    },
+    {
+      "id": "news-wxyz-2026",
+      "title": "Michigan's first Asian-inspired mixed-use development draws crowds in Novi",
+      "source": "WXYZ Detroit",
+      "date": "2026",
+      "url": "https://www.wxyz.com/news/voices/michigans-first-asian-inspired-mixed-use-development-draws-crowds-in-novi",
+      "image_url": "https://ewscripps.brightspotcdn.com/dims4/default/36bba4b/2147483647/strip/true/crop/1920x1008+0+36/resize/1200x630!/quality/90/?url=http%3A%2F%2Fewscripps-brightspot.s3.amazonaws.com%2F85%2F07%2F5ce6b7794de0a38596202b94cac3%2Fphoto-collage-png.png",
+      "is_active": true,
+      "sort_order": -2,
+      "created_at": "2026-04-14T15:05:34.646269+00:00"
+    },
+    {
+      "id": "news-detroitnews-2026",
+      "title": "Buzz grows around Novi spot with Asian-themed shops and cuisine",
+      "source": "The Detroit News",
+      "date": "March 9th, 2026",
+      "url": "https://www.detroitnews.com/story/business/retail/2026/03/09/buzz-grows-around-novi-spot-with-asian-themed-shops-cuisine/88736530007/",
+      "image_url": "https://www.gannett-cdn.com/authoring/authoring-images/2026/03/03/PDTN/88953828007-0228-bu-asian-biz-16-1.jpg?auto=webp&crop=7928,4461,x0,y412&format=pjpg&width=1200",
+      "is_active": true,
+      "sort_order": -1,
+      "created_at": "2026-04-14T15:05:34.646269+00:00"
+    },
+    {
       "id": "40fa6e97-9325-4d20-9cd6-fe6698ca8480",
       "title": "Klawsome! Sakura Novi Kicks Off with Michigan's First 'Clawcade'",
       "source": "Hour Detroit",
