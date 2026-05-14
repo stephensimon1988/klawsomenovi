@@ -216,7 +216,7 @@ const Rental = () => {
       )}
 
       <section className="section-y section-x bg-white">
-        <div className="ds-container">
+        <div className="ds-container max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
               <img
