@@ -35,7 +35,12 @@ const FloatingContactWidget = () => {
       const id = crypto.randomUUID();
       const { error: insertError } = await supabase
         .from('contact_submissions')
-        .insert([{ id, ...result.data }]);
+        .insert([{
+          id,
+          name: result.data.name,
+          email: result.data.email,
+          message: result.data.message,
+        }]);
       if (insertError) {
         console.error('Failed to save contact submission', insertError);
         toast.error("Couldn't send your message. Please try again.");
