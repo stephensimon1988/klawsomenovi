@@ -41,8 +41,8 @@ const KawaiiNews = () => {
           />
         </div>
 
-        <div ref={gridRef} className="grid md:grid-cols-3 gap-8">
-          {articles.slice(0, 3).map((article: any) => (
+        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          {articles.slice(0, 4).map((article: any) => (
             <a
               key={article.url}
               href={article.url}
