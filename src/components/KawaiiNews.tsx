@@ -23,7 +23,14 @@ const KawaiiNews = () => {
   const headerRef = useGsapScroll<HTMLDivElement>({ type: 'slideUp' });
   const gridRef = useGsapStagger<HTMLDivElement>({ type: 'slideUp', stagger: 0.15, distance: 50 });
   const { data: dbArticles } = useCmsTable<NewsArticle>('news_articles');
-  const articles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
+  const rawArticles = dbArticles && dbArticles.length > 0 ? dbArticles : fallbackArticles;
+  const seenUrls = new Set<string>();
+  const articles = (rawArticles as any[]).filter((a) => {
+    const key = (a?.url || '').trim().toLowerCase();
+    if (!key || seenUrls.has(key)) return false;
+    seenUrls.add(key);
+    return true;
+  });
 
   return (
     <section id="news" className="section-y section-x bg-secondary">
