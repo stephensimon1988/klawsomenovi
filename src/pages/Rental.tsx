@@ -292,8 +292,8 @@ const Rental = () => {
         <KawaiiDivider variant="cloud" from="white" to="baby-blue" stroke="baby-pink" height={90} />
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container-narrow">
-            <p className="ds-eyebrow">FAQ</p>
-            <h2 className="ds-h2 mb-8">Frequently Asked Questions</h2>
+            <p className="ds-eyebrow text-center">FAQ</p>
+            <h2 className="ds-h2 mb-8 text-center">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
               {rentalFaqs.map((item) => (
                 <AccordionItem key={item.id} value={item.id} className="border-b border-border">
@@ -306,7 +306,7 @@ const Rental = () => {
                 </AccordionItem>
               ))}
             </Accordion>
-            <div className="mt-10">
+            <div className="mt-10 flex justify-center">
               <a
                 href="/faq"
                 className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
