@@ -13,7 +13,7 @@ interface PageHeroProps {
   height?: 'md' | 'lg';
   hideJoinCta?: boolean;
   jumpLinks?: { label: string; id: string }[];
-  overlay?: 'gradient' | 'white';
+  overlay?: 'gradient' | 'white' | 'solid-white';
 }
 
 // Curated real photos pulled from the Gallery — used as deterministic
@@ -71,7 +71,15 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
           className="absolute inset-0 bg-cover bg-center"
           style={{ backgroundImage: `url('${bg}')` }}
         />
-        <div className={overlay === 'white' ? 'absolute inset-0 bg-white/55' : 'absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20'} />
+        <div
+          className={
+            overlay === 'solid-white'
+              ? 'absolute inset-0 bg-white'
+              : overlay === 'white'
+                ? 'absolute inset-0 bg-white/55'
+                : 'absolute inset-0 bg-gradient-to-t from-white/85 via-white/55 to-white/20'
+          }
+        />
         <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
           <div className={`max-w-3xl ${alignCls}`}>
             <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
