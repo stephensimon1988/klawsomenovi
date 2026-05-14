@@ -22,7 +22,7 @@ const KawaiiTokenPrices = () => {
       <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-20" size={70} />
 
       <div className="ds-container relative z-10">
-        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+        <div ref={headerRef} className="max-w-2xl mx-auto text-center mb-16" style={{ opacity: 0 }}>
           <p className="ds-eyebrow text-klawsome-yellow">Pricing</p>
           <h2 className="ds-h2 text-white">
             Token Prices

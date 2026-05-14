@@ -37,7 +37,7 @@ const KawaiiNews = () => {
   return (
     <section id="news" className="section-y section-x bg-secondary">
       <div className="ds-container">
-        <div ref={headerRef} className="max-w-2xl mb-16" style={{ opacity: 0 }}>
+        <div ref={headerRef} className="max-w-2xl mx-auto text-center mb-16 flex flex-col items-center" style={{ opacity: 0 }}>
           <p className="ds-eyebrow">Press</p>
           <h2 className="ds-h2 mb-6">
             In The News
