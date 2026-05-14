@@ -36,13 +36,11 @@ function usePageContent(pageKey: string) {
   return useQuery<ContentSection[]>({
     queryKey: ['cms', 'page_content_sections', pageKey],
     queryFn: async () => {
-      const { data, error } = await supabase
-        .from('page_content_sections' as any)
-        .select('*')
-        .eq('page_key', pageKey)
-        .order('sort_order', { ascending: true });
-      if (error) return [];
-      return (data || []) as unknown as ContentSection[];
+      const { cmsData } = await import('@/content/cmsData');
+      const rows = ((cmsData['page_content_sections'] as any[]) || [])
+        .filter((r) => r.page_key === pageKey)
+        .sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0));
+      return rows as ContentSection[];
     },
     staleTime: 5 * 60 * 1000,
   });
