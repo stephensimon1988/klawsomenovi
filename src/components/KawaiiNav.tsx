@@ -81,7 +81,7 @@ const KawaiiNav = () => {
         }
         setPointerX(e.clientX);
       }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${scrolled ? 'bg-background/95 backdrop-blur-md shadow-sm' : 'bg-transparent'}`}
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 backdrop-blur-md ${scrolled ? 'bg-white/85 shadow-sm' : 'bg-white/60'}`}
     >
       <NavClaw active={clawActive && !isOpen} pointerX={pointerX} minX={bounds?.min} maxX={bounds?.max} />
       <div className="ds-container section-x relative z-[60]">
@@ -95,9 +95,7 @@ const KawaiiNav = () => {
               <button
                 key={link.label}
                 onClick={() => handleNav(link.href)}
-                className={`nav-link-glow font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white ${
-                  scrolled ? 'nav-link-glow-scrolled text-foreground/60' : 'text-white/70'
-                }`}
+                className="nav-link-glow font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white text-klawsome-navy"
               >
                 {link.label}
               </button>
@@ -108,9 +106,7 @@ const KawaiiNav = () => {
               onMouseLeave={() => setMoreOpen(false)}
             >
               <button
-                className={`nav-link-glow flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white ${
-                  scrolled ? 'nav-link-glow-scrolled text-foreground/60' : 'text-white/70'
-                }`}
+                className="nav-link-glow flex items-center gap-1 font-heading font-bold text-xs tracking-[0.15em] transition-all duration-300 ease-in-out rounded-full px-3 py-1.5 hover:!text-white text-klawsome-navy"
               >
                 MORE <ChevronDown className="w-3 h-3" />
               </button>
@@ -147,7 +143,7 @@ const KawaiiNav = () => {
             </Button>
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className={`md:hidden p-2 ${scrolled ? 'text-foreground' : 'text-white'}`}>
+          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-klawsome-navy">
             {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
           </button>
         </div>
