@@ -64,7 +64,7 @@ const Gallery = () => {
         <section key={section} className="section-y section-x">
           <div className="ds-container">
             <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">
-              {sectionLabels[section] || section}
+              {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
               {items.map((p, idx) => (
