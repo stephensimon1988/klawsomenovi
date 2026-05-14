@@ -158,11 +158,11 @@ const Birthdays = () => {
               <div className="p-3 md:p-6" />
               <div className="p-3 md:p-6 text-center bg-primary border-l border-white/20">
                 <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Private</p>
-                <p className="text-white/80 font-body text-xs mt-1">{privateOpt?.price || '$249'}</p>
+                <p className="text-white/80 font-body text-xs mt-1">{privateOpt?.price || '$319'}</p>
               </div>
               <div className="p-3 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
                 <p className="font-heading font-bold text-klawsome-navy text-base md:text-2xl uppercase leading-tight">Semi-Private</p>
-                <p className="text-klawsome-navy/80 font-body text-xs mt-1">{semiOpt?.price || '$249'}</p>
+                <p className="text-klawsome-navy/80 font-body text-xs mt-1">{semiOpt?.price || '$319'}</p>
               </div>
             </div>
 
