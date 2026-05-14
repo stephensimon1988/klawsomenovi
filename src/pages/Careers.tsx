@@ -255,9 +255,7 @@ const Careers = () => {
         prevColor={
           unpaidJobs.length > 0
             ? 'navy'
-            : hybridJobs.length > 0
-              ? 'red'
-              : 'navy'
+            : 'white'
         }
       />
     </div>
