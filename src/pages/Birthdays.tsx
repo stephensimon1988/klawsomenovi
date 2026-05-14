@@ -54,7 +54,7 @@ const Birthdays = () => {
     { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
     { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: "Bring any food you'd like", semi: "Paris Baguette or Cloud Boba (depending what you like)" },
     { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu' },
-    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full setup available', semi: 'Simple decor only' },
+    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full set up - $119', semi: 'Simple set up - $89' },
     { label: 'Wall hangings / advance setup', desc: 'Hang banners or arrive early to set up.', private: true, semi: false },
   ];
 
