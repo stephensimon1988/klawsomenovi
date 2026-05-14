@@ -915,7 +915,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "0af62ba9-4954-4995-8ace-e2da82315fe1",
       "title": "Assistant General Manager",
       "category": "in-store",
-      "description": "The Assistant Manager (AM) is responsible for the successful day-to-day performance of the store under the guidance of the General Manager (GM), with accountability for 1) performing/training store associates on operation duties, 2) delivering exceptional customer service, 3) achieving store financial targets, and 4) performing all GM responsibilities in the absence of the GM.",
+      "description": "The Assistant Manager (AM) is responsible for the successful day-to-day performance of the store under the guidance of the General Manager (GM), with accountability for:<br/> 1) performing/training store associates on operation duties<br/>2) delivering exceptional customer service<br/>3) achieving store financial targets<br/> 4) performing all GM responsibilities in the absence of the GM.",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FAssistant_General_Manager.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20Assistant%20General%20Manager",
