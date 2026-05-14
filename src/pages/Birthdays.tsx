@@ -171,7 +171,7 @@ const Birthdays = () => {
                 key={i}
                 className={`grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
               >
-                <div className="p-3 md:p-6">
+                <div className="p-3 md:p-6 flex flex-col justify-center">
                   <p className="font-heading font-bold text-white text-xs md:text-base leading-tight">{row.label}</p>
                   {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
                 </div>
