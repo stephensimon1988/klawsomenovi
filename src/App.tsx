@@ -20,6 +20,7 @@ import Store from "./pages/Store.tsx";
 import Community from "./pages/Community.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
 import Contact from "./pages/Contact.tsx";
+import Unsubscribe from "./pages/Unsubscribe.tsx";
 import FloatingContactWidget from "./components/FloatingContactWidget";
 import BackToTop from "./components/BackToTop";
 import ScrollToTop from "./components/ScrollToTop";
@@ -52,6 +53,7 @@ const App = () => (
           <Route path="/community" element={<Community />} />
           <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
