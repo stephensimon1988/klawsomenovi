@@ -2,8 +2,8 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import rentalFamilyImage from '@/assets/rental-family-playing.jpg';
-import rentalReadyImage from '@/assets/rental-ready-to-book.jpg';
+import rentalWhyUsImage from '@/assets/rental-why-us.jpg';
+import rentalTeamImage from '@/assets/rental-team.jpg';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
@@ -220,7 +220,7 @@ const Rental = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
               <img
-                src={rentalFamilyImage}
+                src={rentalWhyUsImage}
                 alt="Adult and child playing a claw machine together"
                 loading="lazy"
                 width={1024}
@@ -245,7 +245,7 @@ const Rental = () => {
             </article>
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
               <img
-                src={rentalReadyImage}
+                src={rentalTeamImage}
                 alt="A row of colorful Klawsome claw machines ready for an event"
                 loading="lazy"
                 width={1024}
