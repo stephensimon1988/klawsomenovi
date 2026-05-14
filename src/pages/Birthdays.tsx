@@ -45,7 +45,12 @@ const Birthdays = () => {
     { label: '325 Klaw Machine Tokens', desc: 'Plenty of tokens for everyone to play.', private: true, semi: true },
     { label: 'Exclusive private space', desc: 'Klawsome closed to the public during your event.', private: true, semi: false },
     { label: 'Play time', desc: 'How long guests get to play games.', private: '1 hour + 30 min setup', semi: 'Unlimited during business hours' },
-    { label: 'Location', desc: 'Where your party is hosted.', private: 'Klawsome', semi: 'Paris Baguette next door' },
+    { 
+      label: 'Location', 
+      desc: 'Where your party is hosted.', 
+      private: 'Klawsome', 
+      semi: 'Paris Baguette next door\nor\nCloud Boba\nor\nOutdoor Space' 
+    },
     { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
     { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: true, semi: false },
     { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu (cost TBD)' },
@@ -55,7 +60,11 @@ const Birthdays = () => {
 
   const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
     if (typeof value === 'string') {
-      return <span className="text-white/90 font-body text-xs md:text-sm">{value}</span>;
+      return (
+        <span className="text-white/90 font-body text-xs md:text-sm whitespace-pre-line">
+          {value}
+        </span>
+      );
     }
     if (value) {
       return (
