@@ -253,13 +253,13 @@ const Birthdays = () => {
               </p>
             </div>
 
-            {/* Photography Rental */}
+            {/* Book Event Photographer */}
             <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
               <p className="ds-eyebrow text-primary mb-2">Photo Session</p>
-              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Photography Rental</h3>
-              <p className="text-3xl font-heading font-bold text-primary mb-3">$49<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / hour</span></p>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Book Event Photographer</h3>
+              <p className="text-3xl font-heading font-bold text-primary mb-3">$79<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / hour</span></p>
               <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
-                Rent our facility for a 1-hour photography session — perfect for capturing the celebration.
+                Book our on-staff photographer for a photography session during the event. Perfect for capturing the celebration.
               </p>
             </div>
           </div>
