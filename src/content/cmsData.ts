@@ -438,7 +438,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "c0eb46a0-3cf6-4289-b50e-47a4cbec596f",
       "question": "How many tokens should I purchase?",
-      "answer": "We recommend the following: 325 tokens ($250 package) per group of five kids. This breaks down to 50 tokens per child, with 75 tokens in reserve to give out to kids that need help. Please note you may only purchase additional tokens (beyond basic $250 package) in-store for events.",
+      "answer": "We recommend the following: 325 tokens ($319 package) per group of five kids. This breaks down to 50 tokens per child, with 75 tokens in reserve to give out to kids that need help. Please note you may only purchase additional tokens (beyond basic $319 package) in-store for events.",
       "page": "general",
       "sort_order": 6
     },
