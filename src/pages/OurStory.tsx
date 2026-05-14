@@ -15,6 +15,12 @@ const OurStory = () => {
 
   const VARIANTS: DividerVariant[] = ['wave', 'scallop', 'cloud', 'bumps', 'petals', 'zigzag-soft', 'brush', 'blob'];
 
+  // Family photos used to illustrate the first two CMS-driven story sections.
+  const SECTION_IMAGES = [
+    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg',
+    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.jpg',
+  ];
+
   const slugify = (s: string) =>
     s.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '').slice(0, 40);
 
@@ -50,17 +56,39 @@ const OurStory = () => {
         const prevColor = idx === 0 ? 'white' : (idx % 2 === 1 ? 'secondary-soft' : 'white');
         const variant = VARIANTS[idx % VARIANTS.length];
         const stroke = thisColor === 'white' ? 'baby-pink' : 'baby-blue';
+        const sideImage = SECTION_IMAGES[idx];
+        const imageOnLeft = idx % 2 === 0;
         return (
           <div key={s.id}>
             {prevColor !== thisColor && (
               <KawaiiDivider variant={variant} from={prevColor as any} to={thisColor as any} stroke={stroke as any} height={90} />
             )}
             <section id={`story-${slugify(s.title)}`} className={`section-y section-x ${idx % 2 === 0 ? 'bg-secondary/40' : ''}`}>
-              <div className="ds-container-narrow">
-                {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
-                <h2 className="ds-h2 uppercase mb-10">{s.title}</h2>
-                <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
-              </div>
+              {sideImage ? (
+                <div className="ds-container">
+                  <div className="grid md:grid-cols-12 gap-10 md:gap-16 items-center">
+                    <div className={`md:col-span-5 ${imageOnLeft ? 'md:order-1' : 'md:order-2'}`}>
+                      <img
+                        src={sideImage}
+                        alt={s.title}
+                        loading="lazy"
+                        className="w-full h-auto rounded-kawaii shadow-lg object-cover aspect-[4/5]"
+                      />
+                    </div>
+                    <div className={`md:col-span-7 ${imageOnLeft ? 'md:order-2' : 'md:order-1'}`}>
+                      {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
+                      <h2 className="ds-h2 uppercase mb-10">{s.title}</h2>
+                      <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="ds-container-narrow">
+                  {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
+                  <h2 className="ds-h2 uppercase mb-10">{s.title}</h2>
+                  <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
+                </div>
+              )}
             </section>
           </div>
         );
