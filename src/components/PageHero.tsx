@@ -78,7 +78,11 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
             <nav aria-label="Quick actions" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>
-              <button type="button" onClick={openBookingModal} className={linkBtnClass}>
+              <button
+                type="button"
+                onClick={openBookingModal}
+                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-primary text-white border border-primary shadow-md transition-all duration-200 hover:bg-primary/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--primary)/0.6)]"
+              >
                 Book Now
               </button>
               <a
@@ -93,13 +97,6 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
                 Buy Plushies
               </Link>
             </nav>
-            {!hideJoinCta && (
-              <div className={align === 'center' ? 'flex justify-center mt-2' : 'mt-2'}>
-                <Button asChild size="lg" className="rounded-full px-8 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-                  <Link to="/rewards">Join Rewards Today</Link>
-                </Button>
-              </div>
-            )}
           </div>
         </div>
         <div ref={sentinelRef} className="absolute bottom-0 left-0 h-px w-px" aria-hidden="true" />
