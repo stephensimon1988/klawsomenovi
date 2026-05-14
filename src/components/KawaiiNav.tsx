@@ -22,7 +22,6 @@ const moreLinks = [
   { label: 'Gallery', href: '/gallery' },
   { label: 'Our Story', href: '/our-story' },
   { label: 'Team', href: '/team' },
-  { label: 'Community', href: '/community' },
   { label: 'Community Partners', href: '/community-partners' },
   { label: 'News', href: '/news' },
   { label: 'Info Hub', href: '/info-hub' },
