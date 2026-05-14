@@ -52,8 +52,8 @@ const Birthdays = () => {
       semi: 'Paris Baguette next door\nor\nCloud Boba\nor\nOutdoor Space' 
     },
     { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
-    { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: true, semi: false },
-    { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu (cost TBD)' },
+    { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: true, semi: "Bring any food you'd like" },
+    { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu' },
     { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full setup available', semi: 'Simple decor only' },
     { label: 'Wall hangings / advance setup', desc: 'Hang banners or arrive early to set up.', private: true, semi: false },
   ];
