@@ -8,6 +8,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
+import birthdaysHero from '@/assets/birthdays-hero.png';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
@@ -77,7 +78,7 @@ const Birthdays = () => {
         eyebrow={hero?.eyebrow || 'Birthdays'}
         title={hero?.title || content?.hero_headline || 'Celebrate your birthday with Klawsome!'}
         subtitle={hero?.subtitle}
-        imageUrl={hero?.image_url || content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg'}
+        imageUrl={hero?.image_url || content?.hero_image_url || birthdaysHero}
         overlay="white"
         jumpLinks={[
           { label: 'Party Rules', id: 'party-rules' },
