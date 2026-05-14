@@ -2,6 +2,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import KawaiiDivider from '@/components/KawaiiDivider';
+import rentalFamilyImage from '@/assets/rental-family-playing.jpg';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
