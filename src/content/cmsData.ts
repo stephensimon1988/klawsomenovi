@@ -2989,7 +2989,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "7f384971-c90c-4acb-9042-74577d7690ea",
       "name": "Reserved Semi-Private",
       "description": "Table for one hour at Paris Baguette (Klawsome!'s nextdoor neighbor)",
-      "price": "$250",
+      "price": "$319",
       "features": [
         "Includes 325 Klaw Machine Tokens",
         "Table for 1 hour at Paris Baguette",
@@ -4924,7 +4924,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "76c1b0ab-e056-476b-8e73-786c3fb1b43c",
-      "price": "$250",
+      "price": "$319",
       "tokens": "250 + 75",
       "bonus": "30%",
       "is_highlight": false,
