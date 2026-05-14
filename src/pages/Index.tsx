@@ -55,7 +55,6 @@ const Index = () => {
         </div>
       </section>
       <KawaiiFooter prevColor="white" />
-      <DividerAudit />
     </div>
   );
 };
