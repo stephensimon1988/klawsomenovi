@@ -3,6 +3,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import rentalFamilyImage from '@/assets/rental-family-playing.jpg';
+import rentalReadyImage from '@/assets/rental-ready-to-book.jpg';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
@@ -216,46 +217,60 @@ const Rental = () => {
 
       <section className="section-y section-x bg-white">
         <div className="ds-container">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-start">
-            <div className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
               <img
                 src={rentalFamilyImage}
                 alt="Adult and child playing a claw machine together"
                 loading="lazy"
-                className="w-full rounded-2xl object-cover"
                 width={1024}
                 height={768}
+                className="w-full aspect-[4/3] object-cover"
               />
-              <div>
-                <h2 className="ds-h2 mb-4">Why Rent from Klawsome?</h2>
-                <p className="ds-lead text-muted-foreground mb-4">
+              <div className="flex flex-col flex-1 p-6 md:p-8">
+                <h3 className="font-heading font-bold text-2xl md:text-3xl mb-4 text-foreground">Why Rent from Klawsome?</h3>
+                <p className="font-body text-base text-muted-foreground mb-4">
                   Klawsome brings the fun of the claw machine arcade directly to your event. Our machines are great for birthdays, company parties, school events, fundraisers, trade shows, and community celebrations in Novi and the surrounding Michigan area.
                 </p>
-                <p className="ds-lead text-muted-foreground">
+                <p className="font-body text-base text-muted-foreground mb-6">
                   We take care of the setup, support, and pickup so you can focus on your guests.
                 </p>
+                <div className="mt-auto">
+                  <button
+                    type="button"
+                    onClick={openBookingModal}
+                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+                  >
+                    Book Now
+                  </button>
+                </div>
               </div>
-              <button
-                type="button"
-                onClick={openBookingModal}
-                className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
-              >
-                Book Now
-              </button>
-            </div>
-            <div className="space-y-6 md:pt-8">
-              <h2 className="ds-h2">Ready to Book?</h2>
-              <p className="ds-lead text-muted-foreground">
-                Contact Klawsome to request a claw machine rental quote.
-              </p>
-              <button
-                type="button"
-                onClick={openBookingModal}
-                className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
-              >
-                Book Now
-              </button>
-            </div>
+            </article>
+            <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
+              <img
+                src={rentalReadyImage}
+                alt="A row of colorful Klawsome claw machines ready for an event"
+                loading="lazy"
+                width={1024}
+                height={768}
+                className="w-full aspect-[4/3] object-cover"
+              />
+              <div className="flex flex-col flex-1 p-6 md:p-8">
+                <h3 className="font-heading font-bold text-2xl md:text-3xl mb-4 text-foreground">Ready to Book?</h3>
+                <p className="font-body text-base text-muted-foreground mb-6">
+                  Contact Klawsome to request a claw machine rental quote.
+                </p>
+                <div className="mt-auto">
+                  <button
+                    type="button"
+                    onClick={openBookingModal}
+                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+                  >
+                    Book Now
+                  </button>
+                </div>
+              </div>
+            </article>
           </div>
         </div>
       </section>
