@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
+import { supabase } from '@/integrations/supabase/client';
 import catImg from '@/assets/klawsome-cat-cut.png';
 
 const contactSchema = z.object({
@@ -31,14 +32,41 @@ const FloatingContactWidget = () => {
     }
     setSubmitting(true);
     try {
-      // Mailto fallback — no backend wired up yet
-      const body = encodeURIComponent(
-        `Name: ${result.data.name}\nEmail: ${result.data.email}\n\n${result.data.message}`
+      const id = crypto.randomUUID();
+      const { error: insertError } = await supabase
+        .from('contact_submissions')
+        .insert({ id, ...result.data });
+      if (insertError) {
+        console.error('Failed to save contact submission', insertError);
+        toast.error("Couldn't send your message. Please try again.");
+        return;
+      }
+
+      const submittedAt = new Date().toLocaleString('en-US', {
+        dateStyle: 'long',
+        timeStyle: 'short',
+      });
+      const templateData = { ...result.data, submittedAt };
+      const recipients = ['team@klawsomenovi.com', 'events@klawsomenovi.com'];
+      await Promise.all(
+        recipients.map((recipientEmail) =>
+          supabase.functions.invoke('send-transactional-email', {
+            body: {
+              templateName: 'contact-form-notification',
+              recipientEmail,
+              idempotencyKey: `contact-${id}-${recipientEmail}`,
+              templateData,
+            },
+          })
+        )
       );
-      window.location.href = `mailto:hello@klawsomearcade.com?subject=${encodeURIComponent('Klawsome website inquiry')}&body=${body}`;
+
       toast.success("Thanks! We'll be in touch soon 🦊");
       setForm({ name: '', email: '', message: '' });
       setOpen(false);
+    } catch (err) {
+      console.error('Contact form error', err);
+      toast.error("Couldn't send your message. Please try again.");
     } finally {
       setSubmitting(false);
     }
