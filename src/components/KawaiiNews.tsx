@@ -48,7 +48,7 @@ const KawaiiNews = () => {
           />
         </div>
 
-        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8">
+        <div ref={gridRef} className="grid sm:grid-cols-2 lg:grid-cols-3 gap-8">
           {articles.map((article: any) => (
             <a
               key={article.url}
