@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -17,7 +17,6 @@ import OurStory from "./pages/OurStory.tsx";
 import Faq from "./pages/Faq.tsx";
 import Rental from "./pages/Rental.tsx";
 import Store from "./pages/Store.tsx";
-import Community from "./pages/Community.tsx";
 import CommunityPartners from "./pages/CommunityPartners.tsx";
 import InfoHub from "./pages/InfoHub.tsx";
 import Contact from "./pages/Contact.tsx";
@@ -51,7 +50,7 @@ const App = () => (
           <Route path="/faq" element={<Faq />} />
           <Route path="/rental" element={<Rental />} />
           <Route path="/store" element={<Store />} />
-          <Route path="/community" element={<Community />} />
+          <Route path="/community" element={<Navigate to="/community-partners" replace />} />
           <Route path="/community-partners" element={<CommunityPartners />} />
           <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/contact" element={<Contact />} />
