@@ -107,7 +107,7 @@ const Birthdays = () => {
                <img
                  src={pandaCatFoxParty}
                  alt="Kawaii characters celebrating a birthday party"
-                 className="w-full aspect-square object-cover rounded-kawaii"
+                  className="w-full aspect-square rounded-kawaii object-cover"
                  loading="lazy"
                />
             </div>
