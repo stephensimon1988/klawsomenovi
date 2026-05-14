@@ -165,7 +165,7 @@ const Careers = () => {
           <p className="text-klawsome-navy/80 font-heading font-bold text-center text-lg mb-10">
             🌱 Why Work at Klawsome?
           </p>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
             <div className="text-center md:text-left">
               <div className="text-3xl mb-3">💖</div>
               <h3 className="font-heading font-bold text-klawsome-navy mb-2">A Family-Owned Company with Heart</h3>
