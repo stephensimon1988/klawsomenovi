@@ -232,9 +232,6 @@ const Rental = () => {
                 <p className="font-body text-base text-muted-foreground mb-4">
                   Klawsome brings the fun of the claw machine arcade directly to your event. Our machines are great for birthdays, company parties, school events, fundraisers, trade shows, and community celebrations in Novi and the surrounding Michigan area.
                 </p>
-                <p className="font-body text-base text-muted-foreground mb-6">
-                  We take care of the setup, support, and pickup so you can focus on your guests.
-                </p>
                 <div className="mt-auto">
                   <button
                     type="button"
@@ -257,7 +254,8 @@ const Rental = () => {
               />
               <div className="flex flex-col flex-1 p-6 md:p-8">
                 <h3 className="font-heading font-bold text-2xl md:text-3xl mb-4 text-foreground">Ready to Book?</h3>
-                <p className="font-body text-base text-muted-foreground mb-6">
+                <p className="font-body text-base text-muted-foreground mb-6 whitespace-pre-line">
+                  We take care of the setup, support, and pickup so you can focus on your guests.{"\n\n"}
                   Contact Klawsome to request a claw machine rental quote.
                 </p>
                 <div className="mt-auto">
