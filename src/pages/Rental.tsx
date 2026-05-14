@@ -131,18 +131,20 @@ const Rental = () => {
                       </li>
                     ))}
                   </ul>
-                  <button
-                    type="button"
-                    onClick={openBookingModal}
-                    className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
-                      p.is_highlight
-                        ? 'bg-background text-foreground hover:bg-background/90'
-                        : 'bg-foreground text-background hover:bg-foreground/90'
-                    }`}
-                  >
-                    Add to Rental
-                    <span>→</span>
-                  </button>
+                  {!compact && (
+                    <button
+                      type="button"
+                      onClick={openBookingModal}
+                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
+                        p.is_highlight
+                          ? 'bg-background text-foreground hover:bg-background/90'
+                          : 'bg-foreground text-background hover:bg-foreground/90'
+                      }`}
+                    >
+                      Add to Rental
+                      <span>→</span>
+                    </button>
+                  )}
                 </div>
               );
               return (
@@ -203,9 +205,20 @@ const Rental = () => {
                   </div>
 
                   {addOns.length > 0 && (
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
-                      {addOns.map((p) => renderCard(p, true))}
-                    </div>
+                    <>
+                      <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mt-16">
+                        {addOns.map((p) => renderCard(p, true))}
+                      </div>
+                      <div className="mt-10 flex justify-center">
+                        <Button
+                          onClick={openBookingModal}
+                          size="lg"
+                          className="rounded-full px-10 py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"
+                        >
+                          Add to Rental
+                        </Button>
+                      </div>
+                    </>
                   )}
                 </>
               );
