@@ -354,7 +354,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "8f0c8648-c365-4c4f-8c3f-435564c607a6",
       "question": "What are the available token bundles?",
-      "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $250 → 250 + 75 bonus.",
+       "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $319 → 250 + 75 bonus.",
       "page": "general",
       "sort_order": 106
     },
