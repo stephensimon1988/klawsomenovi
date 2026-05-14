@@ -1926,7 +1926,7 @@ export const cmsData: Record<string, any[]> = {
       "page_key": "careers",
       "eyebrow": "Join Us",
       "title": "Careers at Klawsome",
-      "subtitle": "Help us spread the joy.",
+      "subtitle": "At Klawsome, we’re looking for passionate, energetic individuals who want to help create an unforgettable environment for kids, families, and claw‑machine lovers.\n",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
       "cta_text": "",
       "cta_url": "",
