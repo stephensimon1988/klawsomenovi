@@ -60,7 +60,11 @@ const Birthdays = () => {
 
   const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
     if (typeof value === 'string') {
-      return <span className="text-white/90 font-body text-xs md:text-sm">{value}</span>;
+      return (
+        <span className="text-white/90 font-body text-xs md:text-sm whitespace-pre-line">
+          {value}
+        </span>
+      );
     }
     if (value) {
       return (
