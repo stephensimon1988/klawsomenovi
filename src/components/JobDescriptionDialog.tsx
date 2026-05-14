@@ -56,9 +56,10 @@ const JobDescriptionDialog = ({ title, url, fallbackDescription, applyUrl, trigg
               ))}
             </div>
           ) : (
-            <p className="font-body leading-relaxed">
-              {fallbackDescription || 'Full job description available on request.'}
-            </p>
+            <p 
+              className="font-body leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: fallbackDescription || 'Full job description available on request.' }}
+            />
           )}
         </div>
 
