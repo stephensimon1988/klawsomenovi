@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
-import foxImg from '@/assets/klawsome-fox-cut.webp';
+import catImg from '@/assets/klawsome-cat-cut.png';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100),
@@ -85,8 +85,8 @@ const FloatingContactWidget = () => {
           aria-label="Open contact form"
         >
           <img
-            src={foxImg}
-            alt="Klawsome fox mascot"
+            src={catImg}
+            alt="Klawsome cat mascot"
             className="w-20 h-20 md:w-24 md:h-24 drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
           />
         </motion.button>
