@@ -120,7 +120,7 @@ const FloatingContactWidget = () => {
           <img
             src={catImg}
             alt="Klawsome cat mascot"
-            className="w-20 h-20 md:w-24 md:h-24 drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
+            className="w-52 md:w-60 h-auto scale-y-75 origin-bottom drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
           />
         </motion.button>
       </div>
