@@ -108,7 +108,7 @@ const Birthdays = () => {
                 Looking to Host a Birthday Party?
               </h2>
               <p className="text-white/80 font-body leading-relaxed mb-6 text-lg">
-                {content?.rules_text || 'Please notify Klawsome two weeks in advance for parties.'}
+                Make your celebration unforgettable with a birthday party at Klawsome! Check out the options below and book the package that's right for you.
               </p>
               <p className="text-white/70 font-body text-sm mb-10">
                 For more information and BEFORE booking your event, please contact{' '}
