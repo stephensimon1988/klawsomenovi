@@ -226,7 +226,7 @@ const Birthdays = () => {
             {/* Costume Animal Show */}
             <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
               <p className="ds-eyebrow text-primary mb-2">Live Show</p>
-              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Costume Animal Show</h3>
+              <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Costumed Mascot Show</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$89<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / 30 min</span></p>
               <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed mb-4 flex-1">
                 A costumed character makes a special appearance at your party.
