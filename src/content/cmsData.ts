@@ -89,7 +89,7 @@ export const cmsData: Record<string, any[]> = {
       "section_key": "hosted",
       "title": "Host a Klawsome Machine in Your Business",
       "subtitle": "We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.",
-      "description": "You earn 10% of every token played. We handle the machine, the prizes, the repairs -- everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.",
+      "description": "You earn 10% of every token played. We handle the machine, the prizes, the repairs -- everything. You simply provide the space, and collect your 10% share each month.",
       "bullet_points": [
         "Machine delivery & installation",
         "All prize stocking & restocking",
@@ -1271,7 +1271,7 @@ export const cmsData: Record<string, any[]> = {
       "page_key": "business-development",
       "section_key": "partner_tagline",
       "eyebrow": "Partner Tagline",
-      "headline": "Own a Fantasy Claw Arcade — Be the Go-To Entertainment Spot in Your City",
+      "headline": "Own a Klawsome Arcade — Be the Go-To Entertainment Spot in Your City",
       "body": "",
       "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-playing.png",
       "cta_text": "",
@@ -3512,7 +3512,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 1,
       "block_type": "text",
       "content": {
-        "text": "We handle the machine, the prizes, the repairs — everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month."
+        "text": "We handle the machine, the prizes, the repairs — everything. You simply provide the space, and collect your 10% share each month."
       }
     },
     {
@@ -3721,7 +3721,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 0,
       "block_type": "text",
       "content": {
-        "text": "Own a Fantasy Claw Arcade — Be the Go-To Entertainment Spot in Your City"
+        "text": "Own a Klawsome Arcade — Be the Go-To Entertainment Spot in Your City"
       }
     },
     {
@@ -4764,7 +4764,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 4,
       "block_type": "richtext",
       "content": {
-        "html": "<h4>Klawsome Takes Care Of</h4><p><em>We do the heavy lifting</em></p><ul><li>Machine delivery & installation</li><li>All prize stocking & restocking</li><li>All repairs & maintenance</li><li>Revenue tracking & monthly payouts</li><li>Ongoing machine operation</li></ul><h4>Your Business Provides</h4><p><em>That's really it</em></p><ul><li>Floor space for the machine</li><li>One standard power outlet</li><li>A 2.4GHz WiFi connection</li></ul>"
+        "html": "<h4>Klawsome Takes Care Of</h4><p><em>We do the heavy lifting</em></p><ul><li>Machine delivery & installation</li><li>All prize stocking & restocking</li><li>All repairs & maintenance</li><li>Revenue tracking & monthly payouts</li><li>Ongoing machine operation</li></ul><h4>Your Business Provides</h4><p><em>That's really it</em></p><ul><li>Floor space for the machine</li><li>One standard power outlet</li></ul>"
       }
     },
     {
