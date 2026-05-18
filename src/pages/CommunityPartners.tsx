@@ -9,6 +9,9 @@ import asianYouthNovi from '@/assets/community/asian-youth-novi.jpg';
 import kalayaanPh from '@/assets/community/kalayaan-ph-independence.jpg';
 import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.jpg';
 import cannedFoodDrive from '@/assets/community/canned-food-drive.jpg';
+import toysForTots from '@/assets/community/toys-for-tots.jpg';
+import msuPass from '@/assets/community/msu-pass.jpg';
+import colorfulCollection from '@/assets/community/colorful-collection.jpg';
 
 interface Partner {
   name: string;
@@ -53,21 +56,21 @@ const partners: Partner[] = [
     tag: 'Service Project',
     blurb:
       'Donating and sorting toys with Paaralang-Pilipino so every kid wakes up to something special during the holidays.',
-    image: PLACEHOLDER,
+    image: toysForTots,
   },
   {
     name: 'MSU PASS',
     tag: 'Student Org Visits',
     blurb:
       'Michigan State University\u2019s Philippine American Student Society visits Klawsome with Paaralang-Pilipino — bridging college students with younger Filipino-American learners across all three locations.',
-    image: PLACEHOLDER,
+    image: msuPass,
   },
   {
     name: 'Colorful Collection',
     tag: 'Literacy · Representation',
     blurb:
       'A University of Michigan student-created nonprofit advocating children\u2019s literacy and Asian representation. We team up with Colorful Collection and Paaralang-Pilipino to put more books with kids who see themselves on the page.',
-    image: PLACEHOLDER,
+    image: colorfulCollection,
   },
   {
     name: 'Novi Public Library',
