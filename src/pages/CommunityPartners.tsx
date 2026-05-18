@@ -5,6 +5,10 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import { Button } from '@/components/ui/button';
 import { openBookingModal } from '@/components/BookNowDialog';
+import asianYouthNovi from '@/assets/community/asian-youth-novi.jpg';
+import kalayaanPh from '@/assets/community/kalayaan-ph-independence.jpg';
+import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.jpg';
+import cannedFoodDrive from '@/assets/community/canned-food-drive.jpg';
 
 interface Partner {
   name: string;
@@ -21,28 +25,28 @@ const partners: Partner[] = [
     tag: 'Tabling',
     blurb:
       'We joined Dear Asian Youth Novi and the Asian Youth Advocates at the Novi Community Fest — tabling, handing out giveaways, and celebrating AAPI representation alongside our neighbors.',
-    image: PLACEHOLDER,
+    image: asianYouthNovi,
   },
   {
     name: 'Kalayaan PH Independence Festival',
     tag: 'Tabling · Giveaways',
     blurb:
       'We tabled at the Kalayaan Philippine Independence Day Festival, running kids\u2019 games and giveaways to celebrate Filipino culture with the community.',
-    image: PLACEHOLDER,
+    image: kalayaanPh,
   },
   {
     name: 'Paaralang-Pilipino — Trunk or Treat',
     tag: 'Tabling · Costume Prizes',
     blurb:
       'Halloween Trunk or Treat with Paaralang-Pilipino — costume contest prizes, kawaii plushies, and a whole lot of candy for the kids.',
-    image: PLACEHOLDER,
+    image: paaralangTrunk,
   },
   {
     name: 'Canned Food Drive',
     tag: 'Service Project',
     blurb:
       'In partnership with Paaralang-Pilipino, we collected and donated canned goods to families in need across the metro Detroit area.',
-    image: PLACEHOLDER,
+    image: cannedFoodDrive,
   },
   {
     name: 'Toys for Tots',
@@ -153,7 +157,7 @@ const CommunityPartners = () => {
                     src={p.image}
                     alt={p.name}
                     loading="lazy"
-                    className="max-h-full max-w-full object-contain"
+                    className={p.image === PLACEHOLDER ? 'max-h-full max-w-full object-contain' : 'w-full h-full object-cover'}
                   />
                 </div>
                 <div className="p-6 flex flex-col gap-3">
