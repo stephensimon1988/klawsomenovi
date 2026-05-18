@@ -12,6 +12,7 @@ import cannedFoodDrive from '@/assets/community/canned-food-drive.jpg';
 import toysForTots from '@/assets/community/toys-for-tots.jpg';
 import msuPass from '@/assets/community/msu-pass.jpg';
 import colorfulCollection from '@/assets/community/colorful-collection.jpg';
+import noviLibrary from '@/assets/community/asian-youth-alliance.avif';
 
 interface Partner {
   name: string;
@@ -77,7 +78,7 @@ const partners: Partner[] = [
     tag: 'National Reading Month',
     blurb:
       'For National Reading Month we partnered with the Novi Public Library and Colorful Collection on a challenge bookmark and reading rewards — including free play at Klawsome!',
-    image: PLACEHOLDER,
+    image: noviLibrary,
   },
 ];
 
