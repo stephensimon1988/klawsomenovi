@@ -51,7 +51,7 @@ const fallbackSections: BusinessSection[] = [
     id: '1', section_key: 'hosted',
     title: 'Host a Klawsome Machine in Your Business',
     subtitle: "We place a machine in your space, handle everything, and you earn a share of every token played — no upfront cost, no hassle.",
-    description: 'We handle the machine, the prizes, the repairs — everything. You simply provide the space and a 2.4GHz WiFi connection, and collect your 10% share each month.',
+    description: 'We handle the machine, the prizes, the repairs — everything. You simply provide the space, and collect your 10% share each month.',
     bullet_points: ['Machine delivery & installation', 'All prize stocking & restocking', 'All repairs & maintenance', 'Revenue tracking & monthly payouts', 'Ongoing machine operation'],
     image_url: '', sort_order: 0,
   },
@@ -89,7 +89,6 @@ const fallbackHowSteps: BusinessHowStep[] = [
 const businessProvides = [
   'Floor space for the machine',
   'One standard power outlet',
-  'A 2.4GHz WiFi connection',
 ];
 
 const fallbackVenues = ['🍜 Restaurants', '🧋 Bubble Tea Shops', '🎳 Entertainment Venues', '🛍️ Retail Stores', '⏳ Waiting Areas', '🏪 High Foot Traffic Spaces'];
@@ -166,7 +165,7 @@ const BusinessDevelopment = () => {
   const plushie = sections.find(s => s.section_key === 'plushie') || fallbackSections[2];
 
   const findContent = (key: string) => dbContent?.find(c => c.section_key === key);
-  const partnerTagline = findContent('partner_tagline')?.headline || 'Own a Fantasy Claw Arcade — Be the Go-To Entertainment Spot in Your City';
+  const partnerTagline = findContent('partner_tagline')?.headline || 'Own a Klawsome Arcade — Be the Go-To Entertainment Spot in Your City';
   const partnerWhy = findContent('partner_why');
   const partnerIncludes = findContent('partner_includes');
   const partnerIncludesItems = (Array.isArray(partnerIncludes?.list_items) ? partnerIncludes!.list_items : fallbackPartnerIncludes) as Array<{ icon: string; title: string; desc: string }>;
