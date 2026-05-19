@@ -1,5 +1,6 @@
 import { ShoppingBag, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
+import { Link } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
@@ -79,8 +80,8 @@ const KawaiiProducts = () => {
                   <p className="text-white/50 text-sm font-body mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-heading font-bold text-xl text-klawsome-yellow">{product.price}</span>
-                    <Button size="sm" className="rounded-bubble font-heading text-sm bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
-                      Buy
+                    <Button asChild size="sm" className="rounded-bubble font-heading text-sm bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
+                      <Link to="/store">Buy</Link>
                     </Button>
                   </div>
                 </div>
