@@ -210,15 +210,15 @@ const BusinessDevelopment = () => {
             <p className="ds-lead max-w-2xl mx-auto">{hosted.subtitle}</p>
           </div>
 
-          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center justify-between gap-7 mb-12 shadow-md">
-            <div>
+          <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="bg-white rounded-3xl p-8 md:p-10 flex flex-col md:flex-row items-center gap-8 md:gap-12 mb-12 shadow-md">
+            <div className="flex-1">
               <h3 className="font-heading text-2xl font-bold text-foreground mb-2">You earn 10% of every token played.</h3>
               <p className="text-muted-foreground font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
             </div>
             <img
               src={hostMachinePhoto}
               alt="Family posing with a Klawsome claw machine and Pikachu mascot"
-              className="w-40 h-40 md:w-48 md:h-48 aspect-square object-cover rounded-2xl flex-shrink-0"
+              className="w-full md:w-80 lg:w-96 aspect-square object-cover rounded-2xl flex-shrink-0"
             />
           </motion.div>
 
