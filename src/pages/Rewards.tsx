@@ -71,18 +71,6 @@ const Rewards = () => {
           aria-hidden
           className="absolute top-40 right-[10%] w-20 md:w-28 opacity-90 animate-float [animation-delay:-1.5s]"
         />
-        <img
-          src="/rewards/klawsome-sparkle.gif"
-          alt=""
-          aria-hidden
-          className="absolute bottom-10 left-[20%] w-12 md:w-16 opacity-80 animate-float [animation-delay:-0.8s]"
-        />
-        <img
-          src="/rewards/klawsome-sparkle.gif"
-          alt=""
-          aria-hidden
-          className="absolute bottom-20 right-[22%] w-14 md:w-20 opacity-80 animate-float [animation-delay:-2.2s]"
-        />
 
         <div className="ds-container section-x relative z-10">
           <div className="flex flex-col items-center text-center">
@@ -144,14 +132,21 @@ const Rewards = () => {
       <section id="benefits" className="section-y section-x relative overflow-hidden">
         <Sparkle className="absolute top-10 left-[6%] w-12 md:w-16 opacity-80" />
         <Sparkle className="absolute top-24 right-[8%] w-16 md:w-20 opacity-80 [animation-delay:-1.2s]" />
-        <Sparkle className="absolute bottom-16 left-[40%] w-10 md:w-14 opacity-70 [animation-delay:-2s]" />
-        <Sparkle className="absolute bottom-8 right-[18%] w-12 md:w-16 opacity-70 [animation-delay:-0.6s]" />
 
         <div className="ds-container relative z-10">
-          <p className="ds-eyebrow text-center">Membership Benefits</p>
-          <h2 className="ds-h2 uppercase mb-16 text-center" style={{ color: 'hsl(var(--klawsome-navy))' }}>
-            Your Claw Game, Upgraded
-          </h2>
+          <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-16">
+            <img
+              src="/rewards/rocking-klawsome-cat.gif"
+              alt="Klawsome birthday cat mascot"
+              className="w-36 sm:w-44 md:w-56 shrink-0"
+            />
+            <div className="text-center md:text-left">
+              <p className="ds-eyebrow">Membership Benefits</p>
+              <h2 className="ds-h2 uppercase" style={{ color: 'hsl(var(--klawsome-navy))' }}>
+                Your Claw Game, Upgraded
+              </h2>
+            </div>
+          </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
             {BENEFITS.map((b) => (
               <div key={b.title} className="relative rounded-3xl bg-klawsome-baby-blue/40 border border-klawsome-baby-blue p-8 text-center shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
@@ -169,8 +164,6 @@ const Rewards = () => {
       <section id="tiers" className="section-y section-x bg-foreground text-background relative overflow-hidden">
         <Sparkle className="absolute top-12 left-[7%] w-14 md:w-20 opacity-90" />
         <Sparkle className="absolute top-28 right-[6%] w-16 md:w-24 opacity-90 [animation-delay:-1.5s]" />
-        <Sparkle className="absolute bottom-12 left-[30%] w-12 md:w-16 opacity-80 [animation-delay:-0.9s]" />
-        <Sparkle className="absolute bottom-20 right-[28%] w-14 md:w-20 opacity-80 [animation-delay:-2.1s]" />
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Lifetime Tiers</p>
@@ -199,8 +192,6 @@ const Rewards = () => {
       <section id="redemptions" className="section-y section-x relative overflow-hidden">
         <Sparkle className="absolute top-10 left-[10%] w-12 md:w-16 opacity-80" />
         <Sparkle className="absolute top-32 right-[12%] w-16 md:w-20 opacity-80 [animation-delay:-1.4s]" />
-        <Sparkle className="absolute bottom-10 left-[35%] w-10 md:w-14 opacity-70 [animation-delay:-0.7s]" />
-        <Sparkle className="absolute bottom-24 right-[20%] w-14 md:w-18 opacity-70 [animation-delay:-2.3s]" />
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Points Redeemable</p>
