@@ -8,6 +8,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
+import bdHero from '@/assets/community/msu-pass.jpg';
 import {
   useCmsTable,
   usePageHero,
@@ -191,27 +192,8 @@ const BusinessDevelopment = () => {
         eyebrow={hero?.eyebrow || '🤝 For Businesses & Partners'}
         title={hero?.title || 'Grow With Klawsome'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
-        imageUrl={hero?.image_url || ''}
-        hideJoinCta
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mt-2">
-          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-            <a href="#contact">{hero?.cta_text || 'Get in Touch'}</a>
-          </Button>
-          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-            <button type="button" onClick={() => handleTabClick('hosted')}>🎰 Host a Machine</button>
-          </Button>
-          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-            <button type="button" onClick={() => handleTabClick('partner')}>⭐ Become a Partner</button>
-          </Button>
-          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-            <button type="button" onClick={() => handleTabClick('plushie')}>🧸 Custom Plushies</button>
-          </Button>
-          <Button asChild size="lg" className="w-full rounded-full px-4 py-6 text-xs font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase">
-            <Link to="/rewards">Join Today</Link>
-          </Button>
-        </div>
-      </PageHero>
+        imageUrl={hero?.image_url || bdHero}
+      />
 
       <div ref={tabsBarRef} aria-hidden className="hidden" />
 
