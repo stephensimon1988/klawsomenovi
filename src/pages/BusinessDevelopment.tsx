@@ -8,7 +8,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
-import bdHero from '@/assets/community/msu-pass.jpg';
+import bdHero from '@/assets/community/canned-food-drive.jpg';
 import {
   useCmsTable,
   usePageHero,
