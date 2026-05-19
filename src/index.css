@@ -265,17 +265,28 @@ html {
   .img-hover {
     @apply relative overflow-hidden;
   }
-  .img-hover,
   .img-hover-tilt {
-    /* Mirror Tailwind's `group` so descendants can use group-hover:* */
+    @apply relative overflow-hidden;
   }
   .img-hover > img,
-  .img-hover img.img-hover-target {
-    @apply motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:will-change-transform motion-safe:group-hover:scale-[1.05];
-  }
+  .img-hover img.img-hover-target,
   .img-hover-tilt > img,
   .img-hover-tilt img.img-hover-target {
-    @apply motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:will-change-transform motion-safe:group-hover:scale-[1.05] motion-safe:group-hover:rotate-[0.5deg];
+    @apply motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:will-change-transform;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .img-hover:hover > img,
+    .img-hover:hover img.img-hover-target,
+    .img-hover:focus-within > img,
+    .img-hover:focus-within img.img-hover-target {
+      transform: scale(1.05);
+    }
+    .img-hover-tilt:hover > img,
+    .img-hover-tilt:hover img.img-hover-target,
+    .img-hover-tilt:focus-within > img,
+    .img-hover-tilt:focus-within img.img-hover-target {
+      transform: scale(1.05) rotate(0.5deg);
+    }
   }
   /* Soft sheen overlay that fades in on hover (opt-in via .img-hover-sheen) */
   .img-hover-sheen::after {
