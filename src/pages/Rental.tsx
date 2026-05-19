@@ -233,6 +233,7 @@ const Rental = () => {
         <div className="ds-container max-w-5xl">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
+              <div className="img-hover">
               <img
                 src={rentalWhyUsImage}
                 alt="Adult and child playing a claw machine together"
@@ -241,6 +242,7 @@ const Rental = () => {
                 height={768}
                 className="w-full aspect-[4/3] object-cover"
               />
+              </div>
               <div className="flex flex-col flex-1 p-6 md:p-8">
                 <h3 className="font-heading font-bold text-2xl md:text-3xl mb-4 text-foreground">Why Rent from Klawsome?</h3>
                 <p className="font-body text-base text-muted-foreground mb-4">
@@ -258,6 +260,7 @@ const Rental = () => {
               </div>
             </article>
             <article className="flex flex-col rounded-2xl overflow-hidden border border-border bg-background shadow-sm">
+              <div className="img-hover">
               <img
                 src={rentalTeamImage}
                 alt="A row of colorful Klawsome claw machines ready for an event"
@@ -266,6 +269,7 @@ const Rental = () => {
                 height={768}
                 className="w-full aspect-[4/3] object-cover"
               />
+              </div>
               <div className="flex flex-col flex-1 p-6 md:p-8">
                 <h3 className="font-heading font-bold text-2xl md:text-3xl mb-4 text-foreground">Ready to Book?</h3>
                 <p className="font-body text-base text-muted-foreground mb-6 whitespace-pre-line">
@@ -333,12 +337,12 @@ const Rental = () => {
               </div>
               <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 {eventPhotos.map((p) => (
-                  <figure key={p.id} className="overflow-hidden rounded-2xl bg-background">
+                  <figure key={p.id} className="img-hover-tilt rounded-2xl bg-background">
                     <img
                       src={p.image_url}
                       alt={p.caption || 'Klawsome event photo'}
                       loading="lazy"
-                      className="w-full aspect-square object-cover hover:scale-105 transition-transform duration-500"
+                      className="w-full aspect-square object-cover"
                     />
                   </figure>
                 ))}
