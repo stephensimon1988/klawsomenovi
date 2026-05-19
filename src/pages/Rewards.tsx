@@ -167,19 +167,31 @@ const Rewards = () => {
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Lifetime Tiers</p>
           <h2 className="ds-h2 uppercase mb-16 text-background text-center">Lifetime Tiers</h2>
-          <div className="grid md:grid-cols-4 gap-px bg-background/20">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
             {TIERS.map((tier, i) => (
-              <div key={tier.name} className="bg-klawsome-navy p-8">
+              <div
+                key={tier.name}
+                className="bg-klawsome-navy border-2 border-background/30 rounded-2xl p-6 flex flex-col"
+              >
+                {/* Row 1: Tier label */}
                 <p className="ds-eyebrow">Tier {i + 1}</p>
-                <h3 className="ds-h3 uppercase mb-6 text-background">{tier.name}</h3>
-                <div className="space-y-2 font-body">
-                  <p className="text-background/60 text-sm">Minimum points</p>
-                  <p className="text-3xl font-heading font-bold">{tier.min}</p>
-                </div>
-                <div className="space-y-2 font-body mt-6 pt-6 border-t border-background/20">
-                  <p className="text-background/60 text-sm">Earn rate</p>
-                  <p className="text-xl font-heading font-bold">{tier.benefit}</p>
-                </div>
+
+                {/* Row 2: Name — fixed height so 1- and 2-line names align */}
+                <h3 className="ds-h3 uppercase text-background min-h-[4rem] flex items-start">
+                  {tier.name}
+                </h3>
+
+                <div className="border-t border-background/20 my-4" />
+
+                {/* Row 3: Minimum points */}
+                <p className="text-background/60 text-sm font-body">Minimum points</p>
+                <p className="text-3xl font-heading font-bold mb-4">{tier.min}</p>
+
+                <div className="border-t border-background/20 my-2" />
+
+                {/* Row 4: Earn rate */}
+                <p className="text-background/60 text-sm font-body mt-2">Earn rate</p>
+                <p className="text-2xl font-heading font-bold">{tier.benefit}</p>
               </div>
             ))}
           </div>
