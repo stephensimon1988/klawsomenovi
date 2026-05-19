@@ -196,6 +196,12 @@ const BusinessDevelopment = () => {
         title={hero?.title || 'Grow With Klawsome'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
         imageUrl={bdHero}
+        jumpLinks={[
+          { label: '🏪 Host a Machine', id: 'hosted' },
+          { label: '🤝 Become a Partner', id: 'partner' },
+          { label: '🧸 Custom Plushies', id: 'plushie' },
+          { label: '✉️ Contact', id: 'contact' },
+        ]}
       />
 
       <div ref={tabsBarRef} aria-hidden className="hidden" />
