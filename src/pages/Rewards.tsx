@@ -141,7 +141,6 @@ const Rewards = () => {
               className="w-36 sm:w-44 md:w-56 shrink-0"
             />
             <div className="text-center md:text-left">
-              <p className="ds-eyebrow">Membership Benefits</p>
               <h2 className="ds-h2 uppercase" style={{ color: 'hsl(var(--klawsome-navy))' }}>
                 Your Claw Game, Upgraded
               </h2>
