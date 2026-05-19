@@ -1540,13 +1540,13 @@ export const cmsData: Record<string, any[]> = {
   "gift_card_images": [
     {
       "id": "0aad6601-2c88-4fc7-9082-f397a1349893",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Feaster-gift-card.webp",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards/easter-gift-card.png",
       "alt_text": "Easter Klawsome gift card",
       "sort_order": 2
     },
     {
       "id": "c7878c6f-8dee-426e-868f-25fff274ad4e",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Fvalentine-gift-card-v2.webp",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards/valentine-gift-card-v2.png",
       "alt_text": "Valentine's Day Klawsome gift card",
       "sort_order": 1
     }
@@ -1739,7 +1739,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "The Detroit News",
       "date": "March 9th, 2026",
       "url": "https://www.detroitnews.com/story/business/retail/2026/03/09/buzz-grows-around-novi-spot-with-asian-themed-shops-cuisine/88736530007/",
-      "image_url": "https://www.gannett-cdn.com/authoring/authoring-images/2026/03/03/PDTN/88953828007-0228-bu-asian-biz-16-1.webp?auto=webp&crop=7928,4461,x0,y412&format=pjpg&width=1200",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/fdbcfe32-94e1-4e84-bb54-e48754347867/klawsome+hometown+life.webp",
       "is_active": true,
       "sort_order": -1,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
