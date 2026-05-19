@@ -2696,7 +2696,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "1200px",
       "padding_y": "7rem",
       "bg_color": "",
-      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.webp",
+      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.jpg",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -3246,7 +3246,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "full",
       "padding_y": "0",
       "bg_color": "#0a0a0a",
-      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775962160906-tr8xakzvas.webp",
+      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775962160906-tr8xakzvas.jpg",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -4489,7 +4489,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 99,
       "block_type": "image",
       "content": {
-        "url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.webp"
+        "url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.jpg"
       }
     },
     {
