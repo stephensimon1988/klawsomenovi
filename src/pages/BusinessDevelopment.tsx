@@ -10,6 +10,7 @@ import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import bdHero from '@/assets/community/canned-food-drive.jpg';
 import hostMachinePhoto from '@/assets/bizdev-host-machine.jpg';
+import groupPhoto from '@/assets/bizdev-group-photo.jpg';
 import {
   useCmsTable,
   usePageHero,
@@ -288,12 +289,20 @@ const BusinessDevelopment = () => {
             ))}
           </div>
 
-          <div className="bg-white rounded-3xl p-10 mb-10 flex flex-col md:flex-row gap-7 items-start shadow-md">
-            <div className="text-5xl flex-shrink-0">{freedomBox?.eyebrow || '💡'}</div>
-            <div>
-              <h4 className="font-heading text-2xl font-bold text-primary mb-3">{freedomBox?.headline || 'Pair it with your other concepts'}</h4>
-              <p className="text-muted-foreground font-body font-semibold leading-relaxed">{freedomBox?.body}</p>
+          <div className="bg-white rounded-3xl p-8 md:p-10 mb-10 grid grid-cols-1 md:grid-cols-2 gap-8 items-center shadow-md">
+            <div className="flex gap-5 items-start">
+              <div className="text-5xl flex-shrink-0">{freedomBox?.eyebrow || '💡'}</div>
+              <div>
+                <h4 className="font-heading text-2xl font-bold text-primary mb-3">{freedomBox?.headline || 'Pair it with your other concepts'}</h4>
+                <p className="text-muted-foreground font-body font-semibold leading-relaxed">{freedomBox?.body}</p>
+              </div>
             </div>
+            <img
+              src={groupPhoto}
+              alt="Group of friends enjoying Klawsome arcade"
+              className="w-full h-full max-h-96 object-cover rounded-2xl"
+              loading="lazy"
+            />
           </div>
 
           <div className="text-center">
