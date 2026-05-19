@@ -272,11 +272,6 @@ const BusinessDevelopment = () => {
             <p className="ds-lead max-w-2xl mx-auto">{partner.subtitle}</p>
           </div>
 
-          <div className="bg-white rounded-3xl p-10 mb-10 shadow-md">
-            <h3 className="font-heading text-2xl font-bold text-foreground mb-3">{partnerWhy?.headline || "Why we're not calling this a franchise"}</h3>
-            <p className="text-muted-foreground font-body font-semibold leading-relaxed">{partnerWhy?.body}</p>
-          </div>
-
           <h3 className="font-heading text-3xl font-bold text-foreground mb-5 text-center">What Klawsome Supplies</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
             {partnerIncludesItems.map((item) => (
