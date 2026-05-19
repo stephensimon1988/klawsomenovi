@@ -14,12 +14,36 @@
  *   node scripts/check-images.mjs --dry          # check only, no writes
  *   node scripts/check-images.mjs --no-fail      # never exit non-zero
  */
-import { readFileSync, writeFileSync, existsSync, statSync, readdirSync } from 'node:fs';
+import { readFileSync, writeFileSync, existsSync, statSync, readdirSync, mkdirSync } from 'node:fs';
 import { join, extname, resolve, relative } from 'node:path';
 
 const ROOT = resolve(process.cwd());
 const DRY = process.argv.includes('--dry');
 const NO_FAIL = process.argv.includes('--no-fail');
+const NO_CACHE = process.argv.includes('--no-cache');
+const FORCE = process.argv.includes('--force');
+// Skip entirely on local builds unless explicitly opted in.
+// Set RUN_IMAGE_CHECK=1 locally, or run in CI, or pass --force.
+const ENABLED = FORCE || !!process.env.CI || process.env.RUN_IMAGE_CHECK === '1';
+if (!ENABLED) {
+  console.log('ℹ️  Skipping image check (local build). Run with --force or RUN_IMAGE_CHECK=1 to enable.');
+  process.exit(0);
+}
+
+const CACHE_PATH = resolve(ROOT, 'node_modules', '.cache', 'image-check.json');
+const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000; // 7 days
+
+function loadCache() {
+  if (NO_CACHE) return {};
+  try { return JSON.parse(readFileSync(CACHE_PATH, 'utf8')); } catch { return {}; }
+}
+function saveCache(cache) {
+  if (NO_CACHE) return;
+  try {
+    mkdirSync(resolve(ROOT, 'node_modules', '.cache'), { recursive: true });
+    writeFileSync(CACHE_PATH, JSON.stringify(cache));
+  } catch {}
+}
 
 const SCAN_DIRS = ['src', 'public', 'index.html'];
 const TEXT_EXT = new Set(['.ts', '.tsx', '.js', '.jsx', '.json', '.html', '.css', '.md']);
@@ -128,6 +152,8 @@ async function main() {
   const refs = collectReferences();
   console.log(`🔎 Scanned ${refs.size} unique image references`);
 
+  const cache = loadCache();
+  const now = Date.now();
   const broken = [];
   const fixed = [];
   const unfixable = [];
@@ -144,8 +170,14 @@ async function main() {
         let ok;
         if (local) ok = checkLocal(url);
         else {
-          const s = await fetchStatus(url);
-          ok = s >= 200 && s < 400;
+          const cached = cache[url];
+          if (cached && cached.ok && now - cached.t < CACHE_TTL_MS) {
+            ok = true;
+          } else {
+            const s = await fetchStatus(url);
+            ok = s >= 200 && s < 400;
+            cache[url] = { ok, t: now };
+          }
         }
         if (ok) continue;
         broken.push(url);
@@ -156,6 +188,9 @@ async function main() {
         const replacement = await findWorkingVariant(url);
         if (replacement) {
           if (!DRY) replaceInFiles(url, replacement, where);
+          // record replacement so we don't refetch on next run
+          cache[replacement] = { ok: true, t: now };
+          delete cache[url];
           fixed.push({ url, replacement, files: where.map((w) => relative(ROOT, w.file)) });
         } else {
           unfixable.push({ url, where: where.map((w) => relative(ROOT, w.file)) });
@@ -163,6 +198,8 @@ async function main() {
       }
     }),
   );
+
+  saveCache(cache);
 
   console.log(`\n✅ OK: ${refs.size - broken.length}`);
   console.log(`🛠  Fixed${DRY ? ' (dry-run)' : ''}: ${fixed.length}`);
