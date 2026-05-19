@@ -54,12 +54,14 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                   className={`md:col-span-6 ${flip ? 'md:order-2' : 'md:order-1'}`}
                 >
                   {hasImage ? (
-                    <img
-                      src={s.image_url}
-                      alt={s.headline}
-                      loading="lazy"
-                      className="ds-img-hero"
-                    />
+                    <div className="img-hover rounded-2xl">
+                      <img
+                        src={s.image_url}
+                        alt={s.headline}
+                        loading="lazy"
+                        className="ds-img-hero"
+                      />
+                    </div>
                   ) : (
                     <div
                       aria-hidden

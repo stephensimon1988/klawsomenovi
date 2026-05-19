@@ -124,7 +124,7 @@ const Gallery = () => {
                   <button
                     type="button"
                     onClick={() => setLightbox({ items, index: idx })}
-                    className="block w-full overflow-hidden rounded-2xl bg-secondary cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-primary"
+                    className="img-hover-tilt block w-full rounded-2xl bg-secondary cursor-zoom-in focus:outline-none focus:ring-2 focus:ring-primary"
                     aria-label={p.caption || 'Open image'}
                   >
                     {p.image_url ? (
@@ -132,7 +132,7 @@ const Gallery = () => {
                         src={p.image_url}
                         alt={p.caption}
                         loading="lazy"
-                        className="ds-img-thumb group-hover:scale-105 transition-transform duration-500"
+                        className="ds-img-thumb"
                       />
                     ) : null}
                   </button>

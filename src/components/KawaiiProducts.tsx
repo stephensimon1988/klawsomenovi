@@ -67,7 +67,7 @@ const KawaiiProducts = () => {
                 className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/15 overflow-hidden group glow-hover glow-blue"
                 style={{ opacity: 0 }}
               >
-                <div className="h-40 bg-gradient-to-br from-primary/30 via-klawsome-yellow/20 to-klawsome-baby-pink/20 flex items-center justify-center overflow-hidden">
+                <div className="img-hover h-40 bg-gradient-to-br from-primary/30 via-klawsome-yellow/20 to-klawsome-baby-pink/20 flex items-center justify-center">
                   {product.imageUrl ? (
                     <img src={product.imageUrl} alt={product.name} className="w-full h-full object-cover" loading="lazy" />
                   ) : (

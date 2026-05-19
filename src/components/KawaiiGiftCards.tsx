@@ -42,13 +42,14 @@ const KawaiiGiftCards = () => {
 
           <div ref={imagesRef} className="grid grid-cols-2 gap-6" style={{ opacity: 0 }}>
             {displayImages.slice(0, 4).map((img) => (
-              <img
-                key={img.id}
-                src={img.image_url}
-                alt={img.alt_text}
-                className="w-full h-auto object-contain rounded-2xl"
-                loading="lazy"
-              />
+              <div key={img.id} className="img-hover rounded-2xl">
+                <img
+                  src={img.image_url}
+                  alt={img.alt_text}
+                  className="w-full h-auto object-contain rounded-2xl"
+                  loading="lazy"
+                />
+              </div>
             ))}
           </div>
         </div>

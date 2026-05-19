@@ -16,7 +16,7 @@ const KawaiiStory = () => {
 
       <div className="ds-container">
         <div ref={ref} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center" style={{ opacity: 0 }}>
-          <div className="md:col-span-6 md:order-2">
+          <div className="md:col-span-6 md:order-2 img-hover rounded-2xl">
             <img
               src={content?.story_image_url || storyImage}
               alt={content?.story_title || 'The Klawsome Story'}

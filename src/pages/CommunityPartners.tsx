@@ -116,7 +116,7 @@ const CommunityPartners = () => {
                 key={p.name}
                 className="flex flex-col bg-card rounded-kawaii border border-border overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className="h-56 flex items-center justify-center bg-secondary/40 overflow-hidden">
+                <div className="img-hover h-56 flex items-center justify-center bg-secondary/40">
                   <img
                     src={p.image}
                     alt={p.name}
