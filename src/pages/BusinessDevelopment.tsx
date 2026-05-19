@@ -9,6 +9,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import bdHero from '@/assets/community/canned-food-drive.jpg';
+import hostMachinePhoto from '@/assets/bizdev-host-machine.jpg';
 import {
   useCmsTable,
   usePageHero,
@@ -214,7 +215,11 @@ const BusinessDevelopment = () => {
               <h3 className="font-heading text-2xl font-bold text-foreground mb-2">You earn 10% of every token played.</h3>
               <p className="text-muted-foreground font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
             </div>
-            <span className="font-bold text-6xl text-primary whitespace-nowrap">🎯 10%</span>
+            <img
+              src={hostMachinePhoto}
+              alt="Family posing with a Klawsome claw machine and Pikachu mascot"
+              className="w-40 h-40 md:w-48 md:h-48 aspect-square object-cover rounded-2xl flex-shrink-0"
+            />
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-12">
