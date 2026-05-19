@@ -166,7 +166,7 @@ const Rewards = () => {
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Lifetime Tiers</p>
-          <h2 className="ds-h2 uppercase mb-16 text-background text-center">Climb the ranks.</h2>
+          <h2 className="ds-h2 uppercase mb-16 text-background text-center">Lifetime Tiers</h2>
           <div className="grid md:grid-cols-4 gap-px bg-background/20">
             {TIERS.map((tier, i) => (
               <div key={tier.name} className="bg-klawsome-navy p-8">
