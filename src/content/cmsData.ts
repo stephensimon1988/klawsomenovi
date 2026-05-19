@@ -599,6 +599,48 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 6
     },
     {
+      "id": "cfd-001",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-volunteer-group-bench.webp",
+      "caption": "Our young volunteers ready to help at the food drive",
+      "sort_order": 1
+    },
+    {
+      "id": "cfd-002",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-mother-daughter-donation.webp",
+      "caption": "Carrying a box of donations together",
+      "sort_order": 2
+    },
+    {
+      "id": "cfd-003",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-group-loading-cart.webp",
+      "caption": "Loading the cart with donated goods",
+      "sort_order": 3
+    },
+    {
+      "id": "cfd-004",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-kids-loading-boxes.webp",
+      "caption": "Kids organizing food and water donations at Gleaners",
+      "sort_order": 4
+    },
+    {
+      "id": "cfd-005",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-kids-water-cases.webp",
+      "caption": "Working together to move cases of water",
+      "sort_order": 5
+    },
+    {
+      "id": "cfd-006",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-sorting-donations.webp",
+      "caption": "Sorting boxes of canned goods at the warehouse",
+      "sort_order": 6
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
