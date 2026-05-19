@@ -641,6 +641,20 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 6
     },
     {
+      "id": "cfd-007",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-girl-packing-cans.webp",
+      "caption": "Packing canned goods into a donation box",
+      "sort_order": 7
+    },
+    {
+      "id": "cfd-008",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-volunteers-with-gleaners-staff.webp",
+      "caption": "Our volunteers with the Gleaners team",
+      "sort_order": 8
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
