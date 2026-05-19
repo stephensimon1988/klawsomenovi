@@ -1717,7 +1717,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Spartan Story Hub (MSU)",
       "date": "April 2026",
       "url": "https://spartan.msu.edu/spartan-story-hub/news/2026/04/klawsome-filipino-claw-arcade",
-      "image_url": "/images/klawsome-storefront.webp",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp",
       "is_active": true,
       "sort_order": -3,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1728,7 +1728,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "WXYZ Detroit",
       "date": "2026",
       "url": "https://www.wxyz.com/news/voices/michigans-first-asian-inspired-mixed-use-development-draws-crowds-in-novi",
-      "image_url": "src/assets/news-collage.webp",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
       "is_active": true,
       "sort_order": -2,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1739,7 +1739,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "The Detroit News",
       "date": "March 9th, 2026",
       "url": "https://www.detroitnews.com/story/business/retail/2026/03/09/buzz-grows-around-novi-spot-with-asian-themed-shops-cuisine/88736530007/",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/fdbcfe32-94e1-4e84-bb54-e48754347867/klawsome+hometown+life.webp",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/33b38672-5286-4f40-a9bd-96bf778cf5a6/unnamed+%286%29.webp",
       "is_active": true,
       "sort_order": -1,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
