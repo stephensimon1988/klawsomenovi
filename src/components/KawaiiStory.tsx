@@ -4,7 +4,7 @@ import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { openBookingModal } from './BookNowDialog';
-const storyImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/bear-panda-fox-cat-party.png';
+const storyImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/bear-panda-fox-cat-party.webp';
 
 const KawaiiStory = () => {
   const ref = useGsapScroll<HTMLDivElement>({ type: 'scaleIn', duration: 1 });

@@ -22,7 +22,7 @@ const Rewards = () => {
         eyebrow={hero?.eyebrow || 'Loyalty'}
         title={hero?.title || 'Rewards Program'}
         subtitle={hero?.subtitle || 'Your claw game, upgraded.'}
-        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg'}
+        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp'}
         jumpLinks={[
           { label: 'Benefits', id: 'benefits' },
           { label: 'Tiers', id: 'tiers' },

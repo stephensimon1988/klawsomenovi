@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, animate } from 'framer-motion';
-import navClaw from '@/assets/nav-claw.png';
+import navClaw from '@/assets/nav-claw.webp';
 
 const CLAW_WIDTH = 60;
 // image aspect ~ 1053 / 1716

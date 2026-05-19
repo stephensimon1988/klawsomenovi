@@ -7,7 +7,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "80825ef7-8ade-4b74-999f-3f7262bd0a01",
       "hero_headline": "Celebrate your birthday with Klawsome!",
       "hero_subheadline": "Klawsome Wants To Celebrate You!",
-      "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg",
+      "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.webp",
       "promo_text": "Celebrating a birthday? Get your paws on a free gift!",
       "rules_text": "Come in anytime during our regular hours and we'll provide a personalized birthday gift bag and balloon for the celebrant. No purchase is necessary — simply subscribe to our newsletter to redeem. Please notify Klawsome two weeks in advance for parties. The earlier, the better to ensure best customer service. Saturdays are generally the busiest day. For the best experience, we recommend either booking a private event in the morning OR only booking parties with small groups (7 or less allowed) during public hours. Klawsome can only book two parties per day, based on staffing.",
       "booking_email": "events@klawsomenovi.com",
@@ -559,77 +559,77 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "npl-paaralang-001",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/novi-library-bookmarks.jpg",
+      "image_url": "/gallery/novi-library-bookmarks.webp",
       "caption": "Reading Month bookmarks at Novi Public Library",
       "sort_order": 1
     },
     {
       "id": "npl-paaralang-002",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/paaralang-lion-dance.jpg",
+      "image_url": "/gallery/paaralang-lion-dance.webp",
       "caption": "Lion dance performance with Paaralang Pilipino",
       "sort_order": 2
     },
     {
       "id": "npl-paaralang-003",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/paaralang-klawsome-booth.jpg",
+      "image_url": "/gallery/paaralang-klawsome-booth.webp",
       "caption": "Klawsome booth at the Paaralang Pilipino event",
       "sort_order": 3
     },
     {
       "id": "npl-paaralang-004",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/novi-library-award-display.jpg",
+      "image_url": "/gallery/novi-library-award-display.webp",
       "caption": "Novi Public Library Reading Month display and reward bookmarks",
       "sort_order": 4
     },
     {
       "id": "npl-paaralang-005",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/paaralang-vendor-table.jpg",
+      "image_url": "/gallery/paaralang-vendor-table.webp",
       "caption": "Paaralang Pilipino event table with plushies and gifts",
       "sort_order": 5
     },
     {
       "id": "npl-paaralang-006",
       "section": "novi-library-paaralang",
-      "image_url": "/gallery/paaralang-cultural-display.jpg",
+      "image_url": "/gallery/paaralang-cultural-display.webp",
       "caption": "Preparing the cultural display for the Paaralang Pilipino event",
       "sort_order": 6
     },
     {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
       "caption": "Families enjoying the arcade",
       "sort_order": 17
     },
     {
       "id": "09596f23-c0f0-4065-ac8c-8f6b52068057",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0b0121fc-43db-42df-ac24-f492fc34cef3/PXL_20251123_165459736.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0b0121fc-43db-42df-ac24-f492fc34cef3/PXL_20251123_165459736.webp",
       "caption": "Birthday balloons and decorations",
       "sort_order": 5
     },
     {
       "id": "0f169e54-36a1-48e4-a8ce-9c123e275599",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da5c9a88-f35c-4e8c-8c9b-ec448be828e8/PXL_20251123_165445477.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da5c9a88-f35c-4e8c-8c9b-ec448be828e8/PXL_20251123_165445477.MP.webp",
       "caption": "Kids at Minecraft party",
       "sort_order": 4
     },
     {
       "id": "17c37df8-9102-4743-b5eb-b633008f2886",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.webp",
       "caption": "Dinosaur birthday cake",
       "sort_order": 12
     },
     {
       "id": "1e24da9b-92c5-42f2-bf36-4a5437ffa90f",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.webp",
       "caption": "Claw machines with blue neon lights",
       "sort_order": 4
     },
@@ -643,28 +643,28 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "2f7e61bb-a2cf-4302-b373-5f2a5713202a",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.webp",
       "caption": "Minecraft themed party setup",
       "sort_order": 1
     },
     {
       "id": "42826a52-a0d2-43e1-9a88-0d9e53226daa",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/316fd98d-521c-4271-b4fa-054ddee61f43/PXL_20251123_235547569.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/316fd98d-521c-4271-b4fa-054ddee61f43/PXL_20251123_235547569.MP.webp",
       "caption": "Reserved table setup",
       "sort_order": 14
     },
     {
       "id": "4ad0730e-762d-49b0-9444-61b8abc42962",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f122357-5ae3-4412-8699-8a1b06e1f5a8/PXL_20251123_165134954.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f122357-5ae3-4412-8699-8a1b06e1f5a8/PXL_20251123_165134954.MP.webp",
       "caption": "Birthday celebration with balloons",
       "sort_order": 7
     },
     {
       "id": "4d25989d-46f9-4845-894a-44e5d48efa5e",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp",
       "caption": "Klawsome crew selfie wall",
       "sort_order": 6
     },
@@ -678,140 +678,140 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "5657a3a8-92df-4ddf-a94d-dededc7f7d37",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/606820e7-4e9a-4b76-86df-13db765394fc/PXL_20251123_042431224.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/606820e7-4e9a-4b76-86df-13db765394fc/PXL_20251123_042431224.webp",
       "caption": "Party setup with claw machines",
       "sort_order": 16
     },
     {
       "id": "5658f200-3c77-479b-a53e-fc8eea999deb",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.webp",
       "caption": "Full party area setup",
       "sort_order": 12
     },
     {
       "id": "5ca20444-c661-4684-bb58-6e327be7c8da",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1908211d-7f46-498b-9adc-5110e06a95fd/PXL_20251123_154035244.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1908211d-7f46-498b-9adc-5110e06a95fd/PXL_20251123_154035244.webp",
       "caption": "Minecraft balloon arch",
       "sort_order": 8
     },
     {
       "id": "60e56ad5-167d-4da1-9e5f-a1c1ebac9503",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1d6dc747-e4ef-436e-b5fb-6d2b9b9b0ca0/PXL_20251123_235603544.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1d6dc747-e4ef-436e-b5fb-6d2b9b9b0ca0/PXL_20251123_235603544.MP.webp",
       "caption": "Decorated table setup",
       "sort_order": 5
     },
     {
       "id": "63e05091-a333-42d0-824c-760e74962cf3",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d98b9d69-9682-4fd9-8d7a-2b58ead4bc99/PXL_20251123_235620742.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d98b9d69-9682-4fd9-8d7a-2b58ead4bc99/PXL_20251123_235620742.MP.webp",
       "caption": "Gift boxes on table",
       "sort_order": 2
     },
     {
       "id": "6597c498-3a42-4361-8ac2-468aea0cfed2",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/6f8fd02c-c1a0-4506-8013-6cf6d927ea5f/PXL_20251123_235542179.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/6f8fd02c-c1a0-4506-8013-6cf6d927ea5f/PXL_20251123_235542179.webp",
       "caption": "Long table with balloon centerpiece",
       "sort_order": 15
     },
     {
       "id": "69d07032-c875-40a5-988d-5cd614410ded",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.webp",
       "caption": "Indoor arcade party",
       "sort_order": 11
     },
     {
       "id": "71559b37-b842-4117-90b1-36d91ee7003e",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.webp",
       "caption": "Full party area with holiday decorations",
       "sort_order": 13
     },
     {
       "id": "7cc3c8fb-07bd-42d3-b0fc-cb09943ac701",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef928fc3-8ede-4daf-b733-6bc18ea62d09/PXL_20251123_171320314.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef928fc3-8ede-4daf-b733-6bc18ea62d09/PXL_20251123_171320314.MP.webp",
       "caption": "Birthday cake celebration",
       "sort_order": 2
     },
     {
       "id": "84bcea5d-53d7-4251-b5ac-6305ec4e0880",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp",
       "caption": "Filipino flag celebration",
       "sort_order": 7
     },
     {
       "id": "8a515d74-af3e-42b4-b886-3a2fdb461d3f",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e5549656-b613-4e53-8e69-fe2736834823/PXL_20251123_171313007.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e5549656-b613-4e53-8e69-fe2736834823/PXL_20251123_171313007.MP.webp",
       "caption": "Party group photo",
       "sort_order": 3
     },
     {
       "id": "8d7e09c7-bbff-48b4-8416-8d59fc68e8fa",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d026a708-6eb8-4bdc-b3c2-528c7d867954/PXL_20251123_042427353.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d026a708-6eb8-4bdc-b3c2-528c7d867954/PXL_20251123_042427353.webp",
       "caption": "Gaming controller balloon",
       "sort_order": 15
     },
     {
       "id": "90f4c65d-0902-4caa-b68b-9ffb51b869b4",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.webp",
       "caption": "Crowd at arcade party",
       "sort_order": 9
     },
     {
       "id": "960d4f37-5e7a-41dc-93a4-add654b0b815",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/3898c4d5-e2a5-459c-83dc-77f74a79dbbe/PXL_20251124_002703641.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/3898c4d5-e2a5-459c-83dc-77f74a79dbbe/PXL_20251124_002703641.MP.webp",
       "caption": "Birthday cake with candles",
       "sort_order": 1
     },
     {
       "id": "9dea9a98-16a3-41f0-89ad-62b5b52e50ec",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cbd4c879-dfc8-4cbf-99f5-60aa1d4a5726/PXL_20251123_154055944.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cbd4c879-dfc8-4cbf-99f5-60aa1d4a5726/PXL_20251123_154055944.MP.webp",
       "caption": "Balloon collection",
       "sort_order": 10
     },
     {
       "id": "a30a2227-1f7d-4cfd-b113-08c275b47636",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/720c33bf-ce63-4135-82dc-3f34cdb68158/IMG-20251123-WA0066.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/720c33bf-ce63-4135-82dc-3f34cdb68158/IMG-20251123-WA0066.webp",
       "caption": "Lively birthday party",
       "sort_order": 13
     },
     {
       "id": "a728d9ae-9e0a-4ed7-8f26-7687a22a48a5",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/c06c88ff-f9f2-466c-80e3-02444aa01d22/PXL_20250822_201918587.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/c06c88ff-f9f2-466c-80e3-02444aa01d22/PXL_20250822_201918587.webp",
       "caption": "Owners at grand opening",
       "sort_order": 5
     },
     {
       "id": "a7a7017a-41cb-4635-9319-d2f7987089cc",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.png",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.webp",
       "caption": "Owners in front of storefront",
       "sort_order": 2
     },
     {
       "id": "a83e30b5-e5ce-43da-b503-fac99472628d",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f64b91d9-1b6f-4839-bb82-7f318bfe04b3/PXL_20251123_235550848.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f64b91d9-1b6f-4839-bb82-7f318bfe04b3/PXL_20251123_235550848.webp",
       "caption": "Birthday presents on table",
       "sort_order": 11
     },
     {
       "id": "b07149a6-b80f-447d-8b86-22899ba1bbc2",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0070bac4-c885-490c-9a59-28d4868d5b0b/PXL_20251123_235613832.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0070bac4-c885-490c-9a59-28d4868d5b0b/PXL_20251123_235613832.webp",
       "caption": "Table with balloon centerpiece",
       "sort_order": 8
     },
@@ -825,49 +825,49 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "e531d7df-43c2-4fdc-b9d0-4ebf7248cfe5",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/3ab2cb01-e94f-4ec2-97fb-b63a2b1eb6c8/PXL_20251123_165431956.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/3ab2cb01-e94f-4ec2-97fb-b63a2b1eb6c8/PXL_20251123_165431956.MP.webp",
       "caption": "Party table setup",
       "sort_order": 6
     },
     {
       "id": "e8a884c4-5f1f-45a6-a02f-54918d1872df",
       "section": "private_party",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b423ffd5-9411-4093-96d5-b7dc4a6149b3/IMG-20251123-WA0064.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b423ffd5-9411-4093-96d5-b7dc4a6149b3/IMG-20251123-WA0064.webp",
       "caption": "Pizza party with balloon arch",
       "sort_order": 14
     },
     {
       "id": "e94a5d93-f98f-481d-b99f-90550597d819",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0c99d1c8-9339-488a-a71f-51f2b2ff6bb5/PXL_20251123_235624898.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0c99d1c8-9339-488a-a71f-51f2b2ff6bb5/PXL_20251123_235624898.MP.webp",
       "caption": "Paris Baguette holiday decor",
       "sort_order": 4
     },
     {
       "id": "eebbae52-88d7-45c5-9943-d1a91b519ff5",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/62b3a497-40c2-49d2-961a-aa6c5850ce67/PXL_20251124_002021332.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/62b3a497-40c2-49d2-961a-aa6c5850ce67/PXL_20251124_002021332.webp",
       "caption": "Group celebration",
       "sort_order": 3
     },
     {
       "id": "f6032db3-9737-43da-b95a-ab626980a384",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/21f62e3c-4e42-4460-ad61-8959feae0a54/AgnesMichal_CandidClapping.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/21f62e3c-4e42-4460-ad61-8959feae0a54/AgnesMichal_CandidClapping.webp",
       "caption": "Birthday celebration at Klawsome",
       "sort_order": 3
     },
     {
       "id": "fa1b8eb0-014c-408c-bdb9-f0dd6371010c",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.webp",
       "caption": "Family celebration at Paris Baguette",
       "sort_order": 7
     },
     {
       "id": "fb3d7483-e203-407a-9605-1d671b2d1ab3",
       "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2f7e7f82-7d7f-4892-b2b5-7463d3c08975/PXL_20251124_002539077.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2f7e7f82-7d7f-4892-b2b5-7463d3c08975/PXL_20251124_002539077.webp",
       "caption": "Rainbow birthday cake",
       "sort_order": 6
     }
@@ -875,13 +875,13 @@ export const cmsData: Record<string, any[]> = {
   "gift_card_images": [
     {
       "id": "0aad6601-2c88-4fc7-9082-f397a1349893",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Feaster-gift-card.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Feaster-gift-card.webp",
       "alt_text": "Easter Klawsome gift card",
       "sort_order": 2
     },
     {
       "id": "c7878c6f-8dee-426e-868f-25fff274ad4e",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Fvalentine-gift-card-v2.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/gift-cards%2Fvalentine-gift-card-v2.webp",
       "alt_text": "Valentine's Day Klawsome gift card",
       "sort_order": 1
     }
@@ -904,10 +904,10 @@ export const cmsData: Record<string, any[]> = {
       "hero_headline": "Welcome to Novi's Own Klaw Arcade",
       "hero_subheadline": "Open Tuesday to Sunday 11 a.m. to 9 p.m. Closed Mondays",
       "hero_cta_text": "Book a Birthday Party",
-      "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "story_title": "The Klawsome Story",
       "story_body": "Klawsome! is Michigan's first stand-alone claw machine arcade, offering a unique and exciting experience where customers can test their skills to win kawaii-style plushies from vibrantly colored claw machines. We are a family-owned local business based in Novi, Michigan, inspired by the popular arcades in Asian countries.",
-      "story_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg",
+      "story_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp",
       "about_title": "How to Play!",
       "about_subtitle": "Buy Tokens → Win Plushies → Upgrade",
       "updated_at": "2026-04-09T18:34:12.980236+00:00"
@@ -941,14 +941,14 @@ export const cmsData: Record<string, any[]> = {
       "id": "235adf69-0342-4d41-b8e4-b616ac127c9c",
       "name": "Birthday Invite Template 2",
       "url": "https://www.klawsomenovi.com/s/Klawsome-Birthday-Invite-2.pdf",
-      "thumbnail_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f3c702b6-da3f-4a85-aec7-e279e2d41820/%7BNAME%7D%E2%80%99S+%7BAGE%7D+BIRTHDAY.PNG",
+      "thumbnail_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f3c702b6-da3f-4a85-aec7-e279e2d41820/%7BNAME%7D%E2%80%99S+%7BAGE%7D+BIRTHDAY.webp",
       "sort_order": 1
     },
     {
       "id": "a09ee8ca-a866-4548-910e-1acadc08126c",
       "name": "Birthday Invite Template 1",
       "url": "https://www.klawsomenovi.com/s/Klawsome-Birthday-Invite.pdf",
-      "thumbnail_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b7a7ccb0-4b9d-491c-a6a2-b6db899bd15f/Birthday+Invite+Template+%282%29.png",
+      "thumbnail_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b7a7ccb0-4b9d-491c-a6a2-b6db899bd15f/Birthday+Invite+Template+%282%29.webp",
       "sort_order": 0
     }
   ],
@@ -958,7 +958,7 @@ export const cmsData: Record<string, any[]> = {
       "title": "Assistant General Manager",
       "category": "in-store",
       "description": "The Assistant Manager (AM) is responsible for the successful day-to-day performance of the store under the guidance of the General Manager (GM), with accountability for:<br/> 1) performing/training store associates on operation duties<br/>2) delivering exceptional customer service<br/>3) achieving store financial targets<br/> 4) performing all GM responsibilities in the absence of the GM.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.webp",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FAssistant_General_Manager.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20Assistant%20General%20Manager",
       "is_paid": true,
@@ -971,7 +971,7 @@ export const cmsData: Record<string, any[]> = {
       "title": "Summer Intern",
       "category": "hybrid",
       "description": "Start immediately (after application/interview process). Involves mentoring within a specific field of our expertise (e.g. business, journalism, education). Projects fit your background/experience. In-person and remote working opportunities with part-time hours. Lasts two to three months. Ends with a letter of recommendation.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d00baf82-bf76-4d17-a38e-b6ca3ab39d6f/PXL_20250610_212808314.MP.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d00baf82-bf76-4d17-a38e-b6ca3ab39d6f/PXL_20250610_212808314.MP.webp",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FSummer_Intern.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20Summer%20Intern",
       "is_paid": false,
@@ -1036,7 +1036,7 @@ export const cmsData: Record<string, any[]> = {
       "title": "Store Associate",
       "category": "in-store",
       "description": "The store associate AKA \"Fun Facilitator\" at Klawsome! creates a lively, welcoming environment for customers. This role focuses on delivering excellent customer service, ensuring smooth game operations, plushie restocking, keeping the facility clean and organized. Enthusiasm and a passion for customer interaction are essential.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FStore_Associate.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20Store%20Associate",
       "is_paid": true,
@@ -1052,7 +1052,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Spartan Story Hub (MSU)",
       "date": "April 2026",
       "url": "https://spartan.msu.edu/spartan-story-hub/news/2026/04/klawsome-filipino-claw-arcade",
-      "image_url": "/images/klawsome-storefront.jpg",
+      "image_url": "/images/klawsome-storefront.webp",
       "is_active": true,
       "sort_order": -3,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1063,7 +1063,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "WXYZ Detroit",
       "date": "2026",
       "url": "https://www.wxyz.com/news/voices/michigans-first-asian-inspired-mixed-use-development-draws-crowds-in-novi",
-      "image_url": "src/assets/news-collage.jpg",
+      "image_url": "src/assets/news-collage.webp",
       "is_active": true,
       "sort_order": -2,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1074,7 +1074,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "The Detroit News",
       "date": "March 9th, 2026",
       "url": "https://www.detroitnews.com/story/business/retail/2026/03/09/buzz-grows-around-novi-spot-with-asian-themed-shops-cuisine/88736530007/",
-      "image_url": "https://www.gannett-cdn.com/authoring/authoring-images/2026/03/03/PDTN/88953828007-0228-bu-asian-biz-16-1.jpg?auto=webp&crop=7928,4461,x0,y412&format=pjpg&width=1200",
+      "image_url": "https://www.gannett-cdn.com/authoring/authoring-images/2026/03/03/PDTN/88953828007-0228-bu-asian-biz-16-1.webp?auto=webp&crop=7928,4461,x0,y412&format=pjpg&width=1200",
       "is_active": true,
       "sort_order": -1,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1085,7 +1085,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Hour Detroit",
       "date": "August 28th, 2025",
       "url": "https://www.hourdetroit.com/development-topics/klawsome-sakura-novi-kicks-off-with-michigans-first-clawcade/",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.png",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/cf98d1f2-1b98-49e2-953a-6784766e898d/klawsome+hourdetroit.webp",
       "is_active": true,
       "sort_order": 2,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1096,7 +1096,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "@clawcraziness",
       "date": "September 2nd, 2025",
       "url": "https://www.tiktok.com/@clawcraziness/video/7545589134090358030",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d8e28fdf-05d0-48a8-a4d0-dd11696cfb08/klawsome+clawcraziness.png",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d8e28fdf-05d0-48a8-a4d0-dd11696cfb08/klawsome+clawcraziness.webp",
       "is_active": true,
       "sort_order": 5,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1107,7 +1107,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Little Guide Detroit",
       "date": "August 28th, 2025",
       "url": "https://littleguidedetroit.com/check-out-klawsome-in-novi-michigans-only-stand-alone-claw-machine-arcade/",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.webp",
       "is_active": true,
       "sort_order": 1,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1118,7 +1118,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Michigan Mama News",
       "date": "August 28th, 2025",
       "url": "https://michiganmamanews.com/2025/08/28/sakura-novi-launches-with-the-grand-opening-of-klawsome-on-friday-august-29/",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.webp",
       "is_active": true,
       "sort_order": 3,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1140,7 +1140,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "@Zcaders",
       "date": "August 29th, 2025",
       "url": "https://www.youtube.com/watch?v=pd0E6-y9Yjk",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/7181dc67-e806-447f-a74f-1f5a6102a2a3/klawsome+zcaders.png",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/7181dc67-e806-447f-a74f-1f5a6102a2a3/klawsome+zcaders.webp",
       "is_active": true,
       "sort_order": 6,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
@@ -1170,7 +1170,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Rentals",
       "headline": "Why Rent from Klawsome?",
       "body": "Klawsome brings the fun of the claw machine arcade directly to your event. Our machines are great for birthdays, company parties, school events, fundraisers, trade shows, and community celebrations in Novi and the surrounding Michigan area.\n\nWe take care of the setup, support, and pickup so you can focus on your guests.\n\nReady to book? Contact Klawsome to request a claw machine rental quote.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-playing-arcade-game.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-playing-arcade-game.webp",
       "cta_text": "Book Now",
       "cta_url": "https://klawsome.as.me/schedule/366e2b9b",
       "list_items": [],
@@ -1185,7 +1185,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Partner With Us",
       "headline": "How Your Organization Can Partner With Klawsome",
       "body": "Community groups, youth programs, educators, and organizations can contact Klawsome to explore collaboration opportunities. Reach out at team@klawsomenovi.com or events@klawsomenovi.com.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-prize-tickets-teddy-bear.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-prize-tickets-teddy-bear.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1208,7 +1208,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "",
       "headline": "How it works",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-playing-claw-machine-candy-star.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-playing-claw-machine-candy-star.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1239,7 +1239,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "What Makes It Special",
       "headline": "Why Guests Love the Klawsome Store Experience",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-toy-charm-heart-ball.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-toy-charm-heart-ball.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1261,7 +1261,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Let's Talk",
       "headline": "Ready to Get Started?",
       "body": "Tell us which opportunity excites you and we'll take it from there.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-playing-arcade-game.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-playing-arcade-game.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1276,7 +1276,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Culture",
       "headline": "Celebrating Asian-Inspired Culture in Novi",
       "body": "Klawsome's brand identity is deeply tied to Asian claw-machine culture. The family lived in Korea for several years and continued to visit clawcades across Asia and the U.S. — experiences that shaped the design, plush selection, and spirit of the arcade.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-holding-candies-party.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-holding-candies-party.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1296,7 +1296,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Location",
       "headline": "Proud Part of the Sakura Novi Community",
       "body": "Klawsome is located in Sakura Novi, Michigan's first Asian-themed mixed-use development — a walkable district dedicated to cultural celebration, cuisine, and retail experiences. As the development's first retailer, Klawsome helped kick off a major cultural milestone.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-bunny-bear-panda-ballpit.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-bunny-bear-panda-ballpit.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1315,7 +1315,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Partner Tagline",
       "headline": "Own a Klawsome Arcade — Be the Go-To Entertainment Spot in Your City",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-playing.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-playing.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1330,7 +1330,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Plushie Categories",
       "headline": "Medium Plushies",
       "body": "The most common machine category — kawaii animals, cute characters, colorful figurines, soft pastel plush designs, and seasonal releases.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-holding-star-bag.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-holding-star-bag.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1345,7 +1345,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "💡",
       "headline": "Pair it with your other concepts",
       "body": "Launching a bubble tea shop? A bakery? A themed café? A Klawsome arcade plugs right in. Because we're not locking you into a traditional franchise model, you have full flexibility to build a multi-concept space that draws in more customers and creates a one-of-a-kind destination in your community. The arcade drives foot traffic — you design what they do next.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-bunny-plush-gumballs.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-bunny-plush-gumballs.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1360,7 +1360,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Our Plush Philosophy",
       "headline": "Cute, Quality, and Carefully Chosen",
       "body": "Klawsome's plush selection is inspired by the owners' experiences visiting claw arcades across Asia — Korea, Japan, and Southeast Asian regions. Every plushie is hand-selected for its kawaii aesthetic, cultural relevance, and kid-approved charm.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bow-holding-heart-candies.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bow-holding-heart-candies.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1380,7 +1380,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Plushie Categories",
       "headline": "Rare Plushies & Anime Figurines",
       "body": "Klawsome machines include rarer stuffed animals and anime figurines that can be won or redeemed through trade-up points — often matching kawaii themes popular in Asian arcades.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-star-holding-gachapon-capsules.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-star-holding-gachapon-capsules.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1395,7 +1395,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Plushie Categories",
       "headline": "Small Plushies & Mini Characters",
       "body": "Some machines contain tiny trinkets, small snacks, and miniature plush items. These are often easier wins and great for younger children.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/baby-panda-star-candies.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/baby-panda-star-candies.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1410,7 +1410,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "How It Works",
       "headline": "Simple. Fun. Stress-Free.",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-claw-game-toys.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-claw-game-toys.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1430,7 +1430,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Visit Us",
       "headline": "42768 Grand River Avenue, Suite C-140, Novi, MI 48375",
       "body": "Inside Sakura Novi. Open Tuesday–Sunday, 11 a.m. – 9 p.m. Closed Mondays.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-playing-claw-machine-bunny.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-playing-claw-machine-bunny.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1445,7 +1445,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Welcome",
       "headline": "Welcome to the Klawsome Prize Shop",
       "body": "Klawsome operates entirely through claw machines — but the arcade effectively functions as a kawaii plushie shop, where every prize is earned through skill and excitement. Guests describe Klawsome as a \"stuffy lover heaven,\" thanks to the wide variety of plush characters, adorable styles, and colorful prizes.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-fox-cat-claw-machine.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-fox-cat-claw-machine.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1460,7 +1460,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "General Inquiries",
       "headline": "team@klawsomenovi.com",
       "body": "Use this email for questions about gameplay, token pricing, lost items, customer service, general info, feedback, or media/PR requests.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-holding-star.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-holding-star.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1483,7 +1483,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "📦",
       "headline": "Minimum order: 100 units.",
       "body": "Perfect for businesses, events, brands, arcades, or anyone looking to create a custom keepsake at scale. Great for promotions, giveaways, retail, or arcade prizes.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-crane-game-heart-ball.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-crane-game-heart-ball.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1498,7 +1498,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Partnerships",
       "headline": "Klawsome Welcomes Collaboration With",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-cuddling-candy-toys.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-cuddling-candy-toys.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1521,7 +1521,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Trade-Up Program",
       "headline": "Bigger Wins Await",
       "body": "Win plushies → exchange them for points → unlock bigger prizes including larger stuffed animals, rarer plush designs, and anime figurines. This system encourages collecting, friendly competition, and return visits.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-bunny-toy-capsules-candies.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-bunny-toy-capsules-candies.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1536,7 +1536,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Accessibility",
       "headline": "Welcoming All Guests",
       "body": "Klawsome is located inside Sakura Novi, a walkable modern retail development designed with accessibility in mind. Guests may request assistance anytime by speaking with staff. For specific accommodation questions, contact team@klawsomenovi.com or call (248) 938-4093.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-holding-candies-capsules.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-holding-candies-capsules.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1551,7 +1551,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Media Kit",
       "headline": "For Journalists, Bloggers & Content Creators",
       "body": "Reach out to request interviews, photos, or additional press materials. Email team@klawsomenovi.com or call (248) 938-4093.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-gumball-and-kawsome-bag.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-gumball-and-kawsome-bag.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1572,7 +1572,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Family & Culture",
       "headline": "Rooted in Family, Culture & Kapwa",
       "body": "Klawsome's founders, Agnes and Michal, built the arcade with a deep commitment to kapwa — a Filipino concept meaning shared identity and community connection. Their children even contributed creatively by influencing plush selections, helping choose the business name, and inspiring the logo.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/bear-panda-fox-cat-party.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/bear-panda-fox-cat-party.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1592,7 +1592,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "",
       "headline": "Perfect for high-traffic spots",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-playing-2.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-playing-2.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1614,7 +1614,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Sakura Novi",
       "headline": "Michigan's First Asian-Inspired Mixed-Use Development",
       "body": "A walkable community hub designed to combine culture, food, family activities, and unique experiences. Klawsome was the first retailer to open here, helping kick off Michigan's first Clawcade.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-bear-cat-ballpit.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-bear-cat-ballpit.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1629,7 +1629,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Location & Directions",
       "headline": "Find Us Inside Sakura Novi",
       "body": "42768 Grand River Avenue, Suite C-140, Novi, MI 48375. Enter Sakura Novi from Grand River Avenue, follow signage into the retail area, and look for Klawsome's bright machines and plush-filled display windows.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1644,7 +1644,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Gallery",
       "headline": "A Vibrant, Plush-Filled Atmosphere",
       "body": "Klawsome features a vibrant and colorful interior filled with rows of claw machines, glowing lights, and kawaii-style plushies displayed inside vibrantly colored prize boxes. Browse the live Instagram feed on the homepage for the latest plushie wins and arcade updates.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1664,7 +1664,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "",
       "headline": "What Klawsome Supplies",
       "body": "",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-claw-machine-heart-ball.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-claw-machine-heart-ball.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1710,7 +1710,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "",
       "headline": "Why we're not calling this a franchise",
       "body": "We want you to have the freedom to build something bigger. Pair a Klawsome arcade with a bubble tea bar, a bakery, a themed café, a community event space — whatever concept you're dreaming up. A traditional franchise would box you in. We're here to fuel your vision, not constrain it. You get the full power of the Klawsome brand and proven system, with the flexibility to make it entirely yours.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-playing-claw-machine-bunny.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-playing-claw-machine-bunny.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1725,7 +1725,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "How It Works",
       "headline": "Tokens → Machines → Plushies",
       "body": "Gift cards can be used for tokens, which power the machines, which deliver the plushies. That's the core of the Klawsome store ecosystem.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-party-capsules.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-party-capsules.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1740,7 +1740,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Events & Birthdays",
       "headline": "events@klawsomenovi.com",
       "body": "Use this email for birthday party bookings, group events, school visits, corporate outings, and special celebrations.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-holding-heart-lollipops.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-holding-heart-lollipops.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1763,7 +1763,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "FAQ",
       "headline": "Frequently Asked Questions",
       "body": "Need 10 days to book ahead. We'll arrive 30 minutes prior to event start time.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1778,7 +1778,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Policies",
       "headline": "General Guidelines",
       "body": "Klawsome strives to maintain a safe, welcoming environment for all guests.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-holding-bear-prize-tickets.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-holding-bear-prize-tickets.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1800,7 +1800,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Plushie Categories",
       "headline": "Large Plushies (Trade-Up Rewards)",
       "body": "Klawsome allows guests to trade prizes for points and upgrade to larger stuffed animals. Large plushies are displayed behind the counter as \"achievement items\" for guests who accumulate enough points.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [],
@@ -1815,7 +1815,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Phone Support",
       "headline": "(248) 938-4093",
       "body": "Have a quick question or need immediate assistance? Call us during open hours. If we're helping guests on the floor, please leave a message and we'll call back as soon as possible.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-gift-bag-star.png",
+      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-party-hat-gift-bag-star.webp",
       "cta_text": "",
       "cta_url": "",
       "list_items": [
@@ -1837,7 +1837,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Parties",
       "title": "Celebrate at Klawsome",
       "subtitle": "Make their birthday unforgettable.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 8
@@ -1848,7 +1848,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Partnerships",
       "title": "Grow with Klawsome",
       "subtitle": "Host a machine, partner with us, or order custom plushies.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 7
@@ -1881,7 +1881,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Loyalty",
       "title": "Klawsome Rewards",
       "subtitle": "Earn points every visit and unlock perks the more you play.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "Join Today",
       "cta_url": "https://app.squareup.com/loyalty/check-in/MLR1JRG2NVT9F",
       "sort_order": 1
@@ -1892,7 +1892,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Gallery",
       "title": "Inside Klawsome",
       "subtitle": "Peek at the prizes, the parties, and the people who make Klawsome, klawsome.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 2
@@ -1914,7 +1914,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "In The News",
       "title": "Klawsome in the press",
       "subtitle": "See where Klawsome has been featured.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 4
@@ -1925,7 +1925,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Help",
       "title": "Frequently Asked Questions",
       "subtitle": "Everything you need to know before you visit.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 3
@@ -1947,7 +1947,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "About Us",
       "title": "Our Story",
       "subtitle": "",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 5
@@ -1969,7 +1969,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Join Us",
       "title": "Careers at Klawsome",
       "subtitle": "At Klawsome, we’re looking for passionate, energetic individuals who want to help create an unforgettable environment for kids, families, and claw‑machine lovers.\n",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 6
@@ -2031,7 +2031,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "1200px",
       "padding_y": "7rem",
       "bg_color": "",
-      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.jpg",
+      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.webp",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -2581,7 +2581,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "full",
       "padding_y": "0",
       "bg_color": "#0a0a0a",
-      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775962160906-tr8xakzvas.jpg",
+      "bg_image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775962160906-tr8xakzvas.webp",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -2603,7 +2603,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "full",
       "padding_y": "0",
       "bg_color": "",
-      "bg_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg",
+      "bg_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.webp",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -2955,7 +2955,7 @@ export const cmsData: Record<string, any[]> = {
       "wrapper_max_width": "full",
       "padding_y": "0",
       "bg_color": "",
-      "bg_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.jpg",
+      "bg_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/55fefb9f-eb8b-4185-a0bf-aec7b9e28a73/Klawsome_FriendsFamily-054-Edit.webp",
       "custom_css_class": "",
       "columns": 1,
       "photos": [],
@@ -3534,7 +3534,7 @@ export const cmsData: Record<string, any[]> = {
       "block_type": "image",
       "content": {
         "alt": "Filipino flag celebration",
-        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.jpg"
+        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp"
       }
     },
     {
@@ -3824,7 +3824,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 99,
       "block_type": "image",
       "content": {
-        "url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.jpg"
+        "url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/1775944684173-1dnv4fqc6fcj.webp"
       }
     },
     {
@@ -3913,7 +3913,7 @@ export const cmsData: Record<string, any[]> = {
       "block_type": "image",
       "content": {
         "alt": "Loyalty",
-        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e580739e-9724-4a5f-bb7b-b5931d69ec16/loyalty.png"
+        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e580739e-9724-4a5f-bb7b-b5931d69ec16/loyalty.webp"
       }
     },
     {
@@ -4129,7 +4129,7 @@ export const cmsData: Record<string, any[]> = {
       "block_type": "image",
       "content": {
         "alt": "Klawsome family at construction site",
-        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/332015af-af2e-4d8b-ac04-91e484709781/KlawsomeFamilyPhoto.jpg"
+        "url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/332015af-af2e-4d8b-ac04-91e484709781/KlawsomeFamilyPhoto.webp"
       }
     },
     {

@@ -2,8 +2,8 @@ import { Button } from './ui/button';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type GiftCardsContent, type GiftCardImage } from '@/hooks/useCmsContent';
-import giftcardBirthday from '@/assets/giftcard-birthday.png';
-import giftcardPink from '@/assets/giftcard-pink.png';
+import giftcardBirthday from '@/assets/giftcard-birthday.webp';
+import giftcardPink from '@/assets/giftcard-pink.webp';
 
 const KawaiiGiftCards = () => {
   const textRef = useGsapScroll<HTMLDivElement>({ type: 'slideLeft', distance: 80, duration: 1 });
