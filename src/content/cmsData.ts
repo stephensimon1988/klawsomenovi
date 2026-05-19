@@ -557,6 +557,27 @@ export const cmsData: Record<string, any[]> = {
   ],
   "gallery_photos": [
     {
+      "id": "npl-paaralang-001",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/novi-library-bookmarks.jpg",
+      "caption": "Reading Month bookmarks at Novi Public Library",
+      "sort_order": 1
+    },
+    {
+      "id": "npl-paaralang-002",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/paaralang-lion-dance.jpg",
+      "caption": "Lion dance performance with Paaralang Pilipino",
+      "sort_order": 2
+    },
+    {
+      "id": "npl-paaralang-003",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/paaralang-klawsome-booth.jpg",
+      "caption": "Klawsome booth at the Paaralang Pilipino event",
+      "sort_order": 3
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.jpg",
