@@ -10,7 +10,9 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest run",
-    "test:watch": "vitest"
+    "test:watch": "vitest",
+    "check:images": "node scripts/check-images.mjs",
+    "prebuild": "node scripts/check-images.mjs --no-fail"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
