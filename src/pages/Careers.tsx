@@ -49,7 +49,7 @@ const Careers = () => {
         eyebrow={hero?.eyebrow || 'Join Us'}
         title={hero?.title || 'Careers'}
         subtitle={hero?.subtitle || 'Join the Klawsome team and help create a fun, welcoming experience for everyone!'}
-        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg'}
+        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp'}
         height="md"
         overlay="white"
         jumpLinks={[

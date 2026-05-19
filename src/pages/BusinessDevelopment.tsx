@@ -8,19 +8,19 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
-import bdHero from '@/assets/community/canned-food-drive.jpg';
-import hostMachinePhoto from '@/assets/bizdev-host-machine.jpg';
-import groupPhoto from '@/assets/bizdev-group-photo.jpg';
-import plushieClaw from '@/assets/bizdev-plushie-claw.jpg';
-import imgEquipment from '@/assets/bizdev/equipment.jpg';
-import imgPlushies from '@/assets/bizdev/plushies.jpg';
-import imgBrand from '@/assets/bizdev/brand.jpg';
-import imgTraining from '@/assets/bizdev/training.jpg';
-import imgMarketing from '@/assets/bizdev/marketing.jpg';
-import imgSupport from '@/assets/bizdev/support.jpg';
-import imgSketch from '@/assets/bizdev/sketch.jpg';
-import imgQuote from '@/assets/bizdev/quote.jpg';
-import imgApprove from '@/assets/bizdev/approve.jpg';
+import bdHero from '@/assets/community/canned-food-drive.webp';
+import hostMachinePhoto from '@/assets/bizdev-host-machine.webp';
+import groupPhoto from '@/assets/bizdev-group-photo.webp';
+import plushieClaw from '@/assets/bizdev-plushie-claw.webp';
+import imgEquipment from '@/assets/bizdev/equipment.webp';
+import imgPlushies from '@/assets/bizdev/plushies.webp';
+import imgBrand from '@/assets/bizdev/brand.webp';
+import imgTraining from '@/assets/bizdev/training.webp';
+import imgMarketing from '@/assets/bizdev/marketing.webp';
+import imgSupport from '@/assets/bizdev/support.webp';
+import imgSketch from '@/assets/bizdev/sketch.webp';
+import imgQuote from '@/assets/bizdev/quote.webp';
+import imgApprove from '@/assets/bizdev/approve.webp';
 import {
   useCmsTable,
   usePageHero,

@@ -2,13 +2,13 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import { Button } from '@/components/ui/button';
-import asianYouthNovi from '@/assets/community/asian-youth-novi.jpg';
-import kalayaanPh from '@/assets/community/kalayaan-ph-independence.jpg';
-import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.jpg';
-import cannedFoodDrive from '@/assets/community/canned-food-drive.jpg';
-import toysForTots from '@/assets/community/toys-for-tots.jpg';
-import msuPass from '@/assets/community/msu-pass.jpg';
-import colorfulCollection from '@/assets/community/colorful-collection.jpg';
+import asianYouthNovi from '@/assets/community/asian-youth-novi.webp';
+import kalayaanPh from '@/assets/community/kalayaan-ph-independence.webp';
+import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.webp';
+import cannedFoodDrive from '@/assets/community/canned-food-drive.webp';
+import toysForTots from '@/assets/community/toys-for-tots.webp';
+import msuPass from '@/assets/community/msu-pass.webp';
+import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibrary from '@/assets/community/asian-youth-alliance.avif';
 
 interface Partner {

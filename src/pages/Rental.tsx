@@ -2,13 +2,13 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import rentalWhyUsImage from '@/assets/rental-why-us.jpg';
-import rentalTeamImage from '@/assets/rental-team.jpg';
+import rentalWhyUsImage from '@/assets/rental-why-us.webp';
+import rentalTeamImage from '@/assets/rental-team.webp';
 import { usePageHero, useCmsTable, type FaqItem } from '@/hooks/useCmsContent';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Button } from '@/components/ui/button';
 import { openBookingModal } from '@/components/BookNowDialog';
-const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.png';
+const rentalFaqImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-heart-with-candies.webp';
 
 interface RentalPackage {
   id: string;

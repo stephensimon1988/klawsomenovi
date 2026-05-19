@@ -19,18 +19,18 @@ interface PageHeroProps {
 // Curated real photos pulled from the Gallery — used as deterministic
 // per-route hero fallbacks so subpages don't all share the same image.
 const GALLERY_HEROES = [
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/c06c88ff-f9f2-466c-80e3-02444aa01d22/PXL_20250822_201918587.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/720c33bf-ce63-4135-82dc-3f34cdb68158/IMG-20251123-WA0066.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/62b3a497-40c2-49d2-961a-aa6c5850ce67/PXL_20251124_002021332.jpg',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.jpg',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/c06c88ff-f9f2-466c-80e3-02444aa01d22/PXL_20250822_201918587.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/720c33bf-ce63-4135-82dc-3f34cdb68158/IMG-20251123-WA0066.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/62b3a497-40c2-49d2-961a-aa6c5850ce67/PXL_20251124_002021332.webp',
+  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/d50dbe5e-0b2a-4366-8f45-104da8f0b11a/PXL_20251124_002020087.MP.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/fa35626f-d9ca-4cdf-bbe0-27ed04fe3de1/unnamed+%285%29.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/33b38672-5286-4f40-a9bd-96bf778cf5a6/unnamed+%286%29.webp',
-  '/images/klawsome-storefront.jpg',
+  '/images/klawsome-storefront.webp',
 ];
 
 const hashPath = () => {

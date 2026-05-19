@@ -9,7 +9,7 @@ import { Button } from '@/components/ui/button';
 import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
-import catImg from '@/assets/klawsome-cat-upscaled.png';
+import catImg from '@/assets/klawsome-cat-upscaled.webp';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100),

@@ -32,7 +32,7 @@ const KawaiiTokenPrices = () => {
         <div className="grid md:grid-cols-12 gap-10 md:gap-12 items-center max-w-6xl mx-auto">
           <div className="md:col-span-5">
             <img
-              src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.png"
+              src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.webp"
               alt="Klawsome characters with tokens"
               loading="lazy"
               className="w-full h-auto"

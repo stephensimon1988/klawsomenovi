@@ -8,8 +8,8 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
- import birthdaysHero from '@/assets/birthdays-hero.png';
- import pandaCatFoxParty from '@/assets/panda-cat-fox-party.jpg';
+ import birthdaysHero from '@/assets/birthdays-hero.webp';
+ import pandaCatFoxParty from '@/assets/panda-cat-fox-party.webp';
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);

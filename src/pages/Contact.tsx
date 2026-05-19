@@ -3,7 +3,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import { usePageHero } from '@/hooks/useCmsContent';
 import { Mail, PartyPopper, Phone, MapPin } from 'lucide-react';
-import contactImage from '@/assets/contact-hero.jpg';
+import contactImage from '@/assets/contact-hero.webp';
 
 const Contact = () => {
   const { data: hero } = usePageHero('contact');

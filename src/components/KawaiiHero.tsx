@@ -18,7 +18,7 @@ const KawaiiHero = () => {
 
   const headline = content?.hero_headline || "Michigan's first stand-alone claw arcade";
   const subheadline = content?.hero_subheadline || 'Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes.';
-  const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.jpg';
+  const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp';
 
   useEffect(() => {
     const ctx = gsap.context(() => {
