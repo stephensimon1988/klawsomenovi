@@ -704,6 +704,531 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 3
     },
     {
+          "id": "canned-food-drive-2025-01",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-01.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 101
+    },
+    {
+          "id": "canned-food-drive-2025-02",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-02.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 102
+    },
+    {
+          "id": "canned-food-drive-2025-03",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-03.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 103
+    },
+    {
+          "id": "canned-food-drive-2025-04",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-04.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 104
+    },
+    {
+          "id": "canned-food-drive-2025-05",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-05.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 105
+    },
+    {
+          "id": "canned-food-drive-2025-06",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-06.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 106
+    },
+    {
+          "id": "canned-food-drive-2025-07",
+          "section": "canned-food-drive",
+          "image_url": "/gallery/canned-food-drive-2025-07.webp",
+          "caption": "Canned food drive \u2014 packing and sorting donations",
+          "sort_order": 107
+    },
+    {
+          "id": "msu-pass-01",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-01.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 101
+    },
+    {
+          "id": "msu-pass-02",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-02.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 102
+    },
+    {
+          "id": "msu-pass-03",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-03.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 103
+    },
+    {
+          "id": "msu-pass-04",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-04.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 104
+    },
+    {
+          "id": "msu-pass-05",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-05.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 105
+    },
+    {
+          "id": "msu-pass-06",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-06.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 106
+    },
+    {
+          "id": "msu-pass-07",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-07.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 107
+    },
+    {
+          "id": "msu-pass-08",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-08.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 108
+    },
+    {
+          "id": "msu-pass-09",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-09.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 109
+    },
+    {
+          "id": "msu-pass-10",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-10.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 110
+    },
+    {
+          "id": "msu-pass-11",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-11.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 111
+    },
+    {
+          "id": "msu-pass-12",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-12.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 112
+    },
+    {
+          "id": "msu-pass-13",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-13.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 113
+    },
+    {
+          "id": "msu-pass-14",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-14.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 114
+    },
+    {
+          "id": "msu-pass-15",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-15.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 115
+    },
+    {
+          "id": "msu-pass-16",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-16.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 116
+    },
+    {
+          "id": "msu-pass-17",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-17.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 117
+    },
+    {
+          "id": "msu-pass-18",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-18.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 118
+    },
+    {
+          "id": "msu-pass-19",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-19.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 119
+    },
+    {
+          "id": "msu-pass-20",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-20.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 120
+    },
+    {
+          "id": "msu-pass-21",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-21.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 121
+    },
+    {
+          "id": "msu-pass-22",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-22.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 122
+    },
+    {
+          "id": "msu-pass-23",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-23.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 123
+    },
+    {
+          "id": "msu-pass-24",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-24.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 124
+    },
+    {
+          "id": "msu-pass-25",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-25.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 125
+    },
+    {
+          "id": "msu-pass-26",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-26.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 126
+    },
+    {
+          "id": "msu-pass-27",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-27.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 127
+    },
+    {
+          "id": "msu-pass-28",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-28.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 128
+    },
+    {
+          "id": "msu-pass-29",
+          "section": "msu-pass",
+          "image_url": "/gallery/msu-pass-29.webp",
+          "caption": "MSU PASS collaboration at Klawsome Arcade",
+          "sort_order": 129
+    },
+    {
+          "id": "novi-community-fest-01",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-01.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 2
+    },
+    {
+          "id": "novi-community-fest-02",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-02.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 3
+    },
+    {
+          "id": "novi-community-fest-03",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-03.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 4
+    },
+    {
+          "id": "novi-community-fest-04",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-04.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 5
+    },
+    {
+          "id": "novi-community-fest-05",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-05.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 6
+    },
+    {
+          "id": "novi-community-fest-06",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-06.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 7
+    },
+    {
+          "id": "novi-community-fest-07",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-07.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 8
+    },
+    {
+          "id": "novi-community-fest-08",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-08.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 9
+    },
+    {
+          "id": "novi-community-fest-09",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-09.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 10
+    },
+    {
+          "id": "novi-community-fest-10",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-10.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 11
+    },
+    {
+          "id": "novi-community-fest-11",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-11.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 12
+    },
+    {
+          "id": "novi-community-fest-12",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-12.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 13
+    },
+    {
+          "id": "novi-community-fest-13",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-13.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 14
+    },
+    {
+          "id": "novi-community-fest-14",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-14.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 15
+    },
+    {
+          "id": "novi-community-fest-15",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-15.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 16
+    },
+    {
+          "id": "novi-community-fest-16",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-16.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 17
+    },
+    {
+          "id": "novi-community-fest-17",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-17.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 18
+    },
+    {
+          "id": "novi-community-fest-18",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-18.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 19
+    },
+    {
+          "id": "novi-community-fest-19",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-19.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 20
+    },
+    {
+          "id": "novi-community-fest-20",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-20.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 21
+    },
+    {
+          "id": "novi-community-fest-21",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-21.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 22
+    },
+    {
+          "id": "novi-community-fest-22",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-22.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 23
+    },
+    {
+          "id": "novi-community-fest-23",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-23.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 24
+    },
+    {
+          "id": "novi-community-fest-24",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-24.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 25
+    },
+    {
+          "id": "novi-community-fest-25",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-25.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 26
+    },
+    {
+          "id": "novi-community-fest-26",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-26.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 27
+    },
+    {
+          "id": "novi-community-fest-27",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-27.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 28
+    },
+    {
+          "id": "novi-community-fest-28",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-28.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 29
+    },
+    {
+          "id": "novi-community-fest-29",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-29.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 30
+    },
+    {
+          "id": "novi-community-fest-30",
+          "section": "novi-community-fest",
+          "image_url": "/gallery/novi-community-fest-30.webp",
+          "caption": "Klawsome at the Novi Community Fest",
+          "sort_order": 31
+    },
+    {
+          "id": "trunk-or-treat-01",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-01.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 2
+    },
+    {
+          "id": "trunk-or-treat-02",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-02.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 3
+    },
+    {
+          "id": "trunk-or-treat-03",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-03.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 4
+    },
+    {
+          "id": "trunk-or-treat-04",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-04.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 5
+    },
+    {
+          "id": "trunk-or-treat-05",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-05.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 6
+    },
+    {
+          "id": "trunk-or-treat-06",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-06.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 7
+    },
+    {
+          "id": "trunk-or-treat-07",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-07.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 8
+    },
+    {
+          "id": "trunk-or-treat-08",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-08.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 9
+    },
+    {
+          "id": "trunk-or-treat-09",
+          "section": "trunk-or-treat",
+          "image_url": "/gallery/trunk-or-treat-09.webp",
+          "caption": "Trunk or Treat community event",
+          "sort_order": 10
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
