@@ -1581,21 +1581,21 @@ export const cmsData: Record<string, any[]> = {
   "homepage_steps": [
     {
       "id": "38b92f1a-cd47-4a45-b42d-f0eba1cb079b",
-      "icon": "/steps/win-plushies.gif",
+      "icon": "/steps/win-plushies.webp",
       "title": "Win Plushies",
       "description": "Use the joystick to position the claw over your favorite prize and press the button to grab it!",
       "sort_order": 2
     },
     {
       "id": "60af491e-baa8-4edd-8c79-4138d44c3c32",
-      "icon": "/steps/trade-up.gif",
+      "icon": "/steps/trade-up.webp",
       "title": "Upgrade",
       "description": "Trade in your wins for larger and rarer prizes at the redemption counter!",
       "sort_order": 3
     },
     {
       "id": "ef3ef8de-a8c3-41df-ae47-72016e5e430f",
-      "icon": "/steps/play-klaw-machines.gif",
+      "icon": "/steps/play-klaw-machines.webp",
       "title": "Buy Tokens",
       "description": "Purchase tokens at the counter or token exchange machine. We accept credit card and cash.",
       "sort_order": 1

@@ -27,4 +27,38 @@ export default defineConfig(({ mode }) => ({
     exclude: ["gsap", "lottie-react"],
     force: true,
   },
+  build: {
+    target: "es2020",
+    minify: "esbuild",
+    sourcemap: false,
+    cssCodeSplit: true,
+    reportCompressedSize: false,
+    chunkSizeWarningLimit: 1200,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return;
+          if (id.includes("react-router")) return "react-vendor";
+          if (
+            id.includes("/react/") ||
+            id.includes("/react-dom/") ||
+            id.includes("/scheduler/")
+          )
+            return "react-vendor";
+          if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
+          if (id.includes("gsap") || id.includes("framer-motion") || id.includes("lottie-web"))
+            return "motion-vendor";
+          if (
+            id.includes("@tanstack/react-query") ||
+            id.includes("@supabase") ||
+            id.includes("zustand")
+          )
+            return "data-vendor";
+          if (id.includes("recharts") || id.includes("d3-")) return "charts-vendor";
+          if (id.includes("embla-carousel")) return "carousel-vendor";
+        },
+      },
+    },
+  },
+  esbuild: mode === "production" ? { drop: ["console", "debugger"] } : {},
 }));
