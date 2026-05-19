@@ -24,6 +24,7 @@ const Gallery = () => {
     private: 'Private Parties',
     'semi-private': 'Semi-Private Events',
     gallery: 'The Arcade',
+    'novi-library-paaralang': 'Novi Public Library / Paaralang Pilipino',
   };
 
   const close = useCallback(() => setLightbox(null), []);
