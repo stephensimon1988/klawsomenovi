@@ -20,8 +20,8 @@ const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React
 
 // Fallback data
 const fallbackSections: BusinessSection[] = [
-  { id: '1', section_key: 'hosted', title: 'Host a Klawsome Machine in Your Business', subtitle: 'We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.', description: 'You earn 10% of every token played.', bullet_points: ['Machine delivery & installation', 'All prize stocking & restocking', 'All repairs & maintenance', 'Revenue tracking & monthly payouts', 'Ongoing machine operation'], image_url: '', sort_order: 0 },
-  { id: '2', section_key: 'partner', title: 'Become a Klawsome Partner', subtitle: 'Open your own Klawsome-powered arcade or claw machine corner.', description: "We're not a franchise -- we're a partnership.", bullet_points: ['Full fleet of Klawsome machines', 'Licensed plushies and anime collectibles', 'Remote monitoring and cashless payments', 'Full onboarding and training', 'Brand assets and marketing support', 'Ongoing maintenance support'], image_url: '', sort_order: 1 },
+  { id: '1', section_key: 'hosted', title: 'Host a Klawsome Machine in Your Business', subtitle: 'We place a machine in your space, handle everything, and you earn a share of every token played - no upfront cost, no hassle.', description: 'You earn 10% of every token played.', bullet_points: ['Machine delivery & installation', 'All prize stocking & restocking', 'All repairs & maintenance', 'Revenue tracking & monthly payouts', 'Ongoing machine operation'], image_url: '', sort_order: 0 },
+  { id: '2', section_key: 'partner', title: 'Become a Klawsome Partner', subtitle: 'Open your own Klawsome-powered arcade or claw machine corner.', description: "We're not a franchise - we're a partnership.", bullet_points: ['Full fleet of Klawsome machines', 'Licensed plushies and anime collectibles', 'Remote monitoring and cashless payments', 'Full onboarding and training', 'Brand assets and marketing support', 'Ongoing maintenance support'], image_url: '', sort_order: 1 },
   { id: '3', section_key: 'plushie', title: 'Custom Plushie Orders', subtitle: 'Turn your character, mascot, or idea into a real plushie.', description: 'Minimum order: 100 units.', bullet_points: ['Share your design', 'We send a quote', 'Approve & produce'], image_url: '', sort_order: 2 },
 ];
 
@@ -35,7 +35,7 @@ const fallbackHowSteps: BusinessHowStep[] = [
   { id: '1', title: 'Reach Out', description: 'Fill out the form below.', icon: '1', sort_order: 0 },
   { id: '2', title: 'We Connect', description: 'Our team follows up within 1-2 business days.', icon: '2', sort_order: 1 },
   { id: '3', title: 'Review & Plan', description: 'We review your location or concept together.', icon: '3', sort_order: 2 },
-  { id: '4', title: 'Launch!', description: "Machines installed, plushies stocked -- you're ready to go.", icon: '4', sort_order: 3 },
+  { id: '4', title: 'Launch!', description: "Machines installed, plushies stocked - you're ready to go.", icon: '4', sort_order: 3 },
 ];
 
 const businessProvides = [
@@ -51,7 +51,7 @@ const venues = [
 
 const partnerIncludes = [
   { icon: '🎰', title: 'Machines', desc: 'Full fleet of Klawsome machines customized for your space.' },
-  { icon: '🧸', title: 'Prizes', desc: 'Licensed plushies, anime collectibles, and more -- supplied by us.' },
+  { icon: '🧸', title: 'Prizes', desc: 'Licensed plushies, anime collectibles, and more - supplied by us.' },
   { icon: '📱', title: 'Tech', desc: 'Remote monitoring, cashless payments, and real-time analytics.' },
   { icon: '🎓', title: 'Training', desc: "Full onboarding so you're confident from day one." },
   { icon: '📣', title: 'Marketing', desc: 'Brand assets, social media support, and launch help.' },
@@ -150,7 +150,7 @@ const Business = () => {
               <span className="kawaii-text-gradient">Klawsome!</span>
             </h1>
             <p className="text-lg md:text-xl text-white/60 max-w-2xl mx-auto mb-10 font-body leading-relaxed">
-              Three ways to bring the magic of Klawsome into your world -- whether you're a business owner, entrepreneur, or creator 🤝
+              Three ways to bring the magic of Klawsome into your world - whether you're a business owner, entrepreneur, or creator 🤝
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
               <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
@@ -322,7 +322,7 @@ const Business = () => {
                 <div>
                   <h4 className="font-heading text-xl font-bold text-klawsome-yellow mb-2">Build your own brand. Keep your freedom.</h4>
                   <p className="text-white/60 font-body font-semibold text-sm leading-relaxed">
-                    You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks -- just guidance, support, and winning prizes.
+                    You can brand your space however you want. We provide the infrastructure, you create the experience. No strict playbooks - just guidance, support, and winning prizes.
                   </p>
                 </div>
               </div>
@@ -487,7 +487,7 @@ const Business = () => {
                 </div>
                 <div className="flex flex-col gap-2 md:col-span-2">
                   <label className="text-sm font-heading font-bold text-white">Tell us more</label>
-                  <textarea placeholder="Share your idea, location, concept -- anything that helps us understand what you're looking for..." value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={5} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors resize-y" />
+                  <textarea placeholder="Share your idea, location, concept - anything that helps us understand what you're looking for..." value={formData.message} onChange={(e) => setFormData({ ...formData, message: e.target.value })} rows={5} className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-kawaii px-4 py-3 font-body font-semibold text-sm text-white placeholder:text-white/40 focus:border-klawsome-yellow outline-none transition-colors resize-y" />
                 </div>
               </div>
               <div className="text-center mt-7">

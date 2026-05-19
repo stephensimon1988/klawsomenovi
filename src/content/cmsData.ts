@@ -26,7 +26,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "c2738a55-7aaf-4f01-a589-d545a33bccd6",
       "title": "Launch!",
-      "description": "Machines installed, plushies stocked, partners trained -- you're ready to go.",
+      "description": "Machines installed, plushies stocked, partners trained - you're ready to go.",
       "icon": "4",
       "sort_order": 3
     },
@@ -88,8 +88,8 @@ export const cmsData: Record<string, any[]> = {
       "id": "78005c41-ab2a-4fab-bd22-96680d195469",
       "section_key": "hosted",
       "title": "Host a Klawsome Machine in Your Business",
-      "subtitle": "We place a machine in your space, handle everything, and you earn a share of every token played -- no upfront cost, no hassle.",
-      "description": "You earn 10% of every token played. We handle the machine, the prizes, the repairs -- everything. You simply provide the space, and collect your 10% share each month.",
+      "subtitle": "We place a machine in your space, handle everything, and you earn a share of every token played - no upfront cost, no hassle.",
+      "description": "You earn 10% of every token played. We handle the machine, the prizes, the repairs - everything. You simply provide the space, and collect your 10% share each month.",
       "bullet_points": [
         "Machine delivery & installation",
         "All prize stocking & restocking",
@@ -104,7 +104,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "e70cc2af-8dc7-4d4c-8aa4-01f34de599e6",
       "section_key": "plushie",
       "title": "Custom Plushie Orders",
-      "subtitle": "Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery -- from concept to cuddly reality.",
+      "subtitle": "Turn your character, mascot, or idea into a real plushie. We handle sourcing, manufacturing, and delivery - from concept to cuddly reality.",
       "description": "Minimum order: 100 units. Pricing varies by size, complexity, and quantity.",
       "bullet_points": [
         "Share your design",
@@ -118,8 +118,8 @@ export const cmsData: Record<string, any[]> = {
       "id": "fbafd93e-c6a0-4243-99f9-47b4222f3be8",
       "section_key": "partner",
       "title": "Become a Klawsome Partner",
-      "subtitle": "Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training -- you bring the space and the hustle.",
-      "description": "We're not a franchise -- we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.",
+      "subtitle": "Open your own Klawsome-powered arcade or claw machine corner. We provide the machines, prizes, technology, and training - you bring the space and the hustle.",
+      "description": "We're not a franchise - we're a partnership. No franchise fees, no royalties. You operate independently with our full backing. We succeed when you succeed.",
       "bullet_points": [
         "Full fleet of Klawsome machines",
         "Licensed plushies and anime collectibles",
