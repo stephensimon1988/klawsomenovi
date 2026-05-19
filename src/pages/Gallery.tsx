@@ -27,6 +27,8 @@ const Gallery = () => {
     'novi-library-paaralang': 'Novi Public Library / Paaralang Pilipino',
     'canned-food-drive': 'Canned Food Drive',
     'msu-pass': 'MSU Pass Collab',
+    'novi-community-fest': 'Novi Community Fest',
+    'trunk-or-treat': 'Trunk or Treat',
   };
 
   const close = useCallback(() => setLightbox(null), []);
