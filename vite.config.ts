@@ -45,12 +45,13 @@ export default defineConfig(({ mode }) => ({
             id.includes("react-router") ||
             id.includes("@tanstack/react-query") ||
             id.includes("@supabase") ||
-            id.includes("zustand")
+            id.includes("zustand") ||
+            id.includes("gsap") ||
+            id.includes("framer-motion") ||
+            id.includes("lottie")
           )
             return "react-vendor";
           if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
-          if (id.includes("gsap") || id.includes("framer-motion") || id.includes("lottie-web"))
-            return "motion-vendor";
           if (id.includes("recharts") || id.includes("d3-")) return "charts-vendor";
           if (id.includes("embla-carousel")) return "carousel-vendor";
         },
