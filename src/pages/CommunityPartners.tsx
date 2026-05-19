@@ -1,6 +1,7 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
+import { Button } from '@/components/ui/button';
 import asianYouthNovi from '@/assets/community/asian-youth-novi.jpg';
 import kalayaanPh from '@/assets/community/kalayaan-ph-independence.jpg';
 import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.jpg';
@@ -164,9 +165,20 @@ const CommunityPartners = () => {
             </ul>
           </div>
         </div>
+        <div className="ds-container mt-12 text-center">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
+          >
+            <a href="mailto:team@klawsomenovi.com?subject=Collaborate%20with%20Klawsome">
+              Collaborate With Us
+            </a>
+          </Button>
+        </div>
       </section>
 
-      <KawaiiFooter />
+      <KawaiiFooter prevColor="secondary-soft" />
     </div>
   );
 };
