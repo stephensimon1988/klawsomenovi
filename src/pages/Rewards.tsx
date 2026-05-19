@@ -37,7 +37,7 @@ const Rewards = () => {
       <KawaiiNav />
 
       {/* Custom kawaii hero — sky-blue with Loyalty script + bubble title + rocking cat */}
-      <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 bg-klawsome-sky">
+      <section className="relative overflow-hidden pt-28 pb-16 md:pt-36 md:pb-24 bg-klawsome-baby-blue">
         {/* Floating sparkles */}
         <img
           src="/rewards/klawsome-sparkle.gif"
