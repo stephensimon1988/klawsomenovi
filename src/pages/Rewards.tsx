@@ -195,7 +195,7 @@ const Rewards = () => {
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Points Redeemable</p>
           <h2 className="ds-h2 uppercase mb-16 text-center" style={{ color: 'hsl(var(--klawsome-navy))' }}>
-            Cash in for something cute.
+            Points Redeemable
           </h2>
           <div className="grid md:grid-cols-3 gap-8">
             {REDEMPTIONS.map((r) => (
