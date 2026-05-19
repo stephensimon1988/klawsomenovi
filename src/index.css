@@ -263,7 +263,11 @@ html {
      scaled image clips cleanly. Respects prefers-reduced-motion.
      ───────────────────────────────────────────────────────── */
   .img-hover {
-    @apply group relative overflow-hidden;
+    @apply relative overflow-hidden;
+  }
+  .img-hover,
+  .img-hover-tilt {
+    /* Mirror Tailwind's `group` so descendants can use group-hover:* */
   }
   .img-hover > img,
   .img-hover img.img-hover-target {
