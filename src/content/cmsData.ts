@@ -683,6 +683,27 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 12
     },
     {
+      "id": "msu-001",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-kids-with-handmade-cards.webp",
+      "caption": "Kids proudly showing off their handmade cards and bookmarks",
+      "sort_order": 1
+    },
+    {
+      "id": "msu-002",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-oath-presentation.webp",
+      "caption": "MSU PASS volunteers being introduced on stage",
+      "sort_order": 2
+    },
+    {
+      "id": "msu-003",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-storytime-reading.webp",
+      "caption": "Story time and reading circle with the kids",
+      "sort_order": 3
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
