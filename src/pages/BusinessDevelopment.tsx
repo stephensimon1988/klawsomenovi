@@ -312,10 +312,19 @@ const BusinessDevelopment = () => {
           <h3 className="font-heading text-3xl font-bold text-foreground mb-5 text-center">What Klawsome Supplies</h3>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-10">
             {partnerIncludesItems.map((item) => (
-              <div key={item.title} className="bg-white rounded-2xl p-7 shadow-md border-b-4 border-[hsl(var(--klawsome-yellow))] hover:-translate-y-1 transition-transform">
-                <div className="text-3xl mb-3">{item.icon}</div>
-                <h5 className="font-heading text-lg font-bold text-foreground mb-2">{item.title}</h5>
-                <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{item.desc}</p>
+              <div key={item.title} className="bg-white rounded-2xl shadow-md border-b-4 border-[hsl(var(--klawsome-yellow))] hover:-translate-y-1 transition-transform overflow-hidden flex flex-col">
+                {partnerIncludeImages[item.title] && (
+                  <img
+                    src={partnerIncludeImages[item.title]}
+                    alt={item.title}
+                    loading="lazy"
+                    className="w-full aspect-square object-cover"
+                  />
+                )}
+                <div className="p-7">
+                  <h5 className="font-heading text-lg font-bold text-foreground mb-2">{item.title}</h5>
+                  <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{item.desc}</p>
+                </div>
               </div>
             ))}
           </div>
@@ -396,7 +405,16 @@ const BusinessDevelopment = () => {
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
               {plushieHowItems.map((step) => (
                 <div key={step.title} className="text-center">
-                  <div className="text-3xl mb-2">{step.icon}</div>
+                  {plushieStepImages[step.title] ? (
+                    <img
+                      src={plushieStepImages[step.title]}
+                      alt={step.title}
+                      loading="lazy"
+                      className="w-full aspect-square object-cover rounded-2xl mb-3"
+                    />
+                  ) : (
+                    <div className="text-3xl mb-2">{step.icon}</div>
+                  )}
                   <h6 className="font-heading text-base font-bold text-foreground mb-1">{step.title}</h6>
                   <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.desc}</p>
                 </div>
