@@ -79,7 +79,7 @@ const FloatingContactWidget = () => {
 
   return (
     <>
-      <div className="fixed bottom-4 right-4 z-50 flex items-end gap-2 pointer-events-none">
+      <div className="fixed bottom-4 right-4 z-50 flex items-end gap-2 pointer-events-none max-w-[80vw] sm:max-w-none">
         {bubbleVisible && (
           <motion.button
             type="button"
@@ -87,7 +87,7 @@ const FloatingContactWidget = () => {
             initial={{ opacity: 0, x: 20, scale: 0.8 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 18, delay: 0.3 }}
-            className="pointer-events-auto relative bg-white border-2 border-klawsome-navy rounded-2xl px-6 py-3 shadow-lg hover:scale-105 transition-transform font-heading font-bold text-klawsome-navy text-xl leading-tight text-center"
+            className="pointer-events-auto relative bg-white border-2 border-klawsome-navy rounded-2xl px-3 py-2 sm:px-6 sm:py-3 shadow-lg hover:scale-105 transition-transform font-heading font-bold text-klawsome-navy text-sm sm:text-xl leading-tight text-center"
             aria-label="Contact us"
           >
             <span className="block">We'd love to</span>
@@ -120,8 +120,7 @@ const FloatingContactWidget = () => {
           <img
             src={catImg}
             alt="Klawsome cat mascot"
-            className="h-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]"
-            style={{ width: '150px' }}
+            className="h-auto drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)] w-[90px] sm:w-[150px]"
           />
         </motion.button>
       </div>
