@@ -1,76 +1,72 @@
-# Performance optimization plan
+## Goal
 
-Goal: faster loads and lighter runtime with **no visual change**. All wins come from how assets and code are shipped, not how anything looks.
+Two passes in one go:
+1. Add tasteful, consistent hover animations to content images across the site.
+2. Audit every page's `PageHero` and ensure each has a working sub-menu of jump links to its main sections.
 
-## What's slow today
+No content or layout changes — purely additive polish.
 
-- **Single JS bundle**: every page (admin, store, gallery, careers…) loads on first paint because `App.tsx` static-imports all 17 routes.
-- **3.4 MB of step GIFs** in `public/steps/` decoded on the homepage (`trade-up.gif` alone is 1.6 MB).
-- **Lottie animations** fetch ~4 JSON files from `lottie.host` on every page — currently 403'ing, so they cost network round-trips for nothing.
-- **CMS data file** (`src/content/cmsData.ts`, 5,666 lines) is bundled into the main chunk.
-- **Vendor libs** (gsap, framer-motion, lottie-web, recharts, embla, radix-ui) all land in one chunk.
-- **Prebuild image checker** runs 200 network requests on every build (~20–40 s).
-- **No LCP preload** for the hero image; no `width`/`height` on several large images → layout shift.
+---
 
-## Changes
+## Part 1 — Image hover animations
 
-### 1. Route-level code splitting
-Convert all routes except `/` to `React.lazy()` + `<Suspense>` in `App.tsx`. Homepage stays eager (LCP). Every other page becomes its own chunk loaded on demand.
+Add a reusable utility class so every content image gets the same kawaii-feeling hover treatment, instead of one-off styles.
 
-### 2. Vendor chunk splitting
-Add `build.rollupOptions.output.manualChunks` in `vite.config.ts`:
-- `react-vendor` — react, react-dom, react-router
-- `ui-vendor` — radix-*, lucide-react
-- `motion-vendor` — gsap, framer-motion, lottie-web
-- `data-vendor` — @tanstack/react-query, @supabase/supabase-js, zustand
+**New utility (in `src/index.css` under `@layer components`):**
+- `.img-hover` — wraps a fixed-aspect container with `overflow-hidden rounded-[inherit]`, applies `transition-transform duration-500 ease-out group-hover:scale-[1.04]` on the `<img>`, plus a soft gradient overlay that fades in on hover and a subtle ring/shadow lift.
+- `.img-hover-tilt` — variant with a tiny `rotate-[0.5deg]` on hover for cards in grids (gallery, news, products).
+- Respects `prefers-reduced-motion` via `motion-safe:` prefixes so we don't animate for users who opted out.
 
-Lets the browser cache vendors across deploys and keeps the main chunk small.
+**Apply to these image surfaces (wrap parent with `group` + add classes):**
+- `KawaiiGallery` / `Gallery.tsx` grid tiles → `img-hover-tilt`
+- `KawaiiNews` / `News.tsx` article cards → `img-hover`
+- `KawaiiProducts` / `Store.tsx` product cards → `img-hover`
+- `KawaiiAbout`, `KawaiiStory`, `OurStory` inline images → `img-hover`
+- `CommunityPartners` partner logos → lighter `img-hover` (scale only, no overlay)
+- `Birthdays`, `Rental`, `Business`, `BusinessDevelopment`, `Careers` section images → `img-hover`
+- `InfoHub`, `Faq` thumbnails (if any) → `img-hover`
 
-### 3. Production build hygiene
-In `vite.config.ts` add `build`: `minify: 'esbuild'`, `sourcemap: false`, `cssCodeSplit: true`, `reportCompressedSize: false`, `target: 'es2020'`, `esbuild.drop: ['console', 'debugger']` in prod.
+`PageHero` hero images stay untouched (they have parallax/gradient already).
 
-### 4. Lazy `LottieAccent`
-- Dynamic-import `lottie-web` only when the component is in-viewport (IntersectionObserver).
-- Drop the network fetch when the JSON URL fails (currently retries every mount) — fall back silently.
-- Result: lottie-web (~250 KB) is not in the main bundle and never loads on mobile if accents are off-screen.
+---
 
-### 5. Step GIFs → animated WebP
-Convert `public/steps/*.gif` (3.4 MB total) to animated WebP via `ffmpeg`. Same loop, same visual, ~85–90% smaller (~400 KB total). Update the 3 references in `cmsData.ts` from `.gif` → `.webp`. Pixel-identical at the rendered size.
+## Part 2 — Jump-link audit
 
-### 6. Hero LCP preload + image hints
-- Add `<link rel="preload" as="image" href="..." fetchpriority="high">` for the hero image in `index.html` (a single static URL is fine; CMS override is rare).
-- Add `decoding="async"` and explicit `width`/`height` to large `<img>` tags in `KawaiiTokenPrices`, `KawaiiStory`, `KawaiiNews`, `KawaiiGiftCards` (sizing values come from current rendered dimensions, so layout is unchanged).
+`PageHero` already supports a `jumpLinks` prop that renders the sub-menu. Pages currently passing it: Birthdays, Careers, Rewards, Rental, BusinessDevelopment, OurStory.
 
-### 7. Smarter prebuild image checker
-Update `scripts/check-images.mjs`:
-- Cache results in `.image-check-cache.json` keyed by URL+mtime; skip URLs verified in last 7 days.
-- Skip entirely when `CI` is unset and `--no-cache` not passed (so local `npm run build` is instant).
-- Keep the auto-fix behavior for new/changed refs only.
+**Pages using `PageHero` but missing `jumpLinks` — add them:**
 
-### 8. Split `cmsData.ts` per consumer
-Move per-page sections (gallery_photos, news_articles, job_listings, etc.) into separate files (`src/content/cms/gallery.ts`, `news.ts`, …) and import only where used. `useCmsContent` already keys by table name — wire it to dynamic-import the matching module. The homepage stops paying for 4,000+ lines of gallery captions.
+| Page | Proposed sub-menu items |
+|------|--------------------------|
+| `Gallery.tsx` | (already added previously — verify still wired) |
+| `Store.tsx` | Featured, Plushies, Tokens, Gift Cards |
+| `CommunityPartners.tsx` | Partners, Apply, Programs |
+| `Contact.tsx` | Visit, Hours, Message Us, FAQ |
+| `InfoHub.tsx` | How It Works, Rules, Safety, FAQ |
+| `Faq.tsx` | Visiting, Games, Memberships, Birthdays |
+| `News.tsx` | Latest, Events, Press |
 
-### 9. Defer Acuity embed
-`Index.tsx` already lazy-loads `embed.js` in `useEffect`. Move the actual `<iframe>` mount behind an `IntersectionObserver` so it doesn't network-load until the user scrolls near the booking section.
+**Each section in those pages gets:**
+- A matching `id="..."` on the section wrapper
+- `scroll-mt-28` (or existing nav offset utility) so the sticky nav doesn't cover the heading
+- IDs match the `jumpLinks` array exactly
 
-## Expected impact
+**Also verify:**
+- `PageHero` sub-menu renders on mobile (it currently uses horizontal scroll) — confirm and leave as-is if working.
+- The previously-reported Gallery sub-menu not appearing — re-check that the `jumpLinks` array is actually being passed and that `PageHero`'s render condition (`links.length > 0`) is satisfied. Fix if regressed.
 
-| Metric | Before (rough) | After (target) |
-|---|---|---|
-| Initial JS | ~900 KB gz | ~250 KB gz |
-| Homepage image weight | ~5 MB | ~1.2 MB |
-| Build time (warm) | ~45 s | ~20 s |
-| LCP (4G) | ~3.5 s | ~1.8 s |
+---
 
-## What's intentionally NOT touched
+## Files touched
 
-- No component re-styling, no layout/spacing tweaks, no copy changes.
-- No animation removed — Lottie/GSAP behavior is identical, just loaded lazily.
-- No CMS schema change — only file organization.
-- No dependency removed (we can revisit framer-motion vs gsap later if you want; keeping both for now to avoid visual regression risk).
+- `src/index.css` — add `.img-hover` / `.img-hover-tilt` utility classes
+- `src/components/PageHero.tsx` — only if sub-menu render needs a fix (verify first)
+- `src/components/Kawaii{Gallery,News,Products,About,Story}.tsx` — add `group` + `img-hover*`
+- `src/pages/{Gallery,Store,CommunityPartners,Contact,InfoHub,Faq,News}.tsx` — add `jumpLinks` prop + section `id`s + `scroll-mt-28`
+- `src/pages/{Birthdays,Rental,Business,BusinessDevelopment,Careers,OurStory}.tsx` — wrap inline images with hover utility (no jump-link changes; they're already done)
 
-## Technical notes
+## Out of scope
 
-- Vite manual chunks rely on the alias config already in `vite.config.ts` — no React-dedup risk.
-- `Suspense` fallback for lazy routes will be a transparent `<div />` so there's no visible loader (matches today's "no spinner" behavior).
-- Animated WebP is supported in every browser the project already targets (Chrome 32+, Safari 14+, Firefox 65+).
+- No new motion library, no Framer/GSAP additions (uses existing Tailwind transitions).
+- No copy/content changes, no layout restructuring.
+- No changes to `KawaiiHero` (homepage) jump links — already present.

@@ -23,7 +23,7 @@ const KawaiiVisit = () => {
     <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
       <div className="ds-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div ref={imageRef} style={{ opacity: 0 }}>
+          <div ref={imageRef} style={{ opacity: 0 }} className="img-hover rounded-2xl">
             <img
               src="/images/klawsome-storefront.webp"
               alt="Klawsome arcade storefront"

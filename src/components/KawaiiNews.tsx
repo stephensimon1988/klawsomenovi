@@ -60,11 +60,11 @@ const KawaiiNews = () => {
               className="group block rounded-2xl overflow-hidden bg-background border border-border hover:shadow-lg transition-all glow-hover glow-pink flex flex-col"
               style={{ opacity: 0 }}
             >
-              <div className="overflow-hidden">
+              <div className="img-hover">
                 <img
                   src={article.image_url === 'src/assets/news-collage.webp' ? newsCollage : article.image_url}
                   alt={article.title}
-                  className="ds-img-card group-hover:scale-105 transition-transform duration-500"
+                  className="ds-img-card"
                   loading="lazy"
                 />
               </div>

@@ -214,12 +214,12 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
       id={`product-${n.id}`}
       className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
     >
-      <div className="aspect-square bg-secondary/40 overflow-hidden">
+      <div className="img-hover aspect-square bg-secondary/40">
         {img ? (
           <img
             src={img.url}
             alt={img.altText || n.title}
-            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            className="w-full h-full object-cover"
             loading="lazy"
           />
         ) : (

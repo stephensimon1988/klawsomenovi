@@ -103,13 +103,13 @@ const Birthdays = () => {
       <section id="party-rules" className="py-20 px-6 lg:px-12 bg-klawsome-navy">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="rounded-kawaii overflow-hidden">
-               <img
-                 src={pandaCatFoxParty}
-                 alt="Kawaii characters celebrating a birthday party"
-                  className="w-full aspect-square rounded-kawaii object-cover"
-                 loading="lazy"
-               />
+            <div className="img-hover rounded-kawaii">
+              <img
+                src={pandaCatFoxParty}
+                alt="Kawaii characters celebrating a birthday party"
+                className="w-full aspect-square rounded-kawaii object-cover"
+                loading="lazy"
+              />
             </div>
 
             <div>

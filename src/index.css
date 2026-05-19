@@ -256,6 +256,33 @@ html {
   .ds-page-hero {
     @apply pt-32 pb-20 section-x;
   }
+
+  /* ─────────────────────────────────────────────────────────
+     Image hover utility — apply to the IMG's direct parent.
+     Parent should already have overflow-hidden + a radius so the
+     scaled image clips cleanly. Respects prefers-reduced-motion.
+     ───────────────────────────────────────────────────────── */
+  .img-hover {
+    @apply group relative overflow-hidden;
+  }
+  .img-hover > img,
+  .img-hover img.img-hover-target {
+    @apply motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:will-change-transform motion-safe:group-hover:scale-[1.05];
+  }
+  .img-hover-tilt > img,
+  .img-hover-tilt img.img-hover-target {
+    @apply motion-safe:transition-transform motion-safe:duration-500 motion-safe:ease-out motion-safe:will-change-transform motion-safe:group-hover:scale-[1.05] motion-safe:group-hover:rotate-[0.5deg];
+  }
+  /* Soft sheen overlay that fades in on hover (opt-in via .img-hover-sheen) */
+  .img-hover-sheen::after {
+    content: '';
+    @apply absolute inset-0 pointer-events-none opacity-0 motion-safe:transition-opacity motion-safe:duration-500;
+    background: linear-gradient(180deg, transparent 55%, hsl(var(--klawsome-navy) / 0.18));
+  }
+  .img-hover-sheen:hover::after,
+  .img-hover-sheen:focus-within::after {
+    @apply opacity-100;
+  }
 }
 
 @keyframes glow-pulse {

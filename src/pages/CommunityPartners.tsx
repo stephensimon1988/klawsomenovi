@@ -104,10 +104,15 @@ const CommunityPartners = () => {
         title="Community Partners"
         subtitle="Klawsome is proud to team up with local schools, student orgs, libraries, and nonprofits across metro Detroit. Here are some of the people we get to show up for."
         imageUrl=""
+        jumpLinks={[
+          { label: 'Our Partners', id: 'partners' },
+          { label: 'Cross-Promote', id: 'cross-promote' },
+          { label: 'Collaborate', id: 'collaborate' },
+        ]}
       />
 
       {/* Partners 4-col grid */}
-      <section className="section-y section-x">
+      <section id="partners" className="section-y section-x scroll-mt-32">
         <div className="ds-container">
           <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">Our Partners</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
@@ -116,7 +121,7 @@ const CommunityPartners = () => {
                 key={p.name}
                 className="flex flex-col bg-card rounded-kawaii border border-border overflow-hidden hover:shadow-lg transition-shadow"
               >
-                <div className="h-56 flex items-center justify-center bg-secondary/40 overflow-hidden">
+                <div className="img-hover h-56 flex items-center justify-center bg-secondary/40">
                   <img
                     src={p.image}
                     alt={p.name}
@@ -140,7 +145,7 @@ const CommunityPartners = () => {
       </section>
 
       {/* Cross-promo (from PDF) */}
-      <section className="section-y section-x bg-secondary/40">
+      <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
         <div className="ds-container grid md:grid-cols-2 gap-12">
           <div>
             <h2 className="ds-h2 uppercase mb-6">Easy ways to cross-promote</h2>
@@ -165,7 +170,7 @@ const CommunityPartners = () => {
             </ul>
           </div>
         </div>
-        <div className="ds-container mt-12 text-center">
+        <div id="collaborate" className="ds-container mt-12 text-center scroll-mt-32">
           <Button
             asChild
             size="lg"

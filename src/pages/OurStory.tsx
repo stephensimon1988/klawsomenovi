@@ -67,12 +67,12 @@ const OurStory = () => {
               {sideImage ? (
                 <div className="ds-container">
                   <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-                    <div className={imageOnLeft ? 'md:order-1' : 'md:order-2'}>
+                    <div className={`${imageOnLeft ? 'md:order-1' : 'md:order-2'} img-hover rounded-kawaii shadow-lg`}>
                       <img
                         src={sideImage}
                         alt={s.title}
                         loading="lazy"
-                        className="w-full h-auto rounded-kawaii shadow-lg object-cover aspect-[4/5]"
+                        className="w-full h-auto object-cover aspect-[4/5]"
                       />
                     </div>
                     <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>

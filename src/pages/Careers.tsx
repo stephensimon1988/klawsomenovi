@@ -68,7 +68,9 @@ const Careers = () => {
               {inStoreJobs.map((job) => (
                 <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
                   {job.image_url && (
-                    <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
+                    <div className="img-hover">
+                      <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
+                    </div>
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
@@ -216,7 +218,9 @@ const Careers = () => {
               {unpaidJobs.map((job) => (
                 <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
                   {job.image_url && (
-                    <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
+                    <div className="img-hover">
+                      <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
+                    </div>
                   )}
                   <div className="p-6 md:p-8 flex flex-col">
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>

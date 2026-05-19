@@ -247,11 +247,13 @@ const BusinessDevelopment = () => {
               <h3 className="font-heading text-2xl font-bold text-foreground mb-2">You earn 10% of every token played.</h3>
               <p className="text-muted-foreground font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
             </div>
-            <img
-              src={hostMachinePhoto}
-              alt="Family posing with a Klawsome claw machine and Pikachu mascot"
-              className="w-full md:w-80 lg:w-96 aspect-square object-cover rounded-2xl flex-shrink-0"
-            />
+            <div className="img-hover rounded-2xl w-full md:w-80 lg:w-96 flex-shrink-0">
+              <img
+                src={hostMachinePhoto}
+                alt="Family posing with a Klawsome claw machine and Pikachu mascot"
+                className="w-full aspect-square object-cover rounded-2xl"
+              />
+            </div>
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-6 mb-12">
@@ -314,12 +316,14 @@ const BusinessDevelopment = () => {
             {partnerIncludesItems.map((item) => (
               <div key={item.title} className="bg-white rounded-2xl shadow-md border-b-4 border-[hsl(var(--klawsome-yellow))] hover:-translate-y-1 transition-transform overflow-hidden flex flex-col">
                 {partnerIncludeImages[item.title] && (
-                  <img
-                    src={partnerIncludeImages[item.title]}
-                    alt={item.title}
-                    loading="lazy"
-                    className="w-full aspect-square object-cover"
-                  />
+                  <div className="img-hover">
+                    <img
+                      src={partnerIncludeImages[item.title]}
+                      alt={item.title}
+                      loading="lazy"
+                      className="w-full aspect-square object-cover"
+                    />
+                  </div>
                 )}
                 <div className="p-7">
                   <h5 className="font-heading text-lg font-bold text-foreground mb-2">{item.title}</h5>
@@ -337,12 +341,14 @@ const BusinessDevelopment = () => {
                 <p className="text-muted-foreground font-body font-semibold leading-relaxed">{freedomBox?.body}</p>
               </div>
             </div>
-            <img
-              src={groupPhoto}
-              alt="Group of friends enjoying Klawsome arcade"
-              className="w-full h-full max-h-96 object-cover rounded-2xl"
-              loading="lazy"
-            />
+            <div className="img-hover rounded-2xl">
+              <img
+                src={groupPhoto}
+                alt="Group of friends enjoying Klawsome arcade"
+                className="w-full h-full max-h-96 object-cover rounded-2xl"
+                loading="lazy"
+              />
+            </div>
           </div>
 
           <div className="text-center">
@@ -370,12 +376,14 @@ const BusinessDevelopment = () => {
                 <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
               </p>
             </div>
-            <img
-              src={plushieClaw}
-              alt="Claw machine filled with kawaii plushies"
-              loading="lazy"
-              className="w-full h-full max-h-72 object-cover rounded-2xl shadow-md"
-            />
+            <div className="img-hover rounded-2xl shadow-md">
+              <img
+                src={plushieClaw}
+                alt="Claw machine filled with kawaii plushies"
+                loading="lazy"
+                className="w-full h-full max-h-72 object-cover rounded-2xl"
+              />
+            </div>
           </div>
 
           <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2 text-center">Pricing by complexity</h3>
@@ -406,12 +414,14 @@ const BusinessDevelopment = () => {
               {plushieHowItems.map((step) => (
                 <div key={step.title} className="text-center">
                   {plushieStepImages[step.title] ? (
-                    <img
-                      src={plushieStepImages[step.title]}
-                      alt={step.title}
-                      loading="lazy"
-                      className="w-full aspect-square object-cover rounded-2xl mb-3"
-                    />
+                    <div className="img-hover rounded-2xl mb-3">
+                      <img
+                        src={plushieStepImages[step.title]}
+                        alt={step.title}
+                        loading="lazy"
+                        className="w-full aspect-square object-cover rounded-2xl"
+                      />
+                    </div>
                   ) : (
                     <div className="text-3xl mb-2">{step.icon}</div>
                   )}
