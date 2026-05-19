@@ -3,9 +3,9 @@ import LottieAccent from './LottieAccent';
 import { useCmsTable, type HomepageStep } from '@/hooks/useCmsContent';
 
 const fallbackImages = [
-  '/steps/play-klaw-machines.gif',
-  '/steps/win-plushies.gif',
-  '/steps/trade-up.gif',
+  '/steps/play-klaw-machines.webp',
+  '/steps/win-plushies.webp',
+  '/steps/trade-up.webp',
 ];
 
 const KawaiiAbout = () => {
