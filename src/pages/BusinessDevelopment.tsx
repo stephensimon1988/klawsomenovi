@@ -12,6 +12,15 @@ import bdHero from '@/assets/community/canned-food-drive.jpg';
 import hostMachinePhoto from '@/assets/bizdev-host-machine.jpg';
 import groupPhoto from '@/assets/bizdev-group-photo.jpg';
 import plushieClaw from '@/assets/bizdev-plushie-claw.jpg';
+import imgEquipment from '@/assets/bizdev/equipment.jpg';
+import imgPlushies from '@/assets/bizdev/plushies.jpg';
+import imgBrand from '@/assets/bizdev/brand.jpg';
+import imgTraining from '@/assets/bizdev/training.jpg';
+import imgMarketing from '@/assets/bizdev/marketing.jpg';
+import imgSupport from '@/assets/bizdev/support.jpg';
+import imgSketch from '@/assets/bizdev/sketch.jpg';
+import imgQuote from '@/assets/bizdev/quote.jpg';
+import imgApprove from '@/assets/bizdev/approve.jpg';
 import {
   useCmsTable,
   usePageHero,
@@ -21,6 +30,21 @@ import {
 } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
+
+const partnerIncludeImages: Record<string, string> = {
+  'Equipment': imgEquipment,
+  'Plushies & Prizes': imgPlushies,
+  'The Brand': imgBrand,
+  'Training': imgTraining,
+  'Marketing Materials': imgMarketing,
+  'Ongoing Support': imgSupport,
+};
+
+const plushieStepImages: Record<string, string> = {
+  'Share your design': imgSketch,
+  'We send a quote': imgQuote,
+  'Approve & produce': imgApprove,
+};
 
 type ContentSection = {
   id: string;
