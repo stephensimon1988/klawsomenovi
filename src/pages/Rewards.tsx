@@ -3,15 +3,35 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import { Button } from '@/components/ui/button';
-import { useCmsTable, usePageHero, type RewardsBenefit } from '@/hooks/useCmsContent';
+import { usePageHero } from '@/hooks/useCmsContent';
 
-interface RewardsTier { id: string; tier_name: string; min_points: string; benefit: string; sort_order: number; }
-interface RewardsRedemption { id: string; points: string; reward: string; sort_order: number; }
+const SPARKLE = '/rewards/klawsome-sparkle.gif';
+
+const Sparkle = ({ className = '' }: { className?: string }) => (
+  <img src={SPARKLE} alt="" aria-hidden className={`pointer-events-none select-none animate-float ${className}`} />
+);
+
+const BENEFITS = [
+  { title: 'Birthday Bonus', body: 'Get a free plushie or gift bag on your special day!' },
+  { title: 'Earn Points Every Time You Play', body: '$1 = 1 point toward free plushies.' },
+  { title: 'Member-Exclusive Rewards & Events', body: 'Unlock special challenges, VIP drops, and exclusive events.' },
+  { title: 'Chances to Win', body: 'Get a free spin for bonus tokens when you join, and be entered into monthly raffles!' },
+];
+
+const TIERS = [
+  { name: 'Base', min: 'Starter (0)', benefit: 'x1 points' },
+  { name: 'Collector', min: '500', benefit: 'x1.2 points' },
+  { name: 'Master Of The Claw', min: '1500', benefit: 'x1.4 points' },
+  { name: 'Legendary', min: '4000', benefit: 'x1.7 points' },
+];
+
+const REDEMPTIONS = [
+  { points: '250', reward: 'Free mini plushie of your choice' },
+  { points: '500', reward: 'Free regular plushie of your choice' },
+  { points: '1000', reward: 'Any XL plushie of your choice' },
+];
 
 const Rewards = () => {
-  const { data: tiers } = useCmsTable<RewardsTier>('rewards_tiers');
-  const { data: redemptions } = useCmsTable<RewardsRedemption>('rewards_redemptions');
-  const { data: benefits } = useCmsTable<RewardsBenefit>('rewards_benefits');
   const { data: hero } = usePageHero('rewards');
 
   // Sticky jump nav (mirrors PageHero behavior)
@@ -78,14 +98,7 @@ const Rewards = () => {
               {hero?.title || 'Rewards Program'}
             </h1>
 
-            {/* Rocking cat */}
-            <img
-              src="/rewards/rocking-klawsome-cat.gif"
-              alt="Klawsome birthday cat mascot"
-              className="w-40 sm:w-52 md:w-64 mt-6 md:mt-8"
-            />
-
-            <div className="mt-6 md:mt-8">
+            <div className="mt-8 md:mt-10">
               <Button
                 asChild
                 size="lg"
@@ -127,15 +140,23 @@ const Rewards = () => {
         </div>
       </nav>
 
-      {/* Benefits */}
-      <section id="benefits" className="section-y section-x">
-        <div className="ds-container">
-          <p className="ds-eyebrow">Membership Benefits</p>
-          <h2 className="ds-h2 uppercase mb-16 max-w-2xl">Built for the people who play.</h2>
+      {/* Benefits — "Your Claw Game, Upgraded" */}
+      <section id="benefits" className="section-y section-x relative overflow-hidden">
+        <Sparkle className="absolute top-10 left-[6%] w-12 md:w-16 opacity-80" />
+        <Sparkle className="absolute top-24 right-[8%] w-16 md:w-20 opacity-80 [animation-delay:-1.2s]" />
+        <Sparkle className="absolute bottom-16 left-[40%] w-10 md:w-14 opacity-70 [animation-delay:-2s]" />
+        <Sparkle className="absolute bottom-8 right-[18%] w-12 md:w-16 opacity-70 [animation-delay:-0.6s]" />
+
+        <div className="ds-container relative z-10">
+          <p className="ds-eyebrow text-center">Membership Benefits</p>
+          <h2 className="ds-h2 uppercase mb-16 text-center" style={{ color: 'hsl(var(--klawsome-navy))' }}>
+            Your Claw Game, Upgraded
+          </h2>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {(benefits || []).map((b) => (
-              <div key={b.id} className="border-t border-foreground pt-6">
-                <h3 className="ds-h3 text-xl mb-3">{b.title}</h3>
+            {BENEFITS.map((b) => (
+              <div key={b.title} className="relative rounded-3xl bg-klawsome-baby-blue/40 border border-klawsome-baby-blue p-8 text-center shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
+                <Sparkle className="absolute -top-4 -right-3 w-10 md:w-12" />
+                <h3 className="ds-h3 text-xl mb-3" style={{ color: 'hsl(var(--klawsome-navy))' }}>{b.title}</h3>
                 <p className="ds-body">{b.body}</p>
               </div>
             ))}
@@ -145,18 +166,23 @@ const Rewards = () => {
 
       {/* Tiers */}
       <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
-      <section id="tiers" className="section-y section-x bg-foreground text-background">
-        <div className="ds-container">
-          <p className="ds-eyebrow">Lifetime Tiers</p>
-          <h2 className="ds-h2 uppercase mb-16 text-background">Climb the ranks.</h2>
+      <section id="tiers" className="section-y section-x bg-foreground text-background relative overflow-hidden">
+        <Sparkle className="absolute top-12 left-[7%] w-14 md:w-20 opacity-90" />
+        <Sparkle className="absolute top-28 right-[6%] w-16 md:w-24 opacity-90 [animation-delay:-1.5s]" />
+        <Sparkle className="absolute bottom-12 left-[30%] w-12 md:w-16 opacity-80 [animation-delay:-0.9s]" />
+        <Sparkle className="absolute bottom-20 right-[28%] w-14 md:w-20 opacity-80 [animation-delay:-2.1s]" />
+
+        <div className="ds-container relative z-10">
+          <p className="ds-eyebrow text-center">Lifetime Tiers</p>
+          <h2 className="ds-h2 uppercase mb-16 text-background text-center">Climb the ranks.</h2>
           <div className="grid md:grid-cols-4 gap-px bg-background/20">
-            {tiers?.map((tier) => (
-              <div key={tier.id} className="bg-foreground p-8">
-                <p className="ds-eyebrow">Tier {tier.sort_order}</p>
-                <h3 className="ds-h3 uppercase mb-6 text-background">{tier.tier_name}</h3>
+            {TIERS.map((tier, i) => (
+              <div key={tier.name} className="bg-foreground p-8">
+                <p className="ds-eyebrow">Tier {i + 1}</p>
+                <h3 className="ds-h3 uppercase mb-6 text-background">{tier.name}</h3>
                 <div className="space-y-2 font-body">
                   <p className="text-background/60 text-sm">Minimum points</p>
-                  <p className="text-3xl font-heading font-bold">{tier.min_points}</p>
+                  <p className="text-3xl font-heading font-bold">{tier.min}</p>
                 </div>
                 <div className="space-y-2 font-body mt-6 pt-6 border-t border-background/20">
                   <p className="text-background/60 text-sm">Earn rate</p>
@@ -170,18 +196,42 @@ const Rewards = () => {
 
       {/* Redemptions */}
       <KawaiiDivider variant="bumps" from="navy" to="white" stroke="yellow" height={90} />
-      <section id="redemptions" className="section-y section-x">
-        <div className="ds-container">
-          <p className="ds-eyebrow">Points Redeemable</p>
-          <h2 className="ds-h2 uppercase mb-16">Cash in for something cute.</h2>
+      <section id="redemptions" className="section-y section-x relative overflow-hidden">
+        <Sparkle className="absolute top-10 left-[10%] w-12 md:w-16 opacity-80" />
+        <Sparkle className="absolute top-32 right-[12%] w-16 md:w-20 opacity-80 [animation-delay:-1.4s]" />
+        <Sparkle className="absolute bottom-10 left-[35%] w-10 md:w-14 opacity-70 [animation-delay:-0.7s]" />
+        <Sparkle className="absolute bottom-24 right-[20%] w-14 md:w-18 opacity-70 [animation-delay:-2.3s]" />
+
+        <div className="ds-container relative z-10">
+          <p className="ds-eyebrow text-center">Points Redeemable</p>
+          <h2 className="ds-h2 uppercase mb-16 text-center" style={{ color: 'hsl(var(--klawsome-navy))' }}>
+            Cash in for something cute.
+          </h2>
           <div className="grid md:grid-cols-3 gap-8">
-            {redemptions?.map((r) => (
-              <div key={r.id} className="border border-border rounded-2xl p-8">
-                <p className="text-5xl font-heading font-bold text-primary mb-4">{r.points}</p>
-                <p className="text-xs font-heading font-bold uppercase tracking-[0.2em] text-muted-foreground mb-3">Points</p>
+            {REDEMPTIONS.map((r) => (
+              <div key={r.points} className="relative border border-klawsome-baby-blue rounded-3xl p-10 bg-klawsome-baby-blue/30 text-center hover:-translate-y-1 hover:shadow-lg transition-all">
+                <Sparkle className="absolute -top-4 -left-3 w-10 md:w-12" />
+                <p className="text-6xl font-heading font-bold mb-2" style={{ color: 'hsl(var(--klawsome-navy))' }}>{r.points}</p>
+                <p className="text-xs font-heading font-bold uppercase tracking-[0.2em] text-muted-foreground mb-4">Points</p>
                 <p className="ds-lead text-foreground">{r.reward}</p>
               </div>
             ))}
+          </div>
+
+          <div className="text-center mt-16">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full px-10 py-6 text-base font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
+            >
+              <a
+                href="https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Join Today!
+              </a>
+            </Button>
           </div>
         </div>
       </section>
