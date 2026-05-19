@@ -655,6 +655,34 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 8
     },
     {
+      "id": "cfd-009",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-kids-carrying-donation-box.webp",
+      "caption": "Kids working together to carry a donation box",
+      "sort_order": 9
+    },
+    {
+      "id": "cfd-010",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-volunteer-leading-unload.webp",
+      "caption": "Volunteer helping coordinate the canned food drive unload",
+      "sort_order": 10
+    },
+    {
+      "id": "cfd-011",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-kids-sorting-cart-donations.webp",
+      "caption": "Sorting food bags and water on the cart",
+      "sort_order": 11
+    },
+    {
+      "id": "cfd-012",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-kids-gathered-by-donation-cart.webp",
+      "caption": "Kids gathered around the donation cart before unloading",
+      "sort_order": 12
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
