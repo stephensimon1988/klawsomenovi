@@ -1,5 +1,4 @@
 import { useEffect, useRef, useState } from 'react';
-import lottie from 'lottie-web';
 
 const LOTTIE_URLS = {
   sparkle: 'https://lottie.host/2a60c0ba-9d13-42a8-b760-4b26b6c4e536/PGKTLwmOBd.json',
@@ -18,39 +17,76 @@ interface LottieAccentProps {
   url?: string;
 }
 
+// Cache results across mounts so a failed URL is never refetched.
+const animationCache = new Map<string, object | 'failed'>();
+
 const LottieAccent = ({ type = 'sparkle', className = '', loop = true, size = 80, url }: LottieAccentProps) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [inView, setInView] = useState(false);
   const [animationData, setAnimationData] = useState<object | null>(null);
 
+  // Only mount fetch + lottie engine when the placeholder scrolls near viewport.
   useEffect(() => {
+    const el = containerRef.current;
+    if (!el || typeof IntersectionObserver === 'undefined') {
+      setInView(true);
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          setInView(true);
+          io.disconnect();
+        }
+      },
+      { rootMargin: '200px' },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  useEffect(() => {
+    if (!inView) return;
     const fetchUrl = url || LOTTIE_URLS[type];
-    let isMounted = true;
-
+    const cached = animationCache.get(fetchUrl);
+    if (cached === 'failed') return;
+    if (cached) {
+      setAnimationData(cached);
+      return;
+    }
+    let cancelled = false;
     fetch(fetchUrl)
-      .then((res) => res.json())
+      .then((res) => (res.ok ? res.json() : Promise.reject(new Error(String(res.status)))))
       .then((data) => {
-        if (isMounted) setAnimationData(data);
+        animationCache.set(fetchUrl, data);
+        if (!cancelled) setAnimationData(data);
       })
-      .catch((err) => console.warn('Lottie load failed:', err));
-
+      .catch(() => {
+        animationCache.set(fetchUrl, 'failed');
+      });
     return () => {
-      isMounted = false;
+      cancelled = true;
     };
-  }, [type, url]);
+  }, [inView, type, url]);
 
   useEffect(() => {
     if (!containerRef.current || !animationData) return;
-
-    const instance = lottie.loadAnimation({
-      container: containerRef.current,
-      renderer: 'svg',
-      loop,
-      autoplay: true,
-      animationData,
+    let instance: { destroy: () => void } | null = null;
+    let cancelled = false;
+    // Dynamic import keeps lottie-web out of the main bundle.
+    import('lottie-web').then(({ default: lottie }) => {
+      if (cancelled || !containerRef.current) return;
+      instance = lottie.loadAnimation({
+        container: containerRef.current,
+        renderer: 'svg',
+        loop,
+        autoplay: true,
+        animationData,
+      });
     });
-
     return () => {
-      instance.destroy();
+      cancelled = true;
+      instance?.destroy();
     };
   }, [animationData, loop]);
 
