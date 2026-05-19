@@ -192,7 +192,7 @@ const BusinessDevelopment = () => {
         eyebrow={hero?.eyebrow || '🤝 For Businesses & Partners'}
         title={hero?.title || 'Grow With Klawsome'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
-        imageUrl={hero?.image_url || bdHero}
+        imageUrl={bdHero}
       />
 
       <div ref={tabsBarRef} aria-hidden className="hidden" />
