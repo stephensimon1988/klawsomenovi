@@ -160,7 +160,7 @@ const Rewards = () => {
 
       {/* Tiers */}
       <KawaiiDivider variant="cloud" from="white" to="navy" stroke="baby-pink" height={90} />
-      <section id="tiers" className="section-y section-x bg-foreground text-background relative overflow-hidden">
+      <section id="tiers" className="section-y section-x bg-klawsome-navy text-background relative overflow-hidden">
         <Sparkle className="absolute top-12 left-[7%] w-14 md:w-20 opacity-90" />
         <Sparkle className="absolute top-28 right-[6%] w-16 md:w-24 opacity-90 [animation-delay:-1.5s]" />
 
@@ -169,7 +169,7 @@ const Rewards = () => {
           <h2 className="ds-h2 uppercase mb-16 text-background text-center">Climb the ranks.</h2>
           <div className="grid md:grid-cols-4 gap-px bg-background/20">
             {TIERS.map((tier, i) => (
-              <div key={tier.name} className="bg-foreground p-8">
+              <div key={tier.name} className="bg-klawsome-navy p-8">
                 <p className="ds-eyebrow">Tier {i + 1}</p>
                 <h3 className="ds-h3 uppercase mb-6 text-background">{tier.name}</h3>
                 <div className="space-y-2 font-body">
