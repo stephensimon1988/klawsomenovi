@@ -578,6 +578,27 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 3
     },
     {
+      "id": "npl-paaralang-004",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/novi-library-award-display.jpg",
+      "caption": "Novi Public Library Reading Month display and reward bookmarks",
+      "sort_order": 4
+    },
+    {
+      "id": "npl-paaralang-005",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/paaralang-vendor-table.jpg",
+      "caption": "Paaralang Pilipino event table with plushies and gifts",
+      "sort_order": 5
+    },
+    {
+      "id": "npl-paaralang-006",
+      "section": "novi-library-paaralang",
+      "image_url": "/gallery/paaralang-cultural-display.jpg",
+      "caption": "Preparing the cultural display for the Paaralang Pilipino event",
+      "sort_order": 6
+    },
+    {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.jpg",
