@@ -606,6 +606,41 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 17
     },
     {
+      "id": "pp-paaralang-shirt-claw",
+      "section": "private_party",
+      "image_url": "/gallery/private-party-paaralang-shirt-claw.webp",
+      "caption": "Guest in Paaralang Pilipino shirt eyeing the plush prizes",
+      "sort_order": 18
+    },
+    {
+      "id": "pp-ice-cream-cone-plush",
+      "section": "private_party",
+      "image_url": "/gallery/private-party-ice-cream-cone-plush-machine.webp",
+      "caption": "Ice cream cone plushies stacked in the claw machine",
+      "sort_order": 19
+    },
+    {
+      "id": "pp-girl-strawberry-claw",
+      "section": "private_party",
+      "image_url": "/gallery/private-party-girl-playing-strawberry-claw.webp",
+      "caption": "Focused player going for a strawberry plush",
+      "sort_order": 20
+    },
+    {
+      "id": "pp-girl-koi-fish",
+      "section": "private_party",
+      "image_url": "/gallery/private-party-girl-playing-koi-fish-machine.webp",
+      "caption": "Trying her luck on the koi fish claw machine",
+      "sort_order": 21
+    },
+    {
+      "id": "pp-kids-turtle-machine",
+      "section": "private_party",
+      "image_url": "/gallery/private-party-kids-turtle-plush-machine.webp",
+      "caption": "Kids gathered around the green turtle plush machine",
+      "sort_order": 22
+    },
+    {
       "id": "09596f23-c0f0-4065-ac8c-8f6b52068057",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0b0121fc-43db-42df-ac24-f492fc34cef3/PXL_20251123_165459736.webp",
