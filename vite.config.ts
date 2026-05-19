@@ -38,22 +38,19 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
-          if (id.includes("react-router")) return "react-vendor";
           if (
             id.includes("/react/") ||
             id.includes("/react-dom/") ||
-            id.includes("/scheduler/")
+            id.includes("/scheduler/") ||
+            id.includes("react-router") ||
+            id.includes("@tanstack/react-query") ||
+            id.includes("@supabase") ||
+            id.includes("zustand")
           )
             return "react-vendor";
           if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
           if (id.includes("gsap") || id.includes("framer-motion") || id.includes("lottie-web"))
             return "motion-vendor";
-          if (
-            id.includes("@tanstack/react-query") ||
-            id.includes("@supabase") ||
-            id.includes("zustand")
-          )
-            return "data-vendor";
           if (id.includes("recharts") || id.includes("d3-")) return "charts-vendor";
           if (id.includes("embla-carousel")) return "carousel-vendor";
         },
