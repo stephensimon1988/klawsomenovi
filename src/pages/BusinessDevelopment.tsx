@@ -11,6 +11,7 @@ import { toast } from 'sonner';
 import bdHero from '@/assets/community/canned-food-drive.jpg';
 import hostMachinePhoto from '@/assets/bizdev-host-machine.jpg';
 import groupPhoto from '@/assets/bizdev-group-photo.jpg';
+import plushieClaw from '@/assets/bizdev-plushie-claw.jpg';
 import {
   useCmsTable,
   usePageHero,
@@ -323,11 +324,19 @@ const BusinessDevelopment = () => {
             <p className="ds-lead text-white/85 max-w-2xl mx-auto">{plushie.subtitle}</p>
           </div>
 
-          <div className="bg-white/95 rounded-r-2xl border-l-[5px] border-[hsl(var(--klawsome-yellow))] p-6 mb-12 flex items-center gap-4 shadow-md">
-            <span className="text-3xl flex-shrink-0">{minOrder?.eyebrow || '📦'}</span>
-            <p className="font-body font-bold text-foreground leading-relaxed">
-              <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
-            </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch mb-12">
+            <div className="bg-white/95 rounded-r-2xl border-l-[5px] border-[hsl(var(--klawsome-yellow))] p-6 flex items-center gap-4 shadow-md">
+              <span className="text-3xl flex-shrink-0">{minOrder?.eyebrow || '📦'}</span>
+              <p className="font-body font-bold text-foreground leading-relaxed">
+                <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
+              </p>
+            </div>
+            <img
+              src={plushieClaw}
+              alt="Claw machine filled with kawaii plushies"
+              loading="lazy"
+              className="w-full h-full max-h-72 object-cover rounded-2xl shadow-md"
+            />
           </div>
 
           <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2 text-center">Pricing by complexity</h3>
