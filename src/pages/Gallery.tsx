@@ -31,6 +31,34 @@ const Gallery = () => {
     'trunk-or-treat': 'Trunk or Treat',
   };
 
+  const sectionOrder = [
+    'beginning',
+    'gallery',
+    'private',
+    'semi-private',
+    'novi-community-fest',
+    'trunk-or-treat',
+    'canned-food-drive',
+    'msu-pass',
+    'novi-library-paaralang',
+  ];
+  const orderedSections = Object.entries(grouped).sort(
+    ([a], [b]) => {
+      const ia = sectionOrder.indexOf(a);
+      const ib = sectionOrder.indexOf(b);
+      return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+    }
+  );
+
+  const slugify = (s: string) => `section-${s}`;
+  const scrollToSection = (s: string) => {
+    const el = document.getElementById(slugify(s));
+    if (el) {
+      const y = el.getBoundingClientRect().top + window.scrollY - 140;
+      window.scrollTo({ top: y, behavior: 'smooth' });
+    }
+  };
+
   const close = useCallback(() => setLightbox(null), []);
   const next = useCallback(() => {
     setLightbox((lb) => (lb ? { ...lb, index: (lb.index + 1) % lb.items.length } : lb));
@@ -65,8 +93,27 @@ const Gallery = () => {
         imageUrl={hero?.image_url || ''}
       />
 
-      {Object.entries(grouped).map(([section, items]) => (
-        <section key={section} className="section-y section-x">
+      {orderedSections.length > 0 && (
+        <div className="sticky top-20 z-40 bg-background/90 backdrop-blur-md border-b border-border">
+          <div className="ds-container section-x">
+            <nav className="flex gap-2 overflow-x-auto py-3 scrollbar-hide" aria-label="Gallery sections">
+              {orderedSections.map(([section]) => (
+                <button
+                  key={section}
+                  type="button"
+                  onClick={() => scrollToSection(section)}
+                  className="whitespace-nowrap rounded-full px-4 py-1.5 font-heading font-bold text-[11px] tracking-[0.15em] uppercase border border-border text-foreground/70 hover:text-foreground hover:bg-secondary/60 transition-colors"
+                >
+                  {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
+                </button>
+              ))}
+            </nav>
+          </div>
+        </div>
+      )}
+
+      {orderedSections.map(([section, items]) => (
+        <section key={section} id={slugify(section)} className="section-y section-x scroll-mt-32">
           <div className="ds-container">
             <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">
               {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
