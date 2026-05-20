@@ -204,6 +204,69 @@ html {
 }
 
 /* ─────────────────────────────────────────────────────────
+   BRANDED MULTI-STROKE HEADINGS
+   Logo-style double outline using stacked text-shadows.
+   Pick one of: ds-stroke--navy | ds-stroke--red | ds-stroke--yellow
+   Size scale: ds-stroke (default = H2), ds-stroke--h1, ds-stroke--h3
+   ───────────────────────────────────────────────────────── */
+@layer utilities {
+  .ds-stroke {
+    --stroke-fill: hsl(var(--klawsome-navy));
+    --stroke-inner: hsl(var(--klawsome-yellow));
+    --stroke-outer: hsl(var(--klawsome-red));
+    --stroke-inner-w: 2px;
+    --stroke-outer-w: 5px;
+    color: var(--stroke-fill);
+    paint-order: stroke fill;
+    text-shadow:
+      /* inner ring */
+      calc(var(--stroke-inner-w) * -1) calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
+      var(--stroke-inner-w) calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
+      calc(var(--stroke-inner-w) * -1) var(--stroke-inner-w) 0 var(--stroke-inner),
+      var(--stroke-inner-w) var(--stroke-inner-w) 0 var(--stroke-inner),
+      0 calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
+      0 var(--stroke-inner-w) 0 var(--stroke-inner),
+      calc(var(--stroke-inner-w) * -1) 0 0 var(--stroke-inner),
+      var(--stroke-inner-w) 0 0 var(--stroke-inner),
+      /* outer ring — cardinals + diagonals + half-step smoothing */
+      calc(var(--stroke-outer-w) * -1) 0 0 var(--stroke-outer),
+      var(--stroke-outer-w) 0 0 var(--stroke-outer),
+      0 calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
+      0 var(--stroke-outer-w) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.8) calc(var(--stroke-outer-w) * -0.8) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.8) calc(var(--stroke-outer-w) * -0.8) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.8) calc(var(--stroke-outer-w) * 0.8) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.8) calc(var(--stroke-outer-w) * 0.8) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.5) calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.5) calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.5) var(--stroke-outer-w) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.5) var(--stroke-outer-w) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -1) calc(var(--stroke-outer-w) * -0.5) 0 var(--stroke-outer),
+      var(--stroke-outer-w) calc(var(--stroke-outer-w) * -0.5) 0 var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -1) calc(var(--stroke-outer-w) * 0.5) 0 var(--stroke-outer),
+      var(--stroke-outer-w) calc(var(--stroke-outer-w) * 0.5) 0 var(--stroke-outer);
+  }
+  .ds-stroke--h1 { --stroke-inner-w: 3px; --stroke-outer-w: 6px; }
+  .ds-stroke--h3 { --stroke-inner-w: 1.5px; --stroke-outer-w: 3.5px; }
+
+  .ds-stroke--navy {
+    --stroke-fill: hsl(var(--klawsome-navy));
+    --stroke-inner: hsl(var(--klawsome-yellow));
+    --stroke-outer: hsl(var(--klawsome-red));
+  }
+  .ds-stroke--red {
+    --stroke-fill: hsl(var(--klawsome-red));
+    --stroke-inner: hsl(var(--klawsome-yellow));
+    --stroke-outer: hsl(var(--klawsome-navy));
+  }
+  .ds-stroke--yellow {
+    --stroke-fill: hsl(var(--klawsome-yellow));
+    --stroke-inner: hsl(var(--klawsome-red));
+    --stroke-outer: hsl(var(--klawsome-navy));
+  }
+}
+
+/* ─────────────────────────────────────────────────────────
    UNIVERSAL DESIGN LANGUAGE
    Apply these utilities across every section for consistent
    spacing, container widths, type scale, and image ratios.
