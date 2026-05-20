@@ -71,6 +71,14 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
     );
   }, [variants, selectedOptions]);
 
+  // Sync gallery image to matched variant's image when variant changes
+  useEffect(() => {
+    const variantImgUrl = matchedVariant?.image?.url;
+    if (!variantImgUrl) return;
+    const idx = images.findIndex((i) => i.url === variantImgUrl);
+    if (idx >= 0 && idx !== imgIdx) setImgIdx(idx);
+  }, [matchedVariant, images]); // eslint-disable-line react-hooks/exhaustive-deps
+
   if (!open) return null;
 
   const price = matchedVariant?.price ?? variants[0]?.price;
@@ -105,7 +113,7 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
       aria-label={`${node.title} quick add`}
     >
       {/* Backdrop */}
-      <div className="absolute inset-0 bg-klawsome-navy/85 backdrop-blur-xl" />
+      <div className="absolute inset-0 bg-klawsome-navy/70 backdrop-blur-xl" />
 
       {/* Sprinkled animated stars */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -130,21 +138,39 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
       {/* Modal panel */}
       <div
         onClick={(e) => e.stopPropagation()}
-        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-kawaii bg-white/15 backdrop-blur-2xl border border-white/25 shadow-2xl animate-scale-in"
+        className="relative w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-kawaii bg-klawsome-baby-blue/85 backdrop-blur-2xl border-2 border-white/60 shadow-2xl animate-scale-in"
       >
+        {/* Sprinkled stars inside modal */}
+        <div className="absolute inset-0 overflow-hidden pointer-events-none rounded-kawaii">
+          {STAR_POSITIONS.slice(0, 6).map((p, i) => (
+            <div
+              key={`inner-${i}`}
+              className="absolute opacity-70"
+              style={{
+                top: p.top,
+                left: p.left,
+                right: p.right,
+                bottom: p.bottom,
+              }}
+            >
+              <LottieAccent type={i % 2 === 0 ? 'star' : 'sparkle'} size={Math.round(p.size * 0.7)} />
+            </div>
+          ))}
+        </div>
+
         {/* Close */}
         <button
           onClick={onClose}
           aria-label="Close"
-          className="absolute top-4 right-4 z-10 w-10 h-10 rounded-full bg-white/20 hover:bg-white/30 border border-white/30 backdrop-blur-md flex items-center justify-center text-white transition-colors"
+          className="absolute top-4 right-4 z-20 w-12 h-12 rounded-full bg-klawsome-navy hover:bg-klawsome-navy/90 border-2 border-white flex items-center justify-center text-white transition-colors shadow-lg"
         >
-          <X className="w-5 h-5" />
+          <X className="w-6 h-6" />
         </button>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-8">
+        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-8">
           {/* Gallery */}
           <div>
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/10 border border-white/20">
+            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70">
               {images[imgIdx] ? (
                 <img
                   src={images[imgIdx].url}
@@ -159,16 +185,16 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
                   <button
                     onClick={prevImg}
                     aria-label="Previous image"
-                    className="absolute left-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/30 hover:bg-white/50 backdrop-blur flex items-center justify-center text-foreground"
+                    className="absolute left-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-klawsome-navy/90 hover:bg-klawsome-navy text-white backdrop-blur flex items-center justify-center"
                   >
-                    <ChevronLeft className="w-5 h-5" />
+                    <ChevronLeft className="w-6 h-6" />
                   </button>
                   <button
                     onClick={nextImg}
                     aria-label="Next image"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-white/30 hover:bg-white/50 backdrop-blur flex items-center justify-center text-foreground"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-klawsome-navy/90 hover:bg-klawsome-navy text-white backdrop-blur flex items-center justify-center"
                   >
-                    <ChevronRight className="w-5 h-5" />
+                    <ChevronRight className="w-6 h-6" />
                   </button>
                 </>
               )}
@@ -179,8 +205,8 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
                   <button
                     key={i}
                     onClick={() => setImgIdx(i)}
-                    className={`flex-shrink-0 w-16 h-16 rounded-xl overflow-hidden border-2 transition ${
-                      i === imgIdx ? 'border-klawsome-yellow' : 'border-white/30 hover:border-white/60'
+                    className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition ${
+                      i === imgIdx ? 'border-klawsome-navy ring-2 ring-klawsome-yellow' : 'border-white/60 hover:border-klawsome-navy'
                     }`}
                   >
                     <img src={img.url} alt="" className="w-full h-full object-cover" />
@@ -191,34 +217,34 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
           </div>
 
           {/* Details */}
-          <div className="text-white flex flex-col">
-            <h2 className="font-heading font-bold text-2xl md:text-3xl">{node.title}</h2>
-            <p className="mt-2 font-heading font-bold text-2xl text-klawsome-yellow">
+          <div className="text-klawsome-navy flex flex-col">
+            <h2 className="font-heading font-bold text-4xl md:text-5xl leading-tight">{node.title}</h2>
+            <p className="mt-3 font-heading font-bold text-4xl text-klawsome-navy">
               {price ? `$${parseFloat(price.amount).toFixed(2)}` : '—'}
             </p>
 
             {node.description && (
-              <p className="mt-4 text-sm text-white/85 font-body whitespace-pre-line max-h-40 overflow-y-auto pr-2">
+              <p className="mt-5 text-lg text-klawsome-navy/90 font-body whitespace-pre-line max-h-56 overflow-y-auto pr-2">
                 {node.description}
               </p>
             )}
 
             {/* Option pickers */}
-            <div className="mt-5 space-y-4">
+            <div className="mt-6 space-y-5">
               {node.options.map((opt) => {
                 if (opt.values.length <= 1 && opt.values[0]?.toLowerCase() === 'default title') return null;
                 return (
                   <div key={opt.name}>
                     <div className="flex items-center justify-between mb-2">
-                      <span className="font-heading font-bold text-sm">
-                        {opt.name}: <span className="text-white/80 font-body font-normal">{selectedOptions[opt.name]}</span>
+                      <span className="font-heading font-bold text-xl text-klawsome-navy">
+                        {opt.name}: <span className="text-klawsome-navy/80 font-body font-normal">{selectedOptions[opt.name]}</span>
                       </span>
                       {opt.name.toLowerCase() === 'size' && needsSizeChart && (
                         <button
                           onClick={() => setShowSize((s) => !s)}
-                          className="text-xs font-heading font-bold text-klawsome-yellow hover:underline flex items-center gap-1"
+                          className="text-base font-heading font-bold text-klawsome-navy hover:underline flex items-center gap-1"
                         >
-                          <Ruler className="w-3 h-3" /> Size chart
+                          <Ruler className="w-4 h-4" /> Size chart
                         </button>
                       )}
                     </div>
@@ -231,10 +257,10 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
                             onClick={() =>
                               setSelectedOptions((prev) => ({ ...prev, [opt.name]: val }))
                             }
-                            className={`px-3 py-1.5 rounded-full text-xs font-heading font-bold border transition ${
+                            className={`px-4 py-2 rounded-full text-base font-heading font-bold border-2 transition ${
                               active
-                                ? 'bg-klawsome-yellow text-foreground border-klawsome-yellow'
-                                : 'bg-white/15 text-white border-white/30 hover:bg-white/25'
+                                ? 'bg-klawsome-navy text-white border-klawsome-navy'
+                                : 'bg-white/70 text-klawsome-navy border-white hover:bg-white'
                             }`}
                           >
                             {val}
@@ -251,31 +277,31 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
             </div>
 
             {/* Quantity + Add */}
-            <div className="mt-6 flex items-center gap-3">
-              <div className="flex items-center bg-white/15 border border-white/30 rounded-full">
+            <div className="mt-7 flex items-center gap-3">
+              <div className="flex items-center bg-white/70 border-2 border-white rounded-full">
                 <button
                   onClick={() => setQty((q) => Math.max(1, q - 1))}
                   aria-label="Decrease quantity"
-                  className="w-9 h-9 flex items-center justify-center text-white hover:bg-white/15 rounded-l-full"
+                  className="w-12 h-12 flex items-center justify-center text-klawsome-navy hover:bg-white rounded-l-full"
                 >
-                  <Minus className="w-4 h-4" />
+                  <Minus className="w-5 h-5" />
                 </button>
-                <span className="w-10 text-center font-heading font-bold">{qty}</span>
+                <span className="w-12 text-center font-heading font-bold text-xl text-klawsome-navy">{qty}</span>
                 <button
                   onClick={() => setQty((q) => q + 1)}
                   aria-label="Increase quantity"
-                  className="w-9 h-9 flex items-center justify-center text-white hover:bg-white/15 rounded-r-full"
+                  className="w-12 h-12 flex items-center justify-center text-klawsome-navy hover:bg-white rounded-r-full"
                 >
-                  <Plus className="w-4 h-4" />
+                  <Plus className="w-5 h-5" />
                 </button>
               </div>
               <Button
                 onClick={handleAdd}
                 disabled={!matchedVariant || !available || isLoading}
-                className="flex-1 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
+                className="flex-1 h-12 rounded-full bg-klawsome-navy hover:bg-klawsome-navy/90 text-white font-heading font-bold text-lg"
               >
                 {isLoading ? (
-                  <Loader2 className="w-4 h-4 animate-spin" />
+                  <Loader2 className="w-5 h-5 animate-spin" />
                 ) : !available ? (
                   'Sold out'
                 ) : (
