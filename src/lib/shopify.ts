@@ -16,6 +16,7 @@ export interface ShopifyVariant {
   price: { amount: string; currencyCode: string };
   availableForSale: boolean;
   selectedOptions: Array<{ name: string; value: string }>;
+  image?: { url: string; altText: string | null } | null;
 }
 
 export interface ShopifyProduct {
@@ -73,8 +74,8 @@ export const PRODUCTS_QUERY = `
           vendor
           createdAt
           priceRange { minVariantPrice { amount currencyCode } }
-          images(first: 5) { edges { node { url altText } } }
-          variants(first: 10) {
+          images(first: 50) { edges { node { url altText } } }
+          variants(first: 100) {
             edges {
               node {
                 id
@@ -82,6 +83,7 @@ export const PRODUCTS_QUERY = `
                 price { amount currencyCode }
                 availableForSale
                 selectedOptions { name value }
+                image { url altText }
               }
             }
           }
