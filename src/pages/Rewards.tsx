@@ -174,7 +174,7 @@ const Rewards = () => {
                 className="bg-klawsome-navy border-2 border-background/30 rounded-2xl p-6 flex flex-col"
               >
                 {/* Row 1: Tier label */}
-                <p className="ds-eyebrow">Tier {i + 1}</p>
+                <p className="ds-eyebrow text-klawsome-yellow">Tier {i + 1}</p>
 
                 {/* Row 2: Name — fixed height so 1- and 2-line names align */}
                 <h3 className="ds-h3 uppercase min-h-[4rem] flex items-start">
