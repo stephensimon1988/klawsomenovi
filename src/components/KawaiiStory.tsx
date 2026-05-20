@@ -28,7 +28,7 @@ const KawaiiStory = () => {
           </div>
           <div className="md:col-span-6 md:order-1">
             <p className="ds-eyebrow mb-6">Our Story</p>
-            <h2 className="ds-h2 mb-8">
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-8">
               {content?.story_title || 'The Klawsome Story'}
             </h2>
             <p className="ds-lead">

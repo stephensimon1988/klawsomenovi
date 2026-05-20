@@ -82,7 +82,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
         />
         <div className="relative z-10 ds-container section-x pb-20 pt-32 w-full">
           <div className={`max-w-3xl ${alignCls}`}>
-            <h1 className="ds-h1 mb-6" style={{ color: titleColor }}>{title}</h1>
+            <h1 className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--navy mb-6">{title}</h1>
             {subtitle && <p className="ds-lead max-w-2xl mb-8" style={{ color: 'hsl(var(--klawsome-navy) / 0.8)' }}>{subtitle}</p>}
             {children}
             <nav aria-label="Quick actions" className={`flex flex-wrap gap-2 mb-6 ${align === 'center' ? 'justify-center' : ''}`}>

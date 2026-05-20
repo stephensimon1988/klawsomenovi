@@ -66,7 +66,7 @@ const Index = () => {
       <section id="scheduling" className="py-20 px-6 lg:px-12 bg-background">
         <div className="container mx-auto max-w-5xl text-center mb-10">
           <p className="ds-eyebrow text-primary mb-3">Book Your Visit</p>
-          <h2 className="ds-h2">Reserve your time at Klawsome</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy">Reserve your time at Klawsome</h2>
         </div>
         <div
           ref={schedulingRef}

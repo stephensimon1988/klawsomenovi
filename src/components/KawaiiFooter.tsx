@@ -35,7 +35,7 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
       {showReadyToPlay && (
       <section className="py-32 px-6 lg:px-12 bg-[hsl(var(--klawsome-baby-pink))] relative overflow-hidden">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="ds-h1 text-foreground mb-8">
+          <h2 className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--red mb-8">
             Ready to<br />Play?
           </h2>
           <p className="text-foreground/80 font-body text-lg mb-10 max-w-md mx-auto">

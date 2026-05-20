@@ -235,7 +235,7 @@ const BusinessDevelopment = () => {
         <div className="ds-container max-w-5xl">
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 01</p>
-            <h2 className="ds-h2 mb-4">Host a Klawsome Machine<br />in Your Business</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Host a Klawsome Machine<br />in Your Business</h2>
             <div className="inline-flex items-center gap-2 bg-white/70 border-2 border-white text-foreground font-bold text-sm px-5 py-2.5 rounded-full mb-6">
               <MapPin className="w-4 h-4" /> Available within 50 miles of Novi, MI (48375)
             </div>
@@ -307,7 +307,7 @@ const BusinessDevelopment = () => {
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 02</p>
             <span className="inline-block bg-[hsl(var(--klawsome-yellow))] text-foreground font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
-            <h2 className="ds-h2 mb-4">Become a Klawsome Partner</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">Become a Klawsome Partner</h2>
             <p className="ds-lead max-w-2xl mx-auto">{partner.subtitle}</p>
           </div>
 
@@ -365,7 +365,7 @@ const BusinessDevelopment = () => {
         <div className="ds-container max-w-5xl">
           <div className="text-center mb-12">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
-            <h2 className="ds-h2 text-white mb-4">Custom Plushie Orders</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Custom Plushie Orders</h2>
             <p className="ds-lead text-white/85 max-w-2xl mx-auto">{plushie.subtitle}</p>
           </div>
 
@@ -445,7 +445,7 @@ const BusinessDevelopment = () => {
       <section className="section-y section-x bg-background">
         <div className="ds-container text-center">
           <p className="ds-eyebrow mb-3">The Process</p>
-          <h2 className="ds-h2 mb-4">Getting Started is Easy</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Getting Started is Easy</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 mt-12">
             {howSteps.map((step) => (
               <div key={step.id} className="text-center">
@@ -466,7 +466,7 @@ const BusinessDevelopment = () => {
         <div className="ds-container max-w-3xl">
           <div className="text-center mb-10">
             <p className="ds-eyebrow mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
-            <h2 className="ds-h2 mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
             <p className="ds-lead max-w-md mx-auto">{contactIntro?.body || "Tell us which opportunity excites you and we'll take it from there."}</p>
           </div>
 

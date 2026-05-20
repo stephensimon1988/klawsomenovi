@@ -39,7 +39,7 @@ const KawaiiNews = () => {
       <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mx-auto text-center mb-16 flex flex-col items-center" style={{ opacity: 0 }}>
           <p className="ds-eyebrow">Press</p>
-          <h2 className="ds-h2 mb-6">
+          <h2 className="ds-h2 ds-stroke ds-stroke--red mb-6">
             In The News
           </h2>
           <img
@@ -69,7 +69,7 @@ const KawaiiNews = () => {
                 />
               </div>
               <div className="p-6">
-                <h3 className="ds-h3 text-lg mb-3">{article.title}</h3>
+                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy text-lg mb-3">{article.title}</h3>
                 <span className="text-primary text-sm font-heading font-bold tracking-wider uppercase">Read More →</span>
               </div>
             </a>

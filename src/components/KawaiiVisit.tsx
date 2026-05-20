@@ -34,7 +34,7 @@ const KawaiiVisit = () => {
 
           <div ref={textRef} style={{ opacity: 0 }}>
             <p className="ds-eyebrow">Visit Us</p>
-            <h2 className="ds-h2 mb-6">
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-6">
               Find us at Sakura Novi
             </h2>
             <p className="ds-lead mb-10 max-w-lg">

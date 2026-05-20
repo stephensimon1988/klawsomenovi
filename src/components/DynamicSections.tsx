@@ -76,7 +76,7 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                   className={`md:col-span-6 ${flip ? 'md:order-1' : 'md:order-2'}`}
                 >
                   {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
-                  {s.headline && <h2 className="ds-h2 mb-6">{s.headline}</h2>}
+                  {s.headline && <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-6">{s.headline}</h2>}
                   {s.body && (
                     <p className="ds-lead whitespace-pre-line">{s.body}</p>
                   )}

@@ -89,7 +89,7 @@ const KawaiiHero = () => {
 
       <div className="relative z-10 ds-container section-x pb-24 pt-32">
         <div ref={textRef} className="max-w-3xl">
-          <h1 className="ds-h1 mb-6" style={{ opacity: 0, color: 'hsl(var(--klawsome-navy))' }}>
+          <h1 className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--red mb-6" style={{ opacity: 0 }}>
             {headlineParts.map((part, i) => (
               <span key={i} className="block">
                 {part}

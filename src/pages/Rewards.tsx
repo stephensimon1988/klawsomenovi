@@ -80,7 +80,7 @@ const Rewards = () => {
               className="w-[260px] sm:w-[340px] md:w-[420px] mb-2 md:mb-4"
             />
             <h1
-              className="ds-h1 uppercase text-5xl sm:text-6xl md:text-8xl tracking-tight"
+              className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--red uppercase text-5xl sm:text-6xl md:text-8xl tracking-tight"
               style={{ color: 'hsl(var(--klawsome-navy))' }}
             >
               {hero?.title || 'Rewards Program'}
@@ -141,7 +141,7 @@ const Rewards = () => {
               className="w-36 sm:w-44 md:w-56 shrink-0"
             />
             <div className="text-center md:text-left">
-              <h2 className="ds-h2 uppercase" style={{ color: 'hsl(var(--klawsome-navy))' }}>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase">
                 Your Claw Game, Upgraded
               </h2>
             </div>
@@ -150,7 +150,7 @@ const Rewards = () => {
             {BENEFITS.map((b) => (
               <div key={b.title} className="relative rounded-3xl bg-klawsome-baby-blue/40 border border-klawsome-baby-blue p-8 text-center shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
                 <Sparkle className="absolute -top-4 -right-3 w-10 md:w-12" />
-                <h3 className="ds-h3 text-xl mb-3" style={{ color: 'hsl(var(--klawsome-navy))' }}>{b.title}</h3>
+                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy text-xl mb-3">{b.title}</h3>
                 <p className="ds-body">{b.body}</p>
               </div>
             ))}
@@ -166,7 +166,7 @@ const Rewards = () => {
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Lifetime Tiers</p>
-          <h2 className="ds-h2 uppercase mb-16 text-background text-center">Lifetime Tiers</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-16 text-center">Lifetime Tiers</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
             {TIERS.map((tier, i) => (
               <div
@@ -177,7 +177,7 @@ const Rewards = () => {
                 <p className="ds-eyebrow">Tier {i + 1}</p>
 
                 {/* Row 2: Name — fixed height so 1- and 2-line names align */}
-                <h3 className="ds-h3 uppercase text-background min-h-[4rem] flex items-start">
+                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--yellow uppercase min-h-[4rem] flex items-start">
                   {tier.name}
                 </h3>
 
@@ -206,7 +206,7 @@ const Rewards = () => {
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Points Redeemable</p>
-          <h2 className="ds-h2 uppercase mb-16 text-center" style={{ color: 'hsl(var(--klawsome-navy))' }}>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-16 text-center">
             Points Redeemable
           </h2>
           <div className="grid md:grid-cols-3 gap-8">

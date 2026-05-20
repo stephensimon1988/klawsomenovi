@@ -24,7 +24,7 @@ const KawaiiGiftCards = () => {
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           <div ref={textRef} style={{ opacity: 0 }}>
             <p className="ds-eyebrow">{content?.eyebrow || 'Gift Cards'}</p>
-            <h2 className="ds-h2 mb-6">
+            <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-6">
               {content?.headline || 'Give the gift of Klawsome'}
             </h2>
             <p className="ds-lead mb-10">
