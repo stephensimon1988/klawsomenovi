@@ -1,71 +1,87 @@
-## Quick-Add Glassmorphic Product Modal
+# Branded multi-stroke headers
 
-Add a click-to-open quick-add modal for every product card on `/store`. The modal shows a full image gallery, description, variation pickers, quantity, and add-to-cart — without leaving the store page.
+Goal: give all section headings (and the "We'd love to hear from you" callout) the same chunky double-outline look as the Klawsome logo — a main fill color surrounded by an inner stroke and an outer stroke in two other brand colors.
 
-### Behavior
+## The CSS technique
 
-- Clicking anywhere on a product card (except inside the existing "Add to cart" button) opens the modal for that product.
-- ESC, backdrop click, and a top-right `X` button close it.
-- Body scroll is locked while open.
+Browsers only support a single `-webkit-text-stroke`, so two real strokes need to be faked with stacked `text-shadow` rings. For each "ring" we offset the same color in all 8 directions (and a couple of half-step offsets) so it reads as a solid outline rather than a dotted halo.
 
-### Visual design
+```css
+.ds-stroke {
+  /* main fill set per-variant */
+  color: var(--stroke-fill);
+  /* inner ring at ~2px, outer ring at ~5px */
+  text-shadow:
+    /* inner stroke — 2px ring */
+    -2px -2px 0 var(--stroke-inner), 2px -2px 0 var(--stroke-inner),
+    -2px  2px 0 var(--stroke-inner), 2px  2px 0 var(--stroke-inner),
+     0   -2px 0 var(--stroke-inner), 0    2px 0 var(--stroke-inner),
+    -2px  0   0 var(--stroke-inner), 2px  0   0 var(--stroke-inner),
+    /* outer stroke — 5px ring (4 cardinals + 4 diagonals + halves) */
+    -5px  0 0 var(--stroke-outer),  5px  0 0 var(--stroke-outer),
+     0   -5px 0 var(--stroke-outer), 0   5px 0 var(--stroke-outer),
+    -4px -4px 0 var(--stroke-outer), 4px -4px 0 var(--stroke-outer),
+    -4px  4px 0 var(--stroke-outer), 4px  4px 0 var(--stroke-outer),
+    -3px -5px 0 var(--stroke-outer), 3px -5px 0 var(--stroke-outer),
+    -3px  5px 0 var(--stroke-outer), 3px  5px 0 var(--stroke-outer),
+    -5px -3px 0 var(--stroke-outer), 5px -3px 0 var(--stroke-outer),
+    -5px  3px 0 var(--stroke-outer), 5px  3px 0 var(--stroke-outer);
+  paint-order: stroke fill;
+}
+```
 
-- Backdrop: Klawsome navy (`bg-klawsome-navy`) at ~85% opacity with `backdrop-blur-xl`.
-- Sprinkled animated star GIFs (reuse existing `LottieAccent` star/sparkle assets already used in the kawaii theme) positioned absolutely across the backdrop with gentle float/twinkle animations — pointer-events: none.
-- Modal panel: glassmorphic — `bg-white/15 backdrop-blur-2xl border border-white/25 rounded-kawaii shadow-2xl`, max-w ~5xl, max-h ~90vh, scrollable inner.
-- Close `X` button: top-right, circular, glass style, white icon.
-- Pastel accent borders/glows consistent with kawaii tokens.
+Stroke widths scale by heading size (use slightly thinner rings on H3 / small text so it doesn't look mushy):
+- H1: 3px inner / 6px outer
+- H2: 2px inner / 5px outer
+- H3 & callout: 1.5px inner / 3.5px outer
 
-### Modal content (two-column on desktop, stacked on mobile)
+## Three variants (pick from navy / red / yellow only)
 
-Left — Gallery:
-- Large main image with prev/next arrows.
-- Thumbnail strip below (all `n.images.edges`).
-- Click thumbnail to switch.
+Only the three "main text" colors from the logo references are used as fills, and the two remaining brand colors form the rings. The outer ring is always the darkest of the three so the letterforms still read against any background.
 
-Right — Details:
-- Title, price (updates with selected variant), category tag.
-- Full description (HTML rendered safely from `n.description`).
-- Variant option pickers: one row per `n.options` (e.g. Color swatches, Size pills). Selecting options resolves to the matching variant via `selectedOptions`.
-- Quantity stepper (− / number / +), min 1.
-- "Add to cart" primary button (full width). On success: toast + keep modal open so the user can keep configuring; secondary "View cart" link opens the drawer.
-- Sold-out state disables button.
+| Variant | Fill | Inner stroke | Outer stroke |
+|---|---|---|---|
+| `ds-stroke--navy` | klawsome-navy | klawsome-yellow | klawsome-red |
+| `ds-stroke--red` | klawsome-red | klawsome-yellow | klawsome-navy |
+| `ds-stroke--yellow` | klawsome-yellow | klawsome-red | klawsome-navy |
 
-### Size charts (clothing only)
+(Baby-blue is reserved for backgrounds, not strokes — matches the logo references.)
 
-- Show a collapsible "Size chart" link beneath the Size picker **only when** the product has a Size option AND is apparel (detected via `productType` includes "apparel" / "shirt" / tags include `t-shirt`, `tee`, `apparel`).
-- For tees (tag/title contains `tee`, `t-shirt`): render the **Gildan adult unisex tee** size chart (researched from Gildan's published spec for styles like 5000/64000):
+## Where to add it
 
-  | Size | Chest (in) | Body Length (in) |
-  |------|------------|------------------|
-  | S    | 34–36      | 28               |
-  | M    | 38–40      | 29               |
-  | L    | 42–44      | 30               |
-  | XL   | 46–48      | 31               |
-  | 2XL  | 50–52      | 32               |
-  | 3XL  | 54–56      | 33               |
+New utilities in `src/index.css` (under `@layer utilities`):
+- `.ds-stroke` — base (sets paint-order + ring widths via CSS vars)
+- `.ds-stroke--navy`, `.ds-stroke--red`, `.ds-stroke--yellow` — set the three color vars
+- `.ds-stroke--h1`, `.ds-stroke--h2`, `.ds-stroke--h3` — scale ring widths
 
-  With a "How to measure" note: measure chest under arms, fully relaxed.
+Then apply across the site so each section gets one of the three variants, alternating to keep visual variety. Proposed mapping:
 
-- For other apparel: render a generic US apparel size chart (S–XXL with bust/waist/hip ranges in inches).
-- Size chart opens in a nested glass sub-panel (or accordion) within the modal.
+- `KawaiiHero` H1 → `--red` (matches logo)
+- `KawaiiAbout` "How to Play!" H2 → `--navy`
+- `KawaiiProducts` H2 → `--red`
+- `KawaiiTokenPrices` H2 → `--yellow`
+- `KawaiiStory` H2 → `--navy`
+- `KawaiiReviews` H2 → `--red`
+- `KawaiiGiftCards` H2 → `--yellow`
+- `KawaiiVisit` H2 → `--navy`
+- `KawaiiNews` H2 → `--red`
+- `PageHero` H1 (used by Story, Info Hub, etc.) → `--navy` by default, prop-overridable
+- `OurStory` per-section H2s → alternate `--red` / `--yellow`
+- Floating "We'd love to hear from you!" widget label → `--red` (matches the pink/red attachment)
+- Card H3s inside Steps / Reviews / Products → `--navy` (smaller, less ring weight)
 
-### Files
+The change is centralized: heading components already use `.ds-h1` / `.ds-h2` / `.ds-h3`, so I'll add the stroke utility alongside those in each component's JSX rather than baking it into `.ds-h2` itself (so admin/CMS-only screens stay unstroked).
 
-- New: `src/components/shopify/QuickAddModal.tsx` — the modal + gallery + variant logic.
-- New: `src/components/shopify/SizeChart.tsx` — Gildan tee chart + generic apparel chart, picks which to render based on product.
-- Edit: `src/components/shopify/Storefront.tsx` — `ProductCard` becomes clickable; opens modal via local state. Existing "Add to cart" button stays and uses `e.stopPropagation()`.
-- Reuse: `useCartStore.addItem`, existing kawaii color tokens, `LottieAccent` for sprinkled stars.
+## Files to touch
 
-### Technical notes
+1. `src/index.css` — add `.ds-stroke*` utilities.
+2. Heading components: `KawaiiHero`, `KawaiiAbout`, `KawaiiProducts`, `KawaiiTokenPrices`, `KawaiiStory`, `KawaiiReviews`, `KawaiiGiftCards`, `KawaiiVisit`, `KawaiiNews`, `KawaiiGallery` (if present), `KawaiiBirthdays` sections, `PageHero`, `OurStory`, `Faq`, `Rewards`, `Rental`, `Business`, `Careers`, `Contact`, `News`, `InfoHub`, `Birthdays`, `CommunityPartners`, `BusinessDevelopment`, `Store`.
+3. `FloatingContactWidget` — apply `--red` to the "We'd love to hear from you" text.
+4. Step / card H3s in `KawaiiAbout`, `KawaiiReviews`, `KawaiiProducts` (smaller stroke scale).
 
-- Use shadcn `Dialog` as the primitive (already in project) with custom styling overrides for the glass look and to inject the animated star layer inside `DialogOverlay`/`DialogContent`.
-- Variant resolution: build a map keyed by sorted `selectedOptions` so changing Color+Size finds the right `variant.id`, `price`, and `availableForSale`.
-- Default selection: first available variant.
-- Description rendering: Shopify returns plain text in `description`; render with `whitespace-pre-line`. (No HTML field fetched, so no sanitizer needed.)
-- Accessibility: focus trap via Dialog, labelled close button, alt text on gallery images.
+## Notes / tradeoffs
 
-### Out of scope
-
-- No change to cart/checkout flow.
-- No new Shopify fields fetched (existing `PRODUCTS_QUERY` already returns images, variants, options, description).
+- `text-shadow` rings stack pixels — at very large H1 sizes the outer 5px ring can look slightly stepped on diagonals. The half-step offsets in the snippet above smooth that out enough for our heading sizes.
+- The effect adds visual weight, so I'll keep body copy untouched and only apply to display/heading text + the contact callout, exactly like the logo treatment.
+- Works in light and dark backgrounds because the outer ring is always navy.
+- No JS, no SVG — pure CSS, fully responsive, no perf cost.
