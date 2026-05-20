@@ -104,6 +104,19 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
   const nextImg = () => setImgIdx((i) => (i + 1) % Math.max(images.length, 1));
   const prevImg = () => setImgIdx((i) => (i - 1 + Math.max(images.length, 1)) % Math.max(images.length, 1));
 
+  // When a gallery image is selected, also switch to the variant that uses that image (if any)
+  const selectImage = (i: number) => {
+    setImgIdx(i);
+    const url = images[i]?.url;
+    if (!url) return;
+    const matching = variants.find((v) => v.image?.url === url);
+    if (matching) {
+      const next: Record<string, string> = { ...selectedOptions };
+      matching.selectedOptions.forEach((o) => (next[o.name] = o.value));
+      setSelectedOptions(next);
+    }
+  };
+
   return (
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center p-4 animate-fade-in"
@@ -170,7 +183,8 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
           {/* Gallery */}
           <div className="lg:row-span-2">
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70">
+            {/* Mobile/tablet: single hero + thumbnail strip */}
+            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70 lg:hidden">
               {images[imgIdx] ? (
                 <img
                   src={images[imgIdx].url}
@@ -200,11 +214,11 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
               )}
             </div>
             {images.length > 1 && (
-              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {images.map((img, i) => (
                   <button
                     key={i}
-                    onClick={() => setImgIdx(i)}
+                    onClick={() => selectImage(i)}
                     className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition ${
                       i === imgIdx ? 'border-klawsome-navy ring-2 ring-klawsome-yellow' : 'border-white/60 hover:border-klawsome-navy'
                     }`}
@@ -214,6 +228,30 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
                 ))}
               </div>
             )}
+
+            {/* Desktop: all images stacked in the left column */}
+            <div className="hidden lg:flex flex-col gap-4">
+              {images.map((img, i) => (
+                <button
+                  key={i}
+                  onClick={() => selectImage(i)}
+                  className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition ${
+                    i === imgIdx
+                      ? 'border-klawsome-navy ring-2 ring-klawsome-yellow'
+                      : 'border-white/70 hover:border-klawsome-navy'
+                  } bg-white/40`}
+                >
+                  <img
+                    src={img.url}
+                    alt={img.altText || node.title}
+                    className="w-full h-full object-cover"
+                  />
+                </button>
+              ))}
+              {images.length === 0 && (
+                <div className="aspect-square rounded-2xl bg-white/40 border-2 border-white/70 flex items-center justify-center text-6xl">🎁</div>
+              )}
+            </div>
           </div>
 
           {/* Purchase block — sits right under the gallery on tablet/mobile */}
