@@ -150,7 +150,7 @@ const Rewards = () => {
             {BENEFITS.map((b) => (
               <div key={b.title} className="relative rounded-3xl bg-klawsome-baby-blue/40 border border-klawsome-baby-blue p-8 text-center shadow-sm hover:-translate-y-1 hover:shadow-lg transition-all">
                 <Sparkle className="absolute -top-4 -right-3 w-10 md:w-12" />
-                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy text-xl mb-3">{b.title}</h3>
+                <h3 className="ds-h3 text-xl mb-3">{b.title}</h3>
                 <p className="ds-body">{b.body}</p>
               </div>
             ))}
@@ -177,7 +177,7 @@ const Rewards = () => {
                 <p className="ds-eyebrow">Tier {i + 1}</p>
 
                 {/* Row 2: Name — fixed height so 1- and 2-line names align */}
-                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--yellow uppercase min-h-[4rem] flex items-start">
+                <h3 className="ds-h3 uppercase min-h-[4rem] flex items-start">
                   {tier.name}
                 </h3>
 

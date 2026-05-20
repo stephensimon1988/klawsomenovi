@@ -106,7 +106,7 @@ const Rental = () => {
                       : 'bg-background border border-border'
                   }`}
                 >
-                  <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy mb-2">{p.name}</h3>
+                  <h3 className="ds-h3 mb-2">{p.name}</h3>
                   <p className={`${compact ? 'text-3xl' : 'text-4xl'} font-heading font-bold mb-4 leading-none`}>
                     {p.price}
                   </p>

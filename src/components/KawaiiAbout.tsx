@@ -43,7 +43,7 @@ const KawaiiAbout = () => {
                   <img src={fallbackImages[index] || fallbackImages[0]} alt={step.title} className="max-h-full max-w-full object-contain" />
                 )}
               </div>
-              <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy text-2xl md:text-3xl">{step.title}</h3>
+              <h3 className="ds-h3 text-2xl md:text-3xl">{step.title}</h3>
             </div>
           ))}
         </div>

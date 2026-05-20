@@ -69,7 +69,7 @@ const KawaiiNews = () => {
                 />
               </div>
               <div className="p-6">
-                <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy text-lg mb-3">{article.title}</h3>
+                <h3 className="ds-h3 text-lg mb-3">{article.title}</h3>
                 <span className="text-primary text-sm font-heading font-bold tracking-wider uppercase">Read More →</span>
               </div>
             </a>
