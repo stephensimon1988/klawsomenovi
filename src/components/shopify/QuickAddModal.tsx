@@ -167,9 +167,9 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
           <X className="w-6 h-6" />
         </button>
 
-        <div className="relative z-10 grid grid-cols-1 md:grid-cols-2 gap-6 p-6 md:p-8">
+        <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
           {/* Gallery */}
-          <div>
+          <div className="lg:row-span-2">
             <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70">
               {images[imgIdx] ? (
                 <img
@@ -200,7 +200,7 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
               )}
             </div>
             {images.length > 1 && (
-              <div className="mt-3 flex gap-2 overflow-x-auto pb-1">
+              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
                 {images.map((img, i) => (
                   <button
                     key={i}
@@ -216,18 +216,12 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
             )}
           </div>
 
-          {/* Details */}
-          <div className="text-klawsome-navy flex flex-col">
+          {/* Purchase block — sits right under the gallery on tablet/mobile */}
+          <div className="text-klawsome-navy flex flex-col order-2 lg:order-none">
             <h2 className="font-heading font-bold text-4xl md:text-5xl leading-tight">{node.title}</h2>
             <p className="mt-3 font-heading font-bold text-4xl text-klawsome-navy">
               {price ? `$${parseFloat(price.amount).toFixed(2)}` : '—'}
             </p>
-
-            {node.description && (
-              <p className="mt-5 text-lg text-klawsome-navy/90 font-body whitespace-pre-line max-h-56 overflow-y-auto pr-2">
-                {node.description}
-              </p>
-            )}
 
             {/* Option pickers */}
             <div className="mt-6 space-y-5">
@@ -310,6 +304,15 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
               </Button>
             </div>
           </div>
+
+          {/* Description — bottom on tablet/mobile, right column below purchase on desktop */}
+          {node.description && (
+            <div className="order-3 lg:order-none text-klawsome-navy">
+              <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
+                {node.description}
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
