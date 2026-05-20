@@ -215,39 +215,47 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
             </div>
             {images.length > 1 && (
               <div className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
-                {images.map((img, i) => (
-                  <button
-                    key={i}
-                    onClick={() => selectImage(i)}
-                    className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-2 transition ${
-                      i === imgIdx ? 'border-klawsome-navy ring-2 ring-klawsome-yellow' : 'border-white/60 hover:border-klawsome-navy'
-                    }`}
-                  >
-                    <img src={img.url} alt="" className="w-full h-full object-cover" />
-                  </button>
-                ))}
+                {images.map((img, i) => {
+                  const active = i === imgIdx;
+                  return (
+                    <button
+                      key={i}
+                      onClick={() => selectImage(i)}
+                      className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-[3px] transition-all duration-200 ${
+                        active
+                          ? 'border-klawsome-navy ring-2 ring-klawsome-yellow ring-offset-2 ring-offset-klawsome-baby-blue opacity-100 scale-105 shadow-md'
+                          : 'border-white/50 opacity-60 hover:opacity-100 hover:border-white'
+                      }`}
+                    >
+                      <img src={img.url} alt="" className="w-full h-full object-cover" />
+                    </button>
+                  );
+                })}
               </div>
             )}
 
             {/* Desktop: all images stacked in the left column */}
             <div className="hidden lg:flex flex-col gap-4">
-              {images.map((img, i) => (
-                <button
-                  key={i}
-                  onClick={() => selectImage(i)}
-                  className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition ${
-                    i === imgIdx
-                      ? 'border-klawsome-navy ring-2 ring-klawsome-yellow'
-                      : 'border-white/70 hover:border-klawsome-navy'
-                  } bg-white/40`}
-                >
-                  <img
-                    src={img.url}
-                    alt={img.altText || node.title}
-                    className="w-full h-full object-cover"
-                  />
-                </button>
-              ))}
+              {images.map((img, i) => {
+                const active = i === imgIdx;
+                return (
+                  <button
+                    key={i}
+                    onClick={() => selectImage(i)}
+                    className={`relative aspect-square rounded-2xl overflow-hidden border-[3px] transition-all duration-200 ${
+                      active
+                        ? 'border-klawsome-navy ring-2 ring-klawsome-yellow ring-offset-2 ring-offset-klawsome-baby-blue opacity-100 scale-[1.02] shadow-lg'
+                        : 'border-white/50 opacity-60 hover:opacity-100 hover:border-white'
+                    } bg-white/40`}
+                  >
+                    <img
+                      src={img.url}
+                      alt={img.altText || node.title}
+                      className="w-full h-full object-cover"
+                    />
+                  </button>
+                );
+              })}
               {images.length === 0 && (
                 <div className="aspect-square rounded-2xl bg-white/40 border-2 border-white/70 flex items-center justify-center text-6xl">🎁</div>
               )}
