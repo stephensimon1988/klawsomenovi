@@ -214,14 +214,14 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
               )}
             </div>
             {images.length > 1 && (
-              <div className="mt-3 flex gap-2 overflow-x-auto pb-1 lg:hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+              <div className="mt-3 grid grid-cols-4 gap-2 lg:hidden">
                 {images.map((img, i) => {
                   const active = i === imgIdx;
                   return (
                     <button
                       key={i}
                       onClick={() => selectImage(i)}
-                      className={`flex-shrink-0 w-20 h-20 rounded-xl overflow-hidden border-[3px] transition-all duration-200 ${
+                      className={`aspect-square w-full rounded-xl overflow-hidden border-[3px] transition-all duration-200 ${
                         active
                           ? 'border-klawsome-navy ring-2 ring-klawsome-yellow ring-offset-2 ring-offset-klawsome-baby-blue opacity-100 scale-105 shadow-md'
                           : 'border-white/50 opacity-60 hover:opacity-100 hover:border-white'
