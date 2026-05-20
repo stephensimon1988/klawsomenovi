@@ -20,6 +20,7 @@ import {
 import { useCartStore } from '@/stores/cartStore';
 import { CartDrawer } from './CartDrawer';
 import { toast } from 'sonner';
+import { QuickAddModal } from './QuickAddModal';
 
 async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
   const { sortKey, reverse } = shopifySortVars(sort);
@@ -192,8 +193,10 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
   const variant = n.variants.edges[0]?.node;
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
+  const [open, setOpen] = useState(false);
 
-  const handleAdd = async () => {
+  const handleAdd = async (e: React.MouseEvent) => {
+    e.stopPropagation();
     if (!variant) return;
     await addItem({
       product,
@@ -210,9 +213,14 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
   const cat = CATEGORIES.find((c) => c.match(n));
 
   return (
+    <>
     <div
       id={`product-${n.id}`}
-      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
+      onClick={() => setOpen(true)}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setOpen(true)}
+      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
     >
       <div className="img-hover aspect-square bg-secondary/40">
         {img ? (
@@ -253,5 +261,7 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
         </div>
       </div>
     </div>
+    <QuickAddModal product={product} open={open} onClose={() => setOpen(false)} />
+    </>
   );
 };
