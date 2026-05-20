@@ -43,7 +43,7 @@ const OurStory = () => {
 
       {/* Intro */}
       <section id="story-intro" className="section-y section-x">
-        <div className="ds-container-narrow">
+        <div className="ds-container">
           <p className="ds-lead text-foreground text-2xl md:text-3xl">
             {body}
           </p>
