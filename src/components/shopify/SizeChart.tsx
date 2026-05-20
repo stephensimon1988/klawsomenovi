@@ -32,14 +32,14 @@ function isTee(node: ShopifyProduct['node']): boolean {
 export const SizeChart = ({ node }: { node: ShopifyProduct['node'] }) => {
   const tee = isTee(node);
   return (
-    <div className="mt-3 rounded-2xl bg-white/15 backdrop-blur-xl border border-white/25 p-4 text-white">
-      <h4 className="font-heading font-bold text-sm mb-2">
+    <div className="mt-3 rounded-2xl bg-white/70 backdrop-blur-xl border-2 border-white p-4 text-klawsome-navy">
+      <h4 className="font-heading font-bold text-lg mb-2">
         {tee ? 'Unisex Tee Size Chart (Gildan, inches)' : 'US Apparel Size Chart (inches)'}
       </h4>
       <div className="overflow-x-auto">
-        <table className="w-full text-xs font-body">
+        <table className="w-full text-base font-body">
           <thead>
-            <tr className="text-left border-b border-white/25">
+            <tr className="text-left border-b-2 border-klawsome-navy/30">
               {tee ? (
                 <>
                   <th className="py-1.5 pr-3 font-heading">Size</th>
@@ -59,14 +59,14 @@ export const SizeChart = ({ node }: { node: ShopifyProduct['node'] }) => {
           <tbody>
             {tee
               ? TEE_ROWS.map((r) => (
-                  <tr key={r.size} className="border-b border-white/10 last:border-0">
+                  <tr key={r.size} className="border-b border-klawsome-navy/15 last:border-0">
                     <td className="py-1.5 pr-3 font-bold">{r.size}</td>
                     <td className="py-1.5 pr-3">{r.chest}</td>
                     <td className="py-1.5">{r.length}</td>
                   </tr>
                 ))
               : APPAREL_ROWS.map((r) => (
-                  <tr key={r.size} className="border-b border-white/10 last:border-0">
+                  <tr key={r.size} className="border-b border-klawsome-navy/15 last:border-0">
                     <td className="py-1.5 pr-3 font-bold">{r.size}</td>
                     <td className="py-1.5 pr-3">{r.bust}</td>
                     <td className="py-1.5 pr-3">{r.waist}</td>
@@ -76,7 +76,7 @@ export const SizeChart = ({ node }: { node: ShopifyProduct['node'] }) => {
           </tbody>
         </table>
       </div>
-      <p className="mt-2 text-[11px] text-white/70 font-body">
+      <p className="mt-2 text-sm text-klawsome-navy/70 font-body">
         Measure relaxed, under the arms across the fullest part of the chest. Garment may vary ±1″.
       </p>
     </div>
