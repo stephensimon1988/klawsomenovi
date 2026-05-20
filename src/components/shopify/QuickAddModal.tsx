@@ -183,8 +183,8 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
         <div className="relative z-10 grid grid-cols-1 lg:grid-cols-2 gap-6 p-6 md:p-8">
           {/* Gallery */}
           <div className="lg:row-span-2">
-            {/* Mobile/tablet: single hero + thumbnail strip */}
-            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70 lg:hidden">
+            {/* Single hero + thumbnail grid (all viewports) */}
+            <div className="relative aspect-square rounded-2xl overflow-hidden bg-white/40 border-2 border-white/70">
               {images[imgIdx] ? (
                 <img
                   src={images[imgIdx].url}
@@ -214,7 +214,7 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
               )}
             </div>
             {images.length > 1 && (
-              <div className="mt-3 grid grid-cols-4 gap-2 lg:hidden">
+              <div className="mt-3 grid grid-cols-4 md:grid-cols-6 gap-2">
                 {images.map((img, i) => {
                   const active = i === imgIdx;
                   return (
@@ -233,33 +233,6 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
                 })}
               </div>
             )}
-
-            {/* Desktop: all images stacked in the left column */}
-            <div className="hidden lg:flex flex-col gap-4">
-              {images.map((img, i) => {
-                const active = i === imgIdx;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => selectImage(i)}
-                    className={`relative aspect-square rounded-2xl overflow-hidden border-[3px] transition-all duration-200 ${
-                      active
-                        ? 'border-klawsome-navy ring-2 ring-klawsome-yellow ring-offset-2 ring-offset-klawsome-baby-blue opacity-100 scale-[1.02] shadow-lg'
-                        : 'border-white/50 opacity-60 hover:opacity-100 hover:border-white'
-                    } bg-white/40`}
-                  >
-                    <img
-                      src={img.url}
-                      alt={img.altText || node.title}
-                      className="w-full h-full object-cover"
-                    />
-                  </button>
-                );
-              })}
-              {images.length === 0 && (
-                <div className="aspect-square rounded-2xl bg-white/40 border-2 border-white/70 flex items-center justify-center text-6xl">🎁</div>
-              )}
-            </div>
           </div>
 
           {/* Purchase block — sits right under the gallery on tablet/mobile */}
