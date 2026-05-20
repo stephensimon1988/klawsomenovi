@@ -115,7 +115,7 @@ const Gallery = () => {
       {orderedSections.map(([section, items]) => (
         <section key={section} id={slugify(section)} className="section-y section-x scroll-mt-32">
           <div className="ds-container">
-            <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-12 border-t border-foreground pt-6">
               {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">

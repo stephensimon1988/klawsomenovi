@@ -114,7 +114,7 @@ const CommunityPartners = () => {
       {/* Partners 4-col grid */}
       <section id="partners" className="section-y section-x scroll-mt-32">
         <div className="ds-container">
-          <h2 className="ds-h2 uppercase mb-12 border-t border-foreground pt-6">Our Partners</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-12 border-t border-foreground pt-6">Our Partners</h2>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {partners.map((p) => (
               <article
@@ -148,7 +148,7 @@ const CommunityPartners = () => {
       <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
         <div className="ds-container grid md:grid-cols-2 gap-12">
           <div>
-            <h2 className="ds-h2 uppercase mb-6">Easy ways to cross-promote</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Easy ways to cross-promote</h2>
             <ul className="space-y-3 font-body text-foreground">
               {crossPromoEasy.map((item) => (
                 <li key={item} className="flex items-start gap-3">
@@ -159,7 +159,7 @@ const CommunityPartners = () => {
             </ul>
           </div>
           <div>
-            <h2 className="ds-h2 uppercase mb-6">Want to go further?</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-6">Want to go further?</h2>
             <ul className="space-y-3 font-body text-foreground">
               {crossPromoInvolved.map((item) => (
                 <li key={item} className="flex items-start gap-3">

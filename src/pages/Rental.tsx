@@ -106,7 +106,7 @@ const Rental = () => {
                       : 'bg-background border border-border'
                   }`}
                 >
-                  <h3 className="ds-h3 mb-2">{p.name}</h3>
+                  <h3 className="ds-h3 ds-stroke ds-stroke--h3 ds-stroke--navy mb-2">{p.name}</h3>
                   <p className={`${compact ? 'text-3xl' : 'text-4xl'} font-heading font-bold mb-4 leading-none`}>
                     {p.price}
                   </p>
@@ -297,7 +297,7 @@ const Rental = () => {
         <section id="rental-faq" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
           <div className="ds-container-narrow">
             <p className="ds-eyebrow text-center">FAQ</p>
-            <h2 className="ds-h2 mb-8 text-center">Frequently Asked Questions</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-8 text-center">Frequently Asked Questions</h2>
             <Accordion type="single" collapsible className="w-full">
               {rentalFaqs.map((item) => (
                 <AccordionItem key={item.id} value={item.id} className="border-b border-border">
@@ -330,7 +330,7 @@ const Rental = () => {
             <div className="ds-container">
               <div className="max-w-2xl mb-12 mx-auto text-center">
                 <p className="ds-eyebrow">Real Events</p>
-                <h2 className="ds-h2 mb-4">From our parties to yours</h2>
+                <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">From our parties to yours</h2>
                 <p className="ds-lead">
                   A peek at recent rentals — KFT pop-ups, Onezo, Halloween at the house, and birthdays we've hosted.
                 </p>
@@ -364,7 +364,7 @@ const Rental = () => {
       <section id="waiver" className="section-y section-x">
         <div className="ds-container max-w-3xl text-center">
           <p className="ds-eyebrow">Required Paperwork</p>
-          <h2 className="ds-h2 mb-4">Liability Release Waiver</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Liability Release Waiver</h2>
           <p className="ds-lead mb-8">
             All rental hosts must sign a liability release waiver before the event begins. Download, review, and bring it with you — or we'll send it digitally with your booking confirmation.
           </p>
