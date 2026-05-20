@@ -87,11 +87,11 @@ const FloatingContactWidget = () => {
             initial={{ opacity: 0, x: 20, scale: 0.8 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ type: 'spring', stiffness: 200, damping: 18, delay: 0.3 }}
-            className="pointer-events-auto relative bg-white border-2 border-klawsome-navy rounded-2xl px-3 py-2 sm:px-6 sm:py-3 shadow-lg hover:scale-105 transition-transform font-heading font-bold text-klawsome-navy text-sm sm:text-xl leading-tight text-center"
+            className="pointer-events-auto relative bg-white border-2 border-klawsome-navy rounded-2xl px-4 py-3 sm:px-7 sm:py-4 shadow-lg hover:scale-105 transition-transform font-heading font-bold text-base sm:text-2xl leading-tight text-center ds-stroke ds-stroke--h3 ds-stroke--red"
             aria-label="Contact us"
           >
             <span className="block">We'd love to</span>
-            <span className="block text-primary">hear from you!</span>
+            <span className="block">hear from you!</span>
             <span
               role="button"
               tabIndex={0}
