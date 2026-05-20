@@ -215,39 +215,40 @@ html {
     --stroke-inner: hsl(var(--klawsome-yellow));
     --stroke-outer: hsl(var(--klawsome-red));
     --stroke-inner-w: 2px;
-    --stroke-outer-w: 5px;
+    --stroke-outer-w: 7px;
+    --stroke-outer-blur: 2.5px;
     color: var(--stroke-fill);
     paint-order: stroke fill;
     text-shadow:
-      /* inner ring */
-      calc(var(--stroke-inner-w) * -1) calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
-      var(--stroke-inner-w) calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
-      calc(var(--stroke-inner-w) * -1) var(--stroke-inner-w) 0 var(--stroke-inner),
-      var(--stroke-inner-w) var(--stroke-inner-w) 0 var(--stroke-inner),
-      0 calc(var(--stroke-inner-w) * -1) 0 var(--stroke-inner),
-      0 var(--stroke-inner-w) 0 var(--stroke-inner),
-      calc(var(--stroke-inner-w) * -1) 0 0 var(--stroke-inner),
-      var(--stroke-inner-w) 0 0 var(--stroke-inner),
-      /* outer ring — cardinals + diagonals + half-step smoothing */
-      calc(var(--stroke-outer-w) * -1) 0 0 var(--stroke-outer),
-      var(--stroke-outer-w) 0 0 var(--stroke-outer),
-      0 calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
-      0 var(--stroke-outer-w) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -0.8) calc(var(--stroke-outer-w) * -0.8) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * 0.8) calc(var(--stroke-outer-w) * -0.8) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -0.8) calc(var(--stroke-outer-w) * 0.8) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * 0.8) calc(var(--stroke-outer-w) * 0.8) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -0.5) calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * 0.5) calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -0.5) var(--stroke-outer-w) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * 0.5) var(--stroke-outer-w) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -1) calc(var(--stroke-outer-w) * -0.5) 0 var(--stroke-outer),
-      var(--stroke-outer-w) calc(var(--stroke-outer-w) * -0.5) 0 var(--stroke-outer),
-      calc(var(--stroke-outer-w) * -1) calc(var(--stroke-outer-w) * 0.5) 0 var(--stroke-outer),
-      var(--stroke-outer-w) calc(var(--stroke-outer-w) * 0.5) 0 var(--stroke-outer);
+      /* inner ring — solid, slight blur softens corners */
+      calc(var(--stroke-inner-w) * -1) calc(var(--stroke-inner-w) * -1) 0.5px var(--stroke-inner),
+      var(--stroke-inner-w) calc(var(--stroke-inner-w) * -1) 0.5px var(--stroke-inner),
+      calc(var(--stroke-inner-w) * -1) var(--stroke-inner-w) 0.5px var(--stroke-inner),
+      var(--stroke-inner-w) var(--stroke-inner-w) 0.5px var(--stroke-inner),
+      0 calc(var(--stroke-inner-w) * -1) 0.5px var(--stroke-inner),
+      0 var(--stroke-inner-w) 0.5px var(--stroke-inner),
+      calc(var(--stroke-inner-w) * -1) 0 0.5px var(--stroke-inner),
+      var(--stroke-inner-w) 0 0.5px var(--stroke-inner),
+      /* outer ring — blurred for rounded corners, many angles for solidity */
+      calc(var(--stroke-outer-w) * -1) 0 var(--stroke-outer-blur) var(--stroke-outer),
+      var(--stroke-outer-w) 0 var(--stroke-outer-blur) var(--stroke-outer),
+      0 calc(var(--stroke-outer-w) * -1) var(--stroke-outer-blur) var(--stroke-outer),
+      0 var(--stroke-outer-w) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.71) calc(var(--stroke-outer-w) * -0.71) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.71) calc(var(--stroke-outer-w) * -0.71) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.71) calc(var(--stroke-outer-w) * 0.71) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.71) calc(var(--stroke-outer-w) * 0.71) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.38) calc(var(--stroke-outer-w) * -0.92) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.38) calc(var(--stroke-outer-w) * -0.92) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.38) calc(var(--stroke-outer-w) * 0.92) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.38) calc(var(--stroke-outer-w) * 0.92) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.92) calc(var(--stroke-outer-w) * -0.38) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.92) calc(var(--stroke-outer-w) * -0.38) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * -0.92) calc(var(--stroke-outer-w) * 0.38) var(--stroke-outer-blur) var(--stroke-outer),
+      calc(var(--stroke-outer-w) * 0.92) calc(var(--stroke-outer-w) * 0.38) var(--stroke-outer-blur) var(--stroke-outer);
   }
-  .ds-stroke--h1 { --stroke-inner-w: 3px; --stroke-outer-w: 6px; }
-  .ds-stroke--h3 { --stroke-inner-w: 1.5px; --stroke-outer-w: 3.5px; }
+  .ds-stroke--h1 { --stroke-inner-w: 3px; --stroke-outer-w: 8px; --stroke-outer-blur: 3px; }
+  .ds-stroke--h3 { --stroke-inner-w: 1.5px; --stroke-outer-w: 5.5px; --stroke-outer-blur: 2px; }
 
   .ds-stroke--navy {
     --stroke-fill: hsl(var(--klawsome-navy));
