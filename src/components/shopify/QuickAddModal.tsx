@@ -75,6 +75,9 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
   useEffect(() => {
     const variantImgUrl = matchedVariant?.image?.url;
     if (!variantImgUrl) return;
+    // If the currently displayed image already matches the variant's image,
+    // don't snap to the first occurrence (handles duplicates and gallery clicks).
+    if (images[imgIdx]?.url === variantImgUrl) return;
     const idx = images.findIndex((i) => i.url === variantImgUrl);
     if (idx >= 0 && idx !== imgIdx) setImgIdx(idx);
   }, [matchedVariant, images]); // eslint-disable-line react-hooks/exhaustive-deps
