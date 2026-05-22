@@ -86,9 +86,13 @@ const KawaiiReviews = () => {
                 </div>
                 <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                    <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
-                  </div>
+                  {review.photo ? (
+                    <img src={review.photo} alt={review.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                      <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
+                    </div>
+                  )}
                   <div>
                     <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
                     <p className="text-muted-foreground text-xs font-body">{review.role}</p>
@@ -116,9 +120,13 @@ const KawaiiReviews = () => {
                   </div>
                   <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                      <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
-                    </div>
+                    {review.photo ? (
+                      <img src={review.photo} alt={review.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                        <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
+                      </div>
+                    )}
                     <div>
                       <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
                       <p className="text-muted-foreground text-xs font-body">{review.role}</p>
