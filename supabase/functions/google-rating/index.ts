@@ -31,7 +31,7 @@ serve(async (req) => {
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": apiKey,
-          "X-Goog-FieldMask": "places.rating,places.userRatingCount",
+          "X-Goog-FieldMask": "places.rating,places.userRatingCount,places.reviews",
         },
         body: JSON.stringify({
           textQuery: "Klawsome! Novi Michigan",
@@ -52,10 +52,19 @@ serve(async (req) => {
     console.log("Places API response:", JSON.stringify(data));
     const place = data.places?.[0];
 
+    const reviews = (place?.reviews || []).map((r: any) => ({
+      author: r.authorAttribution?.displayName || "Google user",
+      authorPhoto: r.authorAttribution?.photoUri || null,
+      rating: r.rating || 5,
+      text: r.text?.text || r.originalText?.text || "",
+      relativeTime: r.relativePublishTimeDescription || "",
+    })).filter((r: any) => r.text);
+
     return new Response(
       JSON.stringify({
         rating: place?.rating || 4.9,
         reviewCount: place?.userRatingCount || null,
+        reviews,
         source: place ? "google" : "fallback",
       }),
       {

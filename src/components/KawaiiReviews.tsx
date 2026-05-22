@@ -3,13 +3,17 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import { useCmsTable, type Review } from '@/hooks/useCmsContent';
-const reviewsImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-holding-candies-party.webp';
+
+type DisplayReview = { name: string; role: string; text: string; photo?: string | null };
 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
-  const reviews = (cmsReviews && cmsReviews.length > 0)
-    ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
-    : [];
+  const [googleReviews, setGoogleReviews] = useState<DisplayReview[]>([]);
+  const reviews: DisplayReview[] = googleReviews.length > 0
+    ? googleReviews
+    : (cmsReviews && cmsReviews.length > 0
+        ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
+        : []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rating, setRating] = useState(4.9);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
@@ -29,6 +33,16 @@ const KawaiiReviews = () => {
         if (!error && data) {
           if (data.rating) setRating(data.rating);
           if (data.reviewCount) setReviewCount(data.reviewCount);
+          if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+            setGoogleReviews(
+              data.reviews.map((r: any) => ({
+                name: r.author,
+                role: r.relativeTime || 'Google review',
+                text: r.text,
+                photo: r.authorPhoto,
+              }))
+            );
+          }
         }
       } catch (e) {
         console.warn('Could not fetch Google rating:', e);
@@ -72,9 +86,13 @@ const KawaiiReviews = () => {
                 </div>
                 <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                    <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
-                  </div>
+                  {review.photo ? (
+                    <img src={review.photo} alt={review.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                      <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
+                    </div>
+                  )}
                   <div>
                     <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
                     <p className="text-muted-foreground text-xs font-body">{review.role}</p>
@@ -102,9 +120,13 @@ const KawaiiReviews = () => {
                   </div>
                   <p className="text-foreground font-body leading-relaxed mb-6 flex-1">"{review.text}"</p>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
-                      <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
-                    </div>
+                    {review.photo ? (
+                      <img src={review.photo} alt={review.name} className="w-10 h-10 rounded-full object-cover" loading="lazy" referrerPolicy="no-referrer" />
+                    ) : (
+                      <div className="w-10 h-10 rounded-full bg-secondary flex items-center justify-center">
+                        <span className="text-sm font-heading font-bold text-foreground">{review.name.charAt(0)}</span>
+                      </div>
+                    )}
                     <div>
                       <p className="font-heading font-bold text-sm text-foreground">{review.name}</p>
                       <p className="text-muted-foreground text-xs font-body">{review.role}</p>
