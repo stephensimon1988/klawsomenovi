@@ -3,13 +3,17 @@ import { ChevronLeft, ChevronRight, Star } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useGsapScroll } from '@/hooks/useGsapScroll';
 import { useCmsTable, type Review } from '@/hooks/useCmsContent';
-const reviewsImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-bunny-holding-candies-party.webp';
+
+type DisplayReview = { name: string; role: string; text: string; photo?: string | null };
 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
-  const reviews = (cmsReviews && cmsReviews.length > 0)
-    ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
-    : [];
+  const [googleReviews, setGoogleReviews] = useState<DisplayReview[]>([]);
+  const reviews: DisplayReview[] = googleReviews.length > 0
+    ? googleReviews
+    : (cmsReviews && cmsReviews.length > 0
+        ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
+        : []);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rating, setRating] = useState(4.9);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
@@ -29,6 +33,16 @@ const KawaiiReviews = () => {
         if (!error && data) {
           if (data.rating) setRating(data.rating);
           if (data.reviewCount) setReviewCount(data.reviewCount);
+          if (Array.isArray(data.reviews) && data.reviews.length > 0) {
+            setGoogleReviews(
+              data.reviews.map((r: any) => ({
+                name: r.author,
+                role: r.relativeTime || 'Google review',
+                text: r.text,
+                photo: r.authorPhoto,
+              }))
+            );
+          }
         }
       } catch (e) {
         console.warn('Could not fetch Google rating:', e);
