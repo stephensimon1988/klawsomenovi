@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, Minus, Plus, Ruler, X, Loader2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import LottieAccent from '@/components/LottieAccent';
@@ -44,12 +44,15 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
 
+  const lastSyncedVariantId = useRef<string | null>(null);
+
   useEffect(() => {
     if (open) {
       setSelectedOptions(initialOptions);
       setImgIdx(0);
       setQty(1);
       setShowSize(false);
+      lastSyncedVariantId.current = null;
     }
   }, [open, initialOptions]);
 
@@ -71,12 +74,14 @@ export const QuickAddModal = ({ product, open, onClose }: Props) => {
     );
   }, [variants, selectedOptions]);
 
-  // Sync gallery image to matched variant's image when variant changes
+  // Sync gallery image to matched variant's image ONLY when the variant actually changes
+  // (i.e. user picked a different option pill). Manual thumbnail clicks should stick.
   useEffect(() => {
+    const variantId = matchedVariant?.id ?? null;
+    if (variantId === lastSyncedVariantId.current) return;
+    lastSyncedVariantId.current = variantId;
     const variantImgUrl = matchedVariant?.image?.url;
     if (!variantImgUrl) return;
-    // If the currently displayed image already matches the variant's image,
-    // don't snap to the first occurrence (handles duplicates and gallery clicks).
     if (images[imgIdx]?.url === variantImgUrl) return;
     const idx = images.findIndex((i) => i.url === variantImgUrl);
     if (idx >= 0 && idx !== imgIdx) setImgIdx(idx);
