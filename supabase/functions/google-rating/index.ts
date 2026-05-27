@@ -31,7 +31,7 @@ serve(async (req) => {
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": apiKey,
-          "X-Goog-FieldMask": "places.rating,places.userRatingCount,places.reviews",
+          "X-Goog-FieldMask": "places.id,places.rating,places.userRatingCount,places.reviews",
         },
         body: JSON.stringify({
           textQuery: "Klawsome! Novi Michigan",
@@ -49,7 +49,6 @@ serve(async (req) => {
     }
 
     const data = await searchRes.json();
-    console.log("Places API response:", JSON.stringify(data));
     const place = data.places?.[0];
 
     const reviews = (place?.reviews || []).map((r: any) => ({
@@ -58,7 +57,11 @@ serve(async (req) => {
       rating: r.rating || 5,
       text: r.text?.text || r.originalText?.text || "",
       relativeTime: r.relativePublishTimeDescription || "",
-    })).filter((r: any) => r.text);
+      publishTime: r.publishTime || "",
+    }))
+      .filter((r: any) => r.text)
+      // Most recent first
+      .sort((a: any, b: any) => (b.publishTime || "").localeCompare(a.publishTime || ""));
 
     return new Response(
       JSON.stringify({

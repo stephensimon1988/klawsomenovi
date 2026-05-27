@@ -9,11 +9,20 @@ type DisplayReview = { name: string; role: string; text: string; photo?: string 
 const KawaiiReviews = () => {
   const { data: cmsReviews } = useCmsTable<Review>('reviews');
   const [googleReviews, setGoogleReviews] = useState<DisplayReview[]>([]);
-  const reviews: DisplayReview[] = googleReviews.length > 0
-    ? googleReviews
-    : (cmsReviews && cmsReviews.length > 0
-        ? cmsReviews.map(r => ({ name: r.author_name, role: r.author_role, text: r.review_text }))
-        : []);
+  const cmsMapped: DisplayReview[] = (cmsReviews || []).map(r => ({
+    name: r.author_name,
+    role: r.author_role,
+    text: r.review_text,
+  }));
+  // Show live Google reviews first (most recent), then supplement with CMS reviews,
+  // de-duped by author+text so we don't repeat entries.
+  const seen = new Set<string>();
+  const reviews: DisplayReview[] = [...googleReviews, ...cmsMapped].filter(r => {
+    const key = `${r.name}::${r.text.slice(0, 60)}`;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rating, setRating] = useState(4.9);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
