@@ -76,13 +76,20 @@ const KawaiiHero = () => {
     <section id="hero" ref={sectionRef} className="relative min-h-screen flex items-end overflow-hidden">
       <div
         ref={bgRef}
-        className="absolute inset-0 bg-cover bg-center will-change-transform"
-        style={{
-          backgroundImage: `url('${heroImage}')`,
-          top: '-60px',
-          bottom: '-60px',
-        }}
-      />
+        className="absolute inset-0 will-change-transform overflow-hidden"
+        style={{ top: '-60px', bottom: '-60px' }}
+      >
+        <video
+          src="/hero-intro.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          poster={heroImage}
+          className="w-full h-full object-cover"
+        />
+      </div>
       <div className="absolute inset-0 bg-white/55" />
 
       <LottieAccent type="sparkle" className="absolute top-24 right-12 opacity-30 z-10" size={80} />
