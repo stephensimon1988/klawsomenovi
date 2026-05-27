@@ -31,7 +31,7 @@ serve(async (req) => {
         headers: {
           "Content-Type": "application/json",
           "X-Goog-Api-Key": apiKey,
-          "X-Goog-FieldMask": "places.rating,places.userRatingCount,places.reviews",
+          "X-Goog-FieldMask": "places.id,places.rating,places.userRatingCount,places.reviews",
         },
         body: JSON.stringify({
           textQuery: "Klawsome! Novi Michigan",
@@ -49,8 +49,32 @@ serve(async (req) => {
     }
 
     const data = await searchRes.json();
-    console.log("Places API response:", JSON.stringify(data));
-    const place = data.places?.[0];
+    let place = data.places?.[0];
+
+    // Fetch place details sorted by NEWEST to get the most recent reviews
+    if (place?.id) {
+      try {
+        const detailsRes = await fetch(
+          `https://places.googleapis.com/v1/places/${place.id}?reviewsSort=NEWEST`,
+          {
+            headers: {
+              "X-Goog-Api-Key": apiKey,
+              "X-Goog-FieldMask": "id,rating,userRatingCount,reviews",
+            },
+          }
+        );
+        if (detailsRes.ok) {
+          const details = await detailsRes.json();
+          if (details?.reviews?.length) {
+            place = { ...place, ...details };
+          }
+        } else {
+          console.warn("Place details fetch failed:", detailsRes.status, await detailsRes.text());
+        }
+      } catch (e) {
+        console.warn("Place details fetch error:", e);
+      }
+    }
 
     const reviews = (place?.reviews || []).map((r: any) => ({
       author: r.authorAttribution?.displayName || "Google user",
@@ -58,6 +82,7 @@ serve(async (req) => {
       rating: r.rating || 5,
       text: r.text?.text || r.originalText?.text || "",
       relativeTime: r.relativePublishTimeDescription || "",
+      publishTime: r.publishTime || "",
     })).filter((r: any) => r.text);
 
     return new Response(
