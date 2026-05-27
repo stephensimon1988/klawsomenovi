@@ -49,32 +49,7 @@ serve(async (req) => {
     }
 
     const data = await searchRes.json();
-    let place = data.places?.[0];
-
-    // Fetch place details sorted by NEWEST to get the most recent reviews
-    if (place?.id) {
-      try {
-        const detailsRes = await fetch(
-          `https://places.googleapis.com/v1/places/${place.id}?reviewsSort=NEWEST`,
-          {
-            headers: {
-              "X-Goog-Api-Key": apiKey,
-              "X-Goog-FieldMask": "id,rating,userRatingCount,reviews",
-            },
-          }
-        );
-        if (detailsRes.ok) {
-          const details = await detailsRes.json();
-          if (details?.reviews?.length) {
-            place = { ...place, ...details };
-          }
-        } else {
-          console.warn("Place details fetch failed:", detailsRes.status, await detailsRes.text());
-        }
-      } catch (e) {
-        console.warn("Place details fetch error:", e);
-      }
-    }
+    const place = data.places?.[0];
 
     const reviews = (place?.reviews || []).map((r: any) => ({
       author: r.authorAttribution?.displayName || "Google user",
@@ -83,7 +58,10 @@ serve(async (req) => {
       text: r.text?.text || r.originalText?.text || "",
       relativeTime: r.relativePublishTimeDescription || "",
       publishTime: r.publishTime || "",
-    })).filter((r: any) => r.text);
+    }))
+      .filter((r: any) => r.text)
+      // Most recent first
+      .sort((a: any, b: any) => (b.publishTime || "").localeCompare(a.publishTime || ""));
 
     return new Response(
       JSON.stringify({
