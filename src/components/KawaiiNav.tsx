@@ -21,7 +21,6 @@ const moreLinks = [
   { label: 'Business Development', href: '/business-development' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Our Story', href: '/our-story' },
-  { label: 'Team', href: '/team' },
   { label: 'Community Partners', href: '/community-partners' },
   { label: 'News', href: '/news' },
   { label: 'Info Hub', href: '/info-hub' },
