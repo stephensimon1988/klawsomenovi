@@ -1390,13 +1390,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 11
     },
     {
-      "id": "71559b37-b842-4117-90b1-36d91ee7003e",
-      "section": "semi_private",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.webp",
-      "caption": "Full party area with holiday decorations",
-      "sort_order": 13
-    },
-    {
       "id": "7cc3c8fb-07bd-42d3-b0fc-cb09943ac701",
       "section": "private_party",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef928fc3-8ede-4daf-b733-6bc18ea62d09/PXL_20251123_171320314.MP.webp",
