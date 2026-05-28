@@ -3,6 +3,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
+import ourStoryIntroImage from '@/assets/our-story-intro.png';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
@@ -44,9 +45,21 @@ const OurStory = () => {
       {/* Intro */}
       <section id="story-intro" className="section-y section-x">
         <div className="ds-container">
-          <p className="ds-lead text-foreground text-2xl md:text-3xl">
-            {body}
-          </p>
+          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+            <div>
+              <p className="ds-lead text-foreground text-2xl md:text-3xl whitespace-pre-line">
+                {body}
+              </p>
+            </div>
+            <div className="img-hover rounded-kawaii shadow-lg">
+              <img
+                src={ourStoryIntroImage}
+                alt="Klawsome community celebration"
+                loading="lazy"
+                className="w-full h-auto object-cover aspect-[4/5]"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -57,7 +70,7 @@ const OurStory = () => {
         const variant = VARIANTS[idx % VARIANTS.length];
         const stroke = thisColor === 'white' ? 'baby-pink' : 'baby-blue';
         const sideImage = SECTION_IMAGES[idx];
-        const imageOnLeft = idx % 2 === 0;
+        const imageOnLeft = idx % 2 !== 0;
         return (
           <div key={s.id}>
             {prevColor !== thisColor && (
