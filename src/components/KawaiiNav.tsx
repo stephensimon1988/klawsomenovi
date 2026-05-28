@@ -10,7 +10,6 @@ import { openBookingModal } from './BookNowDialog';
 const navLinks = [
   { label: 'HOME', href: '#hero' },
   { label: 'BIRTHDAYS', href: '/birthdays' },
-  { label: 'RENTAL', href: '/rental' },
   { label: 'GIFT CARDS', href: 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order' },
   { label: 'CLAW GAME', href: '/claw-game' },
   { label: 'CAREERS', href: '/careers' },
