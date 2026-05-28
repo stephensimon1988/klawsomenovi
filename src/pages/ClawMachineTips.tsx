@@ -212,13 +212,12 @@ const ClawMachineTips = () => {
       <section id="tips-beginner" className="section-y section-x">
         <div className="ds-container">
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative order-2 md:order-1">
-              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] rotate-2" aria-hidden />
-              <img
+            <div className="order-2 md:order-1">
+              <FramedImage
                 src={beginnerPhoto}
                 alt="Klawsome storefront with a welcoming row of beginner-friendly claw machines"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
+                color="lavender"
+                className="w-full h-[420px] md:h-[520px]"
               />
             </div>
             <div className="order-1 md:order-2">
