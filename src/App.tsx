@@ -26,7 +26,6 @@ const Rental = lazy(() => import("./pages/Rental.tsx"));
 const Store = lazy(() => import("./pages/Store.tsx"));
 const CommunityPartners = lazy(() => import("./pages/CommunityPartners.tsx"));
 const InfoHub = lazy(() => import("./pages/InfoHub.tsx"));
-const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const ClawMachineTips = lazy(() => import("./pages/ClawMachineTips.tsx"));
 
@@ -64,7 +63,6 @@ const App = () => (
           <Route path="/community" element={<Navigate to="/community-partners" replace />} />
           <Route path="/community-partners" element={<CommunityPartners />} />
           <Route path="/info-hub" element={<InfoHub />} />
-          <Route path="/contact" element={<Contact />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
           <Route path="/claw-game" element={<ClawGameRedirect />} />
