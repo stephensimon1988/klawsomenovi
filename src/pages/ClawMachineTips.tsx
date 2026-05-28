@@ -3,6 +3,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
+import FramedImage from '@/components/FramedImage';
 import heroImage from '@/assets/claw-machine-header.jpg';
 import plushiesImage from '@/assets/claw-machine-plushies.jpg';
 import pandasImage from '@/assets/claw-machine-pandas.jpg';
@@ -87,15 +88,12 @@ const ClawMachineTips = () => {
                 </p>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] -rotate-2" aria-hidden />
-              <img
-                src={plushiesImage}
-                alt="Claw machine packed with pink and brown plush toys"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={plushiesImage}
+              alt="Claw machine packed with pink and brown plush toys"
+              color="baby-pink"
+              className="w-full h-[420px] md:h-[520px]"
+            />
           </div>
         </div>
       </section>
