@@ -94,9 +94,9 @@ const Gallery = () => {
       />
 
       {orderedSections.length > 0 && (
-        <div className="sticky top-20 z-40 bg-background/90 backdrop-blur-md border-b border-border">
+        <div className="sticky top-20 z-40 bg-background/90 backdrop-blur-md">
           <div className="ds-container section-x">
-            <nav className="flex flex-wrap gap-2 py-3" aria-label="Gallery sections">
+            <nav className="flex flex-wrap gap-2 py-8" aria-label="Gallery sections">
               {orderedSections.map(([section]) => (
                 <button
                   key={section}
@@ -115,7 +115,7 @@ const Gallery = () => {
       {orderedSections.map(([section, items]) => (
         <section key={section} id={slugify(section)} className="section-y section-x scroll-mt-32">
           <div className="ds-container">
-            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-12 border-t border-foreground pt-6">
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-12">
               {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
             </h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
