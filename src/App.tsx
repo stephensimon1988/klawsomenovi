@@ -28,6 +28,7 @@ const CommunityPartners = lazy(() => import("./pages/CommunityPartners.tsx"));
 const InfoHub = lazy(() => import("./pages/InfoHub.tsx"));
 const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
+const ClawMachineTips = lazy(() => import("./pages/ClawMachineTips.tsx"));
 
 const queryClient = new QueryClient();
 
@@ -58,6 +59,7 @@ const App = () => (
           <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
+          <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
