@@ -22,15 +22,15 @@ const KawaiiVisit = () => {
 
   return (
     <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-      <div className="ds-container">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
+      <div className="ds-container-content">
+        <div className="ds-cols">
           <div ref={imageRef} style={{ opacity: 0 }}>
             <FramedImage
               src="/images/klawsome-storefront.webp"
               alt="Klawsome arcade storefront"
               color="lavender"
               sectionBg="baby-pink"
-              className="aspect-[4/5] w-full"
+              className="aspect-square w-full"
             />
           </div>
 

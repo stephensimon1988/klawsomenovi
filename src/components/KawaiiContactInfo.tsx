@@ -36,8 +36,8 @@ const items = [
 const KawaiiContactInfo = () => {
   return (
     <section className="bg-klawsome-baby-blue py-16 md:py-24">
-      <div className="ds-container px-4">
-        <div className="grid gap-10 md:grid-cols-2 md:gap-14 items-center">
+      <div className="ds-container-content px-4">
+        <div className="ds-cols">
           <FramedImage
             src={contactImage}
             alt="Klawsome friends ready to help"

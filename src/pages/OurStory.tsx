@@ -45,8 +45,8 @@ const OurStory = () => {
 
       {/* Intro */}
       <section id="story-intro" className="section-y section-x">
-        <div className="ds-container">
-          <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <div>
               <p className="ds-lead text-foreground text-2xl md:text-3xl whitespace-pre-line">
                 {body}
@@ -57,7 +57,7 @@ const OurStory = () => {
               alt="Klawsome community celebration"
               color="baby-pink"
               sectionBg="white"
-              className="w-full aspect-[4/5]"
+              className="w-full aspect-square"
             />
           </div>
         </div>
@@ -78,15 +78,15 @@ const OurStory = () => {
             )}
             <section id={`story-${slugify(s.title)}`} className={`section-y section-x ${idx % 2 === 0 ? 'bg-secondary/40' : ''}`}>
               {sideImage ? (
-                <div className="ds-container">
-                  <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
+                <div className="ds-container-content">
+                  <div className="ds-cols">
                     <div className={imageOnLeft ? 'md:order-1' : 'md:order-2'}>
                       <FramedImage
                         src={sideImage}
                         alt={s.title}
                         color={idx % 2 === 0 ? 'peach' : 'lavender'}
                         sectionBg={idx % 2 === 0 ? 'secondary' : 'white'}
-                        className="w-full aspect-[4/5]"
+                        className="w-full aspect-square"
                       />
                     </div>
                     <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>

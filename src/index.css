@@ -305,6 +305,10 @@ html {
   .ds-container-narrow { @apply container mx-auto max-w-3xl; }   /* prose / single-column */
   .ds-container-wide   { @apply container mx-auto max-w-[1536px]; }
 
+  /* Multi-column content sections — uniform width across the entire site. */
+  .ds-container-content { @apply container mx-auto max-w-7xl; }   /* 1280px */
+  .ds-cols              { @apply grid md:grid-cols-2 gap-10 lg:gap-16 items-center; }
+
   /* Section header pattern (eyebrow + h2 + optional intro) */
   .ds-eyebrow {
     @apply text-xs font-heading font-bold text-primary uppercase tracking-[0.2em] mb-4;
