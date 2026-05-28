@@ -108,6 +108,7 @@ const Birthdays = () => {
               src={pandaCatFoxParty}
               alt="Kawaii characters celebrating a birthday party"
               color="baby-blue"
+              sectionBg="navy"
               className="w-full aspect-square"
             />
 

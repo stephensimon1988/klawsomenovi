@@ -92,6 +92,7 @@ const ClawMachineTips = () => {
               src={plushiesImage}
               alt="Claw machine packed with pink and brown plush toys"
               color="baby-pink"
+              sectionBg="white"
               className="w-full h-[420px] md:h-[520px]"
             />
           </div>
@@ -151,6 +152,7 @@ const ClawMachineTips = () => {
                 src={pandasImage}
                 alt="Player lining up a claw drop over panda plushies near the chute"
                 color="baby-blue"
+                sectionBg="white"
                 className="w-full h-[420px] md:h-[520px]"
               />
             </div>
@@ -200,6 +202,7 @@ const ClawMachineTips = () => {
               src={watchPhoto}
               alt="Guests watching a claw machine at Klawsome before playing"
               color="mint"
+              sectionBg="secondary"
               className="w-full h-[420px] md:h-[520px]"
             />
           </div>
@@ -217,6 +220,7 @@ const ClawMachineTips = () => {
                 src={beginnerPhoto}
                 alt="Klawsome storefront with a welcoming row of beginner-friendly claw machines"
                 color="lavender"
+                sectionBg="white"
                 className="w-full h-[420px] md:h-[520px]"
               />
             </div>
@@ -247,6 +251,7 @@ const ClawMachineTips = () => {
               src={winPhoto}
               alt="Happy guests posing with their winnings at the Klawsome selfie wall"
               color="yellow"
+              sectionBg="baby-pink"
               className="w-full h-[420px] md:h-[520px]"
             />
             <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
