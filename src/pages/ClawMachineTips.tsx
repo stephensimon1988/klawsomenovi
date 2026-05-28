@@ -64,8 +64,8 @@ const ClawMachineTips = () => {
 
       {/* Section 1 — Basics */}
       <section id="tips-basics" className="section-y section-x">
-        <div className="ds-container">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <div>
               <p className="ds-eyebrow">Strategy Basics</p>
               <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">It's Skill, Not Just Luck</h2>
@@ -93,7 +93,7 @@ const ClawMachineTips = () => {
               alt="Claw machine packed with pink and brown plush toys"
               color="baby-pink"
               sectionBg="white"
-              className="w-full h-[420px] md:h-[520px]"
+              className="w-full aspect-square"
             />
           </div>
         </div>
@@ -103,7 +103,7 @@ const ClawMachineTips = () => {
 
       {/* Section 2 — Aim for the Right Plush */}
       <section id="tips-targets" className="section-y section-x bg-secondary/40">
-        <div className="ds-container">
+        <div className="ds-container-content">
           <div className="text-center mb-12">
             <p className="ds-eyebrow">Aim Smart</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase">Choose the Right Plush</h2>
@@ -145,15 +145,15 @@ const ClawMachineTips = () => {
 
       {/* Section 3 — Push, Don't Just Grab */}
       <section id="tips-push" className="section-y section-x">
-        <div className="ds-container">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <div className="order-2 md:order-1">
               <FramedImage
                 src={pandasImage}
                 alt="Player lining up a claw drop over panda plushies near the chute"
                 color="baby-blue"
                 sectionBg="white"
-                className="w-full h-[420px] md:h-[520px]"
+                className="w-full aspect-square"
               />
             </div>
             <div className="order-1 md:order-2">
@@ -180,8 +180,8 @@ const ClawMachineTips = () => {
 
       {/* Section 4 — Watch Before You Play */}
       <section id="tips-watch" className="section-y section-x bg-secondary/40">
-        <div className="ds-container">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <div>
               <p className="ds-eyebrow">Observe</p>
               <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-6">Watch Before You Play</h2>
@@ -203,7 +203,7 @@ const ClawMachineTips = () => {
               alt="Guests watching a claw machine at Klawsome before playing"
               color="mint"
               sectionBg="secondary"
-              className="w-full h-[420px] md:h-[520px]"
+              className="w-full aspect-square"
             />
           </div>
         </div>
@@ -213,15 +213,15 @@ const ClawMachineTips = () => {
 
       {/* Section 5 — Beginner Machines */}
       <section id="tips-beginner" className="section-y section-x">
-        <div className="ds-container">
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <div className="order-2 md:order-1">
               <FramedImage
                 src={beginnerPhoto}
                 alt="Klawsome storefront with a welcoming row of beginner-friendly claw machines"
                 color="lavender"
                 sectionBg="white"
-                className="w-full h-[420px] md:h-[520px]"
+                className="w-full aspect-square"
               />
             </div>
             <div className="order-1 md:order-2">
@@ -240,19 +240,19 @@ const ClawMachineTips = () => {
 
       {/* Section 6 — Pro Tips (boxed) */}
       <section id="tips-pro" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="ds-container">
+        <div className="ds-container-content">
           <div className="text-center mb-10">
             <p className="ds-eyebrow">Pro Tips</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase">Level Up Your Game</h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+          <div className="ds-cols">
             <FramedImage
               src={winPhoto}
               alt="Happy guests posing with their winnings at the Klawsome selfie wall"
               color="yellow"
               sectionBg="baby-pink"
-              className="w-full h-[420px] md:h-[520px]"
+              className="w-full aspect-square"
             />
             <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
               <ul className="space-y-5">

@@ -15,9 +15,9 @@ const KawaiiStory = () => {
     <section id="story" className="section-y section-x bg-secondary relative overflow-hidden">
       <LottieAccent type="sparkle" className="absolute bottom-8 right-12 opacity-15" size={80} />
 
-      <div className="ds-container">
-        <div ref={ref} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center" style={{ opacity: 0 }}>
-          <div className="md:col-span-6 md:order-2">
+      <div className="ds-container-content">
+        <div ref={ref} className="ds-cols" style={{ opacity: 0 }}>
+          <div className="md:order-2">
             <FramedImage
               src={content?.story_image_url || storyImage}
               alt={content?.story_title || 'The Klawsome Story'}
@@ -26,7 +26,7 @@ const KawaiiStory = () => {
               className="aspect-square w-full"
             />
           </div>
-          <div className="md:col-span-6 md:order-1">
+          <div className="md:order-1">
             <p className="ds-eyebrow mb-6">Our Story</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-8">
               {content?.story_title || 'The Klawsome Story'}

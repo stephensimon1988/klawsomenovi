@@ -52,10 +52,10 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
             <section
               className={`section-y section-x ${alt ? 'bg-secondary/50' : ''}`}
             >
-            <div className="ds-container">
-              <div className="grid gap-10 md:gap-16 items-center md:grid-cols-12">
+            <div className="ds-container-content">
+              <div className="ds-cols">
                 <div
-                  className={`md:col-span-6 ${flip ? 'md:order-2' : 'md:order-1'}`}
+                  className={flip ? 'md:order-2' : 'md:order-1'}
                 >
                   {hasImage ? (
                     <FramedImage
@@ -76,7 +76,7 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                 </div>
 
                 <div
-                  className={`md:col-span-6 ${flip ? 'md:order-1' : 'md:order-2'}`}
+                  className={flip ? 'md:order-1' : 'md:order-2'}
                 >
                   {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
                   {s.headline && <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-6">{s.headline}</h2>}

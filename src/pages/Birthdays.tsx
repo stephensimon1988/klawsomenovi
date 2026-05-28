@@ -102,8 +102,8 @@ const Birthdays = () => {
 
       {/* Party Rules */}
       <section id="party-rules" className="py-20 px-6 lg:px-12 bg-klawsome-navy">
-        <div className="container mx-auto max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div className="ds-container-content">
+          <div className="ds-cols">
             <FramedImage
               src={pandaCatFoxParty}
               alt="Kawaii characters celebrating a birthday party"
@@ -143,7 +143,7 @@ const Birthdays = () => {
 
       {/* Party Options — Comparison Table */}
       <section id="party-options" className="py-20 px-4 bg-primary">
-        <div className="container mx-auto max-w-5xl">
+        <div className="ds-container-content">
           <p className="ds-eyebrow text-klawsome-yellow mb-3 text-center">Party Options</p>
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4 text-center uppercase">
             Package Comparison
@@ -204,7 +204,7 @@ const Birthdays = () => {
       {/* Add-Ons */}
       <KawaiiDivider variant="bumps" from="red" to="baby-pink" stroke="white" height={90} />
       <section id="add-ons" className="py-20 px-4 bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="container mx-auto max-w-6xl">
+        <div className="ds-container-content">
           <p className="ds-eyebrow text-klawsome-navy mb-3 text-center">Options & Add-Ons</p>
           <h2 className="text-3xl md:text-5xl font-heading font-bold text-klawsome-navy mb-4 text-center uppercase">
             Make It Extra Special
