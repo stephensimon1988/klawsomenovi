@@ -21,7 +21,8 @@ const KawaiiStory = () => {
             <FramedImage
               src={content?.story_image_url || storyImage}
               alt={content?.story_title || 'The Klawsome Story'}
-              color="baby-blue"
+              color="peach"
+              sectionBg="secondary"
               className="aspect-square w-full"
             />
           </div>
