@@ -278,6 +278,24 @@ html {
 @layer components {
   /* Section wrappers — vertical rhythm */
   .section-y      { @apply py-24 md:py-24; }            /* standard 96px */
+
+  /* FramedImage — frame tilts at rest, straightens flush over the stationary
+     under-layer on hover while the photo stays upright and zooms in slightly. */
+  .framed-frame {
+    transform: rotate(var(--frame-rot, 5deg));
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .framed-img {
+    transform: rotate(var(--img-rot, -5deg)) scale(var(--img-scale, 1.15));
+    transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .group:hover .framed-frame {
+    transform: rotate(0deg);
+  }
+  .group:hover .framed-img {
+    transform: rotate(0deg) scale(var(--img-scale-hover, 1.22));
+  }
+
   .section-y-sm   { @apply py-16; }                     /* compact */
   .section-y-lg   { @apply py-28 md:py-32; }            /* generous, for hero-adjacent */
   .section-x      { @apply px-6 lg:px-12; }             /* horizontal gutters */
