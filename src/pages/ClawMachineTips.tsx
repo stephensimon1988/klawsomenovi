@@ -196,15 +196,12 @@ const ClawMachineTips = () => {
                 ))}
               </ul>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-white -rotate-2" aria-hidden />
-              <img
-                src={watchPhoto}
-                alt="Guests watching a claw machine at Klawsome before playing"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={watchPhoto}
+              alt="Guests watching a claw machine at Klawsome before playing"
+              color="mint"
+              className="w-full h-[420px] md:h-[520px]"
+            />
           </div>
         </div>
       </section>
