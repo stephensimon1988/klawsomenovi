@@ -33,9 +33,9 @@ const Gallery = () => {
 
   const sectionOrder = [
     'beginning',
-    'gallery',
     'private',
     'semi-private',
+    'gallery',
     'novi-community-fest',
     'trunk-or-treat',
     'canned-food-drive',
@@ -96,7 +96,7 @@ const Gallery = () => {
       {orderedSections.length > 0 && (
         <div className="sticky top-20 z-40 bg-background/90 backdrop-blur-md border-b border-border">
           <div className="ds-container section-x">
-            <nav className="flex gap-2 overflow-x-auto py-3 scrollbar-hide" aria-label="Gallery sections">
+            <nav className="flex flex-wrap gap-2 py-3" aria-label="Gallery sections">
               {orderedSections.map(([section]) => (
                 <button
                   key={section}
