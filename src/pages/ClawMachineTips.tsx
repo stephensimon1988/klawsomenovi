@@ -243,15 +243,12 @@ const ClawMachineTips = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-white rotate-2" aria-hidden />
-              <img
-                src={winPhoto}
-                alt="Happy guests posing with their winnings at the Klawsome selfie wall"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={winPhoto}
+              alt="Happy guests posing with their winnings at the Klawsome selfie wall"
+              color="yellow"
+              className="w-full h-[420px] md:h-[520px]"
+            />
             <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
               <ul className="space-y-5">
                 {proTips.map((tip) => (
