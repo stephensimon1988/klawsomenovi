@@ -1,6 +1,7 @@
 import { useCmsTable } from '@/hooks/useCmsContent';
 import { Sparkles } from 'lucide-react';
 import KawaiiDivider, { DividerVariant } from './KawaiiDivider';
+import FramedImage, { type FramedImageColor } from './FramedImage';
 
 export interface PageContentSection {
   id: string;
@@ -26,6 +27,9 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
 
   // Cycle of cute divider variants for variety between sections.
   const VARIANT_CYCLE: DividerVariant[] = ['wave', 'scallop', 'cloud', 'bumps', 'petals', 'zigzag-soft', 'brush', 'blob'];
+
+  // Cycle pastel under-layer colors so each framed photo differs.
+  const COLOR_CYCLE: FramedImageColor[] = ['baby-pink', 'baby-blue', 'lavender', 'mint', 'peach', 'yellow'];
 
   return (
     <div className="space-y-0">
@@ -54,14 +58,12 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                   className={`md:col-span-6 ${flip ? 'md:order-2' : 'md:order-1'}`}
                 >
                   {hasImage ? (
-                    <div className="img-hover rounded-2xl">
-                      <img
-                        src={s.image_url}
-                        alt={s.headline}
-                        loading="lazy"
-                        className="ds-img-hero"
-                      />
-                    </div>
+                    <FramedImage
+                      src={s.image_url}
+                      alt={s.headline}
+                      color={COLOR_CYCLE[i % COLOR_CYCLE.length]}
+                      className="w-full aspect-square"
+                    />
                   ) : (
                     <div
                       aria-hidden
