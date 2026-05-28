@@ -1,5 +1,6 @@
 import { Mail, PartyPopper, Phone, MapPin } from 'lucide-react';
 import contactImage from '@/assets/contact-hero.webp';
+import FramedImage from './FramedImage';
 
 const items = [
   {
@@ -37,14 +38,12 @@ const KawaiiContactInfo = () => {
     <section className="bg-klawsome-baby-blue py-16 md:py-24">
       <div className="ds-container px-4">
         <div className="grid gap-10 md:grid-cols-2 md:gap-14 items-center">
-          <div className="img-hover rounded-3xl shadow-xl">
-            <img
-              src={contactImage}
-              alt="Klawsome friends ready to help"
-              className="w-full h-full object-cover aspect-[4/5]"
-              loading="lazy"
-            />
-          </div>
+          <FramedImage
+            src={contactImage}
+            alt="Klawsome friends ready to help"
+            color="peach"
+            className="aspect-square w-full"
+          />
           <ul className="space-y-6">
             {items.map(({ icon: Icon, label, value, href, desc }) => (
               <li key={label} className="flex gap-4 rounded-2xl bg-background/70 p-5 shadow-sm">

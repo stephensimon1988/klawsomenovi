@@ -8,6 +8,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
+import FramedImage from '@/components/FramedImage';
  import birthdaysHero from '@/assets/birthdays-hero.webp';
  import pandaCatFoxParty from '@/assets/panda-cat-fox-party.webp';
 
@@ -103,14 +104,12 @@ const Birthdays = () => {
       <section id="party-rules" className="py-20 px-6 lg:px-12 bg-klawsome-navy">
         <div className="container mx-auto max-w-6xl">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-center">
-            <div className="img-hover rounded-kawaii">
-              <img
-                src={pandaCatFoxParty}
-                alt="Kawaii characters celebrating a birthday party"
-                className="w-full aspect-square rounded-kawaii object-cover"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={pandaCatFoxParty}
+              alt="Kawaii characters celebrating a birthday party"
+              color="baby-blue"
+              className="w-full aspect-square"
+            />
 
             <div>
               <p className="ds-eyebrow text-primary mb-3">Party Rules</p>

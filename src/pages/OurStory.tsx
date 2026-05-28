@@ -3,6 +3,7 @@ import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
+import FramedImage from '@/components/FramedImage';
 import ourStoryIntroImage from '@/assets/our-story-intro.png';
 
 const OurStory = () => {
@@ -51,14 +52,12 @@ const OurStory = () => {
                 {body}
               </p>
             </div>
-            <div className="img-hover rounded-kawaii shadow-lg">
-              <img
-                src={ourStoryIntroImage}
-                alt="Klawsome community celebration"
-                loading="lazy"
-                className="w-full h-auto object-cover aspect-[4/5]"
-              />
-            </div>
+            <FramedImage
+              src={ourStoryIntroImage}
+              alt="Klawsome community celebration"
+              color="baby-pink"
+              className="w-full aspect-[4/5]"
+            />
           </div>
         </div>
       </section>
@@ -80,12 +79,12 @@ const OurStory = () => {
               {sideImage ? (
                 <div className="ds-container">
                   <div className="grid md:grid-cols-2 gap-10 md:gap-16 items-center">
-                    <div className={`${imageOnLeft ? 'md:order-1' : 'md:order-2'} img-hover rounded-kawaii shadow-lg`}>
-                      <img
+                    <div className={imageOnLeft ? 'md:order-1' : 'md:order-2'}>
+                      <FramedImage
                         src={sideImage}
                         alt={s.title}
-                        loading="lazy"
-                        className="w-full h-auto object-cover aspect-[4/5]"
+                        color={idx % 2 === 0 ? 'baby-blue' : 'lavender'}
+                        className="w-full aspect-[4/5]"
                       />
                     </div>
                     <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>

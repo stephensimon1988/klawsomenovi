@@ -3,6 +3,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
+import FramedImage from '@/components/FramedImage';
 import heroImage from '@/assets/claw-machine-header.jpg';
 import plushiesImage from '@/assets/claw-machine-plushies.jpg';
 import pandasImage from '@/assets/claw-machine-pandas.jpg';
@@ -87,15 +88,12 @@ const ClawMachineTips = () => {
                 </p>
               </div>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] -rotate-2" aria-hidden />
-              <img
-                src={plushiesImage}
-                alt="Claw machine packed with pink and brown plush toys"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={plushiesImage}
+              alt="Claw machine packed with pink and brown plush toys"
+              color="baby-pink"
+              className="w-full h-[420px] md:h-[520px]"
+            />
           </div>
         </div>
       </section>
@@ -148,13 +146,12 @@ const ClawMachineTips = () => {
       <section id="tips-push" className="section-y section-x">
         <div className="ds-container">
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative order-2 md:order-1">
-              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-blue))] rotate-2" aria-hidden />
-              <img
+            <div className="order-2 md:order-1">
+              <FramedImage
                 src={pandasImage}
                 alt="Player lining up a claw drop over panda plushies near the chute"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
+                color="baby-blue"
+                className="w-full h-[420px] md:h-[520px]"
               />
             </div>
             <div className="order-1 md:order-2">
@@ -199,15 +196,12 @@ const ClawMachineTips = () => {
                 ))}
               </ul>
             </div>
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-white -rotate-2" aria-hidden />
-              <img
-                src={watchPhoto}
-                alt="Guests watching a claw machine at Klawsome before playing"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={watchPhoto}
+              alt="Guests watching a claw machine at Klawsome before playing"
+              color="mint"
+              className="w-full h-[420px] md:h-[520px]"
+            />
           </div>
         </div>
       </section>
@@ -218,13 +212,12 @@ const ClawMachineTips = () => {
       <section id="tips-beginner" className="section-y section-x">
         <div className="ds-container">
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative order-2 md:order-1">
-              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] rotate-2" aria-hidden />
-              <img
+            <div className="order-2 md:order-1">
+              <FramedImage
                 src={beginnerPhoto}
                 alt="Klawsome storefront with a welcoming row of beginner-friendly claw machines"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
+                color="lavender"
+                className="w-full h-[420px] md:h-[520px]"
               />
             </div>
             <div className="order-1 md:order-2">
@@ -250,15 +243,12 @@ const ClawMachineTips = () => {
           </div>
 
           <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
-            <div className="relative">
-              <div className="absolute -inset-3 rounded-kawaii bg-white rotate-2" aria-hidden />
-              <img
-                src={winPhoto}
-                alt="Happy guests posing with their winnings at the Klawsome selfie wall"
-                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
-                loading="lazy"
-              />
-            </div>
+            <FramedImage
+              src={winPhoto}
+              alt="Happy guests posing with their winnings at the Klawsome selfie wall"
+              color="yellow"
+              className="w-full h-[420px] md:h-[520px]"
+            />
             <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
               <ul className="space-y-5">
                 {proTips.map((tip) => (

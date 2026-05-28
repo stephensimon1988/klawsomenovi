@@ -2,6 +2,7 @@ import { Accessibility, Clock, MapPin, Phone } from 'lucide-react';
 import { Button } from './ui/button';
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
+import FramedImage from './FramedImage';
 
 const KawaiiVisit = () => {
   const imageRef = useGsapScroll<HTMLDivElement>({ type: 'slideLeft', distance: 80, duration: 1 });
@@ -23,12 +24,12 @@ const KawaiiVisit = () => {
     <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
       <div className="ds-container">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
-          <div ref={imageRef} style={{ opacity: 0 }} className="img-hover rounded-2xl">
-            <img
+          <div ref={imageRef} style={{ opacity: 0 }}>
+            <FramedImage
               src="/images/klawsome-storefront.webp"
               alt="Klawsome arcade storefront"
-              className="ds-img-portrait"
-              loading="lazy"
+              color="lavender"
+              className="aspect-[4/5] w-full"
             />
           </div>
 

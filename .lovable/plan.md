@@ -1,43 +1,50 @@
+# Site-wide framed image treatment
+
 ## Goal
+Recreate the "under-layer" look from `/claw-machine-tips` as a reusable piece and roll it out to all section/content photos, with three upgrades:
+1. The **bottom CTA photo** (the contact / "Visit Us" style section) becomes **square** and gets the treatment.
+2. The under-layer panels use **varied pastel colors** across sections.
+3. The **frame rotates ~5° clockwise** while the **photo inside stays perfectly upright** (zoomed in slightly to fill the tilted frame), and the **colored under-layer stays stationary** (no rotation).
 
-1. Delete the `/contact` page entirely.
-2. Take the "contact info" section currently on `/contact` (image + 4 info cards on baby-blue) and make it the final section above the footer on every page.
-3. Audit the dividers so the new section flows cleanly into the footer everywhere.
+## How the effect works
+Three stacked layers in a `relative` wrapper:
 
-## Changes
+```text
+┌──────────────────────────────┐
+│  under-layer (stationary)    │  offset colored rounded panel, NOT rotated
+│   ┌────────────────────┐     │
+│   │ frame (rotated 5°)  │     │  rounded corners + shadow, rotate(5deg)
+│   │   [ photo upright ] │     │  img counter-rotated -5° + scale(~1.15)
+│   └────────────────────┘     │
+└──────────────────────────────┘
+```
 
-### 1. Remove `/contact`
-- Delete `src/pages/Contact.tsx`.
-- Remove the `Contact` lazy import and `/contact` route in `src/App.tsx`.
-- Remove the `Contact` entry from `moreLinks` in `src/components/KawaiiNav.tsx`.
+- Frame element: `rotate(5deg)`, `overflow-hidden`, `rounded-kawaii`, shadow.
+- Image: `rotate(-5deg) scale(1.15)` so it nets to upright and still fully covers the tilted frame (no empty corners, same resolution — just zoomed).
+- Under-layer: an absolutely-positioned offset div behind the frame, colored, **not** transformed.
 
-### 2. New shared component `src/components/KawaiiContactInfo.tsx`
-- Lift the existing baby-blue contact block from `Contact.tsx` (image on left, 4 info cards on right: General Inquiries, Events & Birthdays, Phone, Visit Us).
-- Same content/styling as the current screenshot (`bg-klawsome-baby-blue`, rounded image card, icon cards). Reuses `contactImage` from `@/assets/contact-hero.webp`.
-- Self-contained section, no props.
+## New reusable component: `src/components/FramedImage.tsx`
+Props: `src`, `alt`, `color` (pastel token name, e.g. `baby-pink`), `aspect` / `className` for sizing, `rotate` (default `5`), `loading`. It renders the three-layer structure above and accepts class overrides so each section can set its own height/aspect ratio (e.g. square for the CTA, 4:5 elsewhere).
 
-### 3. Wire it into the global footer
-- In `src/components/KawaiiFooter.tsx`:
-  - Import and render `<KawaiiContactInfo />` as the first thing returned.
-  - Place a `<KawaiiDivider from={prevColor} to="baby-blue" />` above the contact section (skipping when `prevColor === 'baby-blue'`).
-  - Then a `<KawaiiDivider from="baby-blue" to="red" />` between contact section and the red footer.
-  - Remove the now-dead `showReadyToPlay` CTA block (it has been hard-coded `false` for a while and would conflict with the new fixed section).
+Colors cycle through existing pastel tokens — `baby-pink`, `baby-blue`, lavender, mint, peach, yellow — so under-layers stay "all different colors" as requested.
 
-Because every page already ends with a call to `<KawaiiFooter prevColor={...} />`, this single change adds the contact section above the footer on every page automatically — no per-page edits needed.
+## Where it gets applied (section/content photos + page heroes only)
+Excluded per scope: nav/footer logos, review avatars, product grid thumbnails, dense gallery grids, and the full-bleed home hero background.
 
-### 4. Divider audit (per `mem://design/divider-rules`)
-Current `prevColor` values handed to the footer:
-- `white` — Index, Store, Rewards, Rental, OurStory, Business, News, Gallery, Faq
-- `baby-pink` — BusinessDevelopment, ClawMachineTips, Birthdays (conditional)
-- `navy` — Birthdays (conditional)
-- `secondary-soft` — CommunityPartners, InfoHub
-- (no page currently uses `baby-blue` for `prevColor` — Contact is the only one and it's being removed)
+- **Bottom CTA** — `src/components/KawaiiContactInfo.tsx`: change the photo from `aspect-[4/5]` to **square**, wrap in `FramedImage`.
+- `src/pages/ClawMachineTips.tsx` — replace the existing hand-built under-layer markup (5 section photos) with `FramedImage` and add the new 5° frame rotation so it matches site-wide behavior.
+- `src/pages/OurStory.tsx` — intro photo + the two story-section photos.
+- `src/components/KawaiiStory.tsx`, `src/components/KawaiiVisit.tsx` — section feature photos.
+- Section/feature photos on `src/pages/Birthdays.tsx`, `Careers.tsx`, `CommunityPartners.tsx`, `Rewards.tsx`, `Rental.tsx`, `BusinessDevelopment.tsx` (single feature/section images only, not repeating card grids).
+- `src/components/PageHero.tsx` — the contained hero photo (kept subtle).
 
-For each value the new top divider becomes `from={prevColor} to="baby-blue"`, which is a valid color change in every case. No page has a final section colored baby-blue, so we won't hit the "same color across a divider" rule. The bottom divider `baby-blue → red` is also a clean transition.
+Each call site passes a different `color` so adjacent sections vary.
 
-I will spot-check Birthdays (its conditional `prevColor` already passes a real color in both branches) and ClawMachineTips (uses an `as any` cast on `'baby-pink'`, still valid).
+## Technical notes
+- Pastel colors come from existing CSS vars (`--klawsome-baby-pink`, `--klawsome-baby-blue`, etc.) — no new design tokens needed.
+- `rounded-kawaii` and `shadow-lg` already exist and are reused.
+- Scale factor (~1.15) is tuned so a 5° counter-rotation never reveals frame corners on both square and 4:5 ratios; the image keeps its native resolution (CSS transform only).
+- No backend, data, or routing changes — purely presentational.
 
-### Verification
-- Build passes.
-- Visually confirm `/`, `/gallery`, `/birthdays`, `/community-partners`, `/business-development` show the new section above the footer with proper scallop dividers and no color clashes.
-- Confirm `/contact` now 404s and the "Contact" link is gone from the More menu.
+## Out of scope (will not touch)
+Logos, avatars, product/store thumbnails, gallery/news thumbnail grids, and the full-bleed homepage hero background.

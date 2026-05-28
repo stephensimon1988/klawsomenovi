@@ -51,6 +51,9 @@ html {
     --klawsome-baby-blue: 190 75% 91%;
     --klawsome-baby-pink: 340 60% 85%;
     --klawsome-white: 0 0% 100%;
+    --klawsome-lavender: 260 55% 88%;
+    --klawsome-mint: 160 50% 85%;
+    --klawsome-peach: 20 85% 88%;
 
     /* Legacy tokens (kept for compatibility) */
     --kawaii-pink: 340 60% 82%;
