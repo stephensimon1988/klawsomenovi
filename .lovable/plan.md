@@ -1,50 +1,49 @@
-# Site-wide framed image treatment
-
 ## Goal
-Recreate the "under-layer" look from `/claw-machine-tips` as a reusable piece and roll it out to all section/content photos, with three upgrades:
-1. The **bottom CTA photo** (the contact / "Visit Us" style section) becomes **square** and gets the treatment.
-2. The under-layer panels use **varied pastel colors** across sections.
-3. The **frame rotates ~5° clockwise** while the **photo inside stays perfectly upright** (zoomed in slightly to fill the tilted frame), and the **colored under-layer stays stationary** (no rotation).
 
-## How the effect works
-Three stacked layers in a `relative` wrapper:
+Two improvements to the site-wide `FramedImage` treatment:
+1. The colored under-layer must never match the background of the section it sits in.
+2. Add a hover interaction: the frame straightens (rotates to level) so it lines up perfectly over the stationary under-layer, the photo stays upright (orientation never changes), and the photo zooms in slightly as the frame straightens.
+
+## Part 1 — Under-layer never matches the section background
+
+Root cause found: in `index.css`, `--secondary` and `--klawsome-baby-blue` are the identical HSL value (`190 75% 91%`). So a `baby-blue` under-layer inside a `bg-secondary` (or `bg-secondary/40`) section is invisible — it blends into the section.
+
+Two-part fix:
+
+**A. Defensive guard in the component.** Add an optional `sectionBg` prop to `FramedImage` (accepts a pastel token name plus `'secondary'`, `'white'`, `'background'`, `'navy'`, `'primary'`). When the requested under-layer `color` resolves to the same family as `sectionBg`, the component automatically shifts to the next pastel in the cycle so it can never blend in. Treat `secondary` as equivalent to `baby-blue` in this check.
+
+**B. Audit + fix every call site** so the chosen color already contrasts (the guard is a safety net, not the primary mechanism):
 
 ```text
-┌──────────────────────────────┐
-│  under-layer (stationary)    │  offset colored rounded panel, NOT rotated
-│   ┌────────────────────┐     │
-│   │ frame (rotated 5°)  │     │  rounded corners + shadow, rotate(5deg)
-│   │   [ photo upright ] │     │  img counter-rotated -5° + scale(~1.15)
-│   └────────────────────┘     │
-└──────────────────────────────┘
+Component / page          Section bg            Current color   Action
+KawaiiStory               secondary (=blue)     baby-blue       CONFLICT -> change to lavender/peach
+OurStory (even sections)  secondary/40 (blue)   baby-blue       CONFLICT -> change to peach/mint
+OurStory intro            white                 baby-pink       ok
+KawaiiVisit               baby-pink             lavender        ok
+KawaiiContactInfo         (verify)              peach           verify, pass sectionBg
+Birthdays                 navy                  baby-blue       ok
+ClawMachineTips x5        white / blue / pink   pink/blue/mint/
+                                                lavender/yellow ok (watch=mint on blue ok)
+DynamicSections           white / secondary     cycled          pass section color so cycle skips it
 ```
 
-- Frame element: `rotate(5deg)`, `overflow-hidden`, `rounded-kawaii`, shadow.
-- Image: `rotate(-5deg) scale(1.15)` so it nets to upright and still fully covers the tilted frame (no empty corners, same resolution — just zoomed).
-- Under-layer: an absolutely-positioned offset div behind the frame, colored, **not** transformed.
+All call sites will pass `sectionBg` so the guard stays accurate even if content/section colors change later.
 
-## New reusable component: `src/components/FramedImage.tsx`
-Props: `src`, `alt`, `color` (pastel token name, e.g. `baby-pink`), `aspect` / `className` for sizing, `rotate` (default `5`), `loading`. It renders the three-layer structure above and accepts class overrides so each section can set its own height/aspect ratio (e.g. square for the CTA, 4:5 elsewhere).
+## Part 2 — Hover animation
 
-Colors cycle through existing pastel tokens — `baby-pink`, `baby-blue`, lavender, mint, peach, yellow — so under-layers stay "all different colors" as requested.
+Current resting state: frame `rotate(5deg)`, photo counter-rotated `rotate(-5deg) scale(1.15)` so it reads upright and covers the tilted frame. Under-layer is stationary.
 
-## Where it gets applied (section/content photos + page heroes only)
-Excluded per scope: nav/footer logos, review avatars, product grid thumbnails, dense gallery grids, and the full-bleed home hero background.
+On hover:
+- Frame animates from `rotate(5deg)` to `rotate(0deg)` — it straightens and aligns perfectly over the stationary under-layer.
+- Photo animates from `rotate(-5deg)` to `rotate(0deg)` so it stays perfectly upright the whole time (net orientation is upright at rest and on hover — the picture never appears to spin).
+- Photo scale increases slightly (e.g. `1.15` to `1.22`) for the subtle zoom-in.
+- Under-layer never moves.
 
-- **Bottom CTA** — `src/components/KawaiiContactInfo.tsx`: change the photo from `aspect-[4/5]` to **square**, wrap in `FramedImage`.
-- `src/pages/ClawMachineTips.tsx` — replace the existing hand-built under-layer markup (5 section photos) with `FramedImage` and add the new 5° frame rotation so it matches site-wide behavior.
-- `src/pages/OurStory.tsx` — intro photo + the two story-section photos.
-- `src/components/KawaiiStory.tsx`, `src/components/KawaiiVisit.tsx` — section feature photos.
-- Section/feature photos on `src/pages/Birthdays.tsx`, `Careers.tsx`, `CommunityPartners.tsx`, `Rewards.tsx`, `Rental.tsx`, `BusinessDevelopment.tsx` (single feature/section images only, not repeating card grids).
-- `src/components/PageHero.tsx` — the contained hero photo (kept subtle).
-
-Each call site passes a different `color` so adjacent sections vary.
+Smooth transition (~350-450ms ease-out) on both the frame and the photo transforms. Works on touch/no-hover gracefully (just stays in the resting tilted state).
 
 ## Technical notes
-- Pastel colors come from existing CSS vars (`--klawsome-baby-pink`, `--klawsome-baby-blue`, etc.) — no new design tokens needed.
-- `rounded-kawaii` and `shadow-lg` already exist and are reused.
-- Scale factor (~1.15) is tuned so a 5° counter-rotation never reveals frame corners on both square and 4:5 ratios; the image keeps its native resolution (CSS transform only).
-- No backend, data, or routing changes — purely presentational.
 
-## Out of scope (will not touch)
-Logos, avatars, product/store thumbnails, gallery/news thumbnail grids, and the full-bleed homepage hero background.
+- Because the rotation amount is a dynamic prop, the hover transforms will be driven by CSS custom properties (e.g. `--frame-rot`, `--img-rot`, `--img-scale`) set inline on the element, with a small CSS rule block (in `index.css`) that reads those vars and overrides them on `:hover` of the wrapping `group`. This keeps the per-instance `rotate` prop working while still allowing a CSS hover transition.
+- `transition-transform` + easing added to both the frame and photo layers.
+- No backend, data, or routing changes — purely presentational edits to `FramedImage.tsx`, `index.css`, and the under-layer color props at each call site.
+- After implementation: visually QA the hover on a couple of sections (e.g. the Story and Visit sections, plus a `bg-secondary` section) to confirm the frame lands flush on the under-layer and no section shows a matching/invisible under-layer.
