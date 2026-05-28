@@ -1,8 +1,6 @@
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
-import { Button } from './ui/button';
 import KawaiiDivider from './KawaiiDivider';
-import { useLocation } from 'react-router-dom';
 import KawaiiContactInfo from './KawaiiContactInfo';
 
 type FooterPrevColor = 'white' | 'baby-pink' | 'baby-blue' | 'red' | 'navy' | 'secondary-soft' | 'muted-soft';
@@ -14,8 +12,6 @@ interface KawaiiFooterProps {
 
 const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
-  useLocation();
-  const showReadyToPlay = false;
 
   const email = settings?.email || 'team@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
