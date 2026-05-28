@@ -1,11 +1,11 @@
 import { Check, X, Flame } from 'lucide-react';
-import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
-import { openBookingModal } from '@/components/BookNowDialog';
-import heroImage from '@/assets/rental-family-playing.webp';
+import heroImage from '@/assets/claw-machine-header.jpg';
+import plushiesImage from '@/assets/claw-machine-plushies.jpg';
+import pandasImage from '@/assets/claw-machine-pandas.jpg';
 
 const ClawMachineTips = () => {
   const bestPicks = [
@@ -45,6 +45,7 @@ const ClawMachineTips = () => {
         title="Tips to Win Claw Machines"
         subtitle="The claw doesn't grab the same strength every time — but smart positioning greatly increases your chances of winning."
         imageUrl={heroImage}
+        hideJoinCta
         jumpLinks={[
           { label: 'Basics', id: 'tips-basics' },
           { label: 'Right Plush', id: 'tips-targets' },
@@ -57,26 +58,39 @@ const ClawMachineTips = () => {
 
       {/* Section 1 — Basics */}
       <section id="tips-basics" className="section-y section-x">
-        <div className="ds-container-narrow">
-          <p className="ds-eyebrow">Strategy Basics</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-10">It's Skill, Not Just Luck</h2>
-          <div className="space-y-6 ds-lead">
-            <p>
-              The most common mistake is aiming for the top of a plush — the claw needs something
-              to grip. Look for toys that are stacked on top of others or sitting "alone," so the
-              claws can wrap around the prize.
-            </p>
-            <p>
-              Move the claw directly over a <strong>gap between toys</strong>, not the toy itself —
-              that gap gives the prongs something to close around. Once you've found your spot,
-              commit to the drop instead of second-guessing at the last second.
-            </p>
-            <p>
-              Go for <strong>smaller prizes</strong>. They're lighter and easier to carry, and a
-              win is a win. Plays <strong>near the chute</strong> are almost always the better
-              choice. And don't forget <strong>depth</strong> — look from the side of the machine
-              (or a few steps away) to make sure your claw is far enough back.
-            </p>
+        <div className="ds-container">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <p className="ds-eyebrow">Strategy Basics</p>
+              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">It's Skill, Not Just Luck</h2>
+              <div className="space-y-5 ds-lead">
+                <p>
+                  The most common mistake is aiming for the top of a plush — the claw needs something
+                  to grip. Look for toys that are stacked on top of others or sitting "alone," so the
+                  claws can wrap around the prize.
+                </p>
+                <p>
+                  Move the claw directly over a <strong>gap between toys</strong>, not the toy itself —
+                  that gap gives the prongs something to close around. Once you've found your spot,
+                  commit to the drop instead of second-guessing at the last second.
+                </p>
+                <p>
+                  Go for <strong>smaller prizes</strong>. They're lighter and easier to carry, and a
+                  win is a win. Plays <strong>near the chute</strong> are almost always the better
+                  choice. And don't forget <strong>depth</strong> — look from the side of the machine
+                  to make sure your claw is far enough back.
+                </p>
+              </div>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] -rotate-2" aria-hidden />
+              <img
+                src={plushiesImage}
+                alt="Claw machine packed with pink and brown plush toys"
+                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
+                loading="lazy"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -127,21 +141,34 @@ const ClawMachineTips = () => {
 
       {/* Section 3 — Push, Don't Just Grab */}
       <section id="tips-push" className="section-y section-x">
-        <div className="ds-container-narrow">
-          <p className="ds-eyebrow">Technique</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">Push — Don't Just Grab</h2>
-          <p className="ds-lead mb-8">
-            Even when the claw can't lift a plush outright, you can still make progress. Every
-            grab is a chance to nudge your target closer to the chute.
-          </p>
-          <ul className="space-y-3">
-            {pushTips.map((tip) => (
-              <li key={tip} className="flex items-start gap-3 font-body text-lg text-foreground">
-                <span className="w-2 h-2 rounded-full bg-primary mt-3 flex-shrink-0" />
-                {tip}
-              </li>
-            ))}
-          </ul>
+        <div className="ds-container">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div className="relative order-2 md:order-1">
+              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-blue))] rotate-2" aria-hidden />
+              <img
+                src={pandasImage}
+                alt="Player lining up a claw drop over panda plushies near the chute"
+                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
+                loading="lazy"
+              />
+            </div>
+            <div className="order-1 md:order-2">
+              <p className="ds-eyebrow">Technique</p>
+              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-6">Push — Don't Just Grab</h2>
+              <p className="ds-lead mb-6">
+                Even when the claw can't lift a plush outright, you can still make progress. Every
+                grab is a chance to nudge your target closer to the chute.
+              </p>
+              <ul className="space-y-3">
+                {pushTips.map((tip) => (
+                  <li key={tip} className="flex items-start gap-3 font-body text-lg text-foreground">
+                    <span className="w-2 h-2 rounded-full bg-primary mt-3 flex-shrink-0" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -149,21 +176,34 @@ const ClawMachineTips = () => {
 
       {/* Section 4 — Watch Before You Play */}
       <section id="tips-watch" className="section-y section-x bg-secondary/40">
-        <div className="ds-container-narrow">
-          <p className="ds-eyebrow">Observe</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-8">Watch Before You Play</h2>
-          <p className="ds-lead mb-8">
-            Spend a minute watching other players before you drop a token. You'll learn a lot from
-            the machine without spending a thing.
-          </p>
-          <ul className="space-y-3">
-            {watchTips.map((tip) => (
-              <li key={tip} className="flex items-start gap-3 font-body text-lg text-foreground">
-                <span className="w-2 h-2 rounded-full bg-primary mt-3 flex-shrink-0" />
-                {tip}
-              </li>
-            ))}
-          </ul>
+        <div className="ds-container">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div>
+              <p className="ds-eyebrow">Observe</p>
+              <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-6">Watch Before You Play</h2>
+              <p className="ds-lead mb-6">
+                Spend a minute watching other players before you drop a token. You'll learn a lot
+                from the machine without spending a thing.
+              </p>
+              <ul className="space-y-3">
+                {watchTips.map((tip) => (
+                  <li key={tip} className="flex items-start gap-3 font-body text-lg text-foreground">
+                    <span className="w-2 h-2 rounded-full bg-primary mt-3 flex-shrink-0" />
+                    {tip}
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-kawaii bg-white -rotate-2" aria-hidden />
+              <img
+                src={heroImage}
+                alt="Close up of a claw machine prong above colorful plush toys"
+                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
+                loading="lazy"
+              />
+            </div>
+          </div>
         </div>
       </section>
 
@@ -171,16 +211,13 @@ const ClawMachineTips = () => {
 
       {/* Section 5 — Beginner Machines */}
       <section id="tips-beginner" className="section-y section-x">
-        <div className="ds-container-narrow text-center">
+        <div className="ds-container text-center max-w-4xl mx-auto">
           <p className="ds-eyebrow">Start Here</p>
           <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">Begin With Beginner Machines</h2>
-          <p className="ds-lead mb-8">
+          <p className="ds-lead">
             New to the claw life? At Klawsome, look for our <strong>Play Till You Win</strong>{' '}
             machines — they're the friendliest way to learn the ropes and walk out with a plush.
           </p>
-          <Button asChild size="hero">
-            <a href="/store">See Our Machines</a>
-          </Button>
         </div>
       </section>
 
@@ -188,27 +225,32 @@ const ClawMachineTips = () => {
 
       {/* Section 6 — Pro Tips (boxed) */}
       <section id="tips-pro" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="ds-container-narrow">
+        <div className="ds-container">
           <div className="text-center mb-10">
             <p className="ds-eyebrow">Pro Tips</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase">Level Up Your Game</h2>
           </div>
 
-          <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
-            <ul className="space-y-5">
-              {proTips.map((tip) => (
-                <li key={tip} className="flex items-start gap-4">
-                  <Flame className="w-6 h-6 text-primary flex-shrink-0 mt-1" strokeWidth={2.5} />
-                  <span className="font-body text-lg md:text-xl text-foreground">{tip}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="text-center mt-10">
-            <Button onClick={openBookingModal} size="hero" className="bg-primary text-white hover:bg-primary/90">
-              Come Try Your Skills
-            </Button>
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div className="relative">
+              <div className="absolute -inset-3 rounded-kawaii bg-white rotate-2" aria-hidden />
+              <img
+                src={plushiesImage}
+                alt="Rows of plush bears and pink plushies inside a claw machine"
+                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
+                loading="lazy"
+              />
+            </div>
+            <div className="bg-white rounded-kawaii p-8 md:p-12 shadow-lg border-2 border-primary/20">
+              <ul className="space-y-5">
+                {proTips.map((tip) => (
+                  <li key={tip} className="flex items-start gap-4">
+                    <Flame className="w-6 h-6 text-primary flex-shrink-0 mt-1" strokeWidth={2.5} />
+                    <span className="font-body text-lg md:text-xl text-foreground">{tip}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
           </div>
         </div>
       </section>
