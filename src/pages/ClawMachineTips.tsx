@@ -7,6 +7,11 @@ import heroImage from '@/assets/claw-machine-header.jpg';
 import plushiesImage from '@/assets/claw-machine-plushies.jpg';
 import pandasImage from '@/assets/claw-machine-pandas.jpg';
 
+// Real photos from the Klawsome gallery library
+const watchPhoto = 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.webp';
+const beginnerPhoto = '/images/klawsome-storefront.webp';
+const winPhoto = 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp';
+
 const ClawMachineTips = () => {
   const bestPicks = [
     'Near the chute',
@@ -197,8 +202,8 @@ const ClawMachineTips = () => {
             <div className="relative">
               <div className="absolute -inset-3 rounded-kawaii bg-white -rotate-2" aria-hidden />
               <img
-                src={heroImage}
-                alt="Close up of a claw machine prong above colorful plush toys"
+                src={watchPhoto}
+                alt="Guests watching a claw machine at Klawsome before playing"
                 className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
                 loading="lazy"
               />
@@ -211,13 +216,26 @@ const ClawMachineTips = () => {
 
       {/* Section 5 — Beginner Machines */}
       <section id="tips-beginner" className="section-y section-x">
-        <div className="ds-container text-center max-w-4xl mx-auto">
-          <p className="ds-eyebrow">Start Here</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">Begin With Beginner Machines</h2>
-          <p className="ds-lead">
-            New to the claw life? At Klawsome, look for our <strong>Play Till You Win</strong>{' '}
-            machines — they're the friendliest way to learn the ropes and walk out with a plush.
-          </p>
+        <div className="ds-container">
+          <div className="grid md:grid-cols-2 gap-10 lg:gap-16 items-center">
+            <div className="relative order-2 md:order-1">
+              <div className="absolute -inset-3 rounded-kawaii bg-[hsl(var(--klawsome-baby-pink))] rotate-2" aria-hidden />
+              <img
+                src={beginnerPhoto}
+                alt="Klawsome storefront with a welcoming row of beginner-friendly claw machines"
+                className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
+                loading="lazy"
+              />
+            </div>
+            <div className="order-1 md:order-2">
+              <p className="ds-eyebrow">Start Here</p>
+              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-6">Begin With Beginner Machines</h2>
+              <p className="ds-lead">
+                New to the claw life? At Klawsome, look for our <strong>Play Till You Win</strong>{' '}
+                machines — they're the friendliest way to learn the ropes and walk out with a plush.
+              </p>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -235,8 +253,8 @@ const ClawMachineTips = () => {
             <div className="relative">
               <div className="absolute -inset-3 rounded-kawaii bg-white rotate-2" aria-hidden />
               <img
-                src={plushiesImage}
-                alt="Rows of plush bears and pink plushies inside a claw machine"
+                src={winPhoto}
+                alt="Happy guests posing with their winnings at the Klawsome selfie wall"
                 className="relative w-full h-[420px] md:h-[520px] object-cover rounded-kawaii shadow-lg"
                 loading="lazy"
               />
