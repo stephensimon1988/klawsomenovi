@@ -1,8 +1,7 @@
 import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
-import { Button } from './ui/button';
 import KawaiiDivider from './KawaiiDivider';
-import { useLocation } from 'react-router-dom';
+import KawaiiContactInfo from './KawaiiContactInfo';
 
 type FooterPrevColor = 'white' | 'baby-pink' | 'baby-blue' | 'red' | 'navy' | 'secondary-soft' | 'muted-soft';
 
@@ -13,8 +12,6 @@ interface KawaiiFooterProps {
 
 const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
-  useLocation();
-  const showReadyToPlay = false;
 
   const email = settings?.email || 'team@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
@@ -26,35 +23,15 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
 
   return (
     <>
-      {/* Transition from page → CTA (baby-pink) when CTA shown, else page → red footer */}
-      {prevColor !== 'red' && (
-        <KawaiiDivider variant="scallop" from={prevColor} to="red" stroke="white" />
+      {/* Transition from page → contact info section (baby-blue) */}
+      {prevColor !== 'baby-blue' && (
+        <KawaiiDivider variant="scallop" from={prevColor} to="baby-blue" stroke="white" />
       )}
 
-      {/* Pre-footer CTA — homepage, birthdays, faq only */}
-      {showReadyToPlay && (
-      <section className="py-32 px-6 lg:px-12 bg-[hsl(var(--klawsome-baby-pink))] relative overflow-hidden">
-        <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--red mb-8">
-            Ready to<br />Play?
-          </h2>
-          <p className="text-foreground/80 font-body text-lg mb-10 max-w-md mx-auto">
-            Come see what all the buzz is about. We're here and ready for you.
-          </p>
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
-          >
-            <a href="#scheduling">Book Your Visit</a>
-          </Button>
-        </div>
-      </section>
-      )}
+      <KawaiiContactInfo />
 
-      {showReadyToPlay && (
-        <KawaiiDivider variant="scallop" from="baby-pink" to="red" stroke="white" />
-      )}
+      {/* Transition from contact info (baby-blue) → red footer */}
+      <KawaiiDivider variant="scallop" from="baby-blue" to="red" stroke="white" />
 
       {/* Minimal footer — red */}
       <footer id="contact" className="py-16 px-6 lg:px-12 bg-primary border-t border-white/15">
