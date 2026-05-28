@@ -56,6 +56,7 @@ const OurStory = () => {
               src={ourStoryIntroImage}
               alt="Klawsome community celebration"
               color="baby-pink"
+              sectionBg="white"
               className="w-full aspect-[4/5]"
             />
           </div>
@@ -83,7 +84,8 @@ const OurStory = () => {
                       <FramedImage
                         src={sideImage}
                         alt={s.title}
-                        color={idx % 2 === 0 ? 'baby-blue' : 'lavender'}
+                        color={idx % 2 === 0 ? 'peach' : 'lavender'}
+                        sectionBg={idx % 2 === 0 ? 'secondary' : 'white'}
                         className="w-full aspect-[4/5]"
                       />
                     </div>
