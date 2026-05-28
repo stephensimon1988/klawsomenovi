@@ -67,6 +67,7 @@ const App = () => (
           <Route path="/contact" element={<Contact />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
+          <Route path="/claw-game" element={<ClawGameRedirect />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
