@@ -1,49 +1,53 @@
 ## Goal
 
-Two improvements to the site-wide `FramedImage` treatment:
-1. The colored under-layer must never match the background of the section it sits in.
-2. Add a hover interaction: the frame straightens (rotates to level) so it lines up perfectly over the stationary under-layer, the photo stays upright (orientation never changes), and the photo zooms in slightly as the frame straightens.
+Make every multi-column content section line up to the same width across the entire site, and make all `FramedImage` photos perfectly square. Single-column / prose layouts stay exactly as they are.
 
-## Part 1 — Under-layer never matches the section background
+Chosen standard width: **1280px (`max-w-7xl`)**.
 
-Root cause found: in `index.css`, `--secondary` and `--klawsome-baby-blue` are the identical HSL value (`190 75% 91%`). So a `baby-blue` under-layer inside a `bg-secondary` (or `bg-secondary/40`) section is invisible — it blends into the section.
+## The two problems today
 
-Two-part fix:
+**1. Inconsistent column widths**
+- Most pages wrap two-column content in `ds-container` = **1536px** (Our Story, Claw Machine Tips, Kawaii Story/Visit/Contact, Dynamic Sections).
+- Birthdays uses `max-w-6xl` = **1152px** (party section) and `max-w-5xl` elsewhere.
+- Gaps and grid structures also differ (`grid-cols-12 + col-span-6` vs `md:grid-cols-2`, gaps ranging `gap-10/12/14/16`).
 
-**A. Defensive guard in the component.** Add an optional `sectionBg` prop to `FramedImage` (accepts a pastel token name plus `'secondary'`, `'white'`, `'background'`, `'navy'`, `'primary'`). When the requested under-layer `color` resolves to the same family as `sectionBg`, the component automatically shifts to the next pastel in the cycle so it can never blend in. Treat `secondary` as equivalent to `baby-blue` in this check.
+**2. Inconsistent FramedImage shapes**
+- `aspect-square` ✓ (Kawaii Story, Contact, Birthdays, Dynamic Sections)
+- `aspect-[4/5]` ✗ (Kawaii Visit, Our Story ×2)
+- fixed `h-[420px] md:h-[520px]` ✗ (Claw Machine Tips ×5)
 
-**B. Audit + fix every call site** so the chosen color already contrasts (the guard is a safety net, not the primary mechanism):
+## Plan
 
+### 1. Add two shared utilities in `src/index.css`
 ```text
-Component / page          Section bg            Current color   Action
-KawaiiStory               secondary (=blue)     baby-blue       CONFLICT -> change to lavender/peach
-OurStory (even sections)  secondary/40 (blue)   baby-blue       CONFLICT -> change to peach/mint
-OurStory intro            white                 baby-pink       ok
-KawaiiVisit               baby-pink             lavender        ok
-KawaiiContactInfo         (verify)              peach           verify, pass sectionBg
-Birthdays                 navy                  baby-blue       ok
-ClawMachineTips x5        white / blue / pink   pink/blue/mint/
-                                                lavender/yellow ok (watch=mint on blue ok)
-DynamicSections           white / secondary     cycled          pass section color so cycle skips it
+.ds-container-content  →  container mx-auto max-w-7xl   /* 1280px standard for multi-column sections */
+.ds-cols               →  grid md:grid-cols-2 gap-10 lg:gap-16 items-center
 ```
 
-All call sites will pass `sectionBg` so the guard stays accurate even if content/section colors change later.
+### 2. Convert every multi-column content section to the shared utilities
+Replace the per-page container + grid with `ds-container-content` + `ds-cols` (keeping each section's existing left/right order via `md:order-1` / `md:order-2`):
+- `KawaiiStory.tsx` (currently `grid-cols-12 + col-span-6`)
+- `KawaiiVisit.tsx` (currently `lg:grid-cols-2 gap-16`)
+- `KawaiiContactInfo.tsx` (currently `grid-cols-2 gap-14`)
+- `OurStory.tsx` — both story sections
+- `Birthdays.tsx` — party-rules section (from `max-w-6xl`)
+- `ClawMachineTips.tsx` — all 5 content sections
+- `DynamicSections.tsx` (from `grid-cols-12 + col-span-6`)
 
-## Part 2 — Hover animation
+### 3. Align page-level container widths so whole pages match
+On Birthdays, the other section wrappers currently at `max-w-6xl` / `max-w-5xl` (packages table, add-on cards) will move to `max-w-7xl` so the whole page lines up with the rest of the site.
 
-Current resting state: frame `rotate(5deg)`, photo counter-rotated `rotate(-5deg) scale(1.15)` so it reads upright and covers the tilted frame. Under-layer is stationary.
+### 4. Make all FramedImage photos square
+Set every `FramedImage` call-site class to `aspect-square w-full`:
+- `KawaiiVisit.tsx`: `aspect-[4/5]` → `aspect-square`
+- `OurStory.tsx` ×2: `aspect-[4/5]` → `aspect-square`
+- `ClawMachineTips.tsx` ×5: `h-[420px] md:h-[520px]` → `aspect-square`
+- The rest are already square (no change).
 
-On hover:
-- Frame animates from `rotate(5deg)` to `rotate(0deg)` — it straightens and aligns perfectly over the stationary under-layer.
-- Photo animates from `rotate(-5deg)` to `rotate(0deg)` so it stays perfectly upright the whole time (net orientation is upright at rest and on hover — the picture never appears to spin).
-- Photo scale increases slightly (e.g. `1.15` to `1.22`) for the subtle zoom-in.
-- Under-layer never moves.
-
-Smooth transition (~350-450ms ease-out) on both the frame and the photo transforms. Works on touch/no-hover gracefully (just stays in the resting tilted state).
+### 5. Leave single-column layouts untouched
+`ds-container-narrow` (max-w-3xl) prose/FAQ blocks, hero, nav, and full-width chrome keep their current widths.
 
 ## Technical notes
-
-- Because the rotation amount is a dynamic prop, the hover transforms will be driven by CSS custom properties (e.g. `--frame-rot`, `--img-rot`, `--img-scale`) set inline on the element, with a small CSS rule block (in `index.css`) that reads those vars and overrides them on `:hover` of the wrapping `group`. This keeps the per-instance `rotate` prop working while still allowing a CSS hover transition.
-- `transition-transform` + easing added to both the frame and photo layers.
-- No backend, data, or routing changes — purely presentational edits to `FramedImage.tsx`, `index.css`, and the under-layer color props at each call site.
-- After implementation: visually QA the hover on a couple of sections (e.g. the Story and Visit sections, plus a `bg-secondary` section) to confirm the frame lands flush on the under-layer and no section shows a matching/invisible under-layer.
+- `ds-container` itself is **not** changed (it's used by nav/hero/full-width chrome); only the multi-column content sections switch to the new narrower `ds-container-content`.
+- Purely presentational — no data, routing, or backend changes.
+- After implementing, I'll screenshot Our Story, Birthdays, and Claw Machine Tips to confirm columns line up at the same width and all framed photos render square, including the hover straighten/zoom.
