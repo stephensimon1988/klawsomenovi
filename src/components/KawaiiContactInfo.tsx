@@ -42,6 +42,7 @@ const KawaiiContactInfo = () => {
             src={contactImage}
             alt="Klawsome friends ready to help"
             color="peach"
+            sectionBg="baby-blue"
             className="aspect-square w-full"
           />
           <ul className="space-y-6">

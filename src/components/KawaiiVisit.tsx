@@ -29,6 +29,7 @@ const KawaiiVisit = () => {
               src="/images/klawsome-storefront.webp"
               alt="Klawsome arcade storefront"
               color="lavender"
+              sectionBg="baby-pink"
               className="aspect-[4/5] w-full"
             />
           </div>

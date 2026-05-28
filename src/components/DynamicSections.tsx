@@ -62,6 +62,7 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                       src={s.image_url}
                       alt={s.headline}
                       color={COLOR_CYCLE[i % COLOR_CYCLE.length]}
+                      sectionBg={alt ? 'secondary' : 'white'}
                       className="w-full aspect-square"
                     />
                   ) : (
