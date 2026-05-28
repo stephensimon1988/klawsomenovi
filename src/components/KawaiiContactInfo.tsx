@@ -35,8 +35,8 @@ const items = [
 const KawaiiContactInfo = () => {
   return (
     <section className="bg-klawsome-baby-blue py-16 md:py-24">
-      <div className="container mx-auto px-4">
-        <div className="grid gap-10 md:grid-cols-2 md:gap-14 items-center max-w-6xl mx-auto">
+      <div className="ds-container px-4">
+        <div className="grid gap-10 md:grid-cols-2 md:gap-14 items-center">
           <div className="img-hover rounded-3xl shadow-xl">
             <img
               src={contactImage}
