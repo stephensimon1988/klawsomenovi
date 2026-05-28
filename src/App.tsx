@@ -30,6 +30,13 @@ const Contact = lazy(() => import("./pages/Contact.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const ClawMachineTips = lazy(() => import("./pages/ClawMachineTips.tsx"));
 
+const ClawGameRedirect = () => {
+  useEffect(() => {
+    window.location.href = "https://poki.com/en/g/lucky-claw-machine";
+  }, []);
+  return null;
+};
+
 const queryClient = new QueryClient();
 
 const App = () => (
