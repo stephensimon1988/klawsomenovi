@@ -16,6 +16,7 @@ const navLinks = [
 ];
 
 const moreLinks = [
+  { label: 'Rental', href: '/rental' },
   { label: 'Rewards', href: '/rewards' },
   { label: 'Store', href: '/store' },
   { label: 'Business Development', href: '/business-development' },
