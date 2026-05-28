@@ -4,6 +4,7 @@ import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
 import { openBookingModal } from './BookNowDialog';
+import FramedImage from './FramedImage';
 const storyImage = 'https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/bear-panda-fox-cat-party.webp';
 
 const KawaiiStory = () => {
@@ -16,14 +17,12 @@ const KawaiiStory = () => {
 
       <div className="ds-container">
         <div ref={ref} className="grid md:grid-cols-12 gap-10 md:gap-16 items-center" style={{ opacity: 0 }}>
-          <div className="md:col-span-6 md:order-2 img-hover rounded-2xl">
-            <img
+          <div className="md:col-span-6 md:order-2">
+            <FramedImage
               src={content?.story_image_url || storyImage}
               alt={content?.story_title || 'The Klawsome Story'}
-              loading="lazy"
-              width={1024}
-              height={1024}
-              className="ds-img-hero"
+              color="baby-blue"
+              className="aspect-square w-full"
             />
           </div>
           <div className="md:col-span-6 md:order-1">
