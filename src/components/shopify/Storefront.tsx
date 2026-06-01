@@ -288,18 +288,6 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
         <h3 className="font-heading font-bold text-base text-foreground mt-1 line-clamp-2 min-h-[2.75rem]">
           {n.title}
         </h3>
-        <div className="mt-2 flex flex-wrap gap-1.5">
-          {cat && (
-            <span className="text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full bg-klawsome-baby-blue text-foreground font-heading font-bold">
-              {cat.emoji} {cat.label}
-            </span>
-          )}
-        </div>
-        {variants.length > 1 && variant && (
-          <p className="mt-1 text-xs font-body text-muted-foreground line-clamp-1">
-            {variant.title}
-          </p>
-        )}
         <div className="mt-auto pt-3 flex items-center justify-between">
           <span className="font-heading font-bold text-lg text-primary">
             ${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}
