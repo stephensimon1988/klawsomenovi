@@ -1,45 +1,37 @@
-## Rename to /partner-with-klawsome + one photo per section + 1280 width
+## Partner with Klawsome — layout + divider fixes
 
-### 1. Route rename with redirect
-`src/App.tsx`
-- Add `<Route path="/partner-with-klawsome" element={<BusinessDevelopment />} />`.
-- Keep `/business-development` but make it `<Navigate to="/partner-with-klawsome" replace />` so old links/SEO still land in the right place.
+All edits in `src/pages/BusinessDevelopment.tsx`.
 
-`src/components/KawaiiNav.tsx` (and any other internal link)
-- Update the "Business Development" entry in `moreLinks` to `{ label: 'Partner with Klawsome', href: '/partner-with-klawsome' }`.
+### 1. Contact section — two-column intro
 
-### 2. Copy / title changes
-`src/pages/BusinessDevelopment.tsx`
-- Page hero: title → `Partner with Klawsome!`, eyebrow → `🤝 Partner with Klawsome`, subtitle stays (it already speaks to all three opportunities).
-- Update `<title>` / any page heading reading "Business Development" / "Grow With Klawsome" to "Partner with Klawsome".
-- Leave the three opportunity section names (Host / Partner / Custom Plushies) as-is — they're sub-sections, not the page title.
+Current: image banner above, centered intro below, form below that.
 
-CMS fallback only — don't touch existing CMS rows; the fallback strings drive what the user sees today.
+New: top row is a 2-column grid (`grid md:grid-cols-2 gap-10 items-center mb-10`):
+- Left column: eyebrow + title + subtitle (left-aligned instead of centered).
+- Right column: the existing `contactPhotoAsset` image, taller (`h-72 md:h-full max-h-[420px]`), rounded, same `img-hover` wrapper.
 
-### 3. Widen sections to the 1280px rule
-The project standard for multi-column content is `max-w-7xl` (=1280px) — already defined as `.ds-container-content` in `index.css`. The three opportunity sections currently cap at `max-w-5xl` (1024px), which is why they feel cramped.
+Form stays full-width below in the same `max-w-3xl` container — no change to fields or submit logic.
 
-In `BusinessDevelopment.tsx`, change:
-- Hosted section inner wrapper: `ds-container max-w-5xl` → `ds-container max-w-7xl`
-- Partner section inner wrapper: same change
-- Plushie section inner wrapper: same change
-- How-it-works and Contact stay as they are (centered prose / form).
+### 2. "Getting Started is Easy" — 4 columns with Gallery photos
 
-### 4. One claw-machine photo per section, tastefully
-Upload the 5 attached photos via `lovable-assets` so they live on the CDN, then place exactly one per section. No collages, no duplicates.
+- Change the inner grid from `md:grid-cols-[1fr_320px]` two-zone layout to a single `grid grid-cols-2 md:grid-cols-4 gap-7` block (drop the right-side `processPhotoAsset` image — it doesn't fit the 4-col rhythm).
+- Pull the first 4 photos from the CMS `gallery_photos` table via `useCmsTable<GalleryPhoto>('gallery_photos')`, sorted by `sort_order`.
+- For each of the 4 `howSteps`, replace the numbered circle with a square photo (`aspect-square object-cover rounded-2xl` inside an `img-hover` wrapper) using `galleryPhotos[index].image_url`. Title + description stay below.
+- Fallback: if fewer than 4 gallery photos are available, fall back to the numbered circle for that slot so the page never breaks.
 
-Assignment (chosen to match the section's vibe):
-- **Hosted** (`hosted`) — `f205519d8…jpg` (twin rainbow Prize Claw cabinets) — replaces the current `hostMachinePhoto` in the "10% of every token played" card. Reads as "your spot, our machine".
-- **Partner** (`partner`) — `2ebddafaa…jpg` (front-on Prize Claw lineup, big prizes inside) — replaces `groupPhoto` in the "freedom box" right column. Reads as "your own arcade floor".
-- **Plushie** (`plushie`) — `Weixin_…004025_963_19.jpg` (Prize Claw Twin loaded with plushies) — replaces `plushieClaw` in the minimum-order card. On-message for custom plushies.
-- **How it works** (`process` band) — `a877c538…png` (clean studio shot of Prize Claw Multi) — add a single rounded photo to the right of the steps grid on `md+`, steps stack to its left in a 2-column layout (`md:grid-cols-[1fr_360px]`). This section currently has no imagery.
-- **Contact** (`contact`) — `Weixin_…004048_972_19.jpg` (XL plush cabinet, atmospheric) — add as a slim 16:6 banner above the form, rounded, low height (~h-48 md:h-56) so it sets the mood without crowding the form.
+### 3. Remove duplicate divider before footer
 
-Old imports that get fully replaced (`hostMachinePhoto`, `groupPhoto`, `plushieClaw`) get removed from the file. Other `bizdev/*` asset imports (used inside the "What Klawsome Supplies" card grid and the plushie "how it works" sub-steps) are untouched — they're per-card, not per-section, so they don't conflict with the one-photo-per-section rule.
+The page currently renders two stacked dividers between Contact and Footer:
+1. Page-level `<KawaiiDivider cloud baby-blue → baby-pink stroke=white />` (line 551).
+2. Footer's auto-divider `<KawaiiDivider scallop baby-pink → baby-blue />` (KawaiiFooter renders this when `prevColor !== 'baby-blue'`).
 
-All new `<img>` tags get `loading="lazy"`, descriptive `alt`, and live inside an `img-hover rounded-2xl` wrapper to match the existing photo treatment.
+Fix:
+- Delete the page-level KawaiiDivider at line 551.
+- Change the Contact section background from `bg-[hsl(var(--klawsome-baby-blue))]` to `bg-[hsl(var(--klawsome-baby-pink))]` so it matches the footer's auto divider's `from="baby-pink"` per the divider color rule (from/to must match adjacent section bg).
+- Keep `<KawaiiFooter prevColor="baby-pink" />` as-is.
+- Update the divider directly above Contact (line 479) from `petals white → baby-blue` to `petals white → baby-pink` so the "to" side matches the new Contact background.
 
 ### Out of scope
-- CMS-managed page hero rows for `business-development` (we'll keep reading from that key; renaming the CMS key is a separate ask).
-- Sitemap entries (route still resolves the same content).
-- Restyling the form, pricing tiers, or supplies grid.
+- No CMS schema changes, no new uploads.
+- Hero, Hosted, Partner, Plushie sections untouched.
+- `processPhotoAsset.json` stays in the repo for now (can clean up later).
