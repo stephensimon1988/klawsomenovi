@@ -11,22 +11,41 @@ import { CartDrawer } from './shopify/CartDrawer';
 const navLinks = [
   { label: 'HOME', href: '#hero' },
   { label: 'BIRTHDAYS', href: '/birthdays' },
-  { label: 'GIFT CARDS', href: 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order' },
   { label: 'CLAW GAME', href: '/claw-game' },
   { label: 'CAREERS', href: '/careers' },
 ];
 
-const moreLinks = [
-  { label: 'Claw Machine Tips', href: '/claw-machine-tips' },
-  { label: 'Rewards', href: '/rewards' },
-  { label: 'Store', href: '/store' },
-  { label: 'Partner with Klawsome', href: '/partner-with-klawsome' },
-  { label: 'Gallery', href: '/gallery' },
-  { label: 'Our Story', href: '/our-story' },
-  { label: 'Community Partners', href: '/community-partners' },
-  { label: 'News', href: '/news' },
-  { label: 'Info Hub', href: '/info-hub' },
-  { label: 'FAQ', href: '/faq' },
+const moreGroups: { heading: string; links: { label: string; href: string }[] }[] = [
+  {
+    heading: 'Connect',
+    links: [
+      { label: 'Partner with Klawsome', href: '/partner-with-klawsome' },
+      { label: 'Community Partners', href: '/community-partners' },
+    ],
+  },
+  {
+    heading: 'Purchase',
+    links: [
+      { label: 'Store', href: '/store' },
+      { label: 'Gift Cards', href: 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order' },
+      { label: 'Rewards', href: '/rewards' },
+    ],
+  },
+  {
+    heading: 'Remember',
+    links: [
+      { label: 'Our Story', href: '/our-story' },
+      { label: 'News', href: '/news' },
+      { label: 'Gallery', href: '/gallery' },
+    ],
+  },
+  {
+    heading: 'Learn',
+    links: [
+      { label: 'Claw Machine Tips', href: '/claw-machine-tips' },
+      { label: 'FAQ', href: '/faq' },
+    ],
+  },
 ];
 
 const smoothScroll = (id: string) => {
@@ -119,15 +138,24 @@ const KawaiiNav = () => {
                     transition={{ duration: 0.15 }}
                     className="absolute top-full right-0 pt-3"
                   >
-                    <div className="min-w-[200px] bg-background border border-border rounded-2xl shadow-lg py-2 overflow-hidden">
-                      {moreLinks.map((link) => (
-                        <button
-                          key={link.label}
-                          onClick={() => { setMoreOpen(false); handleNav(link.href); }}
-                          className="block w-full text-left px-5 py-3 font-heading font-bold text-xs tracking-[0.15em] uppercase text-foreground/70 hover:text-foreground hover:bg-secondary/60 transition-colors"
-                        >
-                          {link.label}
-                        </button>
+                    <div className="w-[640px] bg-background border border-border rounded-2xl shadow-lg p-5 grid grid-cols-4 gap-5">
+                      {moreGroups.map((group) => (
+                        <div key={group.heading}>
+                          <p className="font-heading font-bold text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-2 px-2">
+                            {group.heading}
+                          </p>
+                          <div className="flex flex-col">
+                            {group.links.map((link) => (
+                              <button
+                                key={link.label}
+                                onClick={() => { setMoreOpen(false); handleNav(link.href); }}
+                                className="block w-full text-left px-2 py-2 font-heading font-bold text-xs tracking-[0.1em] uppercase text-foreground/70 hover:text-foreground hover:bg-secondary/60 rounded-md transition-colors"
+                              >
+                                {link.label}
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       ))}
                     </div>
                   </motion.div>
@@ -168,16 +196,22 @@ const KawaiiNav = () => {
                   {link.label}
                 </button>
               ))}
-              <div className="pt-2 border-t border-border">
-                <p className="font-heading font-bold text-[10px] tracking-[0.2em] text-muted-foreground py-2 uppercase">More</p>
-                {moreLinks.map((link) => (
-                  <button
-                    key={link.label}
-                    onClick={() => handleNav(link.href)}
-                    className="block font-heading font-bold text-xs tracking-[0.15em] uppercase text-foreground/60 hover:text-foreground py-2 transition-colors w-full text-left"
-                  >
-                    {link.label}
-                  </button>
+              <div className="pt-2 border-t border-border space-y-4">
+                {moreGroups.map((group) => (
+                  <div key={group.heading}>
+                    <p className="font-heading font-bold text-[10px] tracking-[0.2em] text-muted-foreground py-2 uppercase">
+                      {group.heading}
+                    </p>
+                    {group.links.map((link) => (
+                      <button
+                        key={link.label}
+                        onClick={() => handleNav(link.href)}
+                        className="block font-heading font-bold text-xs tracking-[0.15em] uppercase text-foreground/60 hover:text-foreground py-2 transition-colors w-full text-left"
+                      >
+                        {link.label}
+                      </button>
+                    ))}
+                  </div>
                 ))}
               </div>
               <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
