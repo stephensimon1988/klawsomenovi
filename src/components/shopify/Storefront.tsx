@@ -189,8 +189,25 @@ export const Storefront = () => {
 
 const ProductCard = ({ product }: { product: ShopifyProduct }) => {
   const n = product.node;
-  const img = n.images.edges[0]?.node;
-  const variant = n.variants.edges[0]?.node;
+  const images = n.images.edges.map((e) => e.node);
+  const variants = n.variants.edges.map((e) => e.node);
+
+  // Initial variant = first available (matches modal behavior)
+  const firstAvailable = variants.find((v) => v.availableForSale) ?? variants[0];
+
+  const [selectedVariantId, setSelectedVariantId] = useState<string | undefined>(firstAvailable?.id);
+  const [imgIdx, setImgIdx] = useState(() => {
+    const url = firstAvailable?.image?.url;
+    const i = url ? images.findIndex((im) => im.url === url) : -1;
+    return i >= 0 ? i : 0;
+  });
+
+  const variant = variants.find((v) => v.id === selectedVariantId) ?? firstAvailable;
+  const img = images[imgIdx];
+
+  // Show a thumbnail strip only when there's something meaningful to pick between.
+  const hasMultiple = variants.length > 1 || images.length > 1;
+
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const [open, setOpen] = useState(false);
@@ -209,6 +226,17 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
     toast.success('Added to cart!', { position: 'top-center' });
   };
 
+  const selectThumb = (i: number, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setImgIdx(i);
+    const url = images[i]?.url;
+    if (!url) return;
+    const matching = variants.find((v) => v.image?.url === url);
+    if (matching) setSelectedVariantId(matching.id);
+  };
+
+  const openModal = () => setOpen(true);
+
   // Pick a kawaii tag color based on first matching category
   const cat = CATEGORIES.find((c) => c.match(n));
 
@@ -216,13 +244,14 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
     <>
     <div
       id={`product-${n.id}`}
-      onClick={() => setOpen(true)}
-      role="button"
-      tabIndex={0}
-      onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && setOpen(true)}
-      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-primary"
+      className="group flex flex-col bg-card rounded-2xl overflow-hidden border border-border hover:shadow-lg hover:-translate-y-1 transition-all duration-300"
     >
-      <div className="img-hover aspect-square bg-secondary/40">
+      <button
+        type="button"
+        onClick={openModal}
+        aria-label={`View details for ${n.title}`}
+        className="img-hover aspect-square bg-secondary/40 block w-full text-left focus:outline-none focus:ring-2 focus:ring-primary cursor-zoom-in"
+      >
         {img ? (
           <img
             src={img.url}
@@ -233,7 +262,29 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
         ) : (
           <div className="w-full h-full flex items-center justify-center text-5xl">🎁</div>
         )}
-      </div>
+      </button>
+      {hasMultiple && images.length > 1 && (
+        <div className="px-3 pt-3 flex flex-wrap gap-1.5">
+          {images.map((im, i) => {
+            const active = i === imgIdx;
+            return (
+              <button
+                key={i}
+                type="button"
+                onClick={(e) => selectThumb(i, e)}
+                aria-label={`Show variation ${i + 1}`}
+                className={`w-11 h-11 rounded-lg overflow-hidden border-2 transition ${
+                  active
+                    ? 'border-klawsome-navy ring-2 ring-klawsome-yellow ring-offset-1'
+                    : 'border-border opacity-70 hover:opacity-100 hover:border-foreground'
+                }`}
+              >
+                <img src={im.url} alt="" className="w-full h-full object-cover" />
+              </button>
+            );
+          })}
+        </div>
+      )}
       <div className="p-4 flex flex-col flex-1">
         <p className="text-xs text-muted-foreground font-body">#{n.id.slice(-4)}</p>
         <h3 className="font-heading font-bold text-base text-foreground mt-1 line-clamp-2 min-h-[2.75rem]">
@@ -246,9 +297,14 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
             </span>
           )}
         </div>
+        {variants.length > 1 && variant && (
+          <p className="mt-1 text-xs font-body text-muted-foreground line-clamp-1">
+            {variant.title}
+          </p>
+        )}
         <div className="mt-auto pt-3 flex items-center justify-between">
           <span className="font-heading font-bold text-lg text-primary">
-            ${parseFloat(n.priceRange.minVariantPrice.amount).toFixed(2)}
+            ${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}
           </span>
           <Button
             size="sm"
@@ -261,7 +317,12 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
         </div>
       </div>
     </div>
-    <QuickAddModal product={product} open={open} onClose={() => setOpen(false)} />
+    <QuickAddModal
+      product={product}
+      open={open}
+      onClose={() => setOpen(false)}
+      initialVariantId={selectedVariantId}
+    />
     </>
   );
 };
