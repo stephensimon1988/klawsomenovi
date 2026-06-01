@@ -136,9 +136,9 @@ const KawaiiNav = () => {
             <Button
               size="sm"
               onClick={openBookingModal}
-              className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white"
+              className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors"
             >
-              BOOK NOW
+              BOOK EVENT
             </Button>
           </div>
 
@@ -178,8 +178,8 @@ const KawaiiNav = () => {
                   </button>
                 ))}
               </div>
-              <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-primary hover:bg-primary/90 text-white w-full">
-                BOOK NOW
+              <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
+                BOOK EVENT
               </Button>
             </div>
           </motion.div>
