@@ -1,37 +1,32 @@
-## Partner with Klawsome — layout + divider fixes
+## Changes
 
-All edits in `src/pages/BusinessDevelopment.tsx`.
+### 1. Delete Info Hub
+- Remove `/info-hub` route and the `InfoHub` lazy import from `src/App.tsx`.
+- Delete `src/pages/InfoHub.tsx`.
+- Remove the `info-hub` entries from CMS data in `src/content/cmsData.ts` (page hero + any `page_sections` rows keyed to `info-hub`).
+- Remove the Info Hub link from the More menu in `src/components/KawaiiNav.tsx`.
+- Remove `/info-hub` from `public/sitemap.xml` if present.
 
-### 1. Contact section — two-column intro
+### 2. Hero headline text
+- In `src/content/cmsData.ts`, change `hero_headline` from `"Welcome to Novi's Own Klaw Arcade"` to `"Welcome to Michigan's First Klawcade!"`.
 
-Current: image banner above, centered intro below, form below that.
+### 3. Reorganize "More" menu into grouped sub-categories
+Restructure the More dropdown in `src/components/KawaiiNav.tsx` from a flat list into 4 grouped columns, each with a non-clickable group label and the links beneath:
 
-New: top row is a 2-column grid (`grid md:grid-cols-2 gap-10 items-center mb-10`):
-- Left column: eyebrow + title + subtitle (left-aligned instead of centered).
-- Right column: the existing `contactPhotoAsset` image, taller (`h-72 md:h-full max-h-[420px]`), rounded, same `img-hover` wrapper.
+- **Connect** — Partner with Klawsome (`/partner-with-klawsome`), Community Partners (`/community-partners`)
+- **Purchase** — Store (`/store`), Gift Cards (Square link), Rewards (`/rewards`)
+- **Remember** — Our Story (`/our-story`), News (`/news`), Gallery (`/gallery`)
+- **Learn** — Claw Machine Tips (`/claw-machine-tips`), FAQ (`/faq`)
 
-Form stays full-width below in the same `max-w-3xl` container — no change to fields or submit logic.
+Implementation details:
+- Replace the flat `moreLinks` array with a `moreGroups` array of `{ heading, links: [{label, href}] }`.
+- Render the dropdown as a wider panel (e.g. `min-w-[640px]`) with a 4-column grid on desktop; each column shows the heading in small uppercase muted text, followed by the links styled like today's items.
+- Mobile menu: render each group as a labeled section (heading + stacked links), replacing today's single "More" block.
+- Keep existing hover/click/navigation behavior (`handleNav`, including external Square gift card link opening in a new tab).
 
-### 2. "Getting Started is Easy" — 4 columns with Gallery photos
+### 4. Top-level nav cleanup
+Since Gift Cards now lives under Purchase, decide whether to keep it in the top-level `navLinks`. Recommended: remove `GIFT CARDS` from the top bar to avoid duplication, keeping HOME, BIRTHDAYS, CLAW GAME, CAREERS plus MORE and BOOK EVENT. If you'd rather keep it in both places, say so and I'll leave it.
 
-- Change the inner grid from `md:grid-cols-[1fr_320px]` two-zone layout to a single `grid grid-cols-2 md:grid-cols-4 gap-7` block (drop the right-side `processPhotoAsset` image — it doesn't fit the 4-col rhythm).
-- Pull the first 4 photos from the CMS `gallery_photos` table via `useCmsTable<GalleryPhoto>('gallery_photos')`, sorted by `sort_order`.
-- For each of the 4 `howSteps`, replace the numbered circle with a square photo (`aspect-square object-cover rounded-2xl` inside an `img-hover` wrapper) using `galleryPhotos[index].image_url`. Title + description stay below.
-- Fallback: if fewer than 4 gallery photos are available, fall back to the numbered circle for that slot so the page never breaks.
-
-### 3. Remove duplicate divider before footer
-
-The page currently renders two stacked dividers between Contact and Footer:
-1. Page-level `<KawaiiDivider cloud baby-blue → baby-pink stroke=white />` (line 551).
-2. Footer's auto-divider `<KawaiiDivider scallop baby-pink → baby-blue />` (KawaiiFooter renders this when `prevColor !== 'baby-blue'`).
-
-Fix:
-- Delete the page-level KawaiiDivider at line 551.
-- Change the Contact section background from `bg-[hsl(var(--klawsome-baby-blue))]` to `bg-[hsl(var(--klawsome-baby-pink))]` so it matches the footer's auto divider's `from="baby-pink"` per the divider color rule (from/to must match adjacent section bg).
-- Keep `<KawaiiFooter prevColor="baby-pink" />` as-is.
-- Update the divider directly above Contact (line 479) from `petals white → baby-blue` to `petals white → baby-pink` so the "to" side matches the new Contact background.
-
-### Out of scope
-- No CMS schema changes, no new uploads.
-- Hero, Hosted, Partner, Plushie sections untouched.
-- `processPhotoAsset.json` stays in the repo for now (can clean up later).
+## Notes
+- No backend or data-model changes; CMS content is static in `cmsData.ts`.
+- No new dependencies.
