@@ -9,9 +9,11 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import bdHero from '@/assets/community/canned-food-drive.webp';
-import hostMachinePhoto from '@/assets/bizdev-host-machine.webp';
-import groupPhoto from '@/assets/bizdev-group-photo.webp';
-import plushieClaw from '@/assets/bizdev-plushie-claw.webp';
+import hostedPhotoAsset from '@/assets/bizdev/prize-claw-hosted.jpg.asset.json';
+import partnerPhotoAsset from '@/assets/bizdev/prize-claw-partner.jpg.asset.json';
+import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
+import processPhotoAsset from '@/assets/bizdev/prize-claw-process.png.asset.json';
+import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
 import imgBrand from '@/assets/bizdev/brand.webp';
@@ -216,8 +218,8 @@ const BusinessDevelopment = () => {
       <KawaiiNav />
 
       <PageHero
-        eyebrow={hero?.eyebrow || '🤝 For Businesses & Partners'}
-        title={hero?.title || 'Grow With Klawsome'}
+        eyebrow={hero?.eyebrow || '🤝 Partner with Klawsome'}
+        title={hero?.title || 'Partner with Klawsome!'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
         imageUrl={bdHero}
         jumpLinks={[
@@ -232,7 +234,7 @@ const BusinessDevelopment = () => {
 
       {/* HOSTED — baby blue band like homepage About */}
       <section id="hosted" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 01</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Host a Klawsome Machine<br />in Your Business</h2>
@@ -249,8 +251,9 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl w-full md:w-80 lg:w-96 flex-shrink-0">
               <img
-                src={hostMachinePhoto}
-                alt="Family posing with a Klawsome claw machine and Pikachu mascot"
+                src={hostedPhotoAsset.url}
+                alt="Twin Prize Claw machines glowing with rainbow lights in a Klawsome arcade"
+                loading="lazy"
                 className="w-full aspect-square object-cover rounded-2xl"
               />
             </div>
@@ -303,7 +306,7 @@ const BusinessDevelopment = () => {
       {/* PARTNER — baby pink band */}
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <section id="partner" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 02</p>
             <span className="inline-block bg-[hsl(var(--klawsome-yellow))] text-foreground font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
@@ -343,8 +346,8 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl">
               <img
-                src={groupPhoto}
-                alt="Group of friends enjoying Klawsome arcade"
+                src={partnerPhotoAsset.url}
+                alt="Front-on view of a Klawsome Prize Claw lineup packed with prizes"
                 className="w-full h-full max-h-96 object-cover rounded-2xl"
                 loading="lazy"
               />
@@ -362,7 +365,7 @@ const BusinessDevelopment = () => {
       {/* PLUSHIE — coral red like homepage tokens */}
       <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="white" />
       <section id="plushie" className="section-y section-x bg-primary">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Custom Plushie Orders</h2>
@@ -378,8 +381,8 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl shadow-md">
               <img
-                src={plushieClaw}
-                alt="Claw machine filled with kawaii plushies"
+                src={plushiePhotoAsset.url}
+                alt="Prize Claw Twin cabinet filled with custom kawaii plushies"
                 loading="lazy"
                 className="w-full h-full max-h-72 object-cover rounded-2xl"
               />
