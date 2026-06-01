@@ -25,7 +25,6 @@ const Faq = lazy(() => import("./pages/Faq.tsx"));
 const Rental = lazy(() => import("./pages/Rental.tsx"));
 const Store = lazy(() => import("./pages/Store.tsx"));
 const CommunityPartners = lazy(() => import("./pages/CommunityPartners.tsx"));
-const InfoHub = lazy(() => import("./pages/InfoHub.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const ClawMachineTips = lazy(() => import("./pages/ClawMachineTips.tsx"));
 
