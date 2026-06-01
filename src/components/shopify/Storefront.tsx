@@ -1,4 +1,5 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import { ChevronDown, Loader2, Shuffle, ShoppingBag } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -42,6 +43,8 @@ const TAB_ACCENTS: Record<SortMode, string> = {
 export const Storefront = () => {
   const [sort, setSort] = useState<SortMode>('most-popular');
   const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const autoOpenHandle = searchParams.get('product');
 
   const { data: products = [], isLoading, error } = useQuery({
     queryKey: ['shopify-storefront', sort],
@@ -63,6 +66,22 @@ export const Storefront = () => {
   const activeCategoryLabel = categoryId
     ? CATEGORIES.find((c) => c.id === categoryId)?.label
     : 'All Products';
+
+  // Scroll the auto-open product into view once products are loaded
+  useEffect(() => {
+    if (!autoOpenHandle || !products.length) return;
+    const match = products.find((p) => p.node.handle === autoOpenHandle);
+    if (!match) return;
+    const el = document.getElementById(`product-${match.node.id}`);
+    el?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [autoOpenHandle, products]);
+
+  const clearAutoOpen = () => {
+    if (!autoOpenHandle) return;
+    const next = new URLSearchParams(searchParams);
+    next.delete('product');
+    setSearchParams(next, { replace: true });
+  };
 
   const surpriseMe = () => {
     if (!filtered.length) return;
@@ -176,7 +195,12 @@ export const Storefront = () => {
         {filtered.length > 0 && (
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {filtered.map((p) => (
-              <ProductCard key={p.node.id} product={p} />
+              <ProductCard
+                key={p.node.id}
+                product={p}
+                autoOpen={autoOpenHandle === p.node.handle}
+                onAutoOpenHandled={clearAutoOpen}
+              />
             ))}
           </div>
         )}
@@ -185,7 +209,15 @@ export const Storefront = () => {
   );
 };
 
-const ProductCard = ({ product }: { product: ShopifyProduct }) => {
+const ProductCard = ({
+  product,
+  autoOpen = false,
+  onAutoOpenHandled,
+}: {
+  product: ShopifyProduct;
+  autoOpen?: boolean;
+  onAutoOpenHandled?: () => void;
+}) => {
   const n = product.node;
   const images = n.images.edges.map((e) => e.node);
   const variants = n.variants.edges.map((e) => e.node);
@@ -209,6 +241,14 @@ const ProductCard = ({ product }: { product: ShopifyProduct }) => {
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    if (autoOpen) {
+      setOpen(true);
+      onAutoOpenHandled?.();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [autoOpen]);
 
   const handleAdd = async (e: React.MouseEvent) => {
     e.stopPropagation();
