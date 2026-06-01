@@ -2517,7 +2517,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "Prize Shop",
       "title": "Your Home for Kawaii Plushies & Collectible Wins",
       "subtitle": "Every prize is earned through skill, excitement, and the joy of winning.",
-      "image_url": "",
+      "image_url": "/gallery/novi-community-fest-04.webp",
       "cta_text": "Visit Klawsome",
       "cta_url": "#scheduling",
       "sort_order": 0
