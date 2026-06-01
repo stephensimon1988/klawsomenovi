@@ -18,7 +18,6 @@ import {
   type SortMode,
 } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
-import { CartDrawer } from './CartDrawer';
 import { toast } from 'sonner';
 import { QuickAddModal } from './QuickAddModal';
 
