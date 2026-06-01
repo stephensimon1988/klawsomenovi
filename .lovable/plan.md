@@ -1,36 +1,25 @@
-## Changes
+## Create "Klawsome Crew Plush Collection" product in Shopify
 
-### 1. Rename "Book Now" → "Book Event" site-wide
-Update label text in:
-- `src/components/KawaiiHero.tsx` (hero CTA)
-- `src/components/KawaiiNav.tsx` (desktop + mobile nav buttons, 2 spots — keep `BOOK EVENT` uppercase)
-- `src/components/KawaiiStory.tsx` (story CTA, uppercase)
-- `src/components/PageHero.tsx` (shared page hero CTA)
-- `src/pages/Rental.tsx` (2 spots)
-- `src/content/cmsData.ts` (`cta_text` value)
+### Product
+- **Title:** Klawsome Crew Plush Collection
+- **Vendor:** Klawsome
+- **Type:** Plush
+- **Tags:** plush, mascot, klawsome, collectible
+- **Body (HTML):** full description provided, with the three character sections rendered as headings + paragraphs, plus the bullet list of features. Emoji preserved.
+- **Image:** uploaded group shot (`user-uploads://image-214.png`) used as the main product image. Shopify variant images for Ami/Vivi/Sylvie aren't separately provided, so the group shot is the only image for now (we can add individual character shots later when you have them).
 
-Aria-labels / `open-booking` event handlers stay unchanged.
+### Variants (single option: "Character")
+| Character | Price | SKU |
+|---|---|---|
+| Ami the Panda | 26.99 | KLAW-PLUSH-AMI |
+| Vivi the Cat | 26.99 | KLAW-PLUSH-VIVI |
+| Sylvie the Fox | 26.99 | KLAW-PLUSH-SYLVIE |
 
-### 2. Recolor primary CTAs from navy → klawsome red, keep yellow hover
-Scope = the navy pill CTAs only (Book Event, Buy Gift Card, Buy Plushies, nav Book Event, jump-link pills, story CTA, PageHero CTA, Rental CTAs). Form/dialog/utility/admin buttons untouched.
+All variants: inventory tracked by Shopify, `inventory_policy: deny` (no overselling).
 
-Swap on each button's className:
-- `bg-klawsome-navy` → `bg-klawsome-red`
-- `border-klawsome-navy` → `border-klawsome-red`
-- `text-white` stays
-- Hover (`hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow` + yellow glow shadow) stays as-is
+### Storefront
+No code changes required — the existing Shopify-backed Store page already pulls products from the Storefront API, so the new product will appear automatically with all 3 character variants selectable on the product detail page.
 
-Files touched for color:
-- `src/components/KawaiiHero.tsx` (3 hero CTAs + sticky jump-link pills)
-- `src/components/KawaiiNav.tsx` (Book Event buttons, desktop + mobile)
-- `src/components/KawaiiStory.tsx` (story CTA)
-- `src/components/PageHero.tsx` (hero CTA + any jump-link pills using the same navy pattern)
-- `src/pages/Rental.tsx` (2 Book Event CTAs)
-
-### 3. Verify
-- Grep for remaining `Book Now` / `bg-klawsome-navy` on CTA buttons to confirm none missed.
-- Visual check of `/` hero, nav, and `/rental` in preview.
-
-## Out of scope
-- shadcn `<Button>` default variant, dialog/form/admin buttons, footer links, Storefront/cart buttons — left as-is per "only primary CTAs".
-- No token changes in `index.css` / `tailwind.config.ts`.
+### Out of scope
+- Per-variant solo images (can be added later via update_product_variant once you have them).
+- Inventory quantities (left at 0 until you set stock in Shopify admin).
