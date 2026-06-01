@@ -1829,7 +1829,7 @@ export const cmsData: Record<string, any[]> = {
       "headline": "Why Rent from Klawsome?",
       "body": "Klawsome brings the fun of the claw machine arcade directly to your event. Our machines are great for birthdays, company parties, school events, fundraisers, trade shows, and community celebrations in Novi and the surrounding Michigan area.\n\nWe take care of the setup, support, and pickup so you can focus on your guests.\n\nReady to book? Contact Klawsome to request a claw machine rental quote.",
       "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/cat-playing-arcade-game.webp",
-      "cta_text": "Book Now",
+      "cta_text": "Book Event",
       "cta_url": "https://klawsome.as.me/schedule/366e2b9b",
       "list_items": [],
       "sort_order": 1,
