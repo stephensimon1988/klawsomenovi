@@ -38,10 +38,7 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-start justify-between gap-12 mb-12">
             <div>
-              <img src={klawsomeLogo} alt="Klawsome" className="h-16 w-auto mb-4" />
-              <p className="text-white/75 font-body text-sm max-w-xs">
-                Michigan's first stand-alone claw machine arcade 🎪
-              </p>
+              <img src={klawsomeLogo} alt="Klawsome" className="h-32 w-auto mb-4" />
             </div>
 
             <div className="flex flex-wrap gap-12">
