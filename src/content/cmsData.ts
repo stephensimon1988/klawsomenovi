@@ -354,7 +354,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "8f0c8648-c365-4c4f-8c3f-435564c607a6",
       "question": "What are the available token bundles?",
-       "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $249 → 250 + 75 bonus.",
+      "answer": "$10 → 10 tokens · $30 → 30 + 5 bonus · $50 → 50 + 10 bonus · $100 → 100 + 25 bonus · $249 → 250 + 75 bonus.",
       "page": "general",
       "sort_order": 106
     },
@@ -704,529 +704,529 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 3
     },
     {
-          "id": "canned-food-drive-2025-01",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-01.webp",
-          "caption": "Loading donations into the cart at Gleaners",
-          "sort_order": 101
+      "id": "canned-food-drive-2025-01",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-01.webp",
+      "caption": "Loading donations into the cart at Gleaners",
+      "sort_order": 101
     },
     {
-          "id": "canned-food-drive-2025-02",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-02.webp",
-          "caption": "Volunteers ready to start the food drive shift",
-          "sort_order": 102
+      "id": "canned-food-drive-2025-02",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-02.webp",
+      "caption": "Volunteers ready to start the food drive shift",
+      "sort_order": 102
     },
     {
-          "id": "canned-food-drive-2025-03",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-03.webp",
-          "caption": "Sorting canned goods into boxes",
-          "sort_order": 103
+      "id": "canned-food-drive-2025-03",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-03.webp",
+      "caption": "Sorting canned goods into boxes",
+      "sort_order": 103
     },
     {
-          "id": "canned-food-drive-2025-04",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-04.webp",
-          "caption": "Hauling cases of water to the dock",
-          "sort_order": 104
+      "id": "canned-food-drive-2025-04",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-04.webp",
+      "caption": "Hauling cases of water to the dock",
+      "sort_order": 104
     },
     {
-          "id": "canned-food-drive-2025-05",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-05.webp",
-          "caption": "Packing a fresh box for distribution",
-          "sort_order": 105
+      "id": "canned-food-drive-2025-05",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-05.webp",
+      "caption": "Packing a fresh box for distribution",
+      "sort_order": 105
     },
     {
-          "id": "canned-food-drive-2025-06",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-06.webp",
-          "caption": "Quick team huddle before the next pallet",
-          "sort_order": 106
+      "id": "canned-food-drive-2025-06",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-06.webp",
+      "caption": "Quick team huddle before the next pallet",
+      "sort_order": 106
     },
     {
-          "id": "canned-food-drive-2025-07",
-          "section": "canned-food-drive",
-          "image_url": "/gallery/canned-food-drive-2025-07.webp",
-          "caption": "Kids stacking cans of green beans",
-          "sort_order": 107
+      "id": "canned-food-drive-2025-07",
+      "section": "canned-food-drive",
+      "image_url": "/gallery/canned-food-drive-2025-07.webp",
+      "caption": "Kids stacking cans of green beans",
+      "sort_order": 107
     },
     {
-          "id": "msu-pass-01",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-01.webp",
-          "caption": "Welcoming MSU PASS guests at the door",
-          "sort_order": 101
+      "id": "msu-pass-01",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-01.webp",
+      "caption": "Welcoming MSU PASS guests at the door",
+      "sort_order": 101
     },
     {
-          "id": "msu-pass-02",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-02.webp",
-          "caption": "Group photo with the MSU PASS crew",
-          "sort_order": 102
+      "id": "msu-pass-02",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-02.webp",
+      "caption": "Group photo with the MSU PASS crew",
+      "sort_order": 102
     },
     {
-          "id": "msu-pass-03",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-03.webp",
-          "caption": "First plush of the night",
-          "sort_order": 103
+      "id": "msu-pass-03",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-03.webp",
+      "caption": "First plush of the night",
+      "sort_order": 103
     },
     {
-          "id": "msu-pass-04",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-04.webp",
-          "caption": "Cheering on a clean grab",
-          "sort_order": 104
+      "id": "msu-pass-04",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-04.webp",
+      "caption": "Cheering on a clean grab",
+      "sort_order": 104
     },
     {
-          "id": "msu-pass-05",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-05.webp",
-          "caption": "Strategizing the next pick",
-          "sort_order": 105
+      "id": "msu-pass-05",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-05.webp",
+      "caption": "Strategizing the next pick",
+      "sort_order": 105
     },
     {
-          "id": "msu-pass-06",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-06.webp",
-          "caption": "Celebrating a winning claw",
-          "sort_order": 106
+      "id": "msu-pass-06",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-06.webp",
+      "caption": "Celebrating a winning claw",
+      "sort_order": 106
     },
     {
-          "id": "msu-pass-07",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-07.webp",
-          "caption": "Sharing prizes with friends",
-          "sort_order": 107
+      "id": "msu-pass-07",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-07.webp",
+      "caption": "Sharing prizes with friends",
+      "sort_order": 107
     },
     {
-          "id": "msu-pass-08",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-08.webp",
-          "caption": "Lining up at the favorite machine",
-          "sort_order": 108
+      "id": "msu-pass-08",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-08.webp",
+      "caption": "Lining up at the favorite machine",
+      "sort_order": 108
     },
     {
-          "id": "msu-pass-09",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-09.webp",
-          "caption": "Trading plushies between rounds",
-          "sort_order": 109
+      "id": "msu-pass-09",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-09.webp",
+      "caption": "Trading plushies between rounds",
+      "sort_order": 109
     },
     {
-          "id": "msu-pass-10",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-10.webp",
-          "caption": "Lighting up at the prize reveal",
-          "sort_order": 110
+      "id": "msu-pass-10",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-10.webp",
+      "caption": "Lighting up at the prize reveal",
+      "sort_order": 110
     },
     {
-          "id": "msu-pass-11",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-11.webp",
-          "caption": "Coaching a friend through the grab",
-          "sort_order": 111
+      "id": "msu-pass-11",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-11.webp",
+      "caption": "Coaching a friend through the grab",
+      "sort_order": 111
     },
     {
-          "id": "msu-pass-12",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-12.webp",
-          "caption": "Showing off the haul",
-          "sort_order": 112
+      "id": "msu-pass-12",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-12.webp",
+      "caption": "Showing off the haul",
+      "sort_order": 112
     },
     {
-          "id": "msu-pass-13",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-13.webp",
-          "caption": "Posing with stacks of plush",
-          "sort_order": 113
+      "id": "msu-pass-13",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-13.webp",
+      "caption": "Posing with stacks of plush",
+      "sort_order": 113
     },
     {
-          "id": "msu-pass-14",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-14.webp",
-          "caption": "Big smiles after a big win",
-          "sort_order": 114
+      "id": "msu-pass-14",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-14.webp",
+      "caption": "Big smiles after a big win",
+      "sort_order": 114
     },
     {
-          "id": "msu-pass-15",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-15.webp",
-          "caption": "Friendly competition at the claws",
-          "sort_order": 115
+      "id": "msu-pass-15",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-15.webp",
+      "caption": "Friendly competition at the claws",
+      "sort_order": 115
     },
     {
-          "id": "msu-pass-16",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-16.webp",
-          "caption": "Filling up the prize bag",
-          "sort_order": 116
+      "id": "msu-pass-16",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-16.webp",
+      "caption": "Filling up the prize bag",
+      "sort_order": 116
     },
     {
-          "id": "msu-pass-17",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-17.webp",
-          "caption": "Catching up between rounds",
-          "sort_order": 117
+      "id": "msu-pass-17",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-17.webp",
+      "caption": "Catching up between rounds",
+      "sort_order": 117
     },
     {
-          "id": "msu-pass-18",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-18.webp",
-          "caption": "All-in on the next grab",
-          "sort_order": 118
+      "id": "msu-pass-18",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-18.webp",
+      "caption": "All-in on the next grab",
+      "sort_order": 118
     },
     {
-          "id": "msu-pass-19",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-19.webp",
-          "caption": "Celebrating the night's wins",
-          "sort_order": 119
+      "id": "msu-pass-19",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-19.webp",
+      "caption": "Celebrating the night's wins",
+      "sort_order": 119
     },
     {
-          "id": "msu-pass-20",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-20.webp",
-          "caption": "Trying their luck on the ice cream machine",
-          "sort_order": 120
+      "id": "msu-pass-20",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-20.webp",
+      "caption": "Trying their luck on the ice cream machine",
+      "sort_order": 120
     },
     {
-          "id": "msu-pass-21",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-21.webp",
-          "caption": "Teamwork on the two-player claw",
-          "sort_order": 121
+      "id": "msu-pass-21",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-21.webp",
+      "caption": "Teamwork on the two-player claw",
+      "sort_order": 121
     },
     {
-          "id": "msu-pass-22",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-22.webp",
-          "caption": "Picking out a favorite plush",
-          "sort_order": 122
+      "id": "msu-pass-22",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-22.webp",
+      "caption": "Picking out a favorite plush",
+      "sort_order": 122
     },
     {
-          "id": "msu-pass-23",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-23.webp",
-          "caption": "Hands-up moment after a win",
-          "sort_order": 123
+      "id": "msu-pass-23",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-23.webp",
+      "caption": "Hands-up moment after a win",
+      "sort_order": 123
     },
     {
-          "id": "msu-pass-24",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-24.webp",
-          "caption": "MSU PASS night in full swing",
-          "sort_order": 124
+      "id": "msu-pass-24",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-24.webp",
+      "caption": "MSU PASS night in full swing",
+      "sort_order": 124
     },
     {
-          "id": "msu-pass-25",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-25.webp",
-          "caption": "Tokens, claws, and good company",
-          "sort_order": 125
+      "id": "msu-pass-25",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-25.webp",
+      "caption": "Tokens, claws, and good company",
+      "sort_order": 125
     },
     {
-          "id": "msu-pass-26",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-26.webp",
-          "caption": "Cheering each other on",
-          "sort_order": 126
+      "id": "msu-pass-26",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-26.webp",
+      "caption": "Cheering each other on",
+      "sort_order": 126
     },
     {
-          "id": "msu-pass-27",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-27.webp",
-          "caption": "Lining up the perfect drop",
-          "sort_order": 127
+      "id": "msu-pass-27",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-27.webp",
+      "caption": "Lining up the perfect drop",
+      "sort_order": 127
     },
     {
-          "id": "msu-pass-28",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-28.webp",
-          "caption": "End-of-night plush parade",
-          "sort_order": 128
+      "id": "msu-pass-28",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-28.webp",
+      "caption": "End-of-night plush parade",
+      "sort_order": 128
     },
     {
-          "id": "msu-pass-29",
-          "section": "msu-pass",
-          "image_url": "/gallery/msu-pass-29.webp",
-          "caption": "Thanks for hanging out with us!",
-          "sort_order": 129
+      "id": "msu-pass-29",
+      "section": "msu-pass",
+      "image_url": "/gallery/msu-pass-29.webp",
+      "caption": "Thanks for hanging out with us!",
+      "sort_order": 129
     },
     {
-          "id": "novi-community-fest-01",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-01.webp",
-          "caption": "Setting up the Klawsome tent at the fest",
-          "sort_order": 2
+      "id": "novi-community-fest-01",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-01.webp",
+      "caption": "Setting up the Klawsome tent at the fest",
+      "sort_order": 2
     },
     {
-          "id": "novi-community-fest-02",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-02.webp",
-          "caption": "Welcoming guests to our booth",
-          "sort_order": 3
+      "id": "novi-community-fest-02",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-02.webp",
+      "caption": "Welcoming guests to our booth",
+      "sort_order": 3
     },
     {
-          "id": "novi-community-fest-03",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-03.webp",
-          "caption": "Kids trying the claw for the first time",
-          "sort_order": 4
+      "id": "novi-community-fest-03",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-03.webp",
+      "caption": "Kids trying the claw for the first time",
+      "sort_order": 4
     },
     {
-          "id": "novi-community-fest-04",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-04.webp",
-          "caption": "Plushie giveaway in full swing",
-          "sort_order": 5
+      "id": "novi-community-fest-04",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-04.webp",
+      "caption": "Plushie giveaway in full swing",
+      "sort_order": 5
     },
     {
-          "id": "novi-community-fest-05",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-05.webp",
-          "caption": "Klawsome crew greeting the community",
-          "sort_order": 6
+      "id": "novi-community-fest-05",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-05.webp",
+      "caption": "Klawsome crew greeting the community",
+      "sort_order": 6
     },
     {
-          "id": "novi-community-fest-06",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-06.webp",
-          "caption": "A new winner at the booth",
-          "sort_order": 7
+      "id": "novi-community-fest-06",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-06.webp",
+      "caption": "A new winner at the booth",
+      "sort_order": 7
     },
     {
-          "id": "novi-community-fest-07",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-07.webp",
-          "caption": "Lining up to play at the festival",
-          "sort_order": 8
+      "id": "novi-community-fest-07",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-07.webp",
+      "caption": "Lining up to play at the festival",
+      "sort_order": 8
     },
     {
-          "id": "novi-community-fest-08",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-08.webp",
-          "caption": "Family fun under the Klawsome tent",
-          "sort_order": 9
+      "id": "novi-community-fest-08",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-08.webp",
+      "caption": "Family fun under the Klawsome tent",
+      "sort_order": 9
     },
     {
-          "id": "novi-community-fest-09",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-09.webp",
-          "caption": "Smiles after a successful grab",
-          "sort_order": 10
+      "id": "novi-community-fest-09",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-09.webp",
+      "caption": "Smiles after a successful grab",
+      "sort_order": 10
     },
     {
-          "id": "novi-community-fest-10",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-10.webp",
-          "caption": "Helping out a first-time player",
-          "sort_order": 11
+      "id": "novi-community-fest-10",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-10.webp",
+      "caption": "Helping out a first-time player",
+      "sort_order": 11
     },
     {
-          "id": "novi-community-fest-11",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-11.webp",
-          "caption": "Sharing plushies with new friends",
-          "sort_order": 12
+      "id": "novi-community-fest-11",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-11.webp",
+      "caption": "Sharing plushies with new friends",
+      "sort_order": 12
     },
     {
-          "id": "novi-community-fest-12",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-12.webp",
-          "caption": "Festival-goers picking out a prize",
-          "sort_order": 13
+      "id": "novi-community-fest-12",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-12.webp",
+      "caption": "Festival-goers picking out a prize",
+      "sort_order": 13
     },
     {
-          "id": "novi-community-fest-13",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-13.webp",
-          "caption": "Quick portrait at the booth",
-          "sort_order": 14
+      "id": "novi-community-fest-13",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-13.webp",
+      "caption": "Quick portrait at the booth",
+      "sort_order": 14
     },
     {
-          "id": "novi-community-fest-14",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-14.webp",
-          "caption": "Cheers as the plush drops in",
-          "sort_order": 15
+      "id": "novi-community-fest-14",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-14.webp",
+      "caption": "Cheers as the plush drops in",
+      "sort_order": 15
     },
     {
-          "id": "novi-community-fest-15",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-15.webp",
-          "caption": "A big crowd around the machine",
-          "sort_order": 16
+      "id": "novi-community-fest-15",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-15.webp",
+      "caption": "A big crowd around the machine",
+      "sort_order": 16
     },
     {
-          "id": "novi-community-fest-16",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-16.webp",
-          "caption": "Lining up for another round",
-          "sort_order": 17
+      "id": "novi-community-fest-16",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-16.webp",
+      "caption": "Lining up for another round",
+      "sort_order": 17
     },
     {
-          "id": "novi-community-fest-17",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-17.webp",
-          "caption": "Klawsome plushies on display",
-          "sort_order": 18
+      "id": "novi-community-fest-17",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-17.webp",
+      "caption": "Klawsome plushies on display",
+      "sort_order": 18
     },
     {
-          "id": "novi-community-fest-18",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-18.webp",
-          "caption": "Volunteers keeping the booth running",
-          "sort_order": 19
+      "id": "novi-community-fest-18",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-18.webp",
+      "caption": "Volunteers keeping the booth running",
+      "sort_order": 19
     },
     {
-          "id": "novi-community-fest-19",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-19.webp",
-          "caption": "A proud little winner",
-          "sort_order": 20
+      "id": "novi-community-fest-19",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-19.webp",
+      "caption": "A proud little winner",
+      "sort_order": 20
     },
     {
-          "id": "novi-community-fest-20",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-20.webp",
-          "caption": "Festival vibes at the Klawsome tent",
-          "sort_order": 21
+      "id": "novi-community-fest-20",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-20.webp",
+      "caption": "Festival vibes at the Klawsome tent",
+      "sort_order": 21
     },
     {
-          "id": "novi-community-fest-21",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-21.webp",
-          "caption": "Group shot with new fans",
-          "sort_order": 22
+      "id": "novi-community-fest-21",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-21.webp",
+      "caption": "Group shot with new fans",
+      "sort_order": 22
     },
     {
-          "id": "novi-community-fest-22",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-22.webp",
-          "caption": "Sun, smiles, and stuffed animals",
-          "sort_order": 23
+      "id": "novi-community-fest-22",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-22.webp",
+      "caption": "Sun, smiles, and stuffed animals",
+      "sort_order": 23
     },
     {
-          "id": "novi-community-fest-23",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-23.webp",
-          "caption": "Trading high-fives after a win",
-          "sort_order": 24
+      "id": "novi-community-fest-23",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-23.webp",
+      "caption": "Trading high-fives after a win",
+      "sort_order": 24
     },
     {
-          "id": "novi-community-fest-24",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-24.webp",
-          "caption": "Resetting the machine for the next guest",
-          "sort_order": 25
+      "id": "novi-community-fest-24",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-24.webp",
+      "caption": "Resetting the machine for the next guest",
+      "sort_order": 25
     },
     {
-          "id": "novi-community-fest-25",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-25.webp",
-          "caption": "A favorite plush gets adopted",
-          "sort_order": 26
+      "id": "novi-community-fest-25",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-25.webp",
+      "caption": "A favorite plush gets adopted",
+      "sort_order": 26
     },
     {
-          "id": "novi-community-fest-26",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-26.webp",
-          "caption": "Community Fest energy at our booth",
-          "sort_order": 27
+      "id": "novi-community-fest-26",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-26.webp",
+      "caption": "Community Fest energy at our booth",
+      "sort_order": 27
     },
     {
-          "id": "novi-community-fest-27",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-27.webp",
-          "caption": "Saying thanks to the Novi crowd",
-          "sort_order": 28
+      "id": "novi-community-fest-27",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-27.webp",
+      "caption": "Saying thanks to the Novi crowd",
+      "sort_order": 28
     },
     {
-          "id": "novi-community-fest-28",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-28.webp",
-          "caption": "Wrapping up the day at the fest",
-          "sort_order": 29
+      "id": "novi-community-fest-28",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-28.webp",
+      "caption": "Wrapping up the day at the fest",
+      "sort_order": 29
     },
     {
-          "id": "novi-community-fest-29",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-29.webp",
-          "caption": "End-of-day group photo",
-          "sort_order": 30
+      "id": "novi-community-fest-29",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-29.webp",
+      "caption": "End-of-day group photo",
+      "sort_order": 30
     },
     {
-          "id": "novi-community-fest-30",
-          "section": "novi-community-fest",
-          "image_url": "/gallery/novi-community-fest-30.webp",
-          "caption": "See you at the next Novi Community Fest!",
-          "sort_order": 31
+      "id": "novi-community-fest-30",
+      "section": "novi-community-fest",
+      "image_url": "/gallery/novi-community-fest-30.webp",
+      "caption": "See you at the next Novi Community Fest!",
+      "sort_order": 31
     },
     {
-          "id": "trunk-or-treat-01",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-01.webp",
-          "caption": "Setting up the Klawsome trunk for the night",
-          "sort_order": 2
+      "id": "trunk-or-treat-01",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-01.webp",
+      "caption": "Setting up the Klawsome trunk for the night",
+      "sort_order": 2
     },
     {
-          "id": "trunk-or-treat-02",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-02.webp",
-          "caption": "Welcoming little ghouls and goblins",
-          "sort_order": 3
+      "id": "trunk-or-treat-02",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-02.webp",
+      "caption": "Welcoming little ghouls and goblins",
+      "sort_order": 3
     },
     {
-          "id": "trunk-or-treat-03",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-03.webp",
-          "caption": "Handing out treats from the trunk",
-          "sort_order": 4
+      "id": "trunk-or-treat-03",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-03.webp",
+      "caption": "Handing out treats from the trunk",
+      "sort_order": 4
     },
     {
-          "id": "trunk-or-treat-04",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-04.webp",
-          "caption": "A line of costumes at our spot",
-          "sort_order": 5
+      "id": "trunk-or-treat-04",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-04.webp",
+      "caption": "A line of costumes at our spot",
+      "sort_order": 5
     },
     {
-          "id": "trunk-or-treat-05",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-05.webp",
-          "caption": "Plushie prizes ready to be claimed",
-          "sort_order": 6
+      "id": "trunk-or-treat-05",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-05.webp",
+      "caption": "Plushie prizes ready to be claimed",
+      "sort_order": 6
     },
     {
-          "id": "trunk-or-treat-06",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-06.webp",
-          "caption": "Spooky-cute trunk reveal",
-          "sort_order": 7
+      "id": "trunk-or-treat-06",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-06.webp",
+      "caption": "Spooky-cute trunk reveal",
+      "sort_order": 7
     },
     {
-          "id": "trunk-or-treat-07",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-07.webp",
-          "caption": "Trick-or-treaters loving the Klawsome theme",
-          "sort_order": 8
+      "id": "trunk-or-treat-07",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-07.webp",
+      "caption": "Trick-or-treaters loving the Klawsome theme",
+      "sort_order": 8
     },
     {
-          "id": "trunk-or-treat-08",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-08.webp",
-          "caption": "Sharing smiles and sweets",
-          "sort_order": 9
+      "id": "trunk-or-treat-08",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-08.webp",
+      "caption": "Sharing smiles and sweets",
+      "sort_order": 9
     },
     {
-          "id": "trunk-or-treat-09",
-          "section": "trunk-or-treat",
-          "image_url": "/gallery/trunk-or-treat-09.webp",
-          "caption": "End of a sugar-fueled night",
-          "sort_order": 10
+      "id": "trunk-or-treat-09",
+      "section": "trunk-or-treat",
+      "image_url": "/gallery/trunk-or-treat-09.webp",
+      "caption": "End of a sugar-fueled night",
+      "sort_order": 10
     },
     {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
@@ -1559,7 +1559,7 @@ export const cmsData: Record<string, any[]> = {
   "homepage_content": [
     {
       "id": "3ac880e5-3f94-49e4-adcb-cd507ede0300",
-      "hero_headline": "Welcome to Novi's Own Klaw Arcade",
+      "hero_headline": "Welcome to Michigan's First Klawcade!",
       "hero_subheadline": "Open Tuesday to Sunday 11 a.m. to 9 p.m. Closed Mondays",
       "hero_cta_text": "Book a Birthday Party",
       "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
@@ -2188,42 +2188,6 @@ export const cmsData: Record<string, any[]> = {
       "updated_at": "2026-04-23T15:51:06.827429+00:00"
     },
     {
-      "id": "8f0d69a5-42e4-463c-bebc-50d2a5400c95",
-      "page_key": "info-hub",
-      "section_key": "accessibility",
-      "eyebrow": "Accessibility",
-      "headline": "Welcoming All Guests",
-      "body": "Klawsome is located inside Sakura Novi, a walkable modern retail development designed with accessibility in mind. Guests may request assistance anytime by speaking with staff. For specific accommodation questions, contact team@klawsomenovi.com or call (248) 938-4093.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-holding-candies-capsules.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [],
-      "sort_order": 5,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
-    },
-    {
-      "id": "9360f9df-e385-4420-9d17-e1315769e48d",
-      "page_key": "info-hub",
-      "section_key": "media-kit",
-      "eyebrow": "Media Kit",
-      "headline": "For Journalists, Bloggers & Content Creators",
-      "body": "Reach out to request interviews, photos, or additional press materials. Email team@klawsomenovi.com or call (248) 938-4093.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/fox-holding-gumball-and-kawsome-bag.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [
-        "Exterior and interior photos",
-        "Plush wall images",
-        "Claw machine rows",
-        "Sakura Novi surroundings",
-        "Logo usage guidelines (request via email)"
-      ],
-      "sort_order": 6,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
-    },
-    {
       "id": "959f86b5-5d30-4a66-9ac5-bb184ae88011",
       "page_key": "community",
       "section_key": "rooted",
@@ -2264,56 +2228,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 70,
       "created_at": "2026-04-28T15:03:21.362199+00:00",
       "updated_at": "2026-04-28T15:03:21.362199+00:00"
-    },
-    {
-      "id": "ab74b313-2554-440b-ad65-0b4ce525bace",
-      "page_key": "info-hub",
-      "section_key": "sakura-novi",
-      "eyebrow": "Sakura Novi",
-      "headline": "Michigan's First Asian-Inspired Mixed-Use Development",
-      "body": "A walkable community hub designed to combine culture, food, family activities, and unique experiences. Klawsome was the first retailer to open here, helping kick off Michigan's first Clawcade.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-bunny-bear-cat-ballpit.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [],
-      "sort_order": 3,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
-    },
-    {
-      "id": "b14f7b5d-b963-4006-a53b-0b8f2148269f",
-      "page_key": "info-hub",
-      "section_key": "location",
-      "eyebrow": "Location & Directions",
-      "headline": "Find Us Inside Sakura Novi",
-      "body": "42768 Grand River Avenue, Suite C-140, Novi, MI 48375. Enter Sakura Novi from Grand River Avenue, follow signage into the retail area, and look for Klawsome's bright machines and plush-filled display windows.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [],
-      "sort_order": 2,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
-    },
-    {
-      "id": "b494e372-c49b-4c9a-8964-58d6d3315b03",
-      "page_key": "info-hub",
-      "section_key": "gallery",
-      "eyebrow": "Gallery",
-      "headline": "A Vibrant, Plush-Filled Atmosphere",
-      "body": "Klawsome features a vibrant and colorful interior filled with rows of claw machines, glowing lights, and kawaii-style plushies displayed inside vibrantly colored prize boxes. Browse the live Instagram feed on the homepage for the latest plushie wins and arcade updates.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-claw-machine-party.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [
-        "Bright, playful claw-machine setups",
-        "Plushies of various sizes and styles",
-        "Engaging prize displays featuring cute characters",
-        "A warm, welcoming, family-friendly environment"
-      ],
-      "sort_order": 1,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
     },
     {
       "id": "b5093ed1-009f-476a-b788-55ea5e287a97",
@@ -2430,28 +2344,6 @@ export const cmsData: Record<string, any[]> = {
       "updated_at": "2026-04-23T15:51:06.827429+00:00"
     },
     {
-      "id": "d3cda912-0eab-419b-994f-0db7f36703ac",
-      "page_key": "info-hub",
-      "section_key": "policies",
-      "eyebrow": "Policies",
-      "headline": "General Guidelines",
-      "body": "Klawsome strives to maintain a safe, welcoming environment for all guests.",
-      "image_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-holding-bear-prize-tickets.webp",
-      "cta_text": "",
-      "cta_url": "",
-      "list_items": [
-        "Guests are expected to treat staff and other visitors respectfully",
-        "Children should be supervised to ensure safe play",
-        "All claw machines operate using tokens",
-        "Token bundles include bonus tokens depending on the amount purchased",
-        "Visitors are welcome to take pictures of their wins",
-        "Event inquiries should be sent to events@klawsomenovi.com"
-      ],
-      "sort_order": 4,
-      "created_at": "2026-04-23T15:51:06.827429+00:00",
-      "updated_at": "2026-04-23T15:51:06.827429+00:00"
-    },
-    {
       "id": "e8b61637-c9ee-4761-86f5-1db5946a6dfb",
       "page_key": "store",
       "section_key": "large-plush",
@@ -2554,17 +2446,6 @@ export const cmsData: Record<string, any[]> = {
       "cta_text": "",
       "cta_url": "",
       "sort_order": 2
-    },
-    {
-      "id": "9052cb6f-3ecb-41f5-9963-87e773dbe2a6",
-      "page_key": "info-hub",
-      "eyebrow": "Info Hub",
-      "title": "Your All-In-One Guide for Visiting Klawsome",
-      "subtitle": "Hours, location, policies, accessibility, media kit, and more.",
-      "image_url": "",
-      "cta_text": "",
-      "cta_url": "",
-      "sort_order": 0
     },
     {
       "id": "998daf89-9247-4bea-b177-c3c8762a97bc",
