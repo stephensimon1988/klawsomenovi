@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Sheet, SheetContent, SheetDescription, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
@@ -51,7 +52,12 @@ export const CartDrawer = () => {
                 <div className="space-y-4">
                   {items.map((item) => (
                     <div key={item.variantId} className="flex gap-4 p-2 rounded-2xl bg-secondary/30">
-                      <div className="w-16 h-16 bg-background rounded-xl overflow-hidden flex-shrink-0">
+                      <Link
+                        to={`/store?product=${encodeURIComponent(item.product.node.handle)}`}
+                        onClick={() => setIsOpen(false)}
+                        className="w-16 h-16 bg-background rounded-xl overflow-hidden flex-shrink-0 block hover:opacity-80 transition-opacity"
+                        aria-label={`View ${item.product.node.title}`}
+                      >
                         {(() => {
                           const variant = item.product.node.variants.edges.find((v) => v.node.id === item.variantId)?.node;
                           const url = variant?.image?.url || item.product.node.images?.edges?.[0]?.node?.url;
@@ -59,9 +65,15 @@ export const CartDrawer = () => {
                             <img src={url} alt={item.product.node.title} className="w-full h-full object-cover" />
                           ) : null;
                         })()}
-                      </div>
+                      </Link>
                       <div className="flex-1 min-w-0">
-                        <h4 className="font-heading font-bold text-sm truncate">{item.product.node.title}</h4>
+                        <Link
+                          to={`/store?product=${encodeURIComponent(item.product.node.handle)}`}
+                          onClick={() => setIsOpen(false)}
+                          className="font-heading font-bold text-sm truncate block hover:text-primary transition-colors"
+                        >
+                          {item.product.node.title}
+                        </Link>
                         <p className="text-xs text-muted-foreground">{item.selectedOptions.map((o) => o.value).join(' • ')}</p>
                         <p className="font-heading font-bold text-primary">${parseFloat(item.price.amount).toFixed(2)}</p>
                       </div>
