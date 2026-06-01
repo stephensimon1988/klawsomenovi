@@ -252,9 +252,9 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={openBookingModal}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
-                    Book Now
+                    Book Event
                   </button>
                 </div>
               </div>
@@ -280,9 +280,9 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={openBookingModal}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-foreground text-background border border-foreground shadow-md transition-all duration-200 hover:bg-foreground/90 hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--foreground)/0.4)]"
+                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
-                    Book Now
+                    Book Event
                   </button>
                 </div>
               </div>
