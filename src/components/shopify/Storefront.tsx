@@ -18,7 +18,6 @@ import {
   type SortMode,
 } from '@/lib/shopify';
 import { useCartStore } from '@/stores/cartStore';
-import { CartDrawer } from './CartDrawer';
 import { toast } from 'sonner';
 import { QuickAddModal } from './QuickAddModal';
 
@@ -153,7 +152,6 @@ export const Storefront = () => {
             <span className="px-4 py-1.5 rounded-full bg-primary text-primary-foreground font-heading font-bold text-sm">
               {activeCategoryLabel} · {filtered.length}
             </span>
-            <CartDrawer />
           </div>
         </div>
       </div>
