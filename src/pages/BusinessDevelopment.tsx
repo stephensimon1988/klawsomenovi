@@ -12,7 +12,6 @@ import bdHero from '@/assets/community/canned-food-drive.webp';
 import hostedPhotoAsset from '@/assets/bizdev/prize-claw-hosted.jpg.asset.json';
 import partnerPhotoAsset from '@/assets/bizdev/prize-claw-partner.jpg.asset.json';
 import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
-import processPhotoAsset from '@/assets/bizdev/prize-claw-process.png.asset.json';
 import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
