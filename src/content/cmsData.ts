@@ -1559,7 +1559,7 @@ export const cmsData: Record<string, any[]> = {
   "homepage_content": [
     {
       "id": "3ac880e5-3f94-49e4-adcb-cd507ede0300",
-      "hero_headline": "Welcome to Novi's Own Klaw Arcade",
+      "hero_headline": "Welcome to Michigan's First Klawcade!",
       "hero_subheadline": "Open Tuesday to Sunday 11 a.m. to 9 p.m. Closed Mondays",
       "hero_cta_text": "Book a Birthday Party",
       "hero_image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
