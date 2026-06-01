@@ -20,7 +20,7 @@ const moreLinks = [
   { label: 'Claw Machine Tips', href: '/claw-machine-tips' },
   { label: 'Rewards', href: '/rewards' },
   { label: 'Store', href: '/store' },
-  { label: 'Business Development', href: '/business-development' },
+  { label: 'Partner with Klawsome', href: '/partner-with-klawsome' },
   { label: 'Gallery', href: '/gallery' },
   { label: 'Our Story', href: '/our-story' },
   { label: 'Community Partners', href: '/community-partners' },

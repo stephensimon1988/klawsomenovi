@@ -9,9 +9,11 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import bdHero from '@/assets/community/canned-food-drive.webp';
-import hostMachinePhoto from '@/assets/bizdev-host-machine.webp';
-import groupPhoto from '@/assets/bizdev-group-photo.webp';
-import plushieClaw from '@/assets/bizdev-plushie-claw.webp';
+import hostedPhotoAsset from '@/assets/bizdev/prize-claw-hosted.jpg.asset.json';
+import partnerPhotoAsset from '@/assets/bizdev/prize-claw-partner.jpg.asset.json';
+import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
+import processPhotoAsset from '@/assets/bizdev/prize-claw-process.png.asset.json';
+import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
 import imgBrand from '@/assets/bizdev/brand.webp';
@@ -216,8 +218,8 @@ const BusinessDevelopment = () => {
       <KawaiiNav />
 
       <PageHero
-        eyebrow={hero?.eyebrow || '🤝 For Businesses & Partners'}
-        title={hero?.title || 'Grow With Klawsome'}
+        eyebrow={hero?.eyebrow || '🤝 Partner with Klawsome'}
+        title={hero?.title || 'Partner with Klawsome!'}
         subtitle={hero?.subtitle || "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator."}
         imageUrl={bdHero}
         jumpLinks={[
@@ -232,7 +234,7 @@ const BusinessDevelopment = () => {
 
       {/* HOSTED — baby blue band like homepage About */}
       <section id="hosted" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 01</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Host a Klawsome Machine<br />in Your Business</h2>
@@ -249,8 +251,9 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl w-full md:w-80 lg:w-96 flex-shrink-0">
               <img
-                src={hostMachinePhoto}
-                alt="Family posing with a Klawsome claw machine and Pikachu mascot"
+                src={hostedPhotoAsset.url}
+                alt="Twin Prize Claw machines glowing with rainbow lights in a Klawsome arcade"
+                loading="lazy"
                 className="w-full aspect-square object-cover rounded-2xl"
               />
             </div>
@@ -303,7 +306,7 @@ const BusinessDevelopment = () => {
       {/* PARTNER — baby pink band */}
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <section id="partner" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 02</p>
             <span className="inline-block bg-[hsl(var(--klawsome-yellow))] text-foreground font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
@@ -343,8 +346,8 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl">
               <img
-                src={groupPhoto}
-                alt="Group of friends enjoying Klawsome arcade"
+                src={partnerPhotoAsset.url}
+                alt="Front-on view of a Klawsome Prize Claw lineup packed with prizes"
                 className="w-full h-full max-h-96 object-cover rounded-2xl"
                 loading="lazy"
               />
@@ -362,7 +365,7 @@ const BusinessDevelopment = () => {
       {/* PLUSHIE — coral red like homepage tokens */}
       <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="white" />
       <section id="plushie" className="section-y section-x bg-primary">
-        <div className="ds-container max-w-5xl">
+        <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Custom Plushie Orders</h2>
@@ -378,8 +381,8 @@ const BusinessDevelopment = () => {
             </div>
             <div className="img-hover rounded-2xl shadow-md">
               <img
-                src={plushieClaw}
-                alt="Claw machine filled with kawaii plushies"
+                src={plushiePhotoAsset.url}
+                alt="Prize Claw Twin cabinet filled with custom kawaii plushies"
                 loading="lazy"
                 className="w-full h-full max-h-72 object-cover rounded-2xl"
               />
@@ -443,19 +446,31 @@ const BusinessDevelopment = () => {
       {/* HOW IT WORKS — white */}
       <KawaiiDivider variant="bumps" from="red" to="white" stroke="baby-pink" />
       <section className="section-y section-x bg-background">
-        <div className="ds-container text-center">
-          <p className="ds-eyebrow mb-3">The Process</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Getting Started is Easy</h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 mt-12">
-            {howSteps.map((step) => (
-              <div key={step.id} className="text-center">
-                <div className="w-14 h-14 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  {step.icon}
+        <div className="ds-container max-w-7xl">
+          <div className="text-center">
+            <p className="ds-eyebrow mb-3">The Process</p>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Getting Started is Easy</h2>
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-[1fr_320px] gap-10 items-center mt-12">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-7">
+              {howSteps.map((step) => (
+                <div key={step.id} className="text-center">
+                  <div className="w-14 h-14 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                    {step.icon}
+                  </div>
+                  <h4 className="font-heading text-lg font-bold text-foreground mb-2">{step.title}</h4>
+                  <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.description}</p>
                 </div>
-                <h4 className="font-heading text-lg font-bold text-foreground mb-2">{step.title}</h4>
-                <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.description}</p>
-              </div>
-            ))}
+              ))}
+            </div>
+            <div className="img-hover rounded-3xl shadow-md mx-auto w-full max-w-[320px]">
+              <img
+                src={processPhotoAsset.url}
+                alt="Studio shot of a Klawsome Prize Claw Multi cabinet"
+                loading="lazy"
+                className="w-full h-auto object-contain rounded-3xl"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -464,6 +479,14 @@ const BusinessDevelopment = () => {
       <KawaiiDivider variant="petals" from="white" to="baby-blue" stroke="baby-pink" />
       <section id="contact" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))]">
         <div className="ds-container max-w-3xl">
+          <div className="img-hover rounded-3xl shadow-md mb-10 overflow-hidden">
+            <img
+              src={contactPhotoAsset.url}
+              alt="Glowing Klawsome XL plush claw cabinet at night"
+              loading="lazy"
+              className="w-full h-48 md:h-56 object-cover"
+            />
+          </div>
           <div className="text-center mb-10">
             <p className="ds-eyebrow mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
             <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>

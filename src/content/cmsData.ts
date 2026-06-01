@@ -2525,8 +2525,8 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "5c4cac99-0e40-42ce-8c04-b9d45dd9e310",
       "page_key": "business-development",
-      "eyebrow": "🤝 For Businesses & Partners",
-      "title": "Grow With Klawsome!",
+      "eyebrow": "🤝 Partner with Klawsome",
+      "title": "Partner with Klawsome!",
       "subtitle": "Three ways to bring the magic of Klawsome into your world — whether you're a business owner, entrepreneur, or creator. Pick your path below.",
       "image_url": "",
       "cta_text": "Get in Touch →",
@@ -4921,7 +4921,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 0,
       "block_type": "heading",
       "content": {
-        "text": "Grow With Klawsome!"
+        "text": "Partner with Klawsome!"
       }
     },
     {
