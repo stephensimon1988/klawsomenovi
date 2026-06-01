@@ -38,9 +38,9 @@ const KawaiiStory = () => {
               <Button
                 size="lg"
                 onClick={openBookingModal}
-                className="rounded-full px-8 font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white"
+                className="rounded-full px-8 font-heading font-bold tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors"
               >
-                BOOK NOW
+                BOOK EVENT
               </Button>
               <Link
                 to="/our-story"
