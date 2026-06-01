@@ -62,7 +62,6 @@ const App = () => (
           <Route path="/store" element={<Store />} />
           <Route path="/community" element={<Navigate to="/community-partners" replace />} />
           <Route path="/community-partners" element={<CommunityPartners />} />
-          <Route path="/info-hub" element={<InfoHub />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
           <Route path="/claw-game" element={<ClawGameRedirect />} />
