@@ -11,6 +11,7 @@ interface Props {
   product: ShopifyProduct;
   open: boolean;
   onClose: () => void;
+  initialVariantId?: string;
 }
 
 const STAR_POSITIONS = [
@@ -24,17 +25,20 @@ const STAR_POSITIONS = [
   { top: '25%', left: '40%', size: 50, delay: 1.1 },
 ];
 
-export const QuickAddModal = ({ product, open, onClose }: Props) => {
+export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Props) => {
   const node = product.node;
   const images = node.images.edges.map((e) => e.node);
   const variants = node.variants.edges.map((e) => e.node);
 
-  const firstAvailable = variants.find((v) => v.availableForSale) ?? variants[0];
+  const seedVariant =
+    (initialVariantId && variants.find((v) => v.id === initialVariantId)) ||
+    variants.find((v) => v.availableForSale) ||
+    variants[0];
   const initialOptions = useMemo(() => {
     const map: Record<string, string> = {};
-    firstAvailable?.selectedOptions.forEach((o) => (map[o.name] = o.value));
+    seedVariant?.selectedOptions.forEach((o) => (map[o.name] = o.value));
     return map;
-  }, [firstAvailable]);
+  }, [seedVariant]);
 
   const [selectedOptions, setSelectedOptions] = useState<Record<string, string>>(initialOptions);
   const [imgIdx, setImgIdx] = useState(0);
