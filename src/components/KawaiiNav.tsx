@@ -6,6 +6,7 @@ import klawsomeLogo from '@/assets/klawsome-logo.webp';
 import { Button } from './ui/button';
 import NavClaw from './NavClaw';
 import { openBookingModal } from './BookNowDialog';
+import { CartDrawer } from './shopify/CartDrawer';
 
 const navLinks = [
   { label: 'HOME', href: '#hero' },
@@ -140,6 +141,7 @@ const KawaiiNav = () => {
             >
               BOOK EVENT
             </Button>
+            <CartDrawer />
           </div>
 
           <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-klawsome-navy">
@@ -181,6 +183,9 @@ const KawaiiNav = () => {
               <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
                 BOOK EVENT
               </Button>
+              <div className="pt-2 flex justify-center">
+                <CartDrawer />
+              </div>
             </div>
           </motion.div>
         )}
