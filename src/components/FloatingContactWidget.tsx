@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useLocation } from 'react-router-dom';
 import { z } from 'zod';
 import { X } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
@@ -18,10 +19,13 @@ const contactSchema = z.object({
 });
 
 const FloatingContactWidget = () => {
+  const location = useLocation();
   const [open, setOpen] = useState(false);
   const [bubbleVisible, setBubbleVisible] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+
+  if (location.pathname === '/claw-game') return null;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
