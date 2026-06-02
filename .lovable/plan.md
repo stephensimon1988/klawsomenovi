@@ -1,66 +1,32 @@
+## Changes
 
-# Claw Game Embed + Sticky CTAs + 5OFF Discount
+### 1. Delete Info Hub
+- Remove `/info-hub` route and the `InfoHub` lazy import from `src/App.tsx`.
+- Delete `src/pages/InfoHub.tsx`.
+- Remove the `info-hub` entries from CMS data in `src/content/cmsData.ts` (page hero + any `page_sections` rows keyed to `info-hub`).
+- Remove the Info Hub link from the More menu in `src/components/KawaiiNav.tsx`.
+- Remove `/info-hub` from `public/sitemap.xml` if present.
 
-## Heads-up
-Poki is cross-origin — we cannot hide their in-iframe header. We'll wrap their page with our nav on top (Option A, confirmed).
+### 2. Hero headline text
+- In `src/content/cmsData.ts`, change `hero_headline` from `"Welcome to Novi's Own Klaw Arcade"` to `"Welcome to Michigan's First Klawcade!"`.
 
----
+### 3. Reorganize "More" menu into grouped sub-categories
+Restructure the More dropdown in `src/components/KawaiiNav.tsx` from a flat list into 4 grouped columns, each with a non-clickable group label and the links beneath:
 
-## Phase 1 — `/claw-game` wrapped with our nav
+- **Connect** — Partner with Klawsome (`/partner-with-klawsome`), Community Partners (`/community-partners`)
+- **Purchase** — Store (`/store`), Gift Cards (Square link), Rewards (`/rewards`)
+- **Remember** — Our Story (`/our-story`), News (`/news`), Gallery (`/gallery`)
+- **Learn** — Claw Machine Tips (`/claw-machine-tips`), FAQ (`/faq`)
 
-- Remove `ClawGameRedirect` from `src/App.tsx`; route `/claw-game` to a new `src/pages/ClawGame.tsx`.
-- `ClawGame.tsx`:
-  - `<KawaiiNav />` at the top.
-  - Full-bleed `<iframe src="https://poki.com/en/g/lucky-claw-machine">` sized to `calc(100vh - navHeight)`, `allow="autoplay; fullscreen"`.
-  - Loading shimmer + fallback "If the game doesn't load, [open in new tab]" in case Poki blocks framing.
-- No footer (keeps it game-focused).
-- Hide the cat `FloatingContactWidget` on this route (route check via `useLocation`).
+Implementation details:
+- Replace the flat `moreLinks` array with a `moreGroups` array of `{ heading, links: [{label, href}] }`.
+- Render the dropdown as a wider panel (e.g. `min-w-[640px]`) with a 4-column grid on desktop; each column shows the heading in small uppercase muted text, followed by the links styled like today's items.
+- Mobile menu: render each group as a labeled section (heading + stacked links), replacing today's single "More" block.
+- Keep existing hover/click/navigation behavior (`handleNav`, including external Square gift card link opening in a new tab).
 
-## Phase 2 — Sticky bottom-right CTAs
+### 4. Top-level nav cleanup
+Since Gift Cards now lives under Purchase, decide whether to keep it in the top-level `navLinks`. Recommended: remove `GIFT CARDS` from the top bar to avoid duplication, keeping HOME, BIRTHDAYS, CLAW GAME, CAREERS plus MORE and BOOK EVENT. If you'd rather keep it in both places, say so and I'll leave it.
 
-New `src/components/ClawGameCTAs.tsx`, mounted only on `/claw-game`.
-
-Layout, anchored bottom-right (same corner the cat normally lives):
-
-```text
-        ┌──────────────────────────────┐
-        │  ✨ 5% OFF — code: 5OFF  ✨  │  ← pulsing/glowing popup
-        │  Tap to copy & shop          │     (appears after 10 min)
-        └──────────────────────────────┘
-  [ Join Rewards ] [ Book Event ] [ Shop Store ]   ← row of 3 buttons (always visible)
-```
-
-### The 3 buttons (immediate, always visible)
-- Row of 3 pill buttons, kawaii tokens (rounded-full, border, soft shadow).
-- **Join Rewards** → `/rewards`
-- **Book Event** → calls `openBookingModal()` from `BookNowDialog`
-- **Shop Store** → `/store`
-- Each dismissible? No — buttons stay. Only the discount popup is dismissible.
-
-### The discount popup (appears after 10 min)
-- Sits **above** the row of buttons.
-- Card content: "🎉 5% off your order — code **5OFF**" + small "Copy code" affordance (clipboard + toast) and a click-through to `/store`.
-- **Pulsing glow** animation: soft outer glow using `box-shadow` that pulses via a new `@keyframes pulse-glow` in `tailwind.config.ts` (HSL pink/yellow tokens). Combine with a gentle scale pulse.
-- Entrance: framer-motion spring slide-up + fade.
-- Dismissible (X) — state in `sessionStorage` so it doesn't re-appear that session.
-
-### Timer
-- 10-minute timer starts on mount, pauses on `visibilitychange` (hidden tab doesn't count), persists elapsed ms in `sessionStorage` so refresh resumes.
-- Dev override: `?ctaDelay=5` (seconds) for QA.
-
-## Phase 3 — Shopify `5OFF` discount
-Using Shopify tools (requires reconnect prompt):
-- Price rule: 5% off, applies to all products, no expiration, one use per customer, no minimum.
-- Discount code `5OFF` tied to the rule.
-
-## Phase 4 — QA
-- `/claw-game`: nav renders, iframe loads, cat hidden, no console errors.
-- Buttons row appears immediately and routes/opens modal correctly.
-- After 10 min (or `?ctaDelay=5`): glowing discount popup appears above buttons, copy works, dismiss persists for session.
-- `5OFF` applies 5% at Shopify checkout.
-
----
-
-## Files
-- **Add:** `src/pages/ClawGame.tsx`, `src/components/ClawGameCTAs.tsx`
-- **Edit:** `src/App.tsx` (route), `src/components/FloatingContactWidget.tsx` (hide on `/claw-game`), `tailwind.config.ts` (add `pulse-glow` keyframes)
+## Notes
+- No backend or data-model changes; CMS content is static in `cmsData.ts`.
+- No new dependencies.
