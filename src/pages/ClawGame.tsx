@@ -1,38 +1,43 @@
-import { useState } from 'react';
 import KawaiiNav from '@/components/KawaiiNav';
 import ClawGameCTAs from '@/components/ClawGameCTAs';
+import { Button } from '@/components/ui/button';
+import { ExternalLink, Gamepad2, Sparkles } from 'lucide-react';
 
 const GAME_URL = 'https://poki.com/en/g/lucky-claw-machine';
 
 const ClawGame = () => {
-  const [loaded, setLoaded] = useState(false);
-
   return (
     <div className="min-h-screen bg-background flex flex-col">
       <KawaiiNav />
-      <main className="relative flex-1 w-full bg-klawsome-navy">
-        {!loaded && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-white/80 font-heading gap-3 pointer-events-none">
-            <div className="w-10 h-10 rounded-full border-4 border-white/30 border-t-white animate-spin" />
-            <p>Loading claw game…</p>
+      <main className="flex-1 w-full flex items-center justify-center px-4 py-12 bg-gradient-to-br from-kawaii-pink/30 via-kawaii-lavender/30 to-kawaii-sky/30">
+        <div className="max-w-2xl w-full bg-card rounded-3xl shadow-xl border-4 border-kawaii-pink p-8 md:p-12 text-center space-y-6">
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-kawaii-pink/40 text-foreground font-heading text-sm">
+            <Sparkles className="w-4 h-4" />
+            Play & Win
           </div>
-        )}
-        <iframe
-          src={GAME_URL}
-          title="Klawsome Claw Game"
-          onLoad={() => setLoaded(true)}
-          allow="autoplay; fullscreen; gamepad; clipboard-write"
-          className="block w-full border-0"
-          style={{ height: 'calc(100vh - 80px)' }}
-        />
-        <noscript>
-          <p className="p-6 text-white">
-            Game requires JavaScript. <a href={GAME_URL} className="underline">Open in new tab</a>.
+          <h1 className="font-heading text-4xl md:text-5xl font-bold text-foreground">
+            🎮 Klawsome Claw Game
+          </h1>
+          <p className="text-lg text-muted-foreground max-w-md mx-auto">
+            Click below to launch our claw game in a new tab. Snag a plushie and come back for your reward!
           </p>
-        </noscript>
-        <p className="absolute bottom-2 left-1/2 -translate-x-1/2 text-xs text-white/60 z-10">
-          Trouble loading? <a href={GAME_URL} target="_blank" rel="noreferrer" className="underline">Open game in a new tab</a>.
-        </p>
+          <div className="flex flex-col sm:flex-row gap-3 justify-center pt-2">
+            <Button
+              asChild
+              size="lg"
+              className="bg-kawaii-pink hover:bg-kawaii-pink/90 text-foreground font-heading text-lg rounded-full px-8 py-6 shadow-lg"
+            >
+              <a href={GAME_URL} target="_blank" rel="noreferrer">
+                <Gamepad2 className="w-5 h-5 mr-2" />
+                Play the Claw Game
+                <ExternalLink className="w-4 h-4 ml-2" />
+              </a>
+            </Button>
+          </div>
+          <p className="text-xs text-muted-foreground pt-4">
+            Opens in a new tab. Come back here for your 5% off code 💖
+          </p>
+        </div>
       </main>
       <ClawGameCTAs />
     </div>
