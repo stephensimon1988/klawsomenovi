@@ -3692,15 +3692,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 2
     },
     {
-      "id": "b0e19dca-9d51-4a8c-baf1-10d5b0b673e2",
-      "author_name": "Lucy D.",
-      "author_role": "Saturday night visitor",
-      "review_text": "Klawsome was an awesome Saturday night activity! We had a great time and met Agnes, one of the owners. We enjoyed our time and got our money's worth of prizes. We'll be back!",
-      "rating": 5,
-      "is_active": true,
-      "sort_order": 6
-    },
-    {
       "id": "bd6461cd-a57f-44db-afb2-1064c2e76dac",
       "author_name": "Genki N.",
       "author_role": "Family visitor",
