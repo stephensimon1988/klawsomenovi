@@ -16,6 +16,15 @@ const SENDER_DOMAIN = "notify.klawsomearcade.com"
 // even though actual sending uses the subdomain above.
 const FROM_DOMAIN = "notify.klawsomearcade.com"
 
+// Server-side allowlist of recipient addresses. Any recipient not on this list
+// (or not pinned via a template's `to` field) is rejected. This prevents
+// anonymous callers — who hold a valid anon JWT — from using this endpoint to
+// send official-looking emails to arbitrary addresses.
+const ALLOWED_RECIPIENTS = new Set<string>([
+  'team@klawsomenovi.com',
+  'events@klawsomenovi.com',
+])
+
 // Generate a cryptographically random 32-byte hex token
 function generateToken(): string {
   const bytes = new Uint8Array(32)
@@ -112,6 +121,22 @@ Deno.serve(async (req) => {
       }),
       {
         status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      }
+    )
+  }
+
+  // Enforce recipient allowlist unless the template pins its own `to` address.
+  // Templates with a fixed `to` are trusted (defined server-side in the registry).
+  if (!template.to && !ALLOWED_RECIPIENTS.has(effectiveRecipient.toLowerCase())) {
+    console.warn('Rejected email to non-allowlisted recipient', {
+      templateName,
+      effectiveRecipient,
+    })
+    return new Response(
+      JSON.stringify({ error: 'Recipient not permitted' }),
+      {
+        status: 403,
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },
       }
     )
