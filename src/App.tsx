@@ -27,6 +27,7 @@ const Store = lazy(() => import("./pages/Store.tsx"));
 const CommunityPartners = lazy(() => import("./pages/CommunityPartners.tsx"));
 const Unsubscribe = lazy(() => import("./pages/Unsubscribe.tsx"));
 const ClawMachineTips = lazy(() => import("./pages/ClawMachineTips.tsx"));
+const ClawsomeVideoGame = lazy(() => import("./pages/ClawsomeVideoGame.tsx"));
 
 const ClawGameRedirect = () => {
   useEffect(() => {
@@ -65,6 +66,7 @@ const App = () => (
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
           <Route path="/claw-game" element={<ClawGameRedirect />} />
+          <Route path="/clawsome-video-game" element={<ClawsomeVideoGame />} />
           <Route path="/klawsome-admin" element={<KlawsomeAdmin />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
