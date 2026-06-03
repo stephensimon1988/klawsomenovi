@@ -1,32 +1,24 @@
-## Changes
+## Hidden /clawsome-video-game page
 
-### 1. Delete Info Hub
-- Remove `/info-hub` route and the `InfoHub` lazy import from `src/App.tsx`.
-- Delete `src/pages/InfoHub.tsx`.
-- Remove the `info-hub` entries from CMS data in `src/content/cmsData.ts` (page hero + any `page_sections` rows keyed to `info-hub`).
-- Remove the Info Hub link from the More menu in `src/components/KawaiiNav.tsx`.
-- Remove `/info-hub` from `public/sitemap.xml` if present.
+Create a secret page that embeds the itch.io claw machine game. Not linked in nav or sitemap.
 
-### 2. Hero headline text
-- In `src/content/cmsData.ts`, change `hero_headline` from `"Welcome to Novi's Own Klaw Arcade"` to `"Welcome to Michigan's First Klawcade!"`.
+### Files
 
-### 3. Reorganize "More" menu into grouped sub-categories
-Restructure the More dropdown in `src/components/KawaiiNav.tsx` from a flat list into 4 grouped columns, each with a non-clickable group label and the links beneath:
+**New: `src/pages/ClawsomeVideoGame.tsx`**
+- Minimal page with `KawaiiNav` + `KawaiiFooter`
+- Centered responsive iframe (16:9, max-width ~1100px) loading `https://html-classic.itch.zone/html/14041243/index.html` (itch.io's direct HTML embed URL for ninneko's claw-machine-3d-2)
+- `allow="fullscreen; autoplay; gamepad; pointer-lock"`, `allowFullScreen`
+- Heading: "Welcome to the Secret Klawcade 🎮"
+- Small fallback link to `https://ninneko.itch.io/claw-machine-3d-2` in case the iframe is blocked
+- SEO: `<title>Klawsome Secret Game</title>`, `<meta name="robots" content="noindex, nofollow" />`
 
-- **Connect** — Partner with Klawsome (`/partner-with-klawsome`), Community Partners (`/community-partners`)
-- **Purchase** — Store (`/store`), Gift Cards (Square link), Rewards (`/rewards`)
-- **Remember** — Our Story (`/our-story`), News (`/news`), Gallery (`/gallery`)
-- **Learn** — Claw Machine Tips (`/claw-machine-tips`), FAQ (`/faq`)
+**Edit: `src/App.tsx`**
+- Lazy import `ClawsomeVideoGame`
+- Add `<Route path="/clawsome-video-game" element={<ClawsomeVideoGame />} />` above the catch-all
+- Do not touch `KawaiiNav.tsx`
 
-Implementation details:
-- Replace the flat `moreLinks` array with a `moreGroups` array of `{ heading, links: [{label, href}] }`.
-- Render the dropdown as a wider panel (e.g. `min-w-[640px]`) with a 4-column grid on desktop; each column shows the heading in small uppercase muted text, followed by the links styled like today's items.
-- Mobile menu: render each group as a labeled section (heading + stacked links), replacing today's single "More" block.
-- Keep existing hover/click/navigation behavior (`handleNav`, including external Square gift card link opening in a new tab).
+**Do NOT edit:** `public/sitemap.xml`, `public/robots.txt`, `KawaiiNav.tsx` — keeps it hidden from nav and crawlers.
 
-### 4. Top-level nav cleanup
-Since Gift Cards now lives under Purchase, decide whether to keep it in the top-level `navLinks`. Recommended: remove `GIFT CARDS` from the top bar to avoid duplication, keeping HOME, BIRTHDAYS, CLAW GAME, CAREERS plus MORE and BOOK EVENT. If you'd rather keep it in both places, say so and I'll leave it.
+### Caveat
 
-## Notes
-- No backend or data-model changes; CMS content is static in `cmsData.ts`.
-- No new dependencies.
+itch.io only allows external iframe embedding when the creator opts in. If ninneko's game is not embeddable, the iframe will render an itch.io block message. In that case the page falls back to a "Play on itch.io" link that opens the game in a new tab. If you want a guaranteed-embeddable alternative game instead, say the word.
