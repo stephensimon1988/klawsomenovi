@@ -6,6 +6,7 @@ import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent
 import PageHero from '@/components/PageHero';
 import JobDescriptionDialog from '@/components/JobDescriptionDialog';
 import { GraduationCap, Crown, PartyPopper, ShoppingCart, TrendingUp, Sparkles, type LucideIcon } from 'lucide-react';
+import DOMPurify from 'isomorphic-dompurify';
 
 const ROLE_META: Record<string, { icon: LucideIcon; tagline: string }> = {
   'Summer Intern': {
