@@ -6,6 +6,7 @@ import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent
 import PageHero from '@/components/PageHero';
 import JobDescriptionDialog from '@/components/JobDescriptionDialog';
 import { GraduationCap, Crown, PartyPopper, ShoppingCart, TrendingUp, Sparkles, type LucideIcon } from 'lucide-react';
+import DOMPurify from 'isomorphic-dompurify';
 
 const ROLE_META: Record<string, { icon: LucideIcon; tagline: string }> = {
   'Summer Intern': {
@@ -76,7 +77,7 @@ const Careers = () => {
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p 
                       className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
-                      dangerouslySetInnerHTML={{ __html: job.description }}
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(job.description) }}
                     />
                     <div className="flex flex-wrap gap-3">
                       <JobDescriptionDialog
@@ -226,7 +227,7 @@ const Careers = () => {
                     <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
                     <p 
                       className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
-                      dangerouslySetInnerHTML={{ __html: job.description }}
+                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(job.description) }}
                     />
                     <div className="flex flex-wrap gap-3">
                       <JobDescriptionDialog

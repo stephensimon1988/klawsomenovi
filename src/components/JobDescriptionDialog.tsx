@@ -2,6 +2,7 @@ import { useState, type ReactNode } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { JOB_DESCRIPTIONS } from '@/data/jobDescriptions';
+import DOMPurify from 'isomorphic-dompurify';
 
 interface Props {
   title: string;
@@ -58,7 +59,7 @@ const JobDescriptionDialog = ({ title, url, fallbackDescription, applyUrl, trigg
           ) : (
             <p 
               className="font-body leading-relaxed"
-              dangerouslySetInnerHTML={{ __html: fallbackDescription || 'Full job description available on request.' }}
+              dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(fallbackDescription || 'Full job description available on request.') }}
             />
           )}
         </div>
