@@ -2,7 +2,7 @@ import { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Menu, X, ChevronDown } from 'lucide-react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import klawsomeLogo from '@/assets/klawsome-logo.webp';
+import klawsomeLogo from '@/assets/klawsome-logo.png';
 import { Button } from './ui/button';
 import NavClaw from './NavClaw';
 import { openBookingModal } from './BookNowDialog';
