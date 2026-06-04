@@ -106,7 +106,7 @@ const KawaiiNav = () => {
       <div className="ds-container section-x relative z-[60]">
         <div className="flex items-center justify-between h-20">
           <button onClick={() => handleNav('#hero')} className="flex items-center">
-            <img src={klawsomeLogo} alt="Klawsome" className="h-10 w-auto" />
+            <img src={klawsomeLogo} alt="Klawsome" className="h-20 w-auto" />
           </button>
 
           <div ref={linksRef} className="hidden md:flex items-center gap-10">
