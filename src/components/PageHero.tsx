@@ -21,7 +21,7 @@ interface PageHeroProps {
 const GALLERY_HEROES = [
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/c06c88ff-f9f2-466c-80e3-02444aa01d22/PXL_20250822_201918587.webp',
-  'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp',
+  '/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.webp',
   'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.webp',

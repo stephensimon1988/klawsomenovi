@@ -11,7 +11,7 @@ import pandasImage from '@/assets/claw-machine-pandas.jpg';
 // Real photos from the Klawsome gallery library
 const watchPhoto = 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/2bb292a8-8873-46e9-a975-d3cb7f14825d/PHOTO-2025-09-02-19-49-33.webp';
 const beginnerPhoto = '/images/klawsome-storefront.webp';
-const winPhoto = 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp';
+const winPhoto = '/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp';
 
 const ClawMachineTips = () => {
   const bestPicks = [

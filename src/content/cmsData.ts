@@ -1329,7 +1329,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "4d25989d-46f9-4845-894a-44e5d48efa5e",
       "section": "beginning",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp",
+      "image_url": "/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp",
       "caption": "Klawsome crew selfie wall",
       "sort_order": 6
     },
@@ -1694,7 +1694,7 @@ export const cmsData: Record<string, any[]> = {
       "title": "Store Associate",
       "category": "in-store",
       "description": "The store associate AKA \"Fun Facilitator\" at Klawsome! creates a lively, welcoming environment for customers. This role focuses on delivering excellent customer service, ensuring smooth game operations, plushie restocking, keeping the facility clean and organized. Enthusiasm and a passion for customer interaction are essential.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/057fb62e-a01f-49c9-a963-255ce0091234/KlawsomeCrewSelfieWall.webp",
+      "image_url": "/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FStore_Associate.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20Store%20Associate",
       "is_paid": true,
