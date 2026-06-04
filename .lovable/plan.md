@@ -1,24 +1,23 @@
-## Hidden /clawsome-video-game page
+## Footer Redesign: White Background with Navy Text
 
-Create a secret page that embeds the itch.io claw machine game. Not linked in nav or sitemap.
+### Goal
+Change the site footer from its current red background to a clean white background, with dark navy text for readability. Preserve the contact image and all existing layout structure.
 
-### Files
+### Files to Change
+- `src/components/KawaiiFooter.tsx`
 
-**New: `src/pages/ClawsomeVideoGame.tsx`**
-- Minimal page with `KawaiiNav` + `KawaiiFooter`
-- Centered responsive iframe (16:9, max-width ~1100px) loading `https://html-classic.itch.zone/html/14041243/index.html` (itch.io's direct HTML embed URL for ninneko's claw-machine-3d-2)
-- `allow="fullscreen; autoplay; gamepad; pointer-lock"`, `allowFullScreen`
-- Heading: "Welcome to the Secret Klawcade 🎮"
-- Small fallback link to `https://ninneko.itch.io/claw-machine-3d-2` in case the iframe is blocked
-- SEO: `<title>Klawsome Secret Game</title>`, `<meta name="robots" content="noindex, nofollow" />`
+### Changes
+1. **Footer background**: Change `bg-primary` (red) → `bg-white`
+2. **Text colors**: Change all `text-white` → `text-klawsome-navy` (dark navy) for headings, links, and body text
+3. **Link opacity colors**: Change `text-white/75` → `text-klawsome-navy/70` for secondary links
+4. **Copyright text**: Change `text-white/60` → `text-klawsome-navy/50`
+5. **Hover states**: Change `hover:text-white` → `hover:text-primary` (red on hover for accent)
+6. **Borders**: Change `border-white/15` and `border-white/20` → `border-klawsome-navy/15` and `border-klawsome-navy/20`
+7. **Divider transition**: Update the divider above the footer from `baby-blue → red` → `baby-blue → white`
+8. **Keep intact**: The contact info section (`KawaiiContactInfo`), the animated logo, and the contact image on the right side of the contact section are untouched.
 
-**Edit: `src/App.tsx`**
-- Lazy import `ClawsomeVideoGame`
-- Add `<Route path="/clawsome-video-game" element={<ClawsomeVideoGame />} />` above the catch-all
-- Do not touch `KawaiiNav.tsx`
-
-**Do NOT edit:** `public/sitemap.xml`, `public/robots.txt`, `KawaiiNav.tsx` — keeps it hidden from nav and crawlers.
-
-### Caveat
-
-itch.io only allows external iframe embedding when the creator opts in. If ninneko's game is not embeddable, the iframe will render an itch.io block message. In that case the page falls back to a "Play on itch.io" link that opens the game in a new tab. If you want a guaranteed-embeddable alternative game instead, say the word.
+### Visual Result
+- Clean white footer matching the rest of the site's light sections
+- Navy text maintains high contrast and readability
+- Red hover accents on links keep the brand color present
+- Dividers flow naturally from baby-blue contact section into white footer
