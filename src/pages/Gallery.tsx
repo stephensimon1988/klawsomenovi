@@ -21,8 +21,9 @@ const Gallery = () => {
 
   const sectionLabels: Record<string, string> = {
     beginning: 'In the Beginning',
-    private: 'Private Parties',
-    'semi-private': 'Semi-Private Events',
+    private_minecraft: 'Minecraft Party',
+    private_summer: 'Summer Party',
+    semi_private: 'Semi-Private Events',
     gallery: 'The Arcade',
     'novi-library-paaralang': 'Novi Public Library / Paaralang Pilipino',
     'canned-food-drive': 'Gleaners Canned Food Drive / Toys for Tots',
@@ -33,8 +34,9 @@ const Gallery = () => {
 
   const sectionOrder = [
     'beginning',
-    'private',
-    'semi-private',
+    'private_minecraft',
+    'private_summer',
+    'semi_private',
     'gallery',
     'novi-community-fest',
     'trunk-or-treat',
