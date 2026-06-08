@@ -4,7 +4,6 @@ import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
-import ourStoryIntroImage from '@/assets/our-story-intro.png';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
@@ -53,7 +52,7 @@ const OurStory = () => {
               </p>
             </div>
             <FramedImage
-              src={ourStoryIntroImage}
+              src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp"
               alt="Klawsome community celebration"
               color="baby-pink"
               sectionBg="white"
