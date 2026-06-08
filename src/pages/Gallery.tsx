@@ -25,7 +25,7 @@ const Gallery = () => {
     'semi-private': 'Semi-Private Events',
     gallery: 'The Arcade',
     'novi-library-paaralang': 'Novi Public Library / Paaralang Pilipino',
-    'canned-food-drive': 'Canned Food Drive',
+    'canned-food-drive': 'Gleaners Canned Food Drive / Toys for Tots',
     'msu-pass': 'MSU Pass Collab',
     'novi-community-fest': 'Novi Community Fest',
     'trunk-or-treat': 'Trunk or Treat',
