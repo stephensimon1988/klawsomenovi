@@ -20,7 +20,7 @@ const OurStory = () => {
   // Family photos used to illustrate the first two CMS-driven story sections.
   const SECTION_IMAGES = [
     'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp',
-    '/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp',
+    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp',
   ];
 
   const slugify = (s: string) =>
