@@ -11,7 +11,7 @@ import { toast } from 'sonner';
 import bdHeroAsset from '@/assets/business-development-hero.png.asset.json';
 const bdHero = bdHeroAsset.url;
 import hostedPhotoAsset from '@/assets/bizdev/hosted-machine-partner.png.asset.json';
-import partnerPhotoAsset from '@/assets/bizdev/prize-claw-partner.jpg.asset.json';
+import partnerPhotoAsset from '@/assets/bizdev/partner-concepts-pikachu.png.asset.json';
 import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
 import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
@@ -349,7 +349,7 @@ const BusinessDevelopment = () => {
             <div className="img-hover rounded-2xl">
               <img
                 src={partnerPhotoAsset.url}
-                alt="Front-on view of a Klawsome Prize Claw lineup packed with prizes"
+                alt="Klawsome claw machine filled with Pikachu and friends plushies"
                 className="w-full h-full max-h-96 object-cover rounded-2xl"
                 loading="lazy"
               />
