@@ -1,16 +1,18 @@
-## Part 1 — Swap intro image on /our-story
-In `src/pages/OurStory.tsx`:
-- Remove `import ourStoryIntroImage from '@/assets/our-story-intro.png'`.
-- Change the intro `<FramedImage src={ourStoryIntroImage} ... />` to use:
-  `https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp`
+## Plan: Update News page photos
 
-## Part 2 — Replace image on "Bringing our family into the brand" section
-That section is `SECTION_IMAGES[1]` in `OurStory.tsx` (it currently uses the IMG_1638 community photo). Since IMG_1638 is now being used in the intro, this slot needs a different image anyway.
+Replace the `image_url` for three news cards in `src/content/cmsData.ts` → `news_articles` array. The News page (`KawaiiNews`) reads from this list, so updates flow through automatically.
 
-**I need your input on what image to use here.** A few options:
+### Mappings (screenshot → entry)
+1. **Spartan** → `news-spartan-msu-2026` ("Klawsome: A Filipino-American Family's Claw Arcade" — Spartan Story Hub)
+2. **Sakura draws crowds** → `news-wxyz-2026` ("Michigan's first Asian-inspired mixed-use development draws crowds in Novi" — WXYZ Detroit)
+3. **Buzz Grows Around Novi Spot** → `news-detroitnews-2026` ("Buzz grows around Novi spot with Asian-themed shops and cuisine" — Detroit News)
 
-1. **You provide a URL** (e.g. a photo of the Filipowski family, the kids designing the logo, or a kawaii detail shot) — paste it in your reply and I'll drop it in.
-2. **Reuse an existing brand asset** — for example one of the kawaii illustration pieces already in the project (e.g. the Klawsome friends-and-family photo at `Klawsome_FriendsFamily-056.webp`, though that's already used in the "Where it all began" section above it, so it would repeat).
-3. **Leave the slot empty** — without an image, the section falls back to a centered text-only layout (the code already supports that when `SECTION_IMAGES[idx]` is undefined).
+### Steps (once you send the photos)
+1. Upload each photo via `lovable-assets` CLI into `src/assets/news/` as `.asset.json` pointers:
+   - `spartan.jpg.asset.json`
+   - `sakura-draws-crowds.jpg.asset.json`
+   - `buzz-grows-novi.jpg.asset.json`
+2. In `src/content/cmsData.ts`, replace the `image_url` field of the three matching news entries with the CDN URLs from the new asset pointers.
+3. No component changes needed — `KawaiiNews.tsx` already renders `image_url` directly.
 
-Tell me which option (and a URL if option 1) and I'll wire it up in the same change.
+Send the 3 photos in the next message (label which is which, or send them in the same order as the screenshot: Spartan, Sakura, Buzz) and I'll execute.
