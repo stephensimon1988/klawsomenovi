@@ -1,39 +1,51 @@
-## Plan: Clean up Gallery page sections
+## Plan: Split "Private Parties" into Minecraft + Summer sections
 
-All edits happen in `src/content/cmsData.ts` → `gallery_photos`. `KawaiiNews`/`Gallery` re-render automatically. To pick which specific photos to drop, I'll open each section in the live preview, view the thumbnails, and pick the duplicates / Pikachu repeats visually — then remove those entries.
+### Sections (new section keys in `cmsData.ts` → `gallery_photos`)
+- `private_minecraft` → "Minecraft Party (Indoors)"
+- `private_summer` → "Summer Party (Indoors + Outdoors)"
 
-### Targets per section (current → target)
+Update `src/pages/Gallery.tsx`:
+- Add labels in `sectionLabels`.
+- Add both keys to `sectionOrder` where `private` currently sits.
+- Remove the old `private` label entry (no entries will use it after migration).
 
-| Section | Current | Target | Rule |
-|---|---|---|---|
-| Novi Community Fest (`novi-community-fest`) | 30 | **12** | Eliminate repeated photos; keep only 1 cornhole-Pikachu and 1 sign-holding Pikachu (drop the other ~half of Pikachu shots). |
-| Trunk or Treat (`trunk-or-treat`) | 9 | **8** | Eliminate repeated photos. |
-| Gleaners Canned Food Drive (`canned-food-drive`) | 19 | **8** | Eliminate repeated photos. Also rename section heading to cover **both** service projects (Canned Food Drive **and** Toys for Tots) in the sub-head. |
-| MSU Pass (`msu-pass`) | 32 | **12** | Eliminate repeated photos. |
-| Novi Library / Paaralang Pilipino | 6 | 6 | No change (not in screenshots). |
+### Reclassify existing `private_party` entries (22 total)
+Move to `private_minecraft` (clearly Minecraft-themed by caption):
+- `2f7e61bb…` Minecraft themed party setup
+- `0f169e54…` Kids at Minecraft party
+- `5ca20444…` Minecraft balloon arch
+- `8d7e09c7…` Gaming controller balloon
+- `9dea9a98…` Balloon collection *(if Minecraft — see Question 1)*
 
-### Sub-head rename
-In `src/pages/Gallery.tsx` → `sectionLabels`, change:
-```
-'canned-food-drive': 'Canned Food Drive'
-```
-to:
-```
-'canned-food-drive': 'Gleaners Canned Food Drive / Toys for Tots'
-```
+Move to `private_summer` (the existing girls-themed plush/cake entries):
+- `pp-paaralang-shirt-claw`, `pp-ice-cream-cone-plush`, `pp-girl-strawberry-claw`, `pp-girl-koi-fish`, `pp-kids-turtle-machine`
+- `17c37df8…` Dinosaur birthday cake
+- `7cc3c8fb…` Birthday cake celebration
+- `8a515d74…` Party group photo
 
-### Pikachu-photo rule (Novi Community Fest)
-The cornhole + sign-holding Pikachu shots repeat across the 30 entries. Keep exactly:
-- 1 photo of Pikachu next to the cornhole board
-- 1 photo of Pikachu holding/standing with a sign
-- Drop every other Pikachu shot, then trim the rest of the section down to 12 total, keeping the strongest non-Pikachu booth/crowd photos.
+Remaining ambiguous entries (generic "balloons / arcade party / crowd / families") — see Question 1.
 
-### Execution
-1. Open `/gallery` in preview, jump to each affected section.
-2. For each section, pick the entry `id`s to delete (visual dedupe + Pikachu rule).
-3. Remove those objects from `gallery_photos` in `cmsData.ts`.
-4. Update the `canned-food-drive` label in `Gallery.tsx`.
-5. Reload `/gallery` and confirm counts: 12 / 8 / 8 / 12.
+### Add 6 new Summer party photos (uploads)
+Upload each to CDN via `lovable-assets` and append to `gallery_photos` with `section: "private_summer"`:
+1. `party1.jpg` — "Blue balloon arch at the entrance"
+2. `party-2.jpg` — "Pretzels and candy jars on the party table"
+3. `party3.jpg` — "Horchata dispenser and tropical straws"
+4. `party-5.jpg` — "Going for the cow plush"
+5. `party6.jpg` — "Cake reveal with the birthday crew"
+6. `party7.jpg` — "Walk around the Sakura Novi pond"
 
-### Open question
-Do you want me to pick the duplicates myself based on the live thumbnails, or should I post the candidate `id` lists for you to approve before deleting? (Picking myself is faster; your approval is safer if you have favorites.)
+### Files touched
+- `src/content/cmsData.ts` — change `section` on existing private_party rows; append 6 new summer rows.
+- `src/pages/Gallery.tsx` — update `sectionLabels` + `sectionOrder`.
+- `src/assets/gallery/` — 6 new `.asset.json` pointers.
+
+### Question 1 — ambiguous existing rows
+These captions don't say Minecraft or Summer. Where should they go?
+- "Birthday balloons and decorations", "Birthday celebration with balloons", "Balloon collection", "Indoor arcade party", "Crowd at arcade party", "Lively birthday party", "Party setup with claw machines", "Families enjoying the arcade"
+
+Options:
+- **A** Put them all under Summer (since Minecraft is clearly the boys' party and the rest are mixed).
+- **B** Put them all under Minecraft.
+- **C** I'll inspect each thumbnail and decide (slower but accurate).
+
+Reply with A / B / C and I'll execute the full split.
