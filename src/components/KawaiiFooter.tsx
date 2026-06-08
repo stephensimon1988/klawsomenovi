@@ -70,6 +70,12 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
           </div>
 
           <div className="border-t border-klawsome-navy/20 pt-8">
+            <img
+              src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.webp"
+              alt="As seen on Michigan Mama News, Hour Detroit, Little Guide, Hometown Life"
+              className="max-w-md w-full mx-auto mb-8"
+              loading="lazy"
+            />
             <p className="text-klawsome-navy/50 text-xs font-body">
               © {new Date().getFullYear()} Klawsome. All rights reserved.
             </p>
