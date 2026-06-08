@@ -10,6 +10,7 @@ import toysForTots from '@/assets/community/toys-for-tots.webp';
 import msuPass from '@/assets/community/msu-pass.webp';
 import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
+import communityHeroAsset from '@/assets/community/community-partners-hero.png.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
@@ -119,7 +120,7 @@ const CommunityPartners = () => {
         eyebrow="Community"
         title="Community Partners"
         subtitle="Klawsome is proud to team up with local schools, student orgs, libraries, and nonprofits across metro Detroit. Here are some of the people we get to show up for."
-        imageUrl=""
+        imageUrl={communityHeroAsset.url}
         jumpLinks={[
           { label: 'Our Partners', id: 'partners' },
           { label: 'Cross-Promote', id: 'cross-promote' },
