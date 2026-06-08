@@ -10,7 +10,7 @@ import PageHero from '@/components/PageHero';
 import { toast } from 'sonner';
 import bdHeroAsset from '@/assets/business-development-hero.png.asset.json';
 const bdHero = bdHeroAsset.url;
-import hostedPhotoAsset from '@/assets/bizdev/prize-claw-hosted.jpg.asset.json';
+import hostedPhotoAsset from '@/assets/bizdev/hosted-machine-partner.png.asset.json';
 import partnerPhotoAsset from '@/assets/bizdev/prize-claw-partner.jpg.asset.json';
 import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
 import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
@@ -254,7 +254,7 @@ const BusinessDevelopment = () => {
             <div className="img-hover rounded-2xl w-full md:w-80 lg:w-96 flex-shrink-0">
               <img
                 src={hostedPhotoAsset.url}
-                alt="Twin Prize Claw machines glowing with rainbow lights in a Klawsome arcade"
+                alt="Happy guest holding a Snoopy plush next to a glowing Klawsome claw machine"
                 loading="lazy"
                 className="w-full aspect-square object-cover rounded-2xl"
               />
