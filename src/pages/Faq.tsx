@@ -28,7 +28,7 @@ const Faq = () => {
         title={hero?.title || 'Frequently Asked Questions'}
         subtitle={hero?.subtitle || 'Everything you wanted to know.'}
         imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da23b372-138d-4c18-977f-8db39f1cd16a/klawsome+littleguidedetroit.webp'}
-        height="md"
+        
       />
 
       {/* Tabs */}
