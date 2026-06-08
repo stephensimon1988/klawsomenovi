@@ -4,7 +4,6 @@ import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
-import ourStoryIntroImage from '@/assets/our-story-intro.png';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');

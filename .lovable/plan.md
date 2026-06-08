@@ -1,12 +1,16 @@
-## Goal
-Replace the blurry Filipino-community group photo (currently the `KlawsomeCrewSelfieWall.webp` CDN asset) shown in the second story section on `/our-story` with the sharper hosted image:
+## Part 1 — Swap intro image on /our-story
+In `src/pages/OurStory.tsx`:
+- Remove `import ourStoryIntroImage from '@/assets/our-story-intro.png'`.
+- Change the intro `<FramedImage src={ourStoryIntroImage} ... />` to use:
+  `https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp`
 
-`https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp`
+## Part 2 — Replace image on "Bringing our family into the brand" section
+That section is `SECTION_IMAGES[1]` in `OurStory.tsx` (it currently uses the IMG_1638 community photo). Since IMG_1638 is now being used in the intro, this slot needs a different image anyway.
 
-## Scope
-Only the `/our-story` page. Other pages that still reference the same CDN asset (`PageHero.tsx`, `ClawMachineTips.tsx`, `cmsData.ts`) are left untouched.
+**I need your input on what image to use here.** A few options:
 
-## Change
-In `src/pages/OurStory.tsx`, update the second entry of the `SECTION_IMAGES` array (index 1) from the `/__l5e/assets-v1/.../KlawsomeCrewSelfieWall.webp` URL to the new Squarespace IMG_1638 URL.
+1. **You provide a URL** (e.g. a photo of the Filipowski family, the kids designing the logo, or a kawaii detail shot) — paste it in your reply and I'll drop it in.
+2. **Reuse an existing brand asset** — for example one of the kawaii illustration pieces already in the project (e.g. the Klawsome friends-and-family photo at `Klawsome_FriendsFamily-056.webp`, though that's already used in the "Where it all began" section above it, so it would repeat).
+3. **Leave the slot empty** — without an image, the section falls back to a centered text-only layout (the code already supports that when `SECTION_IMAGES[idx]` is undefined).
 
-No other files modified, no asset cleanup (the CDN asset is still used elsewhere).
+Tell me which option (and a URL if option 1) and I'll wire it up in the same change.
