@@ -4,12 +4,15 @@ import PageHero from '@/components/PageHero';
 import { Button } from '@/components/ui/button';
 import asianYouthNovi from '@/assets/community/asian-youth-novi.webp';
 import kalayaanPh from '@/assets/community/kalayaan-ph-independence.webp';
-import paaralangTrunk from '@/assets/community/paaralang-pilipino-halloween-trunk.webp';
+import paaralangTrunkAsset from '@/assets/community/paaralang-trunk-or-treat-v2.png.asset.json';
 import cannedFoodDrive from '@/assets/community/canned-food-drive.webp';
 import toysForTots from '@/assets/community/toys-for-tots.webp';
 import msuPass from '@/assets/community/msu-pass.webp';
 import colorfulCollection from '@/assets/community/colorful-collection.webp';
-import noviLibrary from '@/assets/community/asian-youth-alliance.avif';
+import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
+
+const paaralangTrunk = paaralangTrunkAsset.url;
+const noviLibrary = noviLibraryAsset.url;
 
 interface Partner {
   name: string;
