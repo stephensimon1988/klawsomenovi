@@ -4,6 +4,7 @@ import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
+import familyBrandImage from '@/assets/family-brand.png.asset.json';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
@@ -19,7 +20,7 @@ const OurStory = () => {
   // Family photos used to illustrate the first two CMS-driven story sections.
   const SECTION_IMAGES = [
     'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp',
-    'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp',
+    familyBrandImage.url,
   ];
 
   const slugify = (s: string) =>
