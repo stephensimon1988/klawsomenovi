@@ -104,8 +104,8 @@ const KawaiiNav = () => {
       <NavClaw active={clawActive && !isOpen} pointerX={pointerX} minX={bounds?.min} maxX={bounds?.max} />
       <div className="ds-container section-x relative z-[60]">
         <div className="flex items-center justify-between h-20">
-          <button onClick={() => handleNav('#hero')} className="flex items-center">
-            <img src={klawsomeLogo} alt="Klawsome" className="h-20 w-auto" />
+          <button onClick={() => handleNav('#hero')} className="flex items-center p-[15px]">
+            <img src={klawsomeLogo} alt="Klawsome" className="h-[50px] w-auto" />
           </button>
 
           <div ref={linksRef} className="hidden md:flex items-center gap-10">
