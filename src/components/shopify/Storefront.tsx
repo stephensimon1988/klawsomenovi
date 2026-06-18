@@ -30,7 +30,33 @@ async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
     reverse,
   });
   if (!data) return [];
-  return data?.data?.products?.edges || [];
+  const edges: ShopifyProduct[] = data?.data?.products?.edges || [];
+  return groupEeveelutions(edges);
+}
+
+// Canonical Eeveelution order so Vaporeon always sits next to its siblings,
+// regardless of which sort tab is active.
+const EEVEE_ORDER = ['eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon'];
+const EEVEE_RE = /eevee|vaporeon|jolteon|flareon|espeon|umbreon|leafeon|glaceon|sylveon/i;
+
+function eeveeRank(p: ShopifyProduct): number {
+  const hay = `${p.node.title} ${p.node.tags.join(' ')}`.toLowerCase();
+  for (let i = 0; i < EEVEE_ORDER.length; i++) {
+    if (hay.includes(EEVEE_ORDER[i])) return i;
+  }
+  return 999;
+}
+
+function isEevee(p: ShopifyProduct): boolean {
+  return EEVEE_RE.test(`${p.node.title} ${p.node.tags.join(' ')}`);
+}
+
+function groupEeveelutions(edges: ShopifyProduct[]): ShopifyProduct[] {
+  const firstIdx = edges.findIndex(isEevee);
+  if (firstIdx === -1) return edges;
+  const eevees = edges.filter(isEevee).sort((a, b) => eeveeRank(a) - eeveeRank(b));
+  const rest = edges.filter((p) => !isEevee(p));
+  return [...rest.slice(0, firstIdx), ...eevees, ...rest.slice(firstIdx)];
 }
 
 const TAB_ACCENTS: Record<SortMode, string> = {

@@ -123,7 +123,7 @@ const has = (p: ShopifyProduct['node'], words: string[]) => {
 export const CATEGORIES: CategoryDef[] = [
   { id: 'figurines', label: 'Figurines', emoji: '🗿', match: (p) => has(p, ['figurine']) || p.productType.toLowerCase() === 'figurines' },
   { id: 'zodiac', label: 'Zodiac', emoji: '✨', match: (p) => has(p, ['zodiac', 'aries', 'taurus', 'gemini', 'leo', 'lunar']) },
-  { id: 'pokemon', label: 'Pokémon Inspired', emoji: '⚡', match: (p) => has(p, ['pokemon', 'eevee', 'eeveelution', 'glaceon', 'jolteon', 'umbreon', 'flareon', 'flareon', 'fire fox']) },
+  { id: 'pokemon', label: 'Pokémon Inspired', emoji: '⚡', match: (p) => has(p, ['pokemon', 'eevee', 'eeveelution', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon', 'fire fox']) },
   { id: 'plushies', label: 'Plushies', emoji: '🧸', match: (p) => has(p, ['plush', 'plushie']) },
   { id: 'collectibles', label: 'Collectibles', emoji: '💎', match: (p) => has(p, ['collectible', 'charm']) },
 ];
