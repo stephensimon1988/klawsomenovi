@@ -330,7 +330,7 @@ const Rental = () => {
             <div className="ds-container">
               <div className="max-w-2xl mb-12 mx-auto text-center">
                 <p className="ds-eyebrow">Real Events</p>
-                <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">From our parties to yours</h2>
+                <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">From our parties to yours</h2>
                 <p className="ds-lead">
                   A peek at recent rentals — KFT pop-ups, Onezo, Halloween at the house, and birthdays we've hosted.
                 </p>
@@ -364,7 +364,7 @@ const Rental = () => {
       <section id="waiver" className="section-y section-x">
         <div className="ds-container max-w-3xl text-center">
           <p className="ds-eyebrow">Required Paperwork</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Liability Release Waiver</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Liability Release Waiver</h2>
           <p className="ds-lead mb-8">
             All rental hosts must sign a liability release waiver before the event begins. Download, review, and bring it with you — or we'll send it digitally with your booking confirmation.
           </p>

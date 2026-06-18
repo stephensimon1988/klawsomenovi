@@ -69,7 +69,7 @@ const KawaiiReviews = () => {
       <div className="ds-container">
         <div ref={headerRef} className="text-center mb-16 max-w-6xl mx-auto" style={{ opacity: 0 }}>
           <p className="ds-eyebrow">Testimonials</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">Guests love us</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Guests love us</h2>
           <div className="flex items-center justify-center gap-2 mb-2">
             {[...Array(5)].map((_, i) => (
               <Star key={i} className={`w-5 h-5 ${i < displayStars ? 'text-accent fill-accent' : 'text-border'}`} />

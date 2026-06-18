@@ -39,7 +39,7 @@ const KawaiiNews = () => {
       <div className="ds-container">
         <div ref={headerRef} className="max-w-2xl mx-auto text-center mb-16 flex flex-col items-center" style={{ opacity: 0 }}>
           <p className="ds-eyebrow">Press</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--red mb-6">
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-6">
             In The News
           </h2>
           <img

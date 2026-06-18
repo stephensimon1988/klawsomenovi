@@ -312,7 +312,7 @@ const BusinessDevelopment = () => {
           <div className="text-center mb-12">
             <p className="ds-eyebrow mb-3">Opportunity 02</p>
             <span className="inline-block bg-[hsl(var(--klawsome-yellow))] text-foreground font-heading font-bold text-base px-7 py-3 rounded-full mb-5">{partnerTagline}</span>
-            <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">Become a Klawsome Partner</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Become a Klawsome Partner</h2>
             <p className="ds-lead max-w-2xl mx-auto">{partner.subtitle}</p>
           </div>
 
@@ -370,7 +370,7 @@ const BusinessDevelopment = () => {
         <div className="ds-container max-w-7xl">
           <div className="text-center mb-12">
             <p className="text-xs font-heading font-black text-white/80 tracking-[3px] uppercase mb-3">Opportunity 03</p>
-            <h2 className="ds-h2 ds-stroke ds-stroke--yellow mb-4">Custom Plushie Orders</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Custom Plushie Orders</h2>
             <p className="ds-lead text-white/85 max-w-2xl mx-auto">{plushie.subtitle}</p>
           </div>
 
@@ -488,7 +488,7 @@ const BusinessDevelopment = () => {
           <div className="grid md:grid-cols-2 gap-10 items-center mb-10">
             <div className="text-left">
               <p className="ds-eyebrow mb-3">{contactIntro?.eyebrow || "Let's Talk"}</p>
-              <h2 className="ds-h2 ds-stroke ds-stroke--red mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">{contactIntro?.headline || 'Ready to Get Started?'}</h2>
               <p className="ds-lead">{contactIntro?.body || "Tell us which opportunity excites you and we'll take it from there."}</p>
             </div>
             <div className="img-hover rounded-3xl shadow-md overflow-hidden">

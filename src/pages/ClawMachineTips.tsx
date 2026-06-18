@@ -68,7 +68,7 @@ const ClawMachineTips = () => {
           <div className="ds-cols">
             <div>
               <p className="ds-eyebrow">Strategy Basics</p>
-              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-8">It's Skill, Not Just Luck</h2>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-8">It's Skill, Not Just Luck</h2>
               <div className="space-y-5 ds-lead">
                 <p>
                   The most common mistake is aiming for the top of a plush — the claw needs something
@@ -106,7 +106,7 @@ const ClawMachineTips = () => {
         <div className="ds-container-content">
           <div className="text-center mb-12">
             <p className="ds-eyebrow">Aim Smart</p>
-            <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase">Choose the Right Plush</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase">Choose the Right Plush</h2>
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 max-w-4xl mx-auto">
@@ -158,7 +158,7 @@ const ClawMachineTips = () => {
             </div>
             <div className="order-1 md:order-2">
               <p className="ds-eyebrow">Technique</p>
-              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-6">Push — Don't Just Grab</h2>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Push — Don't Just Grab</h2>
               <p className="ds-lead mb-6">
                 Even when the claw can't lift a plush outright, you can still make progress. Every
                 grab is a chance to nudge your target closer to the chute.
@@ -184,7 +184,7 @@ const ClawMachineTips = () => {
           <div className="ds-cols">
             <div>
               <p className="ds-eyebrow">Observe</p>
-              <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-6">Watch Before You Play</h2>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Watch Before You Play</h2>
               <p className="ds-lead mb-6">
                 Spend a minute watching other players before you drop a token. You'll learn a lot
                 from the machine without spending a thing.
@@ -226,7 +226,7 @@ const ClawMachineTips = () => {
             </div>
             <div className="order-1 md:order-2">
               <p className="ds-eyebrow">Start Here</p>
-              <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-6">Begin With Beginner Machines</h2>
+              <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Begin With Beginner Machines</h2>
               <p className="ds-lead">
                 New to the claw life? At Klawsome, look for our <strong>Play Till You Win</strong>{' '}
                 machines — they're the friendliest way to learn the ropes and walk out with a plush.
@@ -243,7 +243,7 @@ const ClawMachineTips = () => {
         <div className="ds-container-content">
           <div className="text-center mb-10">
             <p className="ds-eyebrow">Pro Tips</p>
-            <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase">Level Up Your Game</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase">Level Up Your Game</h2>
           </div>
 
           <div className="ds-cols">

@@ -131,7 +131,7 @@ const CommunityPartners = () => {
       {/* Partners 4-col grid */}
       <section id="partners" className="section-y section-x scroll-mt-32">
         <div className="ds-container">
-          <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-12 border-t border-foreground pt-6">Our Partners</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-12 border-t border-foreground pt-6">Our Partners</h2>
           {partnerGroups.map((group) => (
             <div key={group.heading} className="mt-12 first:mt-0">
               <h3 className="font-heading font-bold uppercase tracking-wide text-2xl text-klawsome-navy mb-6">
@@ -183,7 +183,7 @@ const CommunityPartners = () => {
             </ul>
           </div>
           <div>
-            <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-6">Want to go further?</h2>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Want to go further?</h2>
             <ul className="space-y-3 font-body text-foreground">
               {crossPromoInvolved.map((item) => (
                 <li key={item} className="flex items-start gap-3">
