@@ -91,7 +91,7 @@ const OurStory = () => {
                     </div>
                     <div className={imageOnLeft ? 'md:order-2' : 'md:order-1'}>
                       {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
-                      <h2 className="ds-h2 ds-stroke ds-stroke--red uppercase mb-10">{s.title}</h2>
+                      <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-10">{s.title}</h2>
                       <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
                     </div>
                   </div>
@@ -99,7 +99,7 @@ const OurStory = () => {
               ) : (
                 <div className="ds-container-narrow">
                   {s.eyebrow && <p className="ds-eyebrow">{s.eyebrow}</p>}
-                  <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-10">{s.title}</h2>
+                  <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-10">{s.title}</h2>
                   <div className="space-y-6 ds-lead whitespace-pre-line">{s.body}</div>
                 </div>
               )}

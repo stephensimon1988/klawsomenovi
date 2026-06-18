@@ -80,7 +80,7 @@ const Rewards = () => {
               className="w-[260px] sm:w-[340px] md:w-[420px] mb-2 md:mb-4"
             />
             <h1
-              className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--red uppercase text-5xl sm:text-6xl md:text-8xl tracking-tight"
+              className="ds-h1 ds-stroke ds-stroke--h1 ds-stroke--navy uppercase text-5xl sm:text-6xl md:text-8xl tracking-tight"
               style={{ color: 'hsl(var(--klawsome-navy))' }}
             >
               {hero?.title || 'Rewards Program'}
@@ -166,7 +166,7 @@ const Rewards = () => {
 
         <div className="ds-container relative z-10">
           <p className="ds-eyebrow text-center">Lifetime Tiers</p>
-          <h2 className="ds-h2 ds-stroke ds-stroke--yellow uppercase mb-16 text-center">Lifetime Tiers</h2>
+          <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-16 text-center">Lifetime Tiers</h2>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 md:gap-8">
             {TIERS.map((tier, i) => (
               <div
