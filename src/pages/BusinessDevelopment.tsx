@@ -499,8 +499,8 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
-      <KawaiiDivider variant="wave" from="red" to="white" stroke="baby-blue" />
-      <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
+      <KawaiiDivider variant="wave" from="red" to="baby-blue" stroke="baby-blue" />
+      <section id="cross-promote" className="section-y section-x bg-[hsl(var(--klawsome-baby-blue))] scroll-mt-32">
         <div className="ds-container grid md:grid-cols-2 gap-12">
           <div>
             <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Easy ways to cross-promote</h2>
@@ -539,7 +539,7 @@ const BusinessDevelopment = () => {
       </section>
 
       {/* CONTACT — baby pink (matches footer auto-divider) */}
-      <KawaiiDivider variant="petals" from="white" to="baby-pink" stroke="baby-blue" />
+      <KawaiiDivider variant="petals" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <section id="contact" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
         <div className="ds-container max-w-5xl">
           <div className="grid md:grid-cols-2 gap-10 items-center mb-10">
