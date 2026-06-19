@@ -20,7 +20,7 @@ const moreGroups: { heading: string; links: { label: string; href: string }[] }[
     heading: 'Connect',
     links: [
       { label: 'Partner with Klawsome', href: '/partner-with-klawsome' },
-      { label: 'Community Outreach', href: '/community-partners' },
+      { label: 'Community Outreach', href: '/community-outreach' },
     ],
   },
   {
