@@ -12,7 +12,7 @@ import bdHeroAsset from '@/assets/business-development-hero.png.asset.json';
 const bdHero = bdHeroAsset.url;
 import hostedPhotoAsset from '@/assets/bizdev/hosted-machine-partner.png.asset.json';
 import partnerPhotoAsset from '@/assets/bizdev/partner-concepts-pikachu.png.asset.json';
-import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
+import plushiePhotoAsset from '@/assets/bizdev/plushie-custom-orders.jpg.asset.json';
 import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
@@ -31,6 +31,61 @@ import {
 } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
+
+function ParallaxImage({ src, alt }: { src: string; alt: string }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const imgRef = useRef<HTMLImageElement>(null);
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduced) return;
+
+    let rafId = 0;
+    const update = () => {
+      rafId = 0;
+      const container = containerRef.current;
+      const img = imgRef.current;
+      if (!container || !img) return;
+      const rect = container.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const containerCenter = rect.top + rect.height / 2;
+      const viewportCenter = vh / 2;
+      const denom = vh / 2 + rect.height / 2;
+      let progress = (viewportCenter - containerCenter) / denom;
+      progress = Math.max(-1, Math.min(1, progress));
+      const maxOffset = (img.offsetHeight - container.offsetHeight) / 2;
+      const y = progress * maxOffset;
+      img.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+    };
+    const onScroll = () => {
+      if (rafId) return;
+      rafId = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      if (rafId) cancelAnimationFrame(rafId);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative overflow-hidden rounded-2xl shadow-md h-72 md:h-80 w-full"
+    >
+      <img
+        ref={imgRef}
+        src={src}
+        alt={alt}
+        loading="lazy"
+        className="absolute inset-x-0 top-0 w-full h-[140%] object-cover will-change-transform"
+      />
+    </div>
+  );
+}
 
 const partnerIncludeImages: Record<string, string> = {
   'Equipment': imgEquipment,
@@ -369,14 +424,10 @@ const BusinessDevelopment = () => {
                 <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
               </p>
             </div>
-            <div className="img-hover rounded-2xl shadow-md">
-              <img
-                src={plushiePhotoAsset.url}
-                alt="Prize Claw Twin cabinet filled with custom kawaii plushies"
-                loading="lazy"
-                className="w-full h-full max-h-72 object-cover rounded-2xl"
-              />
-            </div>
+            <ParallaxImage
+              src={plushiePhotoAsset.url}
+              alt="Klawsome team member holding a yellow sunflower plushie in front of claw machines"
+            />
           </div>
 
           <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2 text-center">Pricing by complexity</h3>
