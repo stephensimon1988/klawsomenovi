@@ -11,6 +11,7 @@ import { CartDrawer } from './shopify/CartDrawer';
 const navLinks = [
   { label: 'HOME', href: '#hero' },
   { label: 'BIRTHDAYS', href: '/birthdays' },
+  { label: 'STORE', href: '/store' },
   { label: 'CAREERS', href: '/careers' },
 ];
 
