@@ -1,7 +1,9 @@
-import klawsomeLogo from '@/assets/klawsome-logo-animated.gif';
+import klawsomeLogoAsset from '@/assets/klawsome-logo-animated.gif.asset.json';
 import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 import KawaiiDivider from './KawaiiDivider';
 import KawaiiContactInfo from './KawaiiContactInfo';
+
+const klawsomeLogo = klawsomeLogoAsset.url;
 
 type FooterPrevColor = 'white' | 'baby-pink' | 'baby-blue' | 'red' | 'navy' | 'secondary-soft' | 'muted-soft';
 
