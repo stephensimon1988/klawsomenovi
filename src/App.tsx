@@ -61,8 +61,9 @@ const App = () => (
           <Route path="/faq" element={<Faq />} />
           <Route path="/rental" element={<Rental />} />
           <Route path="/store" element={<Store />} />
-          <Route path="/community" element={<Navigate to="/community-partners" replace />} />
-          <Route path="/community-partners" element={<CommunityPartners />} />
+          <Route path="/community" element={<Navigate to="/community-outreach" replace />} />
+          <Route path="/community-partners" element={<Navigate to="/community-outreach" replace />} />
+          <Route path="/community-outreach" element={<CommunityPartners />} />
           <Route path="/unsubscribe" element={<Unsubscribe />} />
           <Route path="/claw-machine-tips" element={<ClawMachineTips />} />
           <Route path="/claw-game" element={<ClawGameRedirect />} />
