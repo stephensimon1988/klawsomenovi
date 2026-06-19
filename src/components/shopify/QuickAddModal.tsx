@@ -97,6 +97,10 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
   const available = matchedVariant?.availableForSale ?? false;
   const needsSizeChart = productNeedsSizeChart(node);
 
+  const isGiftCardProduct =
+    node.productType.toLowerCase() === 'gift cards' ||
+    `${node.title} ${node.tags.join(' ')} ${node.productType}`.toLowerCase().includes('gift card');
+
   const handleAdd = async () => {
     if (!matchedVariant) {
       toast.error('Pick a variant first', { position: 'top-center' });
