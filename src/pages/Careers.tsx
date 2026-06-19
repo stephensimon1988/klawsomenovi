@@ -119,41 +119,50 @@ const Careers = () => {
         <section id="in-store" className="section-y section-x">
           <div className="ds-container max-w-6xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">In-Store Positions</h2>
-            <div className="grid md:grid-cols-2 gap-8">
-              {inStoreJobs.map((job) => (
-                <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
-                  {job.image_url && (
-                    <div className="img-hover">
-                      <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
-                    </div>
-                  )}
-                  <div className="p-6 md:p-8 flex flex-col">
-                    <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
-                    <p 
-                      className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
-                      dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(job.description) }}
-                    />
-                    <div className="flex flex-wrap gap-3">
-                      <JobDescriptionDialog
-                        title={job.title}
-                        url={job.job_desc_url}
-                        applyUrl={job.apply_url}
-                        fallbackDescription={job.description}
-                        trigger={
-                          <Button className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
-                            View Job Description
-                          </Button>
-                        }
-                      />
-                      {job.apply_url && (
-                        <Button asChild className="rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
-                          <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
-                        </Button>
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {[...inStoreJobs]
+                .sort((a, b) => (a.title === 'General Manager' ? -1 : b.title === 'General Manager' ? 1 : 0))
+                .map((job) => {
+                  const { icon: Icon } = getRoleMeta(job.title);
+                  return (
+                    <div key={job.id} className="bg-white/10 backdrop-blur-sm rounded-kawaii border border-white/20 overflow-hidden flex flex-col">
+                      {job.image_url ? (
+                        <div className="img-hover">
+                          <img src={job.image_url} alt={job.title} className="w-full aspect-square object-cover" loading="lazy" />
+                        </div>
+                      ) : (
+                        <div className="aspect-square bg-white/5 flex items-center justify-center">
+                          <Icon className="w-16 h-16 text-white/40" strokeWidth={1.5} />
+                        </div>
                       )}
+                      <div className="p-6 md:p-8 flex flex-col">
+                        <h3 className="font-heading font-bold text-xl text-white mb-3">{job.title}</h3>
+                        <p 
+                          className="text-white/70 font-body text-sm leading-relaxed mb-6 flex-1"
+                          dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(job.description) }}
+                        />
+                        <div className="flex flex-wrap gap-3">
+                          <JobDescriptionDialog
+                            title={job.title}
+                            url={job.job_desc_url}
+                            applyUrl={job.apply_url}
+                            fallbackDescription={job.description}
+                            trigger={
+                              <Button className="rounded-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90">
+                                View Job Description
+                              </Button>
+                            }
+                          />
+                          {job.apply_url && (
+                            <Button asChild className="rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
+                              <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
+                            </Button>
+                          )}
+                        </div>
+                      </div>
                     </div>
-                  </div>
-                </div>
-              ))}
+                  );
+                })}
             </div>
           </div>
         </section>
