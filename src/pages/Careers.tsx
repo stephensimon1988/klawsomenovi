@@ -157,6 +157,7 @@ const Careers = () => {
             </div>
           </div>
         </section>
+        </>
       )}
 
       {/* Hybrid / Paid Jobs */}
