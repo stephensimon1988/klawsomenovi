@@ -382,30 +382,22 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
           {isGiftCardProduct ? (
             <div className="order-3 lg:order-none text-klawsome-navy">
               <h3 className="font-heading font-bold text-xl mb-3">Gift Card Guide</h3>
-              <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
-                🎮 $30 – Great for a casual visit or one child
-
-                👫 $50 – A special outing for one child with a generous plushy amount
-
-                🎉 $100 – Best for families or a big solo birthday occasion
-
-                🎁 $250 – Great for super fans, birthdays, or gifting
-              </p>
+              <div className="text-lg text-klawsome-navy/90 font-body">
+                <p className="mb-3">🎮 $30 – Great for a casual visit or one child</p>
+                <p className="mb-3">👫 $50 – A special outing for one child with a generous plushy amount</p>
+                <p className="mb-3">🎉 $100 – Best for families or a big solo birthday occasion</p>
+                <p className="mb-0">🎁 $250 – Great for super fans, birthdays, or gifting</p>
+              </div>
             </div>
-          ) : node.description ? (
+          ) : node.descriptionHtml || node.description ? (
             <div className="order-3 lg:order-none text-klawsome-navy">
-              {node.descriptionHtml ? (
-                <div
-                  className="text-lg text-klawsome-navy/90 font-body [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-3 [&_li]:mb-1 [&_strong]:font-bold [&_em]:italic [&_h1]:font-heading [&_h1]:font-bold [&_h1]:text-2xl [&_h1]:mb-2 [&_h2]:font-heading [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mb-2 [&_h3]:font-heading [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mb-2 [&_a]:underline [&_br]:block"
-                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(node.descriptionHtml) }}
-                />
-              ) : (
-                <div className="text-lg text-klawsome-navy/90 font-body">
-                  {autoParagraph(node.description).map((p, i) => (
-                    <p key={i} className="mb-3 last:mb-0">{p}</p>
-                  ))}
-                </div>
-              )}
+              <div className="text-lg text-klawsome-navy/90 font-body">
+                {autoParagraph(
+                  node.descriptionHtml ? htmlToText(node.descriptionHtml) : node.description,
+                ).map((p, i) => (
+                  <p key={i} className="mb-3 last:mb-0">{p}</p>
+                ))}
+              </div>
             </div>
           ) : null}
         </div>
