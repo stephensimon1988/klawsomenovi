@@ -420,7 +420,7 @@ const BusinessDevelopment = () => {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-stretch mb-12">
             <div className="bg-white/95 rounded-r-2xl border-l-[5px] border-[hsl(var(--klawsome-yellow))] p-6 flex items-center gap-4 shadow-md">
               <span className="text-3xl flex-shrink-0">{minOrder?.eyebrow || '📦'}</span>
-              <p className="font-body font-bold text-foreground leading-relaxed">
+              <p className="font-body font-bold text-foreground leading-relaxed text-xl md:text-2xl">
                 <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
               </p>
             </div>
