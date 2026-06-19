@@ -69,10 +69,12 @@ const Rental = () => {
               const comparisonRows: { label: string; desc?: string; party: string | boolean; extended: string | boolean }[] = [
                 { label: 'Claw Machines', desc: 'Number of machines included.', party: '1', extended: '1' },
                 { label: 'Play Time', desc: 'How long guests get to play.', party: '1 hour', extended: '2 hours' },
-                { label: 'Filled with Your Product', desc: '5–10 inch plush, 0–5 lbs.', party: true, extended: true },
-                { label: '40 Plushies of Your Choice', desc: 'Subject to in-stock availability.', party: false, extended: true },
+                { label: 'Plushies Included', desc: 'Our 40 plush OR your supplied product (5–10 in, 0–5 lbs).', party: true, extended: true },
+                { label: 'Pick Your Plush Lineup', desc: '40 regular-size plushies, subject to availability.', party: false, extended: true },
                 { label: 'Free Delivery within 20 Miles', party: true, extended: true },
+                { label: 'Beyond 20 Miles', desc: '$3 / mile over 20 miles.', party: '$3 / mile', extended: '$3 / mile' },
                 { label: 'Full Delivery and Setup', party: true, extended: true },
+                { label: 'On-Site Attendant', desc: 'A Klawsome attendant stays with the machine during your rental.', party: true, extended: true },
                 { label: 'Easy Win Difficulty', party: true, extended: true },
                 { label: 'Free-Play Mode', party: true, extended: true },
               ];
