@@ -2,6 +2,7 @@ import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
 import { Button } from '@/components/ui/button';
+import { useCmsTable, type BusinessHowStep } from '@/hooks/useCmsContent';
 import asianYouthNovi from '@/assets/community/asian-youth-novi.webp';
 import kalayaanPh from '@/assets/community/kalayaan-ph-independence.webp';
 import paaralangTrunkAsset from '@/assets/community/paaralang-trunk-or-treat-v2.png.asset.json';
@@ -111,7 +112,18 @@ const crossPromoInvolved = [
   'Custom claw machine with your brand & design',
 ];
 
+const fallbackHowSteps: BusinessHowStep[] = [
+  { id: '1', title: 'Reach Out', description: 'Fill out the form below and tell us about yourself, your business, and which opportunity interests you.', icon: '1', sort_order: 0 },
+  { id: '2', title: 'We Connect', description: 'Our team follows up within 1–2 business days to learn more and answer your questions.', icon: '2', sort_order: 1 },
+  { id: '3', title: 'Review & Plan', description: 'We review your location or concept together and map out the right path forward.', icon: '3', sort_order: 2 },
+  { id: '4', title: 'Launch!', description: "Machines installed, plushies stocked, partners trained — you're ready to go.", icon: '4', sort_order: 3 },
+];
+
 const CommunityPartners = () => {
+  const { data: dbHowSteps } = useCmsTable<BusinessHowStep>('business_how_steps');
+  const { data: galleryPhotos } = useCmsTable<{ id: string; image_url: string; caption: string; sort_order: number }>('gallery_photos');
+  const howSteps = dbHowSteps?.length ? dbHowSteps : fallbackHowSteps;
+  const stepPhotos = (galleryPhotos || []).slice().sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)).slice(0, 4);
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
