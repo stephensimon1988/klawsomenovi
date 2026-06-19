@@ -1,52 +1,39 @@
-## Goal
-The store's apparel ships from an Asian manufacturer, so the size labels on the garments (S/M/L/XL) run 1–2 sizes smaller than US sizes. The current `SizeChart` shows US measurements next to those same letters, which misleads American customers. Rework the chart so shoppers can pick the correct *Asian-labeled* size for their *US* body.
+## Why the GM card is missing
 
-## Approach
-Replace both existing tables (`TEE_ROWS`, `APPAREL_ROWS`) with a single **Asian → US conversion table** plus a prominent "runs small — size up" callout. Keep the same component API (`SizeChart`, `productNeedsSizeChart`) so `QuickAddModal` doesn't change.
+The in-store grid is data-driven from `src/content/cmsData.ts → job_listings`. A "General Manager" record exists, but it's tagged `category: "hybrid"` with an empty `description` and empty `image_url`, so:
 
-## New chart contents
+- It renders in the (currently empty) Hybrid / Paid section, not In-Store.
+- Even if moved, it would show with no description and the crown-icon fallback instead of a photo.
 
-**Callout (above the table):**
-> ⚠️ These shirts use Asian sizing and run 1–2 sizes smaller than US sizes. We recommend sizing up. If you normally wear a US Medium, order a Large or XL.
+The `Careers.tsx` sort already pins "General Manager" first when it appears in `inStoreJobs`, so once the category flips, it will land in the first column automatically — no component changes needed.
 
-**Conversion table — Unisex Tee (Asian sizing):**
+## Changes
 
-| Tag size (Asian) | US equivalent | Chest (in) | Body length (in) |
-|---|---|---|---|
-| S   | US XS    | 32–34 | 25.5 |
-| M   | US S     | 34–36 | 26.5 |
-| L   | US M     | 36–38 | 27.5 |
-| XL  | US L     | 38–40 | 28.5 |
-| 2XL | US XL    | 40–42 | 29.5 |
-| 3XL | US 2XL   | 42–44 | 30.5 |
+### 1. `src/content/cmsData.ts` — update the existing General Manager row
 
-**Conversion table — Apparel (Asian sizing) — same Tag → US offset, with bust/waist/hip:**
+In the `"General Manager"` entry (around line 1332):
 
-| Tag size (Asian) | US equivalent | Bust | Waist | Hip |
-|---|---|---|---|---|
-| S   | US XS  | 32–33 | 25–26 | 35–36 |
-| M   | US S   | 34–35 | 27–28 | 37–38 |
-| L   | US M   | 36–37 | 29–30 | 39–40 |
-| XL  | US L   | 38–40 | 31–33 | 41–43 |
-| 2XL | US XL  | 41–43 | 34–36 | 44–46 |
-| 3XL | US 2XL | 44–46 | 37–39 | 47–49 |
+- `category`: `"hybrid"` → `"in-store"`
+- `sort_order`: `5` → `0` (belt-and-suspenders; the component sort already promotes GM)
+- `description`: fill in with the same short-blurb style used by Assistant GM and Store Associate, e.g.:
+  > "The General Manager (GM) oversees day-to-day operations of the Klawsome! arcade — leading the team to deliver superior customer service, ensuring operational excellence, driving store sales and profitability, managing inventory and restocking, promoting brand awareness, and fostering a positive, inclusive work environment."
+- `image_url`: reuse the Assistant GM photo URL (`https://images.squarespace-cdn.com/.../PXL_20250822_201918587.webp`) per your answer.
+- Leave `job_desc_url` (already points at the GM PDF) and `apply_url` (already the same `mailto:` pattern as Assistant GM) as-is.
 
-Numbers come from standard Gildan/Bella Asian-fit charts shifted one size down from US Gildan measurements.
+### 2. `src/data/jobDescriptions.ts` — add a structured "General Manager" entry
 
-**Footnote (under the table):**
-> Measurements are the *garment's* finished dimensions, not body measurements. Measure a shirt you already own flat across the chest, then pick the row that matches — or size up if you're between sizes. Tolerance ±1″.
+Today the modal falls back to the plain `description` blurb when there's no entry here (that's why Assistant GM's modal shows formatted sections but other roles don't). Add a `'General Manager'` key mirroring the Assistant GM structure, populated from the PDF:
 
-## Code changes (single file)
-`src/components/shopify/SizeChart.tsx`:
-1. Replace `TEE_ROWS` and `APPAREL_ROWS` with new arrays that include an extra `usEquivalent` column.
-2. Add a yellow/pink callout block above the table with the "sizes run small" message.
-3. Add an extra `<th>` and `<td>` column for "US equivalent".
-4. Update the heading from "Unisex Tee Size Chart (Gildan, inches)" → "Unisex Tee Size Chart — Asian sizing (inches)" and from "US Apparel Size Chart (inches)" → "Apparel Size Chart — Asian sizing (inches)".
-5. Replace the existing footnote with the new garment-measurement note.
+- **meta**: FLSA Classification "Exempt (Full-Time) / Non-Exempt (Part-Time)"; Full / Part-Time "Full-Time or Part-Time"; Pay Range "$18–$28/hr"; Reports To "Founders / Owners (Agnes & Michal)".
+- **summary**: the PDF's summary paragraph.
+- **sections**: Essential Functions, Required Skills and Abilities, Schedule, Work Environment, Physical Demands, Background Check & Drug Screen Requirements, Experience & Certifications — all transcribed from the PDF as bullet lists / body paragraphs.
 
-No changes to `productNeedsSizeChart` triggers (already correctly only shows on shirts/apparel), no changes to `QuickAddModal`, no Shopify variant relabeling.
+The existing `JobDescriptionDialog` already renders an **Open PDF** button (links to `job_desc_url`) and an **Apply Here** button (links to `apply_url`) in the modal footer, so no dialog code needs to change.
 
-## Out of scope
-- Renaming Shopify variants (we keep the manufacturer's S/M/L/XL on the listing).
-- Adding a US-size-to-order picker that re-maps the cart variant.
-- Per-product custom charts.
+### 3. Divider / footer logic — no changes required
+
+`Careers.tsx` already conditionally renders the In-Store section based on `inStoreJobs.length > 0`, and the Hybrid / Paid section likewise. Moving GM out of Hybrid drops that category to zero items, which simply hides the now-empty Hybrid section and its divider. The footer's `prevColor` chain already handles that branch.
+
+## Result
+
+`/careers` In-Store Positions grid renders three cards in this order: **General Manager** (new, with photo, description, View Job Description → formatted modal with Open PDF + Apply Here, and Apply Here button), **Assistant General Manager**, **Store Associate**.

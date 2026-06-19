@@ -1332,14 +1332,14 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "2878ded7-9300-44b7-a71c-146f3f84857e",
       "title": "General Manager",
-      "category": "hybrid",
-      "description": "",
-      "image_url": "",
+      "category": "in-store",
+      "description": "The General Manager (GM) oversees day-to-day operations of the Klawsome! arcade — leading the team to deliver superior customer service, ensuring operational excellence, driving store sales and profitability, managing inventory and restocking, promoting brand awareness, and fostering a positive, inclusive work environment.",
+      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f02582ee-95a6-4fb9-bf08-3ac93e6b9861/PXL_20250822_201918587.webp",
       "job_desc_url": "https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/images/careers%2FGeneral_Manager.pdf",
       "apply_url": "mailto:team@klawsomenovi.com?subject=Application%3A%20General%20Manager",
       "is_paid": true,
       "is_active": true,
-      "sort_order": 5,
+      "sort_order": 0,
       "created_at": "2026-04-14T15:06:01.891239+00:00"
     },
     {
