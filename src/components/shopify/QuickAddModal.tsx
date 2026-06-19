@@ -341,13 +341,26 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
           </div>
 
           {/* Description — bottom on tablet/mobile, right column below purchase on desktop */}
-          {node.description && (
+          {isGiftCardProduct ? (
+            <div className="order-3 lg:order-none text-klawsome-navy">
+              <h3 className="font-heading font-bold text-xl mb-3">Gift Card Guide</h3>
+              <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
+                🎮 $30 – Great for a casual visit or one child
+
+                👫 $50 – A special outing for one child with a generous plushy amount
+
+                🎉 $100 – Best for families or a big solo birthday occasion
+
+                🎁 $250 – Great for super fans, birthdays, or gifting
+              </p>
+            </div>
+          ) : node.description ? (
             <div className="order-3 lg:order-none text-klawsome-navy">
               <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
                 {node.description}
               </p>
             </div>
-          )}
+          ) : null}
         </div>
       </div>
     </div>
