@@ -211,62 +211,10 @@ const Careers = () => {
         </>
       )}
 
-      <KawaiiDivider variant="wave" from={hybridJobs.length > 0 ? 'baby-blue' : 'navy'} to="white" stroke="red" height={90} />
-      <section className="section-y section-x bg-white">
-        <div className="ds-container max-w-6xl">
-          <h2 className="text-2xl md:text-3xl font-heading font-bold text-klawsome-navy mb-6 text-center">
-            Join the Klawsome Team: Build Joy, Community, and Memorable Experiences
-          </h2>
-          <p className="text-klawsome-navy/70 font-body text-center max-w-3xl mx-auto mb-4 leading-relaxed">
-            At Klawsome, we believe an arcade can be more than entertainment — it can be a place of community, culture, and connection. As Michigan's first stand-alone claw machine arcade, Klawsome continues to grow rapidly, and we're looking for passionate, energetic individuals who want to help create an unforgettable environment for kids, families, and claw-machine lovers.
-          </p>
-          <p className="text-klawsome-navy/80 font-heading font-bold text-center text-lg mb-10">
-            🌱 Why Work at Klawsome?
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-8">
-            <div className="text-center md:text-left">
-              <div className="text-3xl mb-3">💖</div>
-              <h3 className="font-heading font-bold text-klawsome-navy mb-2">A Family-Owned Company with Heart</h3>
-              <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed">
-                Klawsome's culture is rooted in family, community, and shared joy — values reinforced throughout their Origin Story.
-              </p>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-3xl mb-3">🌏</div>
-              <h3 className="font-heading font-bold text-klawsome-navy mb-2">Inspired by Asian Arcade Culture</h3>
-              <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed">
-                Employees join a brand that embraces kawaii culture, Asian arcade aesthetics, and cross-cultural creativity.
-              </p>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-3xl mb-3">🧸</div>
-              <h3 className="font-heading font-bold text-klawsome-navy mb-2">A Fun, Energetic Environment</h3>
-              <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed">
-                Team members spend their days surrounded by plushies, laughter, bright visuals, and families making memories.
-              </p>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-3xl mb-3">🎮</div>
-              <h3 className="font-heading font-bold text-klawsome-navy mb-2">Meaningful Guest Interactions</h3>
-              <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed">
-                Customer reviews highlight how Klawsome staff help ensure "everyone gets prizes" and create supportive experiences for kids.
-              </p>
-            </div>
-            <div className="text-center md:text-left">
-              <div className="text-3xl mb-3">📈</div>
-              <h3 className="font-heading font-bold text-klawsome-navy mb-2">Opportunities for Growth</h3>
-              <p className="text-klawsome-navy/70 font-body text-sm leading-relaxed">
-                Roles span operations, leadership, business development, merchandising, web development, and creative design.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* Unpaid Opportunities */}
       {unpaidJobs.length > 0 && (
         <>
-        <KawaiiDivider variant="cloud" from="white" to="navy" stroke="white" height={90} />
+        <KawaiiDivider variant="wave" from={hybridJobs.length > 0 ? 'baby-blue' : (inStoreJobs.length > 0 ? 'navy' : 'white')} to="navy" stroke="red" height={90} />
         <section id="unpaid-opps" className="section-y section-x bg-klawsome-navy">
           <div className="ds-container max-w-6xl">
             <h2 className="text-2xl md:text-3xl font-heading font-bold text-white mb-10 text-center">Hybrid / Unpaid Opportunities</h2>
