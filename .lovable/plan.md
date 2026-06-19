@@ -1,13 +1,14 @@
-## Rule (save to project memory)
-
-For any Shopify product on `/store` that has selectable variations (more than one purchasable variant, ignoring the implicit `Default Title` variant), clicking **Add to cart** on the product card must open the QuickAddModal instead of adding straight to cart. Single-variant products keep the current one-click add behavior. This is a permanent rule — save under `mem://features/store-add-to-cart` and reference from `mem://index.md` Core.
+## Goal
+Make the CartDrawer button visible in the header bar on mobile and tablet (currently only shown on desktop and inside the open hamburger menu).
 
 ## Change
+**File:** `src/components/KawaiiNav.tsx`
 
-File: `src/components/shopify/Storefront.tsx` — `ProductCard.handleAdd`
+In the top header row (around the hamburger button), add a `<CartDrawer />` rendered only on `md:hidden`, placed immediately to the left of the hamburger menu button. Wrap them in a small flex container with a gap so they sit side-by-side.
 
-- Compute `hasVariations`: `variants.length > 1` OR any option has more than one value (excluding a sole `Default Title`).
-- If `hasVariations` → `setOpen(true)` and return (do not call `addItem`, do not toast).
-- Else → existing behavior: `addItem(...)` + success toast.
+Also remove the duplicate `<CartDrawer />` currently rendered inside the open mobile menu dropdown (it's redundant once the header has its own).
 
-No changes to `QuickAddModal` (it already requires the user to confirm via its own Add to cart button, so the rule is satisfied end-to-end).
+## Out of scope
+- Desktop header (already has the cart button — unchanged)
+- Cart drawer contents, styling, or logic
+- Product card "Add to Cart" buttons
