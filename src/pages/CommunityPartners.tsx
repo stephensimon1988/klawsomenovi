@@ -13,6 +13,7 @@ import msuPass from '@/assets/community/msu-pass.webp';
 import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
 import communityHeroAsset from '@/assets/community/community-partners-hero.png.asset.json';
+import xlPlushieAsset from '@/assets/donation-xl-plushie.jpg.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
@@ -198,11 +199,20 @@ const CommunityPartners = () => {
               <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-primary/15 text-primary">
                 Option 1 · Eye-Catching
               </span>
+              <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-border shadow-sm">
+                <img
+                  src={xlPlushieAsset.url}
+                  alt="XL plushie donation package in clear gift bag with pins and accessories"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="font-heading font-bold text-2xl text-klawsome-navy">XL Plushie Package</h3>
               <p className="text-3xl font-heading font-bold text-primary">~$90 value</p>
               <ul className="space-y-2 font-body text-foreground">
                 <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" /><span>$20 Klawsome gift card (in-store tokens or merch)</span></li>
                 <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" /><span>One XL plushie — stands out on any prize table</span></li>
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" /><span>Eye-catching on merch table</span></li>
               </ul>
             </article>
 
