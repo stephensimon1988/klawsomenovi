@@ -329,45 +329,6 @@ const CommunityPartners = () => {
         </div>
       </section>
 
-      {/* Cross-promo (from PDF) */}
-      <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
-        <div className="ds-container grid md:grid-cols-2 gap-12">
-          <div>
-            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Easy ways to cross-promote</h2>
-            <ul className="space-y-3 font-body text-foreground">
-              {crossPromoEasy.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-          <div>
-            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Want to go further?</h2>
-            <ul className="space-y-3 font-body text-foreground">
-              {crossPromoInvolved.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-        <div id="collaborate" className="ds-container mt-12 text-center scroll-mt-32">
-          <Button
-            asChild
-            size="lg"
-            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
-          >
-            <a href="mailto:team@klawsomenovi.com?subject=Collaborate%20with%20Klawsome">
-              Collaborate With Us
-            </a>
-          </Button>
-        </div>
-      </section>
-
       <KawaiiFooter prevColor="secondary-soft" />
     </div>
   );
