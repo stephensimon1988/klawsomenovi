@@ -3326,8 +3326,10 @@ export const cmsData: Record<string, any[]> = {
       "features": [
         "Everything in Party Package",
         "Additional hour of play (2 hours total)",
-        "40 plushies of your choice (subject to stock)",
+        "40 regular-size plushies of your choice (subject to availability)",
         "Free delivery within 20 miles",
+        "Beyond 20 miles: $3 / mile",
+        "On-site Klawsome attendant included",
         "Full delivery and setup"
       ],
       "cta_text": "Check Availability",
@@ -3343,8 +3345,10 @@ export const cmsData: Record<string, any[]> = {
       "features": [
         "1 Claw Machine",
         "1 Hour of Play",
-        "Filled with your product (5–10 inch, 0–5 lbs)",
+        "Filled with our 40 plushies OR your supplied product (5–10 inch, 0–5 lbs)",
         "Free delivery within 20 miles",
+        "Beyond 20 miles: $3 / mile",
+        "On-site Klawsome attendant included",
         "Easy win difficulty",
         "Free-play mode",
         "Full delivery and setup"
