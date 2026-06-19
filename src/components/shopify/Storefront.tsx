@@ -369,7 +369,7 @@ const ProductCard = ({
         </h3>
         <div className="mt-auto pt-3 flex items-center justify-between">
           <span className="font-heading font-bold text-lg text-primary">
-            {isGiftCard(n)
+            {isGiftCard(n) && n.priceRange.maxVariantPrice?.amount
               ? `$${parseFloat(n.priceRange.minVariantPrice.amount).toFixed(0)} - $${parseFloat(n.priceRange.maxVariantPrice.amount).toFixed(0)}`
               : `$${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}`}
           </span>
