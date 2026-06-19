@@ -325,6 +325,89 @@ const Birthdays = () => {
         </>
       )}
 
+      {/* Mini Party Gallery */}
+      {(privatePics.length > 0 || semiPics.length > 0) && (
+        <section id="party-gallery" className="py-20 px-6 lg:px-12 bg-klawsome-navy">
+          <div className="ds-container-content">
+            <p className="ds-eyebrow text-klawsome-yellow mb-3 text-center">Party Gallery</p>
+            <h2 className="text-3xl md:text-5xl font-heading font-bold text-white mb-4 text-center uppercase">
+              Real Klawsome Parties
+            </h2>
+            <p className="text-white/80 font-body text-center mb-12 max-w-2xl mx-auto">
+              A peek at private and semi-private celebrations we've hosted.
+            </p>
+
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+              {/* Private */}
+              <div className="bg-white/5 rounded-kawaii border border-white/10 p-6 md:p-8">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <p className="ds-eyebrow text-primary mb-1">Private</p>
+                    <h3 className="font-heading font-bold text-white text-2xl uppercase leading-tight">Private Parties</h3>
+                  </div>
+                  <Link
+                    to="/gallery#section-private_minecraft"
+                    className="inline-flex items-center gap-1 font-heading font-bold text-xs tracking-wider uppercase text-primary hover:text-white transition-colors"
+                  >
+                    See All <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {privatePics.map(p => (
+                    <Link
+                      key={p.id}
+                      to="/gallery#section-private_minecraft"
+                      className="block aspect-square overflow-hidden rounded-2xl bg-white/5 group"
+                      aria-label={p.caption || 'Private party photo'}
+                    >
+                      <img
+                        src={p.image_url}
+                        alt={p.caption || 'Private party at Klawsome'}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+
+              {/* Semi-Private */}
+              <div className="bg-white/5 rounded-kawaii border border-white/10 p-6 md:p-8">
+                <div className="flex items-center justify-between mb-5">
+                  <div>
+                    <p className="ds-eyebrow text-klawsome-yellow mb-1">Semi-Private</p>
+                    <h3 className="font-heading font-bold text-white text-2xl uppercase leading-tight">Semi-Private Parties</h3>
+                  </div>
+                  <Link
+                    to="/gallery#section-semi_private"
+                    className="inline-flex items-center gap-1 font-heading font-bold text-xs tracking-wider uppercase text-klawsome-yellow hover:text-white transition-colors"
+                  >
+                    See All <ArrowRight className="w-4 h-4" />
+                  </Link>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  {semiPics.map(p => (
+                    <Link
+                      key={p.id}
+                      to="/gallery#section-semi_private"
+                      className="block aspect-square overflow-hidden rounded-2xl bg-white/5 group"
+                      aria-label={p.caption || 'Semi-private party photo'}
+                    >
+                      <img
+                        src={p.image_url}
+                        alt={p.caption || 'Semi-private party at Klawsome'}
+                        loading="lazy"
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Invite Templates */}
       <KawaiiFooter prevColor={faqItems.length > 0 ? 'navy' : 'baby-pink'} />
     </div>
