@@ -102,20 +102,6 @@ const partnerGroups: { heading: string; items: Partner[] }[] = [
   },
 ];
 
-const crossPromoEasy = [
-  'Newsletter / Social Media mentions',
-  'Website feature',
-  'In-store flyer mentions',
-  'Free play exchange',
-];
-
-const crossPromoInvolved = [
-  'Coupon exchange',
-  'Claw machine placement (profit share)',
-  'Catering discount',
-  'Custom plush of your mascot with your brand',
-  'Custom claw machine with your brand & design',
-];
 
 const fallbackHowSteps: BusinessHowStep[] = [
   { id: '1', title: 'Reach Out', description: 'Fill out the form below and tell us about yourself, your business, and which opportunity interests you.', icon: '1', sort_order: 0 },
