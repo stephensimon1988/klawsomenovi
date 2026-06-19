@@ -53,10 +53,46 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
 
               <div>
                 <h4 className="font-heading font-bold text-klawsome-navy text-xs tracking-wider uppercase mb-4">Follow</h4>
-                <div className="space-y-2">
-                  {instagram && <a href={instagram} target="_blank" rel="noopener noreferrer" className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">Instagram</a>}
-                  {facebook && <a href={facebook} target="_blank" rel="noopener noreferrer" className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">Facebook</a>}
-                  {tiktok && <a href={tiktok} target="_blank" rel="noopener noreferrer" className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">TikTok</a>}
+                <div className="flex items-center gap-3">
+                  {instagram && (
+                    <a href={instagram} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="block transition-transform hover:scale-110">
+                      <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                          <radialGradient id="igGrad" cx="30%" cy="107%" r="150%">
+                            <stop offset="0%" stopColor="#fdf497" />
+                            <stop offset="5%" stopColor="#fdf497" />
+                            <stop offset="45%" stopColor="#fd5949" />
+                            <stop offset="60%" stopColor="#d6249f" />
+                            <stop offset="90%" stopColor="#285AEB" />
+                          </radialGradient>
+                        </defs>
+                        <circle cx="20" cy="20" r="20" fill="url(#igGrad)" />
+                        <rect x="11" y="11" width="18" height="18" rx="5" fill="none" stroke="#fff" strokeWidth="2" />
+                        <circle cx="20" cy="20" r="4.2" fill="none" stroke="#fff" strokeWidth="2" />
+                        <circle cx="25.5" cy="14.5" r="1.3" fill="#fff" />
+                      </svg>
+                    </a>
+                  )}
+                  {tiktok && (
+                    <a href={tiktok} target="_blank" rel="noopener noreferrer" aria-label="TikTok" className="block transition-transform hover:scale-110">
+                      <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20" fill="#fff" />
+                        <g transform="translate(11 10)">
+                          <path d="M14.5 0h-3.2v13.2a3.1 3.1 0 1 1-3.1-3.1c.3 0 .6 0 .9.1V7a6.4 6.4 0 1 0 5.4 6.3V6.6a7.6 7.6 0 0 0 4.4 1.4V4.8a4.5 4.5 0 0 1-4.4-4.8z" fill="#010101" />
+                          <path d="M14.5 0h-3.2v13.2a3.1 3.1 0 1 1-3.1-3.1c.3 0 .6 0 .9.1V7a6.4 6.4 0 1 0 5.4 6.3V6.6a7.6 7.6 0 0 0 4.4 1.4V4.8a4.5 4.5 0 0 1-4.4-4.8z" fill="#25F4EE" transform="translate(-1.2 1)" opacity="0.85" style={{ mixBlendMode: 'screen' }} />
+                          <path d="M14.5 0h-3.2v13.2a3.1 3.1 0 1 1-3.1-3.1c.3 0 .6 0 .9.1V7a6.4 6.4 0 1 0 5.4 6.3V6.6a7.6 7.6 0 0 0 4.4 1.4V4.8a4.5 4.5 0 0 1-4.4-4.8z" fill="#FE2C55" transform="translate(1.2 -0.5)" opacity="0.85" style={{ mixBlendMode: 'screen' }} />
+                        </g>
+                      </svg>
+                    </a>
+                  )}
+                  {facebook && (
+                    <a href={facebook} target="_blank" rel="noopener noreferrer" aria-label="Facebook" className="block transition-transform hover:scale-110">
+                      <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20" fill="#1877F2" />
+                        <path d="M25.2 25.8l.9-5.6h-5.4v-3.6c0-1.5.7-3 3.1-3h2.5V8.6s-2.3-.4-4.4-.4c-4.5 0-7.5 2.7-7.5 7.7v4.4h-5v5.6h5V40h6.2V25.8z" fill="#fff" />
+                      </svg>
+                    </a>
+                  )}
                 </div>
               </div>
 
