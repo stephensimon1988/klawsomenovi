@@ -175,6 +175,108 @@ const CommunityPartners = () => {
         </div>
       </section>
 
+      <KawaiiDivider variant="wave" from="white" to="baby-pink" />
+
+      <section
+        id="donations"
+        className="section-y section-x scroll-mt-32"
+        style={{ backgroundColor: 'hsl(var(--klawsome-baby-pink) / 0.45)' }}
+      >
+        <div className="ds-container max-w-6xl">
+          <div className="text-center max-w-3xl mx-auto">
+            <p className="ds-eyebrow mb-3">Give Back</p>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-6">Sponsorships or Donations</h2>
+            <p className="ds-lead text-foreground/80">
+              Looking for a gift donation to your group's charitable event or philanthropic cause? We greatly appreciate your patience — we receive many requests from local organizations and schools, and we'd love to offer a gift basket or package for your event's raffle or silent auction.
+            </p>
+          </div>
+
+          {/* Two package options */}
+          <div className="grid md:grid-cols-2 gap-8 mt-12">
+            <article className="bg-white/80 rounded-kawaii border border-border p-8 shadow-md flex flex-col gap-4">
+              <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-primary/15 text-primary">
+                Option 1 · Eye-Catching
+              </span>
+              <h3 className="font-heading font-bold text-2xl text-klawsome-navy">XL Plushie Package</h3>
+              <p className="text-3xl font-heading font-bold text-primary">~$90 value</p>
+              <ul className="space-y-2 font-body text-foreground">
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" /><span>$20 Klawsome gift card (in-store tokens or merch)</span></li>
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" /><span>One XL plushie — stands out on any prize table</span></li>
+              </ul>
+            </article>
+
+            <article className="bg-white/80 rounded-kawaii border border-border p-8 shadow-md flex flex-col gap-4">
+              <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-accent/40 text-klawsome-navy">
+                Option 2 · Variety
+              </span>
+              <h3 className="font-heading font-bold text-2xl text-klawsome-navy">Regular Plushie Basket</h3>
+              <p className="text-3xl font-heading font-bold text-primary">~$70 value</p>
+              <ul className="space-y-2 font-body text-foreground">
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>$20 Klawsome gift card (in-store tokens or merch)</span></li>
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>Two regular-sized plushies, gift-wrapped in a basket</span></li>
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>Great for seasonal & holiday-themed events</span></li>
+              </ul>
+            </article>
+          </div>
+
+          {/* Image placeholder grid — 4 × 3:4 */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-12">
+            {[1, 2, 3, 4].map((n) => (
+              <div
+                key={n}
+                data-placeholder="donation-photo"
+                className="aspect-[3/4] rounded-2xl bg-white/60 border-2 border-dashed border-klawsome-baby-pink flex items-center justify-center text-muted-foreground text-xs font-heading font-bold tracking-wider uppercase"
+              >
+                Photo {n}
+              </div>
+            ))}
+          </div>
+
+          {/* Process info */}
+          <div className="grid md:grid-cols-2 gap-8 mt-12">
+            <div className="bg-white/70 rounded-kawaii p-6 border border-border">
+              <h4 className="font-heading font-bold text-lg text-klawsome-navy mb-2">Lead Time & Pickup</h4>
+              <p className="font-body text-foreground/85 leading-relaxed">
+                We need at least <strong>5 days</strong> to process requests. The least busy pickup times at the arcade are <strong>Monday–Thursday</strong>. Weekends and school breaks may require a longer wait time.
+              </p>
+            </div>
+            <div className="bg-white/70 rounded-kawaii p-6 border border-border">
+              <h4 className="font-heading font-bold text-lg text-klawsome-navy mb-2">A Small Ask</h4>
+              <p className="font-body text-foreground/85 leading-relaxed">
+                Please mention our business on social media and/or display our logo in your programming — tag{' '}
+                <strong>@KlawsomeNovi</strong> on Facebook & Instagram. Here's a{' '}
+                <a
+                  href="https://www.facebook.com/share/p/1Dcnfeju7y/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-primary font-bold underline underline-offset-2 hover:no-underline"
+                >
+                  recent example from a local school PTA
+                </a>.
+              </p>
+            </div>
+          </div>
+
+          <p className="ds-body text-center max-w-3xl mx-auto mt-12 italic">
+            We're honored you reached out to Klawsome and truly value supporting local youth — especially since this business is built around the owners' own kids. Thank you for your partnership.
+          </p>
+
+          <div className="text-center mt-8">
+            <Button
+              asChild
+              size="lg"
+              className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
+            >
+              <a href="mailto:team@klawsomenovi.com?subject=Klawsome%20Donation%20Request">
+                Request a Donation
+              </a>
+            </Button>
+          </div>
+        </div>
+      </section>
+
+      <KawaiiDivider variant="wave" from="baby-pink" to="white" flip />
+
       {/* Partners 4-col grid */}
       <section id="partners" className="section-y section-x scroll-mt-32">
         <div className="ds-container">
