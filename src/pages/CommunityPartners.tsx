@@ -1,6 +1,7 @@
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import PageHero from '@/components/PageHero';
+import KawaiiDivider from '@/components/KawaiiDivider';
 import { Button } from '@/components/ui/button';
 import { useCmsTable, type BusinessHowStep } from '@/hooks/useCmsContent';
 import asianYouthNovi from '@/assets/community/asian-youth-novi.webp';

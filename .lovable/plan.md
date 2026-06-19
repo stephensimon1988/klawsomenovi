@@ -1,17 +1,41 @@
-## Move "Getting Started is Easy" section → Community Outreach page
+## Goal
+Add an animated divider and a new colored "Sponsorships or Donations" section to the `/community-outreach` page, positioned directly under the "Getting Started is Easy" section.
 
-### 1. Remove from `src/pages/BusinessDevelopment.tsx`
-- Delete the whole "HOW IT WORKS" block (lines ~448–482): the `KawaiiDivider variant="bumps" from="red" to="white"` and the entire `<section>` that renders "The Process / Getting Started is Easy" + the `howSteps` grid.
-- Update the next divider (currently `from="white" to="baby-pink"`) to `from="red" to="baby-pink"` so it bridges the now-adjacent red plushie section to the baby-pink contact section. Keep `variant="petals"`, change stroke to a contrasting kawaii token (`baby-blue` stays fine).
-- Remove now-unused locals: `dbHowSteps`, `howSteps`, `galleryPhotos`, `stepPhotos`, the `business_how_steps` and `gallery_photos` `useCmsTable` calls, and the `fallbackHowSteps` constant.
+## Layout
 
-### 2. Add to `src/pages/CommunityPartners.tsx`
-- Insert the section between the existing "Our Partners" section and the "cross-promote" section.
-- Add imports for `useCmsTable`, `BusinessHowStep` type.
-- Inline a `fallbackHowSteps` constant (same 4 items: Reach Out, We Connect, Review & Plan, Launch!).
-- Hook into the same two CMS tables (`business_how_steps`, `gallery_photos`) and reproduce the same JSX (eyebrow "The Process", h2 "Getting Started is Easy", 2/4-col grid of photo + title + description).
-- Wrap in `<section className="section-y section-x bg-background">` so it sits cleanly between the white partners section and the secondary/40 cross-promote section. No `KawaiiDivider` needed (no bg change → bg change is white→secondary/40, already divider-free on this page).
+```
+[PageHero]
+[Getting Started is Easy]  ← white bg
+<KawaiiDivider wave white → baby-pink>
+[Sponsorships or Donations]  ← baby-pink bg (new)
+<KawaiiDivider wave baby-pink → white>
+[Our Partners]             ← white bg (existing)
+[Cross-Promote]            ← existing
+[KawaiiFooter]
+```
 
-### Out of scope
-- No CMS schema changes; same tables continue to feed the section, just on a different page.
-- No route, nav, or footer changes.
+## Changes
+
+### 1. `src/pages/CommunityPartners.tsx`
+
+- Import `KawaiiDivider`.
+- Insert **two** `KawaiiDivider` components around the new section:
+  - `from="white" to="baby-pink"` (above)
+  - `from="baby-pink" to="white"` (below)
+- Add a new `<section id="donations">` between the dividers with `bg-klawsome-baby-pink/30` and standard `section-y section-x` padding.
+- Section content:
+  - Eyebrow: "Give Back"
+  - H2: "Sponsorships or Donations" (with `ds-stroke ds-stroke--navy`)
+  - Intro paragraph
+  - Two highlighted gift-package options in a card grid:
+    - **XL Plushie Package** — $20 gift card + XL plushie (total value $90)
+    - **Regular Plushie Package** — $20 gift card + two regular plushies in gift basket (total value $70)
+  - Processing & pickup info (5 days lead time, Mon–Thu pickup preferred)
+  - Social-media request paragraph with the Facebook share link
+  - Closing thank-you paragraph
+  - **Image grid** — 4 placeholder divs in a 2×2 (mobile) / 4-column (desktop) grid, each with `aspect-[3/4]` and a soft placeholder background (`bg-white/60 rounded-2xl flex items-center justify-center text-muted-foreground text-sm`). These are explicitly marked with `data-placeholder` so the user can swap in real images later.
+
+### 2. Content tone
+Match the warm, friendly kawaii brand voice already used on the page.
+
+### 3. No other files touched.
