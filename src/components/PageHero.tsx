@@ -93,16 +93,8 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
               >
                 Book Event
               </button>
-              <a
-                href="https://app.squareup.com/gift/ML1R35ZH9VKRW/order"
-                target="_blank"
-                rel="noopener noreferrer"
-                className={linkBtnClass}
-              >
-                Buy Gift Card
-              </a>
               <Link to="/store" className={linkBtnClass}>
-                Buy Plushies
+                Store
               </Link>
             </nav>
           </div>
