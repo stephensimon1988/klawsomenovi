@@ -14,6 +14,7 @@ import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
 import communityHeroAsset from '@/assets/community/community-partners-hero.png.asset.json';
 import xlPlushieAsset from '@/assets/donation-xl-plushie.jpg.asset.json';
+import regularBasketAsset from '@/assets/donation-regular-basket.jpg.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
@@ -220,12 +221,21 @@ const CommunityPartners = () => {
               <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-accent/40 text-klawsome-navy">
                 Option 2 · Variety
               </span>
+              <div className="aspect-square md:aspect-[3/4] rounded-2xl overflow-hidden border border-border shadow-sm">
+                <img
+                  src={regularBasketAsset.url}
+                  alt="Regular plushie basket donation with gift card, plushies, and branded items"
+                  loading="lazy"
+                  className="w-full h-full object-cover"
+                />
+              </div>
               <h3 className="font-heading font-bold text-2xl text-klawsome-navy">Regular Plushie Basket</h3>
               <p className="text-3xl font-heading font-bold text-primary">~$70 value</p>
               <ul className="space-y-2 font-body text-foreground">
                 <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>$20 Klawsome gift card (in-store tokens or merch)</span></li>
                 <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>Two regular-sized plushies, gift-wrapped in a basket</span></li>
                 <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>Great for seasonal & holiday-themed events</span></li>
+                <li className="flex items-start gap-3"><span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" /><span>Regular plushie baskets offer variety and an opportunity for more seasonal/holiday-themed items depending on your event</span></li>
               </ul>
             </article>
           </div>
