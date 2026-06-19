@@ -22,6 +22,11 @@ import { useCartStore } from '@/stores/cartStore';
 import { toast } from 'sonner';
 import { QuickAddModal } from './QuickAddModal';
 
+function isGiftCard(n: ShopifyProduct['node']): boolean {
+  const hay = `${n.title} ${n.tags.join(' ')} ${n.productType}`.toLowerCase();
+  return n.productType.toLowerCase() === 'gift cards' || hay.includes('gift card');
+}
+
 async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
   const { sortKey, reverse } = shopifySortVars(sort);
   const data = await storefrontApiRequest(PRODUCTS_QUERY, {
@@ -69,6 +74,7 @@ const TAB_ACCENTS: Record<SortMode, string> = {
 export const Storefront = () => {
   const [sort, setSort] = useState<SortMode>('most-popular');
   const [categoryId, setCategoryId] = useState<string | null>(null);
+  const [interacted, setInteracted] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const autoOpenHandle = searchParams.get('product');
 
@@ -83,11 +89,19 @@ export const Storefront = () => {
   }, [products]);
 
   const filtered = useMemo(() => {
-    if (!categoryId) return products;
-    const cat = CATEGORIES.find((c) => c.id === categoryId);
-    if (!cat) return products;
-    return products.filter((p) => cat.match(p.node));
-  }, [products, categoryId]);
+    let list = products;
+    if (categoryId) {
+      const cat = CATEGORIES.find((c) => c.id === categoryId);
+      if (cat) list = products.filter((p) => cat.match(p.node));
+    }
+    // Pin gift cards only on the initial default view (no interactions yet).
+    if (!interacted && !categoryId && sort === 'most-popular') {
+      const gc = list.filter((p) => isGiftCard(p.node));
+      const rest = list.filter((p) => !isGiftCard(p.node));
+      return [...gc, ...rest];
+    }
+    return list;
+  }, [products, categoryId, interacted, sort]);
 
   const activeCategoryLabel = categoryId
     ? CATEGORIES.find((c) => c.id === categoryId)?.label
@@ -135,7 +149,7 @@ export const Storefront = () => {
               return (
                 <button
                   key={tab.id}
-                  onClick={() => setSort(tab.id)}
+                  onClick={() => { setInteracted(true); setSort(tab.id); }}
                   className={`relative px-5 py-4 font-heading font-bold text-sm whitespace-nowrap transition-colors ${
                     active ? 'text-foreground' : 'text-muted-foreground hover:text-foreground'
                   }`}
@@ -161,7 +175,7 @@ export const Storefront = () => {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-56 rounded-2xl">
                   <DropdownMenuItem
-                    onClick={() => setCategoryId(null)}
+                    onClick={() => { setInteracted(true); setCategoryId(null); }}
                     className={`font-heading font-bold ${!categoryId ? 'bg-secondary/60' : ''}`}
                   >
                     ✨ All Products
@@ -169,7 +183,7 @@ export const Storefront = () => {
                   {populatedCategories.map((c) => (
                     <DropdownMenuItem
                       key={c.id}
-                      onClick={() => setCategoryId(c.id)}
+                      onClick={() => { setInteracted(true); setCategoryId(c.id); }}
                       className={`font-heading font-bold ${categoryId === c.id ? 'bg-secondary/60' : ''}`}
                     >
                       <span className="mr-2">{c.emoji}</span> {c.label}
@@ -186,7 +200,7 @@ export const Storefront = () => {
       <div className="ds-container section-x py-6">
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
           <Button
-            onClick={surpriseMe}
+            onClick={() => { setInteracted(true); surpriseMe(); }}
             className="rounded-full bg-klawsome-baby-blue hover:bg-klawsome-baby-blue/80 text-foreground font-heading font-bold px-6"
           >
             <Shuffle className="w-4 h-4 mr-2" />
@@ -350,13 +364,14 @@ const ProductCard = ({
         </div>
       )}
       <div className="p-4 flex flex-col flex-1">
-        <p className="text-xs text-muted-foreground font-body">#{n.id.slice(-4)}</p>
-        <h3 className="font-heading font-bold text-base text-foreground mt-1 line-clamp-2 min-h-[2.75rem]">
+        <h3 className="font-heading font-bold text-base text-foreground line-clamp-2 min-h-[2.75rem]">
           {n.title}
         </h3>
         <div className="mt-auto pt-3 flex items-center justify-between">
           <span className="font-heading font-bold text-lg text-primary">
-            ${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}
+            {isGiftCard(n)
+              ? `$${parseFloat(n.priceRange.minVariantPrice.amount).toFixed(0)} - $${parseFloat(n.priceRange.maxVariantPrice.amount).toFixed(0)}`
+              : `$${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}`}
           </span>
           <Button
             size="sm"
