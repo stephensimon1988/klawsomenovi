@@ -27,7 +27,6 @@ const moreGroups: { heading: string; links: { label: string; href: string }[] }[
     heading: 'Purchase',
     links: [
       { label: 'Store', href: '/store' },
-      { label: 'Gift Cards', href: 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order' },
       { label: 'Rewards', href: '/rewards' },
     ],
   },
