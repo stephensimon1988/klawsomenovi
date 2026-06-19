@@ -327,7 +327,7 @@ const CommunityPartners = () => {
         </div>
       </section>
 
-      <KawaiiFooter prevColor="secondary-soft" />
+      <KawaiiFooter prevColor="white" />
     </div>
   );
 };
