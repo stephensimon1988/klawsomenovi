@@ -1,17 +1,17 @@
-**Goal**: Replace the text-based social media links in the footer with colored circular icon buttons, styled like the user's reference screenshot but without the blue background.
+## Changes to `src/components/shopify/Storefront.tsx`
 
-**Current state**: The footer "Follow" section shows plain text links for Instagram, Facebook, and TikTok.
+1. **Pin gift cards as the first 2 results only on initial load.**
+   - Add an `isGiftCard(p)` helper matching `productType === 'Gift Cards'` or title/tag containing `gift card`.
+   - Track an `interacted` flag, flipped to `true` the first time the user changes sort, picks a category, or hits Surprise Me.
+   - When `interacted === false` AND `sort === 'most-popular'` (the default) AND no category filter, hoist gift card products to the top. Once the user interacts, products render in normal sort/filter order — gift cards behave like any other product.
 
-**Changes**:
-1. In `src/components/KawaiiFooter.tsx`, replace the text `<a>` links in the "Follow" column with a horizontal row of circular icon buttons.
-2. Create inline SVG icons for each platform to match their brand colors:
-   - **Instagram**: Gradient circle (pink/purple/yellow) with camera outline
-   - **Facebook**: Blue circle (#1877F2) with white "f" letter
-   - **TikTok**: Black circle with cyan/magenta musical note
-3. Keep existing URLs, `target="_blank"`, `rel="noopener noreferrer"`, and add hover scale/opacity transitions.
-4. Keep the "Follow" heading above the icon row. Remove the vertical text link list.
-5. No new npm dependency needed — inline SVGs are lightweight and fully controllable.
-6. Layout: flex row with `gap-3` or `gap-4` for the icon buttons.
+2. **Display price as a range for gift cards.**
+   - Extend `PRODUCTS_QUERY` in `src/lib/shopify.ts` to also fetch `priceRange.maxVariantPrice { amount currencyCode }` and update the `ShopifyProduct` type.
+   - In `ProductCard`, when `isGiftCard(n)` render `$<min> - $<max>` (e.g. `$30 - $250`) using the priceRange. Non-gift-card products keep the current single-price display.
 
-**Files to edit**:
-- `src/components/KawaiiFooter.tsx`
+3. **Remove the SKU / short ID line on `/store`.**
+   - Delete the `<p>#{n.id.slice(-4)}</p>` line in `ProductCard`.
+
+## Out of scope
+- No changes to gift card configurator, cart, checkout, or product detail modal pricing.
+- No changes to the Shopify gift card product itself — the displayed range comes from existing variant prices in Shopify. If the cheapest variant is not currently $30, say the word and I'll reprice the variants too.
