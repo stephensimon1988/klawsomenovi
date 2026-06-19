@@ -127,6 +127,7 @@ const has = (p: ShopifyProduct['node'], words: string[]) => {
 };
 
 export const CATEGORIES: CategoryDef[] = [
+  { id: 'gift-cards', label: 'Gift Cards', emoji: '🎁', match: (p) => p.productType.toLowerCase() === 'gift cards' || has(p, ['gift card']) },
   { id: 'figurines', label: 'Figurines', emoji: '🗿', match: (p) => has(p, ['figurine']) || p.productType.toLowerCase() === 'figurines' },
   { id: 'zodiac', label: 'Zodiac', emoji: '✨', match: (p) => has(p, ['zodiac', 'aries', 'taurus', 'gemini', 'leo', 'lunar']) },
   { id: 'pokemon', label: 'Pokémon Inspired', emoji: '⚡', match: (p) => has(p, ['pokemon', 'eevee', 'eeveelution', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon', 'fire fox']) },
