@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronDown, Check, X } from 'lucide-react';
+import { ChevronDown, Check, X, ArrowRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
@@ -9,8 +9,11 @@ import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type Par
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
 import FramedImage from '@/components/FramedImage';
+import { Link } from 'react-router-dom';
  import birthdaysHero from '@/assets/birthdays-hero.webp';
  import pandaCatFoxParty from '@/assets/panda-cat-fox-party.webp';
+
+interface GalleryPhoto { id: string; section: string; caption: string; image_url: string; sort_order: number; }
 
 const FAQItem = ({ q, a }: { q: string; a: string }) => {
   const [open, setOpen] = useState(false);
@@ -35,6 +38,14 @@ const Birthdays = () => {
   const { data: allFaqs } = useCmsTable<FaqItem>('faq_items');
   const { data: templates } = useCmsTable<InviteTemplate>('invite_templates');
   const { data: hero } = usePageHero('birthdays');
+  const { data: galleryPhotos } = useCmsTable<GalleryPhoto>('gallery_photos');
+
+  const privatePics = (galleryPhotos || [])
+    .filter(p => p.section === 'private_minecraft' || p.section === 'private_summer')
+    .slice(0, 4);
+  const semiPics = (galleryPhotos || [])
+    .filter(p => p.section === 'semi_private')
+    .slice(0, 4);
 
   const faqItems = allFaqs?.filter(f => f.page === 'birthdays') || [];
   const bookingEmail = content?.booking_email || 'events@klawsomenovi.com';
