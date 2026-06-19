@@ -31,7 +31,7 @@ export interface ShopifyProduct {
     createdAt: string;
     priceRange: {
       minVariantPrice: { amount: string; currencyCode: string };
-      maxVariantPrice: { amount: string; currencyCode: string };
+      maxVariantPrice?: { amount: string; currencyCode: string };
     };
     images: { edges: Array<{ node: ShopifyImage }> };
     variants: { edges: Array<{ node: ShopifyVariant }> };
