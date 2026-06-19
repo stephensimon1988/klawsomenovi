@@ -135,6 +135,7 @@ const CommunityPartners = () => {
         subtitle="Klawsome is proud to team up with local schools, student orgs, libraries, and nonprofits across metro Detroit. Here are some of the people we get to show up for."
         imageUrl={communityHeroAsset.url}
         jumpLinks={[
+          { label: 'Sponsorships', id: 'donations' },
           { label: 'Our Partners', id: 'partners' },
           { label: 'Cross-Promote', id: 'cross-promote' },
           { label: 'Collaborate', id: 'collaborate' },
@@ -180,7 +181,7 @@ const CommunityPartners = () => {
       <section
         id="donations"
         className="section-y section-x scroll-mt-32"
-        style={{ backgroundColor: 'hsl(var(--klawsome-baby-pink) / 0.45)' }}
+        style={{ backgroundColor: 'hsl(var(--klawsome-baby-pink))' }}
       >
         <div className="ds-container max-w-6xl">
           <div className="text-center max-w-3xl mx-auto">
