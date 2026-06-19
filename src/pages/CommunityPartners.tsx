@@ -188,7 +188,7 @@ const CommunityPartners = () => {
               <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-primary/15 text-primary">
                 Option 1 · Eye-Catching
               </span>
-              <div className="aspect-[3/4] rounded-2xl overflow-hidden border border-border shadow-sm">
+              <div className="aspect-square rounded-2xl overflow-hidden border border-border shadow-sm">
                 <img
                   src={xlPlushieAsset.url}
                   alt="XL plushie donation package in clear gift bag with pins and accessories"
@@ -209,7 +209,7 @@ const CommunityPartners = () => {
               <span className="inline-block self-start text-[10px] tracking-[0.18em] uppercase font-heading font-bold px-3 py-1 rounded-full bg-accent/40 text-klawsome-navy">
                 Option 2 · Variety
               </span>
-              <div className="aspect-square md:aspect-[3/4] rounded-2xl overflow-hidden border border-border shadow-sm">
+              <div className="aspect-square rounded-2xl overflow-hidden border border-border shadow-sm">
                 <img
                   src={regularBasketAsset.url}
                   alt="Regular plushie basket donation with gift card, plushies, and branded items"
