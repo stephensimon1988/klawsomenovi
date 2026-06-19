@@ -1,41 +1,26 @@
-## Goal
-Add an animated divider and a new colored "Sponsorships or Donations" section to the `/community-outreach` page, positioned directly under the "Getting Started is Easy" section.
+## Plan
 
-## Layout
+**1. Upload new image as a Lovable Asset**
+- Run `lovable-assets create` on `/mnt/user-uploads/plushie.jpg` → `src/assets/bizdev/plushie-custom-orders.jpg.asset.json`.
 
-```
-[PageHero]
-[Getting Started is Easy]  ← white bg
-<KawaiiDivider wave white → baby-pink>
-[Sponsorships or Donations]  ← baby-pink bg (new)
-<KawaiiDivider wave baby-pink → white>
-[Our Partners]             ← white bg (existing)
-[Cross-Promote]            ← existing
-[KawaiiFooter]
-```
+**2. Swap the image in `src/pages/BusinessDevelopment.tsx` (line ~372–379)**
+- Update the import to use the new `.asset.json`.
+- Update the `alt` text to describe the new photo (person holding a yellow sunflower plushie in front of Klawsome claw machines).
 
-## Changes
+**3. Add a confined parallax effect to that single image card**
+- Wrap the image in a fixed-aspect, `overflow-hidden` container (keep current rounded-2xl shadow). The container becomes the "window".
+- Inner `<img>` is taller than the window (e.g. ~140% of container height) and translated on the Y axis based on scroll.
+- Use a small React component (e.g. `ParallaxImage`) local to this file:
+  - Tracks the container's bounding rect via `requestAnimationFrame` + scroll/resize listeners.
+  - Computes `progress = (viewportCenter − containerCenter) / (viewportHeight/2 + containerHeight/2)`, clamped to `[-1, 1]`.
+  - When `progress === 0` (container perfectly centered in viewport) → `translateY(0)` so the image's true center is shown.
+  - Otherwise translate by `progress * maxOffset`, where `maxOffset = (imageHeight − containerHeight) / 2`. This guarantees the image always fully covers the window (no empty edges) and the center aligns exactly when the window is centered.
+  - Slow speed comes from making the image only modestly taller than the window (~30–40% extra), so the max travel is small over a full scroll pass.
+- Respect `prefers-reduced-motion` → disable translation.
+- Only affects this one image; nothing else on the page changes.
 
-### 1. `src/pages/CommunityPartners.tsx`
-
-- Import `KawaiiDivider`.
-- Insert **two** `KawaiiDivider` components around the new section:
-  - `from="white" to="baby-pink"` (above)
-  - `from="baby-pink" to="white"` (below)
-- Add a new `<section id="donations">` between the dividers with `bg-klawsome-baby-pink/30` and standard `section-y section-x` padding.
-- Section content:
-  - Eyebrow: "Give Back"
-  - H2: "Sponsorships or Donations" (with `ds-stroke ds-stroke--navy`)
-  - Intro paragraph
-  - Two highlighted gift-package options in a card grid:
-    - **XL Plushie Package** — $20 gift card + XL plushie (total value $90)
-    - **Regular Plushie Package** — $20 gift card + two regular plushies in gift basket (total value $70)
-  - Processing & pickup info (5 days lead time, Mon–Thu pickup preferred)
-  - Social-media request paragraph with the Facebook share link
-  - Closing thank-you paragraph
-  - **Image grid** — 4 placeholder divs in a 2×2 (mobile) / 4-column (desktop) grid, each with `aspect-[3/4]` and a soft placeholder background (`bg-white/60 rounded-2xl flex items-center justify-center text-muted-foreground text-sm`). These are explicitly marked with `data-placeholder` so the user can swap in real images later.
-
-### 2. Content tone
-Match the warm, friendly kawaii brand voice already used on the page.
-
-### 3. No other files touched.
+### Technical details
+- No new dependencies; pure React + CSS transform with `will-change: transform`.
+- Use `transform: translate3d(0, Ypx, 0)` for GPU compositing.
+- Container: keep responsive height roughly matching current `max-h-72` look (e.g. `h-72 md:h-80`), `overflow-hidden`, `rounded-2xl`.
+- Image: `absolute inset-x-0 top-0 w-full h-[140%] object-cover`.
