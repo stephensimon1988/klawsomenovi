@@ -60,7 +60,6 @@ const Careers = () => {
         ]}
       />
 
-      <KawaiiDivider variant="wave" from="white" to="white" stroke="red" height={90} />
       <section className="section-y section-x bg-white">
         <div className="ds-container max-w-6xl">
           <h2 className="text-2xl md:text-3xl font-heading font-bold text-klawsome-navy mb-6 text-center">
