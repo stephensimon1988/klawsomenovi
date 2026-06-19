@@ -13,7 +13,7 @@ const bdHero = bdHeroAsset.url;
 import hostedPhotoAsset from '@/assets/bizdev/hosted-machine-partner.png.asset.json';
 import partnerPhotoAsset from '@/assets/bizdev/partner-concepts-pikachu.png.asset.json';
 import plushiePhotoAsset from '@/assets/bizdev/plushie-custom-orders.jpg.asset.json';
-import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
+import contactPhotoAsset from '@/assets/bizdev/klaw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
 import imgBrand from '@/assets/bizdev/brand.webp';
@@ -551,7 +551,7 @@ const BusinessDevelopment = () => {
             <div className="img-hover rounded-3xl shadow-md overflow-hidden">
               <img
                 src={contactPhotoAsset.url}
-                alt="Glowing Klawsome XL plush claw cabinet at night"
+                alt="Klawsome plush claw machines lined up with blue glow"
                 loading="lazy"
                 className="w-full h-72 md:h-[420px] object-cover"
               />
