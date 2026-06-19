@@ -13,6 +13,7 @@ import msuPass from '@/assets/community/msu-pass.webp';
 import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
 import communityHeroAsset from '@/assets/community/community-partners-hero.png.asset.json';
+import xlPlushieAsset from '@/assets/donation-xl-plushie.jpg.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
