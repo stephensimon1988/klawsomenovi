@@ -21,6 +21,7 @@ const moreGroups: { heading: string; links: { label: string; href: string }[] }[
     links: [
       { label: 'Partner with Klawsome', href: '/partner-with-klawsome' },
       { label: 'Community Outreach', href: '/community-outreach' },
+      { label: 'Instagram', href: 'https://www.instagram.com/klawsomenovi/' },
     ],
   },
   {
