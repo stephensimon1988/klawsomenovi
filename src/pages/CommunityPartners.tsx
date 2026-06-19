@@ -8,7 +8,7 @@ import asianYouthNovi from '@/assets/community/asian-youth-novi.webp';
 import kalayaanPh from '@/assets/community/kalayaan-ph-independence.webp';
 import paaralangTrunkAsset from '@/assets/community/paaralang-trunk-or-treat-v2.png.asset.json';
 import cannedFoodDrive from '@/assets/community/canned-food-drive.webp';
-import toysForTots from '@/assets/community/toys-for-tots.webp';
+import toysForTotsAsset from '@/assets/community/toys-for-tots.webp.asset.json';
 import msuPass from '@/assets/community/msu-pass.webp';
 import colorfulCollection from '@/assets/community/colorful-collection.webp';
 import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asset.json';
@@ -20,6 +20,7 @@ import donationPhoto2Asset from '@/assets/donation-photo-2.jpg.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
+const toysForTots = toysForTotsAsset.url;
 
 interface Partner {
   name: string;
