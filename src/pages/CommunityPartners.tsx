@@ -286,7 +286,7 @@ const CommunityPartners = () => {
         </div>
       </section>
 
-      <KawaiiDivider variant="wave" from="baby-pink" to="white" flip />
+      <KawaiiDivider variant="wave" from="baby-pink" to="white" />
 
       {/* Partners 4-col grid */}
       <section id="partners" className="section-y section-x scroll-mt-32">
