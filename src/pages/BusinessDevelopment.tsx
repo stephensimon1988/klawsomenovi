@@ -499,8 +499,47 @@ const BusinessDevelopment = () => {
         </div>
       </section>
 
+      <KawaiiDivider variant="wave" from="red" to="white" stroke="baby-blue" />
+      <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
+        <div className="ds-container grid md:grid-cols-2 gap-12">
+          <div>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Easy ways to cross-promote</h2>
+            <ul className="space-y-3 font-body text-foreground">
+              {crossPromoEasy.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-primary shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy uppercase mb-6">Want to go further?</h2>
+            <ul className="space-y-3 font-body text-foreground">
+              {crossPromoInvolved.map((item) => (
+                <li key={item} className="flex items-start gap-3">
+                  <span className="mt-1.5 inline-block w-2 h-2 rounded-full bg-accent shrink-0" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+        <div className="ds-container mt-12 text-center">
+          <Button
+            asChild
+            size="lg"
+            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
+          >
+            <a href="mailto:team@klawsomenovi.com?subject=Collaborate%20with%20Klawsome">
+              Collaborate With Us
+            </a>
+          </Button>
+        </div>
+      </section>
+
       {/* CONTACT — baby pink (matches footer auto-divider) */}
-      <KawaiiDivider variant="petals" from="red" to="baby-pink" stroke="baby-blue" />
+      <KawaiiDivider variant="petals" from="white" to="baby-pink" stroke="baby-blue" />
       <section id="contact" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
         <div className="ds-container max-w-5xl">
           <div className="grid md:grid-cols-2 gap-10 items-center mb-10">
