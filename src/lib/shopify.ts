@@ -29,8 +29,10 @@ export interface ShopifyProduct {
     tags: string[];
     vendor: string;
     createdAt: string;
-    priceRange: { minVariantPrice: { amount: string; currencyCode: string } };
-    priceRangeV2?: { maxVariantPrice: { amount: string; currencyCode: string } };
+    priceRange: {
+      minVariantPrice: { amount: string; currencyCode: string };
+      maxVariantPrice: { amount: string; currencyCode: string };
+    };
     images: { edges: Array<{ node: ShopifyImage }> };
     variants: { edges: Array<{ node: ShopifyVariant }> };
     options: Array<{ name: string; values: string[] }>;
@@ -74,7 +76,10 @@ export const PRODUCTS_QUERY = `
           tags
           vendor
           createdAt
-          priceRange { minVariantPrice { amount currencyCode } }
+          priceRange {
+            minVariantPrice { amount currencyCode }
+            maxVariantPrice { amount currencyCode }
+          }
           images(first: 50) { edges { node { url altText } } }
           variants(first: 100) {
             edges {
