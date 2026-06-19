@@ -278,6 +278,15 @@ const ProductCard = ({
   // Show a thumbnail strip only when there's something meaningful to pick between.
   const hasMultiple = variants.length > 1 || images.length > 1;
 
+  // True when the product has selectable variations (ignoring Shopify's implicit
+  // single "Default Title" variant). When true, Add to cart must open the modal
+  // so the user explicitly picks options before adding.
+  const hasVariations =
+    variants.length > 1 ||
+    n.options.some(
+      (o) => o.values.length > 1 || (o.values[0]?.toLowerCase() !== 'default title' && o.values.length > 1),
+    );
+
   const addItem = useCartStore((s) => s.addItem);
   const isLoading = useCartStore((s) => s.isLoading);
   const [open, setOpen] = useState(false);
@@ -293,6 +302,10 @@ const ProductCard = ({
   const handleAdd = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!variant) return;
+    if (hasVariations) {
+      setOpen(true);
+      return;
+    }
     await addItem({
       product,
       variantId: variant.id,
