@@ -7,6 +7,35 @@ import type { ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { SizeChart, productNeedsSizeChart } from './SizeChart';
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/\son\w+="[^"]*"/gi, '')
+    .replace(/\son\w+='[^']*'/gi, '')
+    .replace(/javascript:/gi, '');
+}
+
+function autoParagraph(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  // Honor existing paragraph breaks first
+  const byBreaks = trimmed.split(/\n\s*\n+/).map((s) => s.trim()).filter(Boolean);
+  const out: string[] = [];
+  for (const chunk of byBreaks) {
+    if (chunk.length <= 280) {
+      out.push(chunk);
+      continue;
+    }
+    // Split into sentences, group every 2
+    const sentences = chunk.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) ?? [chunk];
+    for (let i = 0; i < sentences.length; i += 2) {
+      out.push(sentences.slice(i, i + 2).join('').trim());
+    }
+  }
+  return out;
+}
+
 interface Props {
   product: ShopifyProduct;
   open: boolean;
