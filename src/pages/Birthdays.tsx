@@ -347,7 +347,7 @@ const Birthdays = () => {
               <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Costumed Mascot Show</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$89<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / 30 min</span></p>
               <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed mb-4 flex-1">
-                A costumed character makes a special appearance at your party.
+                A costumed character visits your party for 30 minutes of meet-and-greet fun—posing for photos, dancing with guests, and bringing extra energy to the celebration. Choose from favorites like Pikachu, Cinnamoroll, Hello Kitty, Kuromi, and Bluey. Character availability is limited, so please reach out to confirm.
               </p>
               <div>
                 <p className="text-xs uppercase tracking-wider font-heading font-bold text-klawsome-navy/60 mb-2">Choose your character</p>
