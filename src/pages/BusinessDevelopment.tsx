@@ -102,6 +102,21 @@ const plushieStepImages: Record<string, string> = {
   'Approve & produce': imgApprove,
 };
 
+const crossPromoEasy = [
+  'Newsletter / Social Media mentions',
+  'Website feature',
+  'In-store flyer mentions',
+  'Free play exchange',
+];
+
+const crossPromoInvolved = [
+  'Coupon exchange',
+  'Claw machine placement (profit share)',
+  'Catering discount',
+  'Custom plush of your mascot with your brand',
+  'Custom claw machine with your brand & design',
+];
+
 type ContentSection = {
   id: string;
   page_key: string;
