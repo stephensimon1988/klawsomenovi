@@ -263,6 +263,10 @@ const Careers = () => {
         prevColor={
           unpaidJobs.length > 0
             ? 'navy'
+            : hybridJobs.length > 0
+            ? 'baby-blue'
+            : inStoreJobs.length > 0
+            ? 'navy'
             : 'white'
         }
       />
