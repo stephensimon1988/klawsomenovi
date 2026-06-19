@@ -171,9 +171,12 @@ const KawaiiNav = () => {
             <CartDrawer />
           </div>
 
-          <button onClick={() => setIsOpen(!isOpen)} className="md:hidden p-2 text-klawsome-navy">
-            {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-          </button>
+          <div className="md:hidden flex items-center gap-2">
+            <CartDrawer />
+            <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-klawsome-navy">
+              {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+            </button>
+          </div>
         </div>
       </div>
 
@@ -216,9 +219,6 @@ const KawaiiNav = () => {
               <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
                 BOOK EVENT
               </Button>
-              <div className="pt-2 flex justify-center">
-                <CartDrawer />
-              </div>
             </div>
           </motion.div>
         )}
