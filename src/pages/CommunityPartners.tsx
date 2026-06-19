@@ -128,8 +128,6 @@ const CommunityPartners = () => {
           { label: 'Get Started', id: 'how' },
           { label: 'Sponsorships', id: 'donations' },
           { label: 'Our Partners', id: 'partners' },
-          { label: 'Cross-Promote', id: 'cross-promote' },
-          { label: 'Collaborate', id: 'collaborate' },
         ]}
       />
 
