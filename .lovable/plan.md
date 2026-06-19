@@ -1,26 +1,34 @@
-## Plan
+## Problem
+Business hours are only mentioned once at the very top of the homepage and then buried inside a paragraph in the Visit Us section near the bottom. Customers who scroll through reviews and pricing have no easy way to spot hours again without scrolling back up or digging through footer text.
 
-**1. Upload new image as a Lovable Asset**
-- Run `lovable-assets create` on `/mnt/user-uploads/plushie.jpg` → `src/assets/bizdev/plushie-custom-orders.jpg.asset.json`.
+## Goal
+Make hours immediately visible to scanners in the "Visit Us" section by extracting them from the paragraph into a distinct, icon-led info block.
 
-**2. Swap the image in `src/pages/BusinessDevelopment.tsx` (line ~372–379)**
-- Update the import to use the new `.asset.json`.
-- Update the `alt` text to describe the new photo (person holding a yellow sunflower plushie in front of Klawsome claw machines).
+## Proposed Change
+In `src/components/KawaiiVisit.tsx`:
 
-**3. Add a confined parallax effect to that single image card**
-- Wrap the image in a fixed-aspect, `overflow-hidden` container (keep current rounded-2xl shadow). The container becomes the "window".
-- Inner `<img>` is taller than the window (e.g. ~140% of container height) and translated on the Y axis based on scroll.
-- Use a small React component (e.g. `ParallaxImage`) local to this file:
-  - Tracks the container's bounding rect via `requestAnimationFrame` + scroll/resize listeners.
-  - Computes `progress = (viewportCenter − containerCenter) / (viewportHeight/2 + containerHeight/2)`, clamped to `[-1, 1]`.
-  - When `progress === 0` (container perfectly centered in viewport) → `translateY(0)` so the image's true center is shown.
-  - Otherwise translate by `progress * maxOffset`, where `maxOffset = (imageHeight − containerHeight) / 2`. This guarantees the image always fully covers the window (no empty edges) and the center aligns exactly when the window is centered.
-  - Slow speed comes from making the image only modestly taller than the window (~30–40% extra), so the max travel is small over a full scroll pass.
-- Respect `prefers-reduced-motion` → disable translation.
-- Only affects this one image; nothing else on the page changes.
+1. **Add a hours info row** below the paragraph and above the CTA buttons.
+2. **Use the existing `Clock` icon** (already imported) and CMS `hours` data.
+3. **Style as a rounded card** with a light background (`bg-background/70`, `rounded-xl`, `p-4`) so it pops against the baby-pink section background.
+4. **Keep the paragraph text** but remove the hours sentence from it so the info block becomes the single, scannable source of truth for hours in this section.
 
-### Technical details
-- No new dependencies; pure React + CSS transform with `will-change: transform`.
-- Use `transform: translate3d(0, Ypx, 0)` for GPU compositing.
-- Container: keep responsive height roughly matching current `max-h-72` look (e.g. `h-72 md:h-80`), `overflow-hidden`, `rounded-2xl`.
-- Image: `absolute inset-x-0 top-0 w-full h-[140%] object-cover`.
+### Visual layout
+```text
+[Visit Us]
+[Find us at Sakura Novi]
+[Klawsome sits at {address}.]
+
+┌─────────────────────────────────────┐
+│ 🕐  Tue–Sun, 11 a.m. – 9 p.m.       │
+│     Closed Mondays                   │
+└─────────────────────────────────────┘
+
+[Directions]  [Call Us]
+```
+
+## Files to edit
+- `src/components/KawaiiVisit.tsx` (only file)
+
+## Out of scope
+- No changes to the footer or hero hours.
+- No new dependencies.

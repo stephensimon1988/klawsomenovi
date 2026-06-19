@@ -40,8 +40,19 @@ const KawaiiVisit = () => {
               Find us at Sakura Novi
             </h2>
             <p className="ds-lead mb-10 max-w-lg">
-              Klawsome sits at {address}. Open Tuesday through Sunday, {hoursText}, closed Mondays.
+              Klawsome sits at {address}.
             </p>
+
+            <div className="mb-10 max-w-lg flex items-start gap-4 rounded-xl bg-background/70 p-4 shadow-sm">
+              <div className="flex-shrink-0 w-11 h-11 rounded-full bg-primary/15 text-primary flex items-center justify-center">
+                <Clock className="w-5 h-5" />
+              </div>
+              <div className="min-w-0">
+                <p className="font-heading font-bold text-foreground">Hours</p>
+                <p className="text-foreground/80">Tuesday–Sunday, {hoursText}</p>
+                <p className="text-sm text-muted-foreground mt-1">Closed Mondays</p>
+              </div>
+            </div>
 
             <div className="flex gap-4">
               <Button asChild className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
