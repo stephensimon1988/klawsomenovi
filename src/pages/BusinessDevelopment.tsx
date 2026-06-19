@@ -309,7 +309,7 @@ const BusinessDevelopment = () => {
               <h3 className="font-heading text-2xl font-bold text-foreground mb-2">You earn 10% of every token played.</h3>
               <p className="text-muted-foreground font-body font-semibold text-sm leading-relaxed max-w-md">{hosted.description}</p>
             </div>
-            <div className="img-hover rounded-2xl w-full md:w-80 lg:w-96 flex-shrink-0">
+            <div className="img-hover rounded-2xl w-full md:w-[28rem] lg:w-[32rem] flex-shrink-0">
               <img
                 src={hostedPhotoAsset.url}
                 alt="Happy guest holding a Snoopy plush next to a glowing Klawsome claw machine"
