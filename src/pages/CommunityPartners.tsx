@@ -181,6 +181,40 @@ const CommunityPartners = () => {
       </section>
 
       {/* Cross-promo (from PDF) */}
+      <section id="how" className="section-y section-x bg-background scroll-mt-32">
+        <div className="ds-container max-w-7xl">
+          <div className="text-center">
+            <p className="ds-eyebrow mb-3">The Process</p>
+            <h2 className="ds-h2 ds-stroke ds-stroke--navy mb-4">Getting Started is Easy</h2>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-7 mt-12">
+            {howSteps.map((step, idx) => {
+              const photo = stepPhotos[idx];
+              return (
+                <div key={step.id} className="text-center">
+                  {photo?.image_url ? (
+                    <div className="img-hover rounded-2xl mb-4 shadow-md">
+                      <img
+                        src={photo.image_url}
+                        alt={photo.caption || step.title}
+                        loading="lazy"
+                        className="w-full aspect-square object-cover rounded-2xl"
+                      />
+                    </div>
+                  ) : (
+                    <div className="w-14 h-14 bg-primary text-white font-bold text-2xl rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
+                      {step.icon}
+                    </div>
+                  )}
+                  <h4 className="font-heading text-lg font-bold text-foreground mb-2">{step.title}</h4>
+                  <p className="text-sm text-muted-foreground font-semibold leading-relaxed">{step.description}</p>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       <section id="cross-promote" className="section-y section-x bg-secondary/40 scroll-mt-32">
         <div className="ds-container grid md:grid-cols-2 gap-12">
           <div>
