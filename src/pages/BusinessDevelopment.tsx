@@ -176,14 +176,10 @@ const BusinessDevelopment = () => {
   const { data: hero } = usePageHero('business-development');
   const { data: dbSections } = useCmsTable<BusinessSection>('business_sections');
   const { data: dbPricing } = useCmsTable<BusinessPricingTier>('business_pricing_tiers');
-  const { data: dbHowSteps } = useCmsTable<BusinessHowStep>('business_how_steps');
   const { data: dbContent } = usePageContent('business-development');
-  const { data: galleryPhotos } = useCmsTable<{ id: string; image_url: string; caption: string; sort_order: number }>('gallery_photos');
-  const stepPhotos = (galleryPhotos || []).slice().sort((a, b) => (a.sort_order ?? 0) - (b.sort_order ?? 0)).slice(0, 4);
 
   const sections = dbSections?.length ? dbSections : fallbackSections;
   const pricingTiers = dbPricing?.length ? dbPricing : fallbackPricing;
-  const howSteps = dbHowSteps?.length ? dbHowSteps : fallbackHowSteps;
 
   const hosted = sections.find(s => s.section_key === 'hosted') || fallbackSections[0];
   const partner = sections.find(s => s.section_key === 'partner') || fallbackSections[1];
