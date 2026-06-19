@@ -15,6 +15,8 @@ import noviLibraryAsset from '@/assets/community/novi-public-library-v2.png.asse
 import communityHeroAsset from '@/assets/community/community-partners-hero.png.asset.json';
 import xlPlushieAsset from '@/assets/donation-xl-plushie.jpg.asset.json';
 import regularBasketAsset from '@/assets/donation-regular-basket.jpg.asset.json';
+import donationPhoto1Asset from '@/assets/donation-photo-1.jpg.asset.json';
+import donationPhoto2Asset from '@/assets/donation-photo-2.jpg.asset.json';
 
 const paaralangTrunk = paaralangTrunkAsset.url;
 const noviLibrary = noviLibraryAsset.url;
@@ -242,13 +244,15 @@ const CommunityPartners = () => {
 
           {/* Image placeholder grid — 2 × 3:4 */}
           <div className="grid grid-cols-2 gap-5 mt-12">
-            {[1, 2].map((n) => (
+            {[
+              { src: donationPhoto1Asset.url, alt: 'Reading Prize Sponsors collage' },
+              { src: donationPhoto2Asset.url, alt: 'Halo Halo 2026 Sponsors collage' },
+            ].map((p) => (
               <div
-                key={n}
-                data-placeholder="donation-photo"
-                className="aspect-[3/4] rounded-2xl bg-white/60 border-2 border-dashed border-klawsome-baby-pink flex items-center justify-center text-muted-foreground text-xs font-heading font-bold tracking-wider uppercase"
+                key={p.src}
+                className="aspect-[3/4] rounded-2xl overflow-hidden border border-border shadow-sm bg-white"
               >
-                Photo {n}
+                <img src={p.src} alt={p.alt} className="w-full h-full object-cover" loading="lazy" />
               </div>
             ))}
           </div>
