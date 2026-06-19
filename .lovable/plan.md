@@ -1,14 +1,19 @@
-## Goal
-Make the CartDrawer button visible in the header bar on mobile and tablet (currently only shown on desktop and inside the open hamburger menu).
+## Rename "Community Partners" → "Community Outreach"
 
-## Change
-**File:** `src/components/KawaiiNav.tsx`
+Update user-facing copy everywhere it appears. Keep the existing URL path (`/community-partners`) and asset filenames unchanged to avoid broken links, sitemap churn, and asset refetching.
 
-In the top header row (around the hamburger button), add a `<CartDrawer />` rendered only on `md:hidden`, placed immediately to the left of the hamburger menu button. Wrap them in a small flex container with a gap so they sit side-by-side.
+### Changes
 
-Also remove the duplicate `<CartDrawer />` currently rendered inside the open mobile menu dropdown (it's redundant once the header has its own).
+1. **`src/components/KawaiiNav.tsx`** (MORE menu, Connect group)
+   - `'Partner with Klawsome'` stays; change `'Community Partners'` label → `'Community Outreach'` (href unchanged: `/community-partners`).
 
-## Out of scope
-- Desktop header (already has the cart button — unchanged)
-- Cart drawer contents, styling, or logic
-- Product card "Add to Cart" buttons
+2. **`src/pages/CommunityPartners.tsx`**
+   - `PageHero` `title="Community Partners"` → `"Community Outreach"`.
+   - (Component/file name and import unchanged.)
+
+3. **`src/App.tsx`**
+   - No change. Route path `/community-partners` kept so existing links/sitemap continue to work.
+
+### Out of scope
+- No URL/route rename, no sitemap edit, no asset file rename.
+- `jobDescriptions.ts` already uses the generic phrase "community outreach" — leave as is.
