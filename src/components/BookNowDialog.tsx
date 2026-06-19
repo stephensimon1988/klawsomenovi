@@ -24,7 +24,10 @@ const BookNowDialog = () => {
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogContent className="max-w-4xl w-[95vw] p-0 overflow-hidden">
         <DialogHeader className="px-6 pt-5 pb-3 border-b">
-          <DialogTitle className="font-heading">Book your visit</DialogTitle>
+          <DialogTitle className="font-heading">Book an Event with Klawsome</DialogTitle>
+          <p className="text-xs text-muted-foreground font-body mt-1">
+            Pick your event type first, then add any extras.
+          </p>
         </DialogHeader>
         <div className="max-h-[90vh] overflow-y-auto">
           <iframe

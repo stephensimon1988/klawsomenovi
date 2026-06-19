@@ -66,13 +66,25 @@ const Birthdays = () => {
     { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
     { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: "Bring any food you'd like", semi: "Paris Baguette or Cloud Boba (depending what you like)" },
     { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu' },
-    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'Full set up - $119', semi: 'Simple set up - $89' },
+    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'See Decor Add-Ons →', semi: 'See Decor Add-Ons →' },
     { label: 'Ability to choose plushies in one machine', desc: 'Pick the plushies featured in one machine for your party.', private: true, semi: true },
     { label: 'Choose machine color and music', desc: 'Customize the vibe with your color and music picks.', private: true, semi: false },
   ];
 
   const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
     if (typeof value === 'string') {
+      if (/see decor add-ons/i.test(value)) {
+        return (
+          <a
+            href="#add-ons"
+            className={`font-heading font-bold text-xs md:text-sm uppercase tracking-wider underline underline-offset-4 hover:no-underline transition-colors ${
+              color === 'red' ? 'text-white hover:text-klawsome-yellow' : 'text-klawsome-yellow hover:text-white'
+            }`}
+          >
+            {value}
+          </a>
+        );
+      }
       return (
         <span className="text-white/90 font-body text-xs md:text-sm whitespace-pre-line">
           {value}
