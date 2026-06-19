@@ -278,7 +278,11 @@ const CommunityPartners = () => {
               size="lg"
               className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
             >
-              <a href="mailto:team@klawsomenovi.com?subject=Klawsome%20Donation%20Request">
+              <a
+                href="https://docs.google.com/forms/d/e/1FAIpQLSeMRqFgE-A5oNAM4pn0ybnAcU6VidlnNWirNqI0wcGDSjvvHw/viewform"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
                 Request a Donation
               </a>
             </Button>
