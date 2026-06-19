@@ -28,7 +28,6 @@ import {
   usePageHero,
   type BusinessSection,
   type BusinessPricingTier,
-  type BusinessHowStep,
 } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
