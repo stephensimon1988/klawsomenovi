@@ -7,6 +7,35 @@ import type { ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { SizeChart, productNeedsSizeChart } from './SizeChart';
 
+function sanitizeHtml(html: string): string {
+  return html
+    .replace(/<script[\s\S]*?<\/script>/gi, '')
+    .replace(/<style[\s\S]*?<\/style>/gi, '')
+    .replace(/\son\w+="[^"]*"/gi, '')
+    .replace(/\son\w+='[^']*'/gi, '')
+    .replace(/javascript:/gi, '');
+}
+
+function autoParagraph(text: string): string[] {
+  const trimmed = text.trim();
+  if (!trimmed) return [];
+  // Honor existing paragraph breaks first
+  const byBreaks = trimmed.split(/\n\s*\n+/).map((s) => s.trim()).filter(Boolean);
+  const out: string[] = [];
+  for (const chunk of byBreaks) {
+    if (chunk.length <= 280) {
+      out.push(chunk);
+      continue;
+    }
+    // Split into sentences, group every 2
+    const sentences = chunk.match(/[^.!?]+[.!?]+(\s|$)|[^.!?]+$/g) ?? [chunk];
+    for (let i = 0; i < sentences.length; i += 2) {
+      out.push(sentences.slice(i, i + 2).join('').trim());
+    }
+  }
+  return out;
+}
+
 interface Props {
   product: ShopifyProduct;
   open: boolean;
@@ -356,9 +385,18 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
             </div>
           ) : node.description ? (
             <div className="order-3 lg:order-none text-klawsome-navy">
-              <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
-                {node.description}
-              </p>
+              {node.descriptionHtml ? (
+                <div
+                  className="text-lg text-klawsome-navy/90 font-body [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-3 [&_li]:mb-1 [&_strong]:font-bold [&_em]:italic [&_h1]:font-heading [&_h1]:font-bold [&_h1]:text-2xl [&_h1]:mb-2 [&_h2]:font-heading [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mb-2 [&_h3]:font-heading [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mb-2 [&_a]:underline [&_br]:block"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(node.descriptionHtml) }}
+                />
+              ) : (
+                <div className="text-lg text-klawsome-navy/90 font-body">
+                  {autoParagraph(node.description).map((p, i) => (
+                    <p key={i} className="mb-3 last:mb-0">{p}</p>
+                  ))}
+                </div>
+              )}
             </div>
           ) : null}
         </div>
