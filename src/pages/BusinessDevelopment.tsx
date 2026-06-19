@@ -12,7 +12,7 @@ import bdHeroAsset from '@/assets/business-development-hero.png.asset.json';
 const bdHero = bdHeroAsset.url;
 import hostedPhotoAsset from '@/assets/bizdev/hosted-machine-partner.png.asset.json';
 import partnerPhotoAsset from '@/assets/bizdev/partner-concepts-pikachu.png.asset.json';
-import plushiePhotoAsset from '@/assets/bizdev/prize-claw-plushie.jpg.asset.json';
+import plushiePhotoAsset from '@/assets/bizdev/plushie-custom-orders.jpg.asset.json';
 import contactPhotoAsset from '@/assets/bizdev/prize-claw-contact.jpg.asset.json';
 import imgEquipment from '@/assets/bizdev/equipment.webp';
 import imgPlushies from '@/assets/bizdev/plushies.webp';
@@ -369,14 +369,10 @@ const BusinessDevelopment = () => {
                 <strong className="text-primary">{minOrder?.headline || 'Minimum order: 100 units.'}</strong> {minOrder?.body}
               </p>
             </div>
-            <div className="img-hover rounded-2xl shadow-md">
-              <img
-                src={plushiePhotoAsset.url}
-                alt="Prize Claw Twin cabinet filled with custom kawaii plushies"
-                loading="lazy"
-                className="w-full h-full max-h-72 object-cover rounded-2xl"
-              />
-            </div>
+            <ParallaxImage
+              src={plushiePhotoAsset.url}
+              alt="Klawsome team member holding a yellow sunflower plushie in front of claw machines"
+            />
           </div>
 
           <h3 className="font-heading text-2xl md:text-3xl font-bold text-white mb-2 text-center">Pricing by complexity</h3>
