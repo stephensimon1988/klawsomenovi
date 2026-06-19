@@ -7,7 +7,6 @@ const TEE_ROWS = [
   { size: 'XL',  us: 'US L',   chest: '38–40', length: '28.5' },
   { size: '2XL', us: 'US XL',  chest: '40–42', length: '29.5' },
 ];
-];
 
 const APPAREL_ROWS = [
   { size: 'S',   us: 'US XS',  bust: '32–33', waist: '25–26', hip: '35–36' },
@@ -15,7 +14,6 @@ const APPAREL_ROWS = [
   { size: 'L',   us: 'US M',   bust: '36–37', waist: '29–30', hip: '39–40' },
   { size: 'XL',  us: 'US L',   bust: '38–40', waist: '31–33', hip: '41–43' },
   { size: '2XL', us: 'US XL',  bust: '41–43', waist: '34–36', hip: '44–46' },
-];
 ];
 
 export function productNeedsSizeChart(node: ShopifyProduct['node']): boolean {
