@@ -240,9 +240,9 @@ const CommunityPartners = () => {
             </article>
           </div>
 
-          {/* Image placeholder grid — 4 × 3:4 */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-5 mt-12">
-            {[1, 2, 3, 4].map((n) => (
+          {/* Image placeholder grid — 2 × 3:4 */}
+          <div className="grid grid-cols-2 gap-5 mt-12">
+            {[1, 2].map((n) => (
               <div
                 key={n}
                 data-placeholder="donation-photo"
