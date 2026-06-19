@@ -1,15 +1,13 @@
-### More Menu Column Header Styling Update
+## Rule (save to project memory)
 
-Update the column headers in the "More" navigation dropdown to be more prominent.
+For any Shopify product on `/store` that has selectable variations (more than one purchasable variant, ignoring the implicit `Default Title` variant), clicking **Add to cart** on the product card must open the QuickAddModal instead of adding straight to cart. Single-variant products keep the current one-click add behavior. This is a permanent rule — save under `mem://features/store-add-to-cart` and reference from `mem://index.md` Core.
 
-#### Changes
-- **File:** `src/components/KawaiiNav.tsx`
-- **What:** Increase the font size and weight of the column headings (`Connect`, `Purchase`, `Remember`, `Learn`) in both the desktop dropdown and the mobile hamburger menu.
+## Change
 
-#### Details
-- Current size: `text-[10px]` (10px)
-- New size: `text-[13px]` (~1.25x larger)
-- Current weight: `font-bold`
-- New weight: `font-black` (maximum weight for stronger visual hierarchy)
+File: `src/components/shopify/Storefront.tsx` — `ProductCard.handleAdd`
 
-Both the desktop mega-menu heading (line 144) and the mobile menu heading (line 202) will be updated with the same new styling.
+- Compute `hasVariations`: `variants.length > 1` OR any option has more than one value (excluding a sole `Default Title`).
+- If `hasVariations` → `setOpen(true)` and return (do not call `addItem`, do not toast).
+- Else → existing behavior: `addItem(...)` + success toast.
+
+No changes to `QuickAddModal` (it already requires the user to confirm via its own Add to cart button, so the rule is satisfied end-to-end).
