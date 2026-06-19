@@ -118,7 +118,7 @@ const CommunityPartners = () => {
 
       <PageHero
         eyebrow="Community"
-        title="Community Partners"
+        title="Community Outreach"
         subtitle="Klawsome is proud to team up with local schools, student orgs, libraries, and nonprofits across metro Detroit. Here are some of the people we get to show up for."
         imageUrl={communityHeroAsset.url}
         jumpLinks={[
