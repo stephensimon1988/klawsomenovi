@@ -141,7 +141,7 @@ const KawaiiNav = () => {
                     <div className="w-[640px] bg-background border border-border rounded-2xl shadow-lg p-5 grid grid-cols-4 gap-5">
                       {moreGroups.map((group) => (
                         <div key={group.heading}>
-                          <p className="font-heading font-bold text-[10px] tracking-[0.2em] uppercase text-muted-foreground mb-2 px-2">
+                          <p className="font-heading font-black text-[13px] tracking-[0.2em] uppercase text-muted-foreground mb-2 px-2">
                             {group.heading}
                           </p>
                           <div className="flex flex-col">
@@ -199,7 +199,7 @@ const KawaiiNav = () => {
               <div className="pt-2 border-t border-border space-y-4">
                 {moreGroups.map((group) => (
                   <div key={group.heading}>
-                    <p className="font-heading font-bold text-[10px] tracking-[0.2em] text-muted-foreground py-2 uppercase">
+                    <p className="font-heading font-black text-[13px] tracking-[0.2em] text-muted-foreground py-2 uppercase">
                       {group.heading}
                     </p>
                     {group.links.map((link) => (

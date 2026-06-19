@@ -1,19 +1,15 @@
-Consolidate "Buy Gift Card" and "Buy Plushies" buttons into a single "Store" button on every hero header.
+### More Menu Column Header Styling Update
 
-## Files to change
+Update the column headers in the "More" navigation dropdown to be more prominent.
 
-### 1. `src/components/KawaiiHero.tsx` (homepage hero)
-Lines 120-133 currently contain:
-- An `<a>` button linking to Square gift card page labeled "Buy Gift Card"
-- A `<Link>` button linking to `/store` labeled "Buy Plushies"
+#### Changes
+- **File:** `src/components/KawaiiNav.tsx`
+- **What:** Increase the font size and weight of the column headings (`Connect`, `Purchase`, `Remember`, `Learn`) in both the desktop dropdown and the mobile hamburger menu.
 
-Replace both with a single `<Link to="/store">` button labeled "Store".
+#### Details
+- Current size: `text-[10px]` (10px)
+- New size: `text-[13px]` (~1.25x larger)
+- Current weight: `font-bold`
+- New weight: `font-black` (maximum weight for stronger visual hierarchy)
 
-### 2. `src/components/PageHero.tsx` (reusable page hero for all subpages)
-Lines 96-106 currently contain:
-- An `<a>` button linking to Square gift card page labeled "Buy Gift Card"
-- A `<Link>` button linking to `/store` labeled "Buy Plushies"
-
-Replace both with a single `<Link to="/store">` button labeled "Store".
-
-These are the only two hero/header components in the codebase containing these dual CTA buttons. After this change, every page using either hero will show one unified "Store" button.
+Both the desktop mega-menu heading (line 144) and the mobile menu heading (line 202) will be updated with the same new styling.
