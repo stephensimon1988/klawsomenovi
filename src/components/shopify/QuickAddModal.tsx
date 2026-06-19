@@ -7,13 +7,22 @@ import type { ShopifyProduct } from '@/lib/shopify';
 import { toast } from 'sonner';
 import { SizeChart, productNeedsSizeChart } from './SizeChart';
 
-function sanitizeHtml(html: string): string {
+function htmlToText(html: string): string {
   return html
     .replace(/<script[\s\S]*?<\/script>/gi, '')
     .replace(/<style[\s\S]*?<\/style>/gi, '')
-    .replace(/\son\w+="[^"]*"/gi, '')
-    .replace(/\son\w+='[^']*'/gi, '')
-    .replace(/javascript:/gi, '');
+    // Treat block-level closes and <br> as paragraph breaks
+    .replace(/<\s*br\s*\/?\s*>/gi, '\n')
+    .replace(/<\/\s*(p|div|li|h[1-6]|ul|ol|blockquote)\s*>/gi, '\n\n')
+    .replace(/<[^>]+>/g, '')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&quot;/gi, '"')
+    .replace(/&#39;/gi, "'")
+    .replace(/[ \t]+\n/g, '\n')
+    .replace(/\n{3,}/g, '\n\n');
 }
 
 function autoParagraph(text: string): string[] {
