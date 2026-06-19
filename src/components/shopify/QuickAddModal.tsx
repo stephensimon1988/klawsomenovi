@@ -385,9 +385,18 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
             </div>
           ) : node.description ? (
             <div className="order-3 lg:order-none text-klawsome-navy">
-              <p className="text-lg text-klawsome-navy/90 font-body whitespace-pre-line">
-                {node.description}
-              </p>
+              {node.descriptionHtml ? (
+                <div
+                  className="text-lg text-klawsome-navy/90 font-body [&_p]:mb-3 [&_p:last-child]:mb-0 [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:mb-3 [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:mb-3 [&_li]:mb-1 [&_strong]:font-bold [&_em]:italic [&_h1]:font-heading [&_h1]:font-bold [&_h1]:text-2xl [&_h1]:mb-2 [&_h2]:font-heading [&_h2]:font-bold [&_h2]:text-xl [&_h2]:mb-2 [&_h3]:font-heading [&_h3]:font-bold [&_h3]:text-lg [&_h3]:mb-2 [&_a]:underline [&_br]:block"
+                  dangerouslySetInnerHTML={{ __html: sanitizeHtml(node.descriptionHtml) }}
+                />
+              ) : (
+                <div className="text-lg text-klawsome-navy/90 font-body">
+                  {autoParagraph(node.description).map((p, i) => (
+                    <p key={i} className="mb-3 last:mb-0">{p}</p>
+                  ))}
+                </div>
+              )}
             </div>
           ) : null}
         </div>
