@@ -85,7 +85,7 @@ const KawaiiHero = () => {
           muted
           loop
           playsInline
-          preload="auto"
+          preload="metadata"
           poster={heroImage}
           className="w-full h-full object-cover"
         />

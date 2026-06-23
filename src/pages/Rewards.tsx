@@ -135,9 +135,14 @@ const Rewards = () => {
 
         <div className="ds-container relative z-10">
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-16">
-            <img
-              src="/rewards/rocking-klawsome-cat.gif"
-              alt="Klawsome birthday cat mascot"
+            <video
+              src="/rewards/rocking-klawsome-cat.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              aria-label="Klawsome birthday cat mascot"
               className="w-36 sm:w-44 md:w-56 shrink-0"
             />
             <div className="text-center md:text-left">

@@ -1,5 +1,4 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
-import LottieAccent from './LottieAccent';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
 
 const fallbackTiers = [
@@ -19,8 +18,6 @@ const KawaiiTokenPrices = () => {
 
   return (
     <section id="tokens" className="section-y section-x bg-primary relative overflow-hidden">
-      <LottieAccent type="star" className="absolute bottom-12 left-6 opacity-20" size={70} />
-
       <div className="ds-container relative z-10">
         <div ref={headerRef} className="max-w-2xl mx-auto text-center mb-16" style={{ opacity: 0 }}>
           <p className="ds-eyebrow text-klawsome-yellow">Pricing</p>

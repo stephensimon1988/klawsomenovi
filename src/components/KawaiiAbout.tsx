@@ -1,5 +1,4 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
-import LottieAccent from './LottieAccent';
 import { useCmsTable, type HomepageStep } from '@/hooks/useCmsContent';
 
 const fallbackImages = [
@@ -22,8 +21,6 @@ const KawaiiAbout = () => {
 
   return (
     <section id="about" className="section-y section-x bg-secondary relative overflow-hidden">
-      <LottieAccent type="sparkle" className="absolute top-12 left-12 opacity-20" size={80} />
-
       <div className="ds-container">
         <div ref={headerRef} className="text-center mb-16" style={{ opacity: 0 }}>
           <h2 className="ds-h2 ds-stroke ds-stroke--navy">How to Play!</h2>
