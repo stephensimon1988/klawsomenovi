@@ -137,7 +137,6 @@ const Rewards = () => {
           <div className="flex flex-col md:flex-row items-center justify-center gap-6 md:gap-10 mb-16">
             <video
               src="/rewards/rocking-klawsome-cat.mp4"
-              poster="/rewards/rocking-klawsome-cat.gif"
               autoPlay
               muted
               loop
