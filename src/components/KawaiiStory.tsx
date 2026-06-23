@@ -1,5 +1,4 @@
 import { useGsapScroll } from '@/hooks/useGsapScroll';
-import LottieAccent from './LottieAccent';
 import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
 import { Button } from './ui/button';
 import { Link } from 'react-router-dom';
@@ -13,8 +12,6 @@ const KawaiiStory = () => {
 
   return (
     <section id="story" className="section-y section-x bg-secondary relative overflow-hidden">
-      <LottieAccent type="sparkle" className="absolute bottom-8 right-12 opacity-15" size={80} />
-
       <div className="ds-container-content">
         <div ref={ref} className="ds-cols" style={{ opacity: 0 }}>
           <div className="md:order-2">
