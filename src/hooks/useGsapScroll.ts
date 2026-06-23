@@ -140,22 +140,21 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(options: 
         toVars = { y: 0, opacity: 1 };
     }
 
-    const tween = gsap.fromTo(children, fromVars, {
-      ...toVars,
-      duration,
-      stagger,
-      ease: 'power3.out',
-      scrollTrigger: {
-        trigger: el,
-        start: 'top 85%',
-        toggleActions: 'play none none none',
-      },
-    });
+    const ctx = gsap.context(() => {
+      gsap.fromTo(children, fromVars, {
+        ...toVars,
+        duration,
+        stagger,
+        ease: 'power3.out',
+        scrollTrigger: {
+          trigger: el,
+          start: 'top 85%',
+          toggleActions: 'play none none none',
+        },
+      });
+    }, el);
 
-    return () => {
-      tween.scrollTrigger?.kill();
-      tween.kill();
-    };
+    return () => ctx.revert();
   }, [stagger, type, duration, distance, childSelector]);
 
   return ref;

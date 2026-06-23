@@ -38,17 +38,17 @@ export default defineConfig(({ mode }) => ({
       output: {
         manualChunks(id) {
           if (!id.includes("node_modules")) return;
+          if (id.includes("gsap")) return "gsap";
+          if (id.includes("framer-motion")) return "framer";
+          if (id.includes("lottie")) return "lottie";
+          if (id.includes("@supabase")) return "supabase";
           if (
             id.includes("/react/") ||
             id.includes("/react-dom/") ||
             id.includes("/scheduler/") ||
             id.includes("react-router") ||
             id.includes("@tanstack/react-query") ||
-            id.includes("@supabase") ||
-            id.includes("zustand") ||
-            id.includes("gsap") ||
-            id.includes("framer-motion") ||
-            id.includes("lottie")
+            id.includes("zustand")
           )
             return "react-vendor";
           if (id.includes("@radix-ui") || id.includes("lucide-react")) return "ui-vendor";
