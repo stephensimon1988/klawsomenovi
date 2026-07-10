@@ -10,6 +10,7 @@ import { Label } from '@/components/ui/label';
 import { toast } from 'sonner';
 import { supabase } from '@/integrations/supabase/client';
 import catImg from '@/assets/klawsome-cat-upscaled.webp';
+import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 
 const contactSchema = z.object({
   name: z.string().trim().min(1, 'Name is required').max(100),
@@ -22,6 +23,7 @@ const FloatingContactWidget = () => {
   const [bubbleVisible, setBubbleVisible] = useState(true);
   const [submitting, setSubmitting] = useState(false);
   const [form, setForm] = useState({ name: '', email: '', message: '' });
+  const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -52,7 +54,9 @@ const FloatingContactWidget = () => {
         timeStyle: 'short',
       });
       const templateData = { ...result.data, submittedAt };
-      const recipients = ['team@klawsomenovi.com', 'events@klawsomenovi.com'];
+      const generalEmail = settings?.email || 'team@klawsomenovi.com';
+      const eventsEmail = settings?.events_email || 'events@klawsomenovi.com';
+      const recipients = Array.from(new Set([generalEmail, eventsEmail].filter(Boolean)));
       await Promise.all(
         recipients.map((recipientEmail) =>
           supabase.functions.invoke('send-transactional-email', {
