@@ -1,70 +1,63 @@
-# Admin tab: Booking Schedule
+# Booking Schedule cleanup + Bookings Calendar
 
-Add a "Booking Schedule" tab to `/klawsome-admin` that controls when customers can book each of the four service types.
+Two changes to `/klawsome-admin`:
 
-## What already exists
+## 1. Remove "Slot length" from Booking Schedule editor
 
-The booking wizard reads from `event_availability` (per event_type):
-- `event_type` — one of `private`, `semi_private`, `rental`, `mobile`
-- `hours` — JSON `{ mon, tue, wed, thu, fri, sat, sun }`, each either `null` (closed) or `{ open: "HH:MM", close: "HH:MM" }` (24h)
-- `slot_minutes` — booking slot granularity (default 60)
-- `lead_time_hours` — earliest booking cutoff (default 48/72)
+Customers pick their own duration during checkout, so a fixed slot granularity is misleading. Keep the value in the DB (still used by `generateSlots` for the time-picker grid in the wizard), but hide the input in the admin and stop editing it. The wizard keeps working off the stored default (60 min) — we can revisit if you want to remove slot-based time pickers from the wizard too.
 
-Plus `event_blackout_dates` (per event_type, per date) to block specific days.
+Edits: `src/components/admin/BookingScheduleEditor.tsx` — remove the "Slot length (minutes)" `<Input>` and drop `slot_minutes` from the save payload; keep `lead_time_hours` (still important — it's the "how far in advance customers must book" cutoff).
 
-The wizard is wired to these tables via `useAvailability`, so anything saved here takes effect immediately in the booking flow.
+## 2. New "Bookings Calendar" tab
 
-## New admin tab
+We already have an `event_bookings` table (currently empty) that the booking wizard writes to. It stores `start_at`, `duration_minutes`, `event_type`, `pathway`, `status`, contact info, party size, addons, Shopify order id, total, etc. Nothing in the admin surfaces it yet.
 
-New tab labeled **Schedule** with a section per event type:
+Add a new tab **📆 Bookings** with a real month calendar view of every booking.
 
 ```text
-Private Parties        [Slot: 60 min]  [Lead time: 48 h]
-  Mon  [ Closed ]
-  Tue  [ Closed ]
-  Wed  [12:00] → [20:00]   [x Open]
-  Thu  [12:00] → [20:00]   [x Open]
-  Fri  [12:00] → [21:00]   [x Open]
-  Sat  [11:00] → [21:00]   [x Open]
-  Sun  [11:00] → [20:00]   [x Open]
+[< Nov 2026]   Nov 2026   [Dec 2026 >]      Filter: [All types ▾] [All statuses ▾]
 
-  Blackout dates
-  • 2026-07-04  Independence Day        [Remove]
-  • 2026-12-25  Christmas               [Remove]
-  [ + Add blackout date ]
-  [ Save Private Parties ]
-
-Semi-Private Parties   …  (same shape)
-Rental (in-store rental of a machine)  …
-Klawsome Mobile (delivered / off-site) …
+  Sun   Mon   Tue   Wed   Thu   Fri   Sat
+   1     2     3     4     5     6     7
+                   • 2p Private
+                     Smith (8)
+                   • 6p Rental
+   8     9    10    11    12    13    14
+        BLACKOUT
+                              • 3p Mobile
+                                Jones (12)
+   …
 ```
 
-Per event type:
-- Open/close time inputs per day + a "Closed" toggle that greys the times
-- Slot minutes (numeric) and Lead time hours (numeric)
-- Blackout list with add/remove (date + optional reason)
-- Single "Save" button per event type that writes the whole `hours` object plus scalars
+- Month grid (7×5/6). Prev/Next month arrows + "Today".
+- Each cell lists that day's bookings (time + type + contact name + party size), color-coded by event type (private / semi / rental / mobile).
+- Blackout days from `event_blackout_dates` are visually marked.
+- Closed days (per `event_availability.hours`) are dimmed.
+- Clicking a booking opens a details drawer/dialog with:
+  - Full contact (name, email, phone)
+  - Start time + duration, event type, pathway
+  - Party size, celebrant, favorites, special requests, character pick
+  - Zip/miles (for mobile), addons, Shopify order id + total
+  - Status badge with a dropdown to change status (`pending` → `confirmed` / `cancelled` / `completed`)
+- Filters: event type (all / private / semi / rental / mobile) and status.
+- Above the calendar: quick "Upcoming (next 14 days)" list for at-a-glance triage.
 
-Time inputs are `<input type="time">` so we get native 24h pickers and store `HH:MM` strings, matching what `useAvailability` already parses.
+### Data / API
 
-## Data / API
-
-- Reuse the existing `cms-admin` edge function pattern — add `event_availability` and `event_blackout_dates` to `TABLES_ALLOWED`, then all CRUD flows through the existing password-gated function.
-- No schema changes needed (tables and RLS already in place).
-- The `hours` column is `jsonb`; the editor serializes/deserializes it into the seven-day form.
+- Extend `cms-admin` `TABLES_ALLOWED` with `event_bookings` so the admin can read the list and patch status through the existing password-gated function.
+- Load the visible month via `cmsInvoke('read', 'event_bookings')` (small volume; no server-side date filter needed yet — can add later if it grows).
+- Status updates use the existing `action: 'update'` path.
+- No schema changes.
 
 ## Files
 
-- `src/pages/KlawsomeAdmin.tsx` — new `<TabsTrigger value="schedule">` + `<TabsContent>`
-- `src/components/admin/BookingScheduleEditor.tsx` (new) — the per-event-type editor block
-- `supabase/functions/cms-admin/index.ts` — extend `TABLES_ALLOWED` with the two booking tables
+- `src/components/admin/BookingScheduleEditor.tsx` — remove slot input
+- `src/components/admin/BookingsCalendar.tsx` (new) — month grid + detail dialog
+- `src/pages/KlawsomeAdmin.tsx` — new `<TabsTrigger value="bookings">📆 Bookings</TabsTrigger>` + content
+- `supabase/functions/cms-admin/index.ts` — add `event_bookings` to `TABLES_ALLOWED`
 
 ## Out of scope
 
-- Editing booking-add-ons or per-service durations beyond the slot size (Klawsome Mobile's 1h/2h/all-day live in Shopify variants, not here).
-- Viewing/managing individual bookings — the tab is only for scheduling rules.
-
-## Open questions
-
-1. Do you want a single global "operating hours" that applies to all four service types, or keep them independent (current setup allows different hours per type — e.g. rental opens earlier than private parties)?
-2. Do you want per-day "buffer" minutes between bookings (turnover time) as a separate field, or is `slot_minutes` enough for now?
+- Manually creating bookings from the admin (bookings still come only from the customer wizard)
+- iCal/Google Calendar sync (can be a follow-up)
+- Rescheduling by drag-and-drop

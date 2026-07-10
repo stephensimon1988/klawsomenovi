@@ -69,7 +69,6 @@ function EventTypeEditor({
   onReload: () => void;
 }) {
   const [hours, setHours] = useState<HoursMap>(availability?.hours || {});
-  const [slotMinutes, setSlotMinutes] = useState<number>(availability?.slot_minutes ?? 60);
   const [leadHours, setLeadHours] = useState<number>(availability?.lead_time_hours ?? 48);
   const [saving, setSaving] = useState(false);
   const [newDate, setNewDate] = useState('');
@@ -77,7 +76,6 @@ function EventTypeEditor({
 
   useEffect(() => {
     setHours(availability?.hours || {});
-    setSlotMinutes(availability?.slot_minutes ?? 60);
     setLeadHours(availability?.lead_time_hours ?? 48);
   }, [availability]);
 
@@ -91,7 +89,7 @@ function EventTypeEditor({
         action: 'update',
         table: 'event_availability',
         id: availability.id,
-        data: { hours, slot_minutes: slotMinutes, lead_time_hours: leadHours },
+        data: { hours, lead_time_hours: leadHours },
       });
       toast.success(`${label} schedule saved`);
       onReload();
@@ -141,19 +139,8 @@ function EventTypeEditor({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-5">
-        {/* Slot + lead time */}
+        {/* Lead time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <label className="flex flex-col gap-1 text-white/70 text-xs font-heading">
-            Slot length (minutes)
-            <Input
-              type="number"
-              min={15}
-              step={15}
-              value={slotMinutes}
-              onChange={(e) => setSlotMinutes(Number(e.target.value) || 0)}
-              className="bg-white/10 border-white/20 text-white"
-            />
-          </label>
           <label className="flex flex-col gap-1 text-white/70 text-xs font-heading">
             Lead time (hours before booking)
             <Input
