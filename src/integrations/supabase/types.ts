@@ -125,6 +125,141 @@ export type Database = {
         }
         Relationships: []
       }
+      event_availability: {
+        Row: {
+          created_at: string
+          event_type: string
+          hours: Json
+          id: string
+          lead_time_hours: number
+          slot_minutes: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          event_type: string
+          hours?: Json
+          id?: string
+          lead_time_hours?: number
+          slot_minutes?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          event_type?: string
+          hours?: Json
+          id?: string
+          lead_time_hours?: number
+          slot_minutes?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      event_blackout_dates: {
+        Row: {
+          blackout_date: string
+          created_at: string
+          event_type: string
+          id: string
+          reason: string | null
+        }
+        Insert: {
+          blackout_date: string
+          created_at?: string
+          event_type: string
+          id?: string
+          reason?: string | null
+        }
+        Update: {
+          blackout_date?: string
+          created_at?: string
+          event_type?: string
+          id?: string
+          reason?: string | null
+        }
+        Relationships: []
+      }
+      event_bookings: {
+        Row: {
+          addons: Json
+          booking_ref: string
+          celebrant_age: number | null
+          celebrant_name: string | null
+          character_pick: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone: string | null
+          created_at: string
+          duration_minutes: number
+          event_type: string
+          favorites: string | null
+          id: string
+          miles: number | null
+          party_size: number | null
+          pathway: string
+          shopify_cart_id: string | null
+          shopify_order_id: string | null
+          special_requests: string | null
+          start_at: string
+          status: string
+          total_cents: number | null
+          updated_at: string
+          zip: string | null
+        }
+        Insert: {
+          addons?: Json
+          booking_ref: string
+          celebrant_age?: number | null
+          celebrant_name?: string | null
+          character_pick?: string | null
+          contact_email: string
+          contact_name: string
+          contact_phone?: string | null
+          created_at?: string
+          duration_minutes?: number
+          event_type: string
+          favorites?: string | null
+          id?: string
+          miles?: number | null
+          party_size?: number | null
+          pathway: string
+          shopify_cart_id?: string | null
+          shopify_order_id?: string | null
+          special_requests?: string | null
+          start_at: string
+          status?: string
+          total_cents?: number | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Update: {
+          addons?: Json
+          booking_ref?: string
+          celebrant_age?: number | null
+          celebrant_name?: string | null
+          character_pick?: string | null
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string | null
+          created_at?: string
+          duration_minutes?: number
+          event_type?: string
+          favorites?: string | null
+          id?: string
+          miles?: number | null
+          party_size?: number | null
+          pathway?: string
+          shopify_cart_id?: string | null
+          shopify_order_id?: string | null
+          special_requests?: string | null
+          start_at?: string
+          status?: string
+          total_cents?: number | null
+          updated_at?: string
+          zip?: string | null
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string
