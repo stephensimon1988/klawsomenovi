@@ -9,42 +9,10 @@ import KawaiiGiftCards from '@/components/KawaiiGiftCards';
 import KawaiiStory from '@/components/KawaiiStory';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import { useEffect, useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { openBookingModal } from '@/components/BookNowDialog';
 
 const Index = () => {
-  const schedulingRef = useRef<HTMLDivElement>(null);
-  const [loadScheduler, setLoadScheduler] = useState(false);
-
-  useEffect(() => {
-    const el = schedulingRef.current;
-    if (!el || typeof IntersectionObserver === 'undefined') {
-      setLoadScheduler(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      (entries) => {
-        if (entries.some((e) => e.isIntersecting)) {
-          setLoadScheduler(true);
-          io.disconnect();
-        }
-      },
-      { rootMargin: '400px' },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (!loadScheduler) return;
-    const id = 'acuity-embed-script';
-    if (document.getElementById(id)) return;
-    const s = document.createElement('script');
-    s.id = id;
-    s.src = 'https://embed.acuityscheduling.com/js/embed.js';
-    s.async = true;
-    document.body.appendChild(s);
-  }, [loadScheduler]);
-
   return (
     <div className="min-h-screen bg-background">
       <KawaiiNav />
@@ -67,21 +35,17 @@ const Index = () => {
         <div className="container mx-auto max-w-5xl text-center mb-10">
           <p className="ds-eyebrow text-primary mb-3">Book Your Visit</p>
           <h2 className="ds-h2 ds-stroke ds-stroke--navy">Reserve your time at Klawsome</h2>
-        </div>
-        <div
-          ref={schedulingRef}
-          className="container mx-auto max-w-4xl rounded-kawaii overflow-hidden border border-border bg-white"
-          style={{ minHeight: '100vh' }}
-        >
-          {loadScheduler && (
-            <iframe
-              src="https://klawsome.as.me/schedule/366e2b9b"
-              title="Schedule with Klawsome"
-              loading="lazy"
-              className="block w-full"
-              style={{ height: '100vh', border: 0 }}
-            />
-          )}
+          <p className="mt-4 text-muted-foreground font-body max-w-2xl mx-auto">
+            Birthday parties, machine rentals, or Klawsome Mobile — pick your date and check out securely.
+          </p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3">
+            <Button size="hero" onClick={() => openBookingModal()} className="bg-primary text-primary-foreground hover:bg-primary/90">
+              Start Booking
+            </Button>
+            <Button size="hero" variant="outline" onClick={() => openBookingModal('rental')}>
+              Rent a Machine
+            </Button>
+          </div>
         </div>
       </section>
       <KawaiiFooter prevColor="white" />
