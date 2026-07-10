@@ -410,7 +410,8 @@ const KlawsomeAdmin = () => {
                 <SingleRowEditor password={storedPassword} table="site_settings" fields={[
                   { key: 'business_name', label: 'Business Name' },
                   { key: 'phone', label: 'Phone' },
-                  { key: 'email', label: 'Email' },
+                  { key: 'email', label: 'General Email' },
+                  { key: 'events_email', label: 'Events / Booking Email' },
                   { key: 'address', label: 'Address' },
                   { key: 'google_maps_url', label: 'Google Maps URL' },
                   { key: 'instagram_url', label: 'Instagram URL' },
