@@ -1,142 +1,56 @@
-# Custom Booking + Shopify Checkout (replace Acuity)
+# Wire all pages to Vital Info + Hours
 
-Replace the Acuity iframe (`BookNowDialog`) with a native multi-step booking wizard that builds a Shopify cart and opens Shopify Checkout. Backed by Lovable Cloud for availability, bookings, and post-payment fulfillment.
+## Goal
+Every place on the site that shows phone, email, address, social links, or store hours reads from `site_settings` / `store_hours` (edited in `/klawsome-admin`). No hardcoded copies that silently override the admin.
 
-## Scope
+## Audit findings (what's already wired vs. not)
 
-Three booking pathways, all ending in a Shopify checkout:
+**Already CMS-wired (via `useCmsContent`)**
+- `KawaiiFooter` — email, phone, address, socials (with hardcoded fallbacks)
+- `KawaiiVisit` — address + hours (with hardcoded fallbacks)
+- Homepage About/Hero/Story blocks
 
-- **A. Book an Event** (`/birthdays`) — Private Party, Semi-Private, Rent a Klaw, Book Klawsome Mobile
-- **B. Rent a Klaw Machine** (`/rental`) — 1hr / 2hr / add-ons + ZIP-mileage delivery
-- **C. Klawsome Mobile** — 1hr / 2hr / all-day, ZIP-mileage delivery, blackout until Aug 15
+**Hardcoded — bypasses admin today**
+- `KawaiiContactInfo.tsx` — team@ / events@ emails, phone, address
+- `FloatingContactWidget.tsx` — hardcoded email recipients
+- `KawaiiNav.tsx` — any address/phone in header
+- `Birthdays.tsx` — `bookingEmail` fallback `events@klawsomenovi.com`
+- `Business.tsx` / `BusinessDevelopment.tsx` — `hello@`, `team@`, "Novi, MI (48375)"
+- `BookingWizard.tsx` — hardcoded `events@klawsomenovi.com`
+- `data/jobDescriptions.ts` — full street address + store hours embedded in job copy
+- Fallback hours strings in `KawaiiVisit` ("Closed Mondays")
 
-Acuity iframe (`BookNowDialog`) is retired. All existing `openBookingModal()` call sites open the new wizard, defaulting to the correct pathway per page.
+## Plan
 
-## 1. Shopify products to create
+### 1. Extend Vital Info (site_settings) with missing fields
+Add editable fields the site actually uses but the admin doesn't expose:
+- `events_email` (separate from general `email`)
+- `booking_phone` (if different from main phone)
+- Keep existing: business_name, phone, email, address, google_maps_url, instagram_url, tiktok_url, facebook_url, youtube_url
 
-Use `shopify--create_product` (each variant carries the fixed price; the wizard picks the right variant per selection).
+### 2. Rewire every hardcoded reference to CMS
+Replace hardcoded strings with `useCmsContent()` reads + a single shared fallback (used only if the row is truly missing):
+- `KawaiiContactInfo` → email / events_email / phone / address from settings
+- `FloatingContactWidget` → recipients from settings
+- `Birthdays` → booking email from settings (drop hardcoded fallback)
+- `Business`, `BusinessDevelopment` → contact email + address from settings
+- `BookingWizard` → events email from settings
+- `KawaiiFooter`, `KawaiiVisit` → keep wiring, remove stale hardcoded fallbacks
+- `jobDescriptions.ts` → template strings that inject address + hours at render time (or a note that job copy is static — see Open Question)
 
-**Events**
-- Klawsome Private Party — $319 / 1 hr
-- Semi-Private Party (Paris Baguette Table) — $250 / 1 hr
+### 3. Rewire hours everywhere
+- Ensure `KawaiiVisit`, footer hours block, and any "hours" mention on Birthdays / Business / Careers read from `store_hours` (via `useCmsContent().hours`), formatted by a small shared helper.
+- Remove "Closed Mondays" hardcoded caption; derive from data.
 
-**Event add-ons**
-- Private Event Decorations — $119
-- Small Balloon Decoration — $89 (private only)
-- Semi-Private Party Decorations — $89
-- Birthday Pal Visit — $89 (variants: Pikachu, Hello Kitty, Kuromi, Bluey — Cinnamoroll excluded per note)
-- XL Plushie — $89
-- Event Photographer — $79/hr
+### 4. Add a build-time guard
+Small script (`scripts/check-hardcoded-contact.mjs`) that greps `src/**` for the literal phone / emails / address and fails if new hardcoded copies appear. Wired into the existing `scripts/` folder pattern.
 
-**Rentals**
-- 1-Hour Party Package — $445
-- 2-Hour Extended Party — $645
-- Extra Hour — $145
-- Plushie Refill — $200
-- Additional Machine — $245
+### 5. Manual verification checklist
+After changes, walk these routes and confirm every element updates when the admin value changes:
+`/`, `/rental`, `/birthdays`, `/business`, `/business-development`, `/careers`, `/community-partners`, `/gallery`, `/faq`, `/news`, `/our-story`, `/rewards`, `/store`, `/klawsome-video-game`, `/claw-machine-tips`, footer + nav on every page, Floating Contact widget, Booking Wizard "email us" screen.
 
-**Klawsome Mobile** (single product, three variants)
-- 1 hour, 2 hour, All-day
+## Open questions
 
-**Utility**
-- Delivery Surcharge — $3 (cart quantity = extra miles over 20)
-
-Each variant's Shopify ID is stored in a small typed registry (`src/lib/bookingCatalog.ts`) so the wizard can resolve id → variantId at build time. If Shopify variant IDs change, only that file updates.
-
-## 2. Availability system (Lovable Cloud)
-
-New tables (migration):
-
-- **`event_availability`** — one row per event type (`private`, `semi_private`, `rental`, `mobile`), storing weekday open/close hours as JSON (e.g. `{"mon":{"open":"10:00","close":"20:00"},...}`) plus slot length (default 60 min).
-- **`event_blackout_dates`** — `(event_type, date, reason)` — admin-managed blackout list. Klawsome Mobile is seeded blacked out through **2026-08-15**.
-- **`event_bookings`** — reservation ledger. Written when a Shopify webhook confirms payment. Prevents double-booking via unique `(event_type, start_at)`.
-
-RLS + GRANTs:
-- `event_availability` / `event_blackout_dates` — public SELECT, service-role write.
-- `event_bookings` — service-role only; no client read.
-
-Admin UI (in existing `KlawsomeAdmin`) gets a **Booking Availability** tab to toggle weekday hours and add/remove blackout dates per event type. This is how staff "block out dates."
-
-## 3. ZIP → miles table
-
-Bundled as static data (`src/lib/zipMiles.ts`) covering MI ZIPs within ~75 mi of the store (pre-computed driving distance). Includes helper `getMilesForZip(zip)` returning `{ miles } | { unknown: true }`.
-
-Wizard logic:
-- `miles ≤ 20` → free delivery line
-- `miles > 20` → adds Delivery Surcharge variant with `quantity = ceil(miles − 20)`
-- unknown ZIP → block checkout, show "We'll quote delivery — contact us"
-
-## 4. Booking wizard component
-
-New `src/components/booking/BookingWizard.tsx` — replaces `BookNowDialog`. Same global event API (`openBookingModal()` dispatches `open-booking`) so all existing buttons keep working, but the dialog now renders the wizard with an optional starting pathway (`private | semi | rental | mobile`).
-
-Wizard steps (conditional per pathway):
-
-1. **Pick pathway** (only shown when opened without a preset) — 4 cards
-2. **Pick event type / package** (private vs semi, or 1hr vs 2hr, or mobile duration)
-3. **Date & time picker** — shadcn Calendar + generated time-slot chips from `event_availability`, filtered by `event_blackout_dates` and existing `event_bookings`
-4. **Add-ons** — filtered per pathway (private-only vs semi-only vs shared; rental extras). Birthday Pal Visit shows character selector; each add-on quantity 0/1.
-5. **Delivery ZIP** (rental + mobile only) — ZIP input → live miles/fee display
-6. **Contact form** — name, email, phone, party size, celebrant name/age, favorite color/theme/plushies, special requests. Zod-validated.
-7. **Review & checkout** — line-item summary, total, "Continue to Payment" button
-
-On submit:
-- Save draft to `event_bookings` with `status = 'pending'` and a generated `booking_ref`
-- Build Shopify cart via `cartCreate` with:
-  - main event/package variant
-  - each add-on variant
-  - Delivery Surcharge variant with computed qty (rental/mobile only)
-  - **cart-level `attributes`**: `booking_ref`, `event_type`, `start_at`, `party_size`, `celebrant`, `character`, `zip`, `miles`, `contact_email`, `contact_phone`, notes
-  - **per-line `attributes`**: `start_at`, `character` (for Birthday Pal)
-- Open the formatted `checkoutUrl` in a new tab (`window.open(url, '_blank')`)
-
-## 5. Post-payment fulfillment
-
-New edge function **`booking-order-webhook`** (`verify_jwt = false`, signature-verified):
-
-- Registered as a Shopify `orders/paid` webhook (using `SHOPIFY_ACCESS_TOKEN` + `shopify--` tools during setup, verified via `X-Shopify-Hmac-Sha256`).
-- Reads cart `note_attributes` on the order, resolves `booking_ref`, flips `event_bookings.status = 'confirmed'`, stores `shopify_order_id`.
-- Sends two emails through the existing queued transactional-email system (`send-transactional-email`):
-  - **Customer**: booking confirmation with an inline `.ics` calendar invite attachment (generated in the function)
-  - **`events@klawsomenovi.com`**: booking details for staff
-
-Two new React Email templates in `supabase/functions/_shared/transactional-email-templates/` + registry entries.
-
-## 6. Page changes
-
-- `src/pages/Birthdays.tsx` — every `openBookingModal()` call passes the correct pathway (private / semi / event picker). "Reserve your time at Klawsome" section on `Index.tsx` also opens the wizard.
-- `src/pages/Rental.tsx` — pathway = `rental`. Add copy notes: "Comes with our 40 plushies OR your own product (5–10 in, 0–5 lb)", "40 regular-size plushies, based on availability", "Free delivery within 20 miles; $3/mile beyond 20". (Attendant note intentionally not added yet.)
-- New `KawaiiMobile` entry point (button or card, wherever "Book Klawsome Mobile" lives) — wizard opens on `mobile` pathway.
-- `Index.tsx` — replace Acuity iframe section with a CTA card that opens the wizard.
-- `BookNowDialog` → `BookingWizardDialog` (kept at same import path, same `openBookingModal` API, extended to accept `openBookingModal(pathway?)`).
-
-## 7. Community-outreach copy fixes
-
-Already applied earlier this session per the previous request; no change here.
-
-## Technical details (for developers)
-
-- **New files**
-  - `src/components/booking/BookingWizard.tsx`, `steps/*.tsx` (DateTime, AddOns, Delivery, Contact, Review)
-  - `src/lib/bookingCatalog.ts` — typed map of Shopify variant IDs + pathway/add-on metadata
-  - `src/lib/zipMiles.ts` — prebuilt MI ZIP → miles table + lookup
-  - `src/lib/booking/cart.ts` — builds `CartInput` with `attributes` and `lines[].attributes`
-  - `src/hooks/useAvailability.ts` — reads `event_availability` + blackouts + confirmed bookings
-  - `supabase/functions/booking-order-webhook/index.ts` — HMAC-verified Shopify webhook → booking confirm + emails + ics
-  - `supabase/functions/_shared/transactional-email-templates/booking-customer.tsx`, `booking-staff.tsx`
-  - Admin: `src/components/admin/BookingAvailabilityEditor.tsx` in `KlawsomeAdmin`
-- **Migrations**
-  - `event_availability`, `event_blackout_dates`, `event_bookings` (+ GRANTs + RLS + updated_at trigger)
-  - Seed Klawsome Mobile blackouts through 2026-08-15
-- **Cart**: uses existing `storefrontApiRequest` in `src/lib/shopify.ts`. Booking cart is **separate** from the store cart (`useCartStore`) so mixing plushies with a party booking doesn't collide — booking submits directly to a fresh cart and opens checkout in a new tab.
-- **Webhook registration**: performed once via edge function using Shopify Admin API; endpoint is `https://<project>.supabase.co/functions/v1/booking-order-webhook`.
-- **Secrets needed**: `SHOPIFY_WEBHOOK_SECRET` (for HMAC verification) — will be requested via `add_secret` once the webhook endpoint exists.
-- **Cinnamoroll** is excluded from character variants until stock arrives (per note).
-- **Photographer description link**: add-on card supports an optional `descriptionUrl` (opens a modal or new tab) when the URL becomes available.
-
-## Out of scope (explicit)
-
-- Rescheduling / cancellation self-service (staff handles via Shopify + admin panel for now)
-- Discount codes in the wizard (Shopify checkout still accepts them at the payment step)
-- Non-MI delivery ZIPs — falls back to "We'll quote delivery"
-- Real-time inventory of plushies / machines beyond blackout dates
+1. **Job descriptions** in `src/data/jobDescriptions.ts` embed the full address and tentative hours inside long paragraphs. Do you want those rewritten to pull from CMS at render time, or leave that copy static (since it's legal/HR-style text)?
+2. **Separate "events" email** — right now the site uses `team@klawsomenovi.com` for general and `events@klawsomenovi.com` for bookings. Add a second `events_email` field in Vital Info, or collapse both to a single `email`?
+3. **Phone number** — do you also want a `booking_phone` distinct from the main phone, or one number everywhere?
