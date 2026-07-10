@@ -4,6 +4,7 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Switch } from '@/components/ui/switch';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { Save, Plus, Trash2 } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -131,14 +132,7 @@ function EventTypeEditor({
   };
 
   return (
-    <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-white font-heading flex items-center justify-between">
-          <span>{label}</span>
-          <span className="text-white/40 text-xs font-body">{blurb}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-5">
+    <div className="space-y-5 pb-2">
         {/* Lead time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="flex flex-col gap-1 text-white/70 text-xs font-heading">
@@ -243,8 +237,7 @@ function EventTypeEditor({
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
 
@@ -280,20 +273,35 @@ export function BookingScheduleEditor({ password }: { password: string }) {
         Set the days and times customers can book each service. Blackout dates block booking for a specific day.
         Changes take effect immediately on the booking flow.
       </p>
-      {EVENT_TYPES.map((t) => (
-        <EventTypeEditor
-          key={t.key}
-          eventType={t.key}
-          label={t.label}
-          blurb={t.blurb}
-          password={password}
-          availability={availability.find((a) => a.event_type === t.key)}
-          blackouts={blackouts
-            .filter((b) => b.event_type === t.key)
-            .sort((x, y) => x.blackout_date.localeCompare(y.blackout_date))}
-          onReload={load}
-        />
-      ))}
+      <Accordion type="multiple" className="space-y-3">
+        {EVENT_TYPES.map((t) => (
+          <AccordionItem
+            key={t.key}
+            value={t.key}
+            className="border border-white/10 bg-white/5 backdrop-blur-sm rounded-lg px-4"
+          >
+            <AccordionTrigger className="text-white font-heading hover:no-underline">
+              <div className="flex flex-col items-start text-left">
+                <span>{t.label}</span>
+                <span className="text-white/40 text-xs font-body font-normal">{t.blurb}</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-2">
+              <EventTypeEditor
+                eventType={t.key}
+                label={t.label}
+                blurb={t.blurb}
+                password={password}
+                availability={availability.find((a) => a.event_type === t.key)}
+                blackouts={blackouts
+                  .filter((b) => b.event_type === t.key)
+                  .sort((x, y) => x.blackout_date.localeCompare(y.blackout_date))}
+                onReload={load}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }
