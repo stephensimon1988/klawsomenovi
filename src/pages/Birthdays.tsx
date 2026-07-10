@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import KawaiiDivider from '@/components/KawaiiDivider';
-import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate, type SiteSettings } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
 import FramedImage from '@/components/FramedImage';
@@ -34,6 +34,7 @@ const FAQItem = ({ q, a }: { q: string; a: string }) => {
 
 const Birthdays = () => {
   const { data: content } = useCmsSingle<BirthdaysContent>('birthdays_content');
+  const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: partyOptions } = useCmsTable<PartyOption>('party_options');
   const { data: allFaqs } = useCmsTable<FaqItem>('faq_items');
   const { data: templates } = useCmsTable<InviteTemplate>('invite_templates');
@@ -48,7 +49,7 @@ const Birthdays = () => {
     .slice(0, 4);
 
   const faqItems = allFaqs?.filter(f => f.page === 'birthdays') || [];
-  const bookingEmail = content?.booking_email || 'events@klawsomenovi.com';
+  const bookingEmail = content?.booking_email || settings?.events_email || 'events@klawsomenovi.com';
 
   const privateOpt = (partyOptions || []).find(o => /private/i.test(o.name) && !/semi/i.test(o.name));
   const semiOpt = (partyOptions || []).find(o => /semi/i.test(o.name));

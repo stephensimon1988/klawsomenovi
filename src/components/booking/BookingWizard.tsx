@@ -24,6 +24,7 @@ import {
 import { getMilesForZip } from '@/lib/booking/zipMiles';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
+import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 
 export type OpenBookingDetail = { pathway?: Pathway };
 
@@ -518,6 +519,8 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
 }
 
 function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange: (z: string) => void; zipInfo: ReturnType<typeof getMilesForZip> | null }) {
+  const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
+  const eventsEmail = settings?.events_email || 'events@klawsomenovi.com';
   return (
     <div className="space-y-4 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
@@ -538,7 +541,7 @@ function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange:
       {zipInfo && !zipInfo.known && zip.length === 5 && (
         <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm">
           <p className="font-heading font-bold text-destructive">We'll need to quote delivery for this ZIP.</p>
-          <p className="text-muted-foreground mt-1">Please email events@klawsomenovi.com and we'll confirm before you book.</p>
+          <p className="text-muted-foreground mt-1">Please email {eventsEmail} and we'll confirm before you book.</p>
         </div>
       )}
     </div>

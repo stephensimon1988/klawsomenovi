@@ -260,6 +260,84 @@ export type Database = {
         }
         Relationships: []
       }
+      site_settings: {
+        Row: {
+          address: string
+          business_name: string
+          email: string
+          events_email: string
+          facebook_url: string
+          google_maps_url: string
+          id: string
+          instagram_url: string
+          phone: string
+          tiktok_url: string
+          updated_at: string
+          youtube_url: string
+        }
+        Insert: {
+          address?: string
+          business_name?: string
+          email?: string
+          events_email?: string
+          facebook_url?: string
+          google_maps_url?: string
+          id?: string
+          instagram_url?: string
+          phone?: string
+          tiktok_url?: string
+          updated_at?: string
+          youtube_url?: string
+        }
+        Update: {
+          address?: string
+          business_name?: string
+          email?: string
+          events_email?: string
+          facebook_url?: string
+          google_maps_url?: string
+          id?: string
+          instagram_url?: string
+          phone?: string
+          tiktok_url?: string
+          updated_at?: string
+          youtube_url?: string
+        }
+        Relationships: []
+      }
+      store_hours: {
+        Row: {
+          close_time: string
+          day_label: string
+          day_of_week: number
+          id: string
+          is_closed: boolean
+          open_time: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          close_time?: string
+          day_label: string
+          day_of_week: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          close_time?: string
+          day_label?: string
+          day_of_week?: number
+          id?: string
+          is_closed?: boolean
+          open_time?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       suppressed_emails: {
         Row: {
           created_at: string

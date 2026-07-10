@@ -16,6 +16,7 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
 
   const email = settings?.email || 'team@klawsomenovi.com';
+  const eventsEmail = settings?.events_email || 'events@klawsomenovi.com';
   const phone = settings?.phone || '(248) 938-4093';
   const address = settings?.address || '42768 Grand River Ave Suite C-140, Novi, MI 48375';
   const instagram = settings?.instagram_url || 'https://www.instagram.com/klawsomenovi/';
@@ -48,7 +49,9 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
                 <h4 className="font-heading font-bold text-klawsome-navy text-xs tracking-wider uppercase mb-4">Contact</h4>
                 <div className="space-y-2">
                   <a href={`mailto:${email}`} className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">{email}</a>
-                  <a href="mailto:team@klawsomenovi.com" className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">team@klawsomenovi.com</a>
+                  {eventsEmail && eventsEmail !== email && (
+                    <a href={`mailto:${eventsEmail}`} className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">{eventsEmail}</a>
+                  )}
                   <a href={`tel:${phone.replace(/[^+\d]/g, '')}`} className="block text-klawsome-navy/70 text-sm hover:text-primary transition-colors font-body">{phone}</a>
                 </div>
               </div>

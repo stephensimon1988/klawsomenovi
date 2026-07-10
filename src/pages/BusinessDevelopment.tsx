@@ -25,9 +25,11 @@ import imgQuote from '@/assets/bizdev/quote.webp';
 import imgApprove from '@/assets/bizdev/approve.webp';
 import {
   useCmsTable,
+  useCmsSingle,
   usePageHero,
   type BusinessSection,
   type BusinessPricingTier,
+  type SiteSettings,
 } from '@/hooks/useCmsContent';
 import { supabase } from '@/integrations/supabase/client';
 import { useQuery } from '@tanstack/react-query';
@@ -245,6 +247,8 @@ const BusinessDevelopment = () => {
   const { data: hero } = usePageHero('business-development');
   const { data: dbSections } = useCmsTable<BusinessSection>('business_sections');
   const { data: dbPricing } = useCmsTable<BusinessPricingTier>('business_pricing_tiers');
+  const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
+  const contactEmail = settings?.email || 'team@klawsomenovi.com';
   const { data: dbContent } = usePageContent('business-development');
 
   const sections = dbSections?.length ? dbSections : fallbackSections;
@@ -531,7 +535,7 @@ const BusinessDevelopment = () => {
             size="lg"
             className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
           >
-            <a href="mailto:team@klawsomenovi.com?subject=Collaborate%20with%20Klawsome">
+            <a href={`mailto:${contactEmail}?subject=Collaborate%20with%20Klawsome`}>
               Collaborate With Us
             </a>
           </Button>

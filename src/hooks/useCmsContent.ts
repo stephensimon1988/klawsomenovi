@@ -1,6 +1,12 @@
-// Static content layer — replaces the former Supabase-backed CMS.
-// All hook signatures preserved so existing consumers don't need changes.
+// Hybrid CMS layer: `site_settings` and `store_hours` fetch live from
+// Supabase (edited via /klawsome-admin). All other tables still come from
+// the static cmsData.ts snapshot.
+import { useQuery } from '@tanstack/react-query';
+import { supabase } from '@/integrations/supabase/client';
 import { cmsData } from '@/content/cmsData';
+
+// Tables that read live from Supabase instead of cmsData.ts
+const LIVE_TABLES = new Set(['site_settings', 'store_hours']);
 
 function sortRows<T extends Record<string, any>>(rows: T[]): T[] {
   if (!rows || rows.length === 0) return rows;
@@ -10,23 +16,40 @@ function sortRows<T extends Record<string, any>>(rows: T[]): T[] {
   return rows;
 }
 
+function useLiveTable<T>(table: string, enabled = true) {
+  return useQuery({
+    queryKey: ['cms', table],
+    enabled,
+    staleTime: 60_000,
+    queryFn: async () => {
+      const { data, error } = await supabase.from(table as any).select('*');
+      if (error) throw error;
+      return (data ?? []) as T[];
+    },
+  });
+}
+
 export function useCmsTable<T = Record<string, unknown>>(table: string, _options?: { enabled?: boolean }) {
-  const rows = (cmsData[table] as T[]) || [];
+  const fallback = (cmsData[table] as T[]) || [];
+  const live = useLiveTable<T>(table, LIVE_TABLES.has(table));
+  const rows = LIVE_TABLES.has(table) ? (live.data ?? fallback) : fallback;
   return {
     data: sortRows(rows as any) as T[],
-    isLoading: false,
-    isError: false,
-    error: null as Error | null,
+    isLoading: LIVE_TABLES.has(table) ? live.isLoading : false,
+    isError: LIVE_TABLES.has(table) ? live.isError : false,
+    error: (LIVE_TABLES.has(table) ? live.error : null) as Error | null,
   };
 }
 
 export function useCmsSingle<T = Record<string, unknown>>(table: string) {
-  const rows = (cmsData[table] as T[]) || [];
+  const fallback = (cmsData[table] as T[]) || [];
+  const live = useLiveTable<T>(table, LIVE_TABLES.has(table));
+  const rows = LIVE_TABLES.has(table) ? (live.data ?? fallback) : fallback;
   return {
     data: (rows[0] ?? null) as T | null,
-    isLoading: false,
-    isError: false,
-    error: null as Error | null,
+    isLoading: LIVE_TABLES.has(table) ? live.isLoading : false,
+    isError: LIVE_TABLES.has(table) ? live.isError : false,
+    error: (LIVE_TABLES.has(table) ? live.error : null) as Error | null,
   };
 }
 
@@ -43,9 +66,9 @@ export function usePageHero(pageKey: string) {
 
 // ---- Type definitions (preserved) ----
 export interface SiteSettings {
-  id: string; business_name: string; phone: string; email: string; address: string;
+  id: string; business_name: string; phone: string; email: string; events_email: string; address: string;
   google_maps_url: string; instagram_url: string; tiktok_url: string; facebook_url: string;
-  youtube_url: string; gift_card_url: string; newsletter_text: string;
+  youtube_url: string;
 }
 export interface StoreHour {
   id: string; day_of_week: number; day_label: string; open_time: string;

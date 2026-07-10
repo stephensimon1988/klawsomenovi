@@ -1,39 +1,23 @@
 import { Mail, PartyPopper, Phone, MapPin } from 'lucide-react';
 import contactImage from '@/assets/contact-hero.webp';
 import FramedImage from './FramedImage';
-
-const items = [
-  {
-    icon: Mail,
-    label: 'General Inquiries',
-    value: 'team@klawsomenovi.com',
-    href: 'mailto:team@klawsomenovi.com',
-    desc: 'Gameplay, tokens, lost items, feedback, media.',
-  },
-  {
-    icon: PartyPopper,
-    label: 'Events & Birthdays',
-    value: 'events@klawsomenovi.com',
-    href: 'mailto:events@klawsomenovi.com',
-    desc: 'Birthday parties, group events, school & corporate visits.',
-  },
-  {
-    icon: Phone,
-    label: 'Phone',
-    value: '(248) 938-4093',
-    href: 'tel:+12489384093',
-    desc: "Call during open hours; leave a message if we're on the floor.",
-  },
-  {
-    icon: MapPin,
-    label: 'Visit Us',
-    value: '42768 Grand River Avenue, Suite C-140, Novi, MI 48375',
-    href: 'https://maps.google.com/?q=42768+Grand+River+Avenue+Suite+C-140+Novi+MI+48375',
-    desc: 'Inside Sakura Novi · Tue–Sun, 11 a.m. – 9 p.m.',
-  },
-];
+import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
 
 const KawaiiContactInfo = () => {
+  const { data: s } = useCmsSingle<SiteSettings>('site_settings');
+  const email = s?.email || 'team@klawsomenovi.com';
+  const eventsEmail = s?.events_email || 'events@klawsomenovi.com';
+  const phone = s?.phone || '(248) 938-4093';
+  const address = s?.address || '42768 Grand River Avenue, Suite C-140, Novi, MI 48375';
+  const mapsUrl = s?.google_maps_url || `https://maps.google.com/?q=${encodeURIComponent(address)}`;
+
+  const items = [
+    { icon: Mail, label: 'General Inquiries', value: email, href: `mailto:${email}`, desc: 'Gameplay, tokens, lost items, feedback, media.' },
+    { icon: PartyPopper, label: 'Events & Birthdays', value: eventsEmail, href: `mailto:${eventsEmail}`, desc: 'Birthday parties, group events, school & corporate visits.' },
+    { icon: Phone, label: 'Phone', value: phone, href: `tel:${phone.replace(/[^+\d]/g, '')}`, desc: "Call during open hours; leave a message if we're on the floor." },
+    { icon: MapPin, label: 'Visit Us', value: address, href: mapsUrl, desc: 'Inside Sakura Novi' },
+  ];
+
   return (
     <section className="bg-klawsome-baby-blue py-16 md:py-24">
       <div className="ds-container-content px-4">

@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { toast } from 'sonner';
-import { useCmsTable, type BusinessSection, type BusinessPricingTier, type BusinessHowStep } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, type BusinessSection, type BusinessPricingTier, type BusinessHowStep, type SiteSettings } from '@/hooks/useCmsContent';
 
 const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => (
   <motion.div
@@ -69,6 +69,8 @@ const Business = () => {
   const { data: dbSections } = useCmsTable<BusinessSection>('business_sections');
   const { data: dbPricing } = useCmsTable<BusinessPricingTier>('business_pricing_tiers');
   const { data: dbHowSteps } = useCmsTable<BusinessHowStep>('business_how_steps');
+  const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
+  const contactEmail = settings?.email || 'team@klawsomenovi.com';
 
   const sections = dbSections?.length ? dbSections : fallbackSections;
   const pricingTiers = dbPricing?.length ? dbPricing : fallbackPricing;
@@ -495,7 +497,7 @@ const Business = () => {
                   Send Message →
                 </Button>
                 <p className="text-xs text-white/60 font-body font-bold mt-3">
-                  We'll reply within 1-2 business days · hello@klawsomenovi.com
+                  We'll reply within 1-2 business days · {contactEmail}
                 </p>
               </div>
             </form>
