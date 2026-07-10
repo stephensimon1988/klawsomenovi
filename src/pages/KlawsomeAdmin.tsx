@@ -13,6 +13,7 @@ import { Lock, Settings, Save, Plus, Trash2 } from 'lucide-react';
 
 import { toast } from 'sonner';
 import { BookingScheduleEditor } from '@/components/admin/BookingScheduleEditor';
+import { BookingsCalendar } from '@/components/admin/BookingsCalendar';
 
 // ─── CMS helpers ────────────────────────────────────────────
 const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
@@ -402,6 +403,7 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="vital" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Settings className="w-3 h-3 mr-1" />Vital Info</TabsTrigger>
             <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
             <TabsTrigger value="schedule" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📅 Booking Schedule</TabsTrigger>
+            <TabsTrigger value="bookings" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📆 Bookings</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -436,6 +438,11 @@ const KlawsomeAdmin = () => {
           {/* ─── Booking Schedule ─── */}
           <TabsContent value="schedule">
             <BookingScheduleEditor password={storedPassword} />
+          </TabsContent>
+
+          {/* ─── Bookings Calendar ─── */}
+          <TabsContent value="bookings">
+            <BookingsCalendar password={storedPassword} />
           </TabsContent>
 
         </Tabs>
