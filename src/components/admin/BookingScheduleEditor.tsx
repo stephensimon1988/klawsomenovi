@@ -132,14 +132,7 @@ function EventTypeEditor({
   };
 
   return (
-    <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-      <CardHeader>
-        <CardTitle className="text-white font-heading flex items-center justify-between">
-          <span>{label}</span>
-          <span className="text-white/40 text-xs font-body">{blurb}</span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-5">
+    <div className="space-y-5 pb-2">
         {/* Lead time */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <label className="flex flex-col gap-1 text-white/70 text-xs font-heading">
@@ -244,8 +237,7 @@ function EventTypeEditor({
             </Button>
           </div>
         </div>
-      </CardContent>
-    </Card>
+    </div>
   );
 }
 
