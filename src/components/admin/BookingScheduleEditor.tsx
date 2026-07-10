@@ -281,20 +281,35 @@ export function BookingScheduleEditor({ password }: { password: string }) {
         Set the days and times customers can book each service. Blackout dates block booking for a specific day.
         Changes take effect immediately on the booking flow.
       </p>
-      {EVENT_TYPES.map((t) => (
-        <EventTypeEditor
-          key={t.key}
-          eventType={t.key}
-          label={t.label}
-          blurb={t.blurb}
-          password={password}
-          availability={availability.find((a) => a.event_type === t.key)}
-          blackouts={blackouts
-            .filter((b) => b.event_type === t.key)
-            .sort((x, y) => x.blackout_date.localeCompare(y.blackout_date))}
-          onReload={load}
-        />
-      ))}
+      <Accordion type="multiple" className="space-y-3">
+        {EVENT_TYPES.map((t) => (
+          <AccordionItem
+            key={t.key}
+            value={t.key}
+            className="border border-white/10 bg-white/5 backdrop-blur-sm rounded-lg px-4"
+          >
+            <AccordionTrigger className="text-white font-heading hover:no-underline">
+              <div className="flex flex-col items-start text-left">
+                <span>{t.label}</span>
+                <span className="text-white/40 text-xs font-body font-normal">{t.blurb}</span>
+              </div>
+            </AccordionTrigger>
+            <AccordionContent className="pt-2">
+              <EventTypeEditor
+                eventType={t.key}
+                label={t.label}
+                blurb={t.blurb}
+                password={password}
+                availability={availability.find((a) => a.event_type === t.key)}
+                blackouts={blackouts
+                  .filter((b) => b.event_type === t.key)
+                  .sort((x, y) => x.blackout_date.localeCompare(y.blackout_date))}
+                onReload={load}
+              />
+            </AccordionContent>
+          </AccordionItem>
+        ))}
+      </Accordion>
     </div>
   );
 }
