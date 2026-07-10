@@ -66,9 +66,9 @@ export function usePageHero(pageKey: string) {
 
 // ---- Type definitions (preserved) ----
 export interface SiteSettings {
-  id: string; business_name: string; phone: string; email: string; address: string;
+  id: string; business_name: string; phone: string; email: string; events_email: string; address: string;
   google_maps_url: string; instagram_url: string; tiktok_url: string; facebook_url: string;
-  youtube_url: string; gift_card_url: string; newsletter_text: string;
+  youtube_url: string;
 }
 export interface StoreHour {
   id: string; day_of_week: number; day_label: string; open_time: string;
