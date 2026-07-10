@@ -1,63 +1,62 @@
-# Booking Schedule cleanup + Bookings Calendar
+## Goal
 
-Two changes to `/klawsome-admin`:
+End-to-end smoke test of `/klawsome-admin` (all tabs, all CRUD paths) with Playwright, capture screenshots and network/console output, and confirm every action leaves the database in its original state.
 
-## 1. Remove "Slot length" from Booking Schedule editor
+## Approach
 
-Customers pick their own duration during checkout, so a fixed slot granularity is misleading. Keep the value in the DB (still used by `generateSlots` for the time-picker grid in the wizard), but hide the input in the admin and stop editing it. The wizard keeps working off the stored default (60 min) — we can revisit if you want to remove slot-based time pickers from the wizard too.
+Drive the live preview at `http://localhost:8080/klawsome-admin` with headless Chromium. For every mutation, record the "before" state, run the action, verify the "after" state visually + via the `cms-admin` response, then run the inverse action to revert. Screenshots and a JSON log go to `/tmp/browser/klawsome-admin/`.
 
-Edits: `src/components/admin/BookingScheduleEditor.tsx` — remove the "Slot length (minutes)" `<Input>` and drop `slot_minutes` from the save payload; keep `lead_time_hours` (still important — it's the "how far in advance customers must book" cutoff).
+Password comes from the `ADMIN_PASSWORD` secret. I'll read it inside Playwright via `os.environ` — never echoed.
 
-## 2. New "Bookings Calendar" tab
+## Test matrix
 
-We already have an `event_bookings` table (currently empty) that the booking wizard writes to. It stores `start_at`, `duration_minutes`, `event_type`, `pathway`, `status`, contact info, party size, addons, Shopify order id, total, etc. Nothing in the admin surfaces it yet.
+### A. Blackout dates (primary focus)
+1. Load Booking Schedule tab → screenshot each event-type card.
+2. Read current `event_blackout_dates` rows (baseline count per event type).
+3. For each of the 4 event types (private, semi_private, rental, mobile):
+   - Add a blackout on a far-future date (e.g. 2027-12-31) with reason "DEBUG — auto test".
+   - Verify row appears in the UI list and in a fresh `read`.
+   - Delete it.
+   - Verify it's gone.
+4. Check edge cases: duplicate date insert, empty date submit (should toast error), past date insert.
+5. Confirm `event_blackout_dates` row count matches baseline at end.
 
-Add a new tab **📆 Bookings** with a real month calendar view of every booking.
+### B. Booking Schedule hours
+1. Snapshot current `event_availability.hours` + `lead_time_hours` for one type (e.g. private).
+2. Toggle Monday open/closed, change an open/close time, change lead time → Save.
+3. Verify persisted value via `read`.
+4. Restore original values → Save → verify.
 
-```text
-[< Nov 2026]   Nov 2026   [Dec 2026 >]      Filter: [All types ▾] [All statuses ▾]
+### C. Bookings Calendar tab
+1. Load tab → screenshot empty state (table is empty).
+2. Insert a fake `event_bookings` row via `cms-admin` `insert` (start_at in current month, status pending, contact "DEBUG Test").
+3. Verify it appears on the correct calendar day and in the "Upcoming 14 days" list.
+4. Click the booking → screenshot the details dialog.
+5. Change status via the dropdown → verify update.
+6. Navigate month prev/next/today → screenshots.
+7. Apply type + status filters → screenshots.
+8. Delete the debug row via `cms-admin` `delete` → verify calendar is empty again.
 
-  Sun   Mon   Tue   Wed   Thu   Fri   Sat
-   1     2     3     4     5     6     7
-                   • 2p Private
-                     Smith (8)
-                   • 6p Rental
-   8     9    10    11    12    13    14
-        BLACKOUT
-                              • 3p Mobile
-                                Jones (12)
-   …
-```
+### D. Other admin tabs (light smoke)
+Load each remaining tab (Hours, Site Settings, plus any others visible in `KlawsomeAdmin.tsx`), screenshot, confirm rows render and no console/network errors. No mutations here unless something looks broken.
 
-- Month grid (7×5/6). Prev/Next month arrows + "Today".
-- Each cell lists that day's bookings (time + type + contact name + party size), color-coded by event type (private / semi / rental / mobile).
-- Blackout days from `event_blackout_dates` are visually marked.
-- Closed days (per `event_availability.hours`) are dimmed.
-- Clicking a booking opens a details drawer/dialog with:
-  - Full contact (name, email, phone)
-  - Start time + duration, event type, pathway
-  - Party size, celebrant, favorites, special requests, character pick
-  - Zip/miles (for mobile), addons, Shopify order id + total
-  - Status badge with a dropdown to change status (`pending` → `confirmed` / `cancelled` / `completed`)
-- Filters: event type (all / private / semi / rental / mobile) and status.
-- Above the calendar: quick "Upcoming (next 14 days)" list for at-a-glance triage.
+### E. Failure paths
+- Call `cms-admin` with wrong password → expect 401.
+- Call with disallowed table name → expect 400.
+- Call with missing fields → expect 400.
 
-### Data / API
+## Deliverables
 
-- Extend `cms-admin` `TABLES_ALLOWED` with `event_bookings` so the admin can read the list and patch status through the existing password-gated function.
-- Load the visible month via `cmsInvoke('read', 'event_bookings')` (small volume; no server-side date filter needed yet — can add later if it grows).
-- Status updates use the existing `action: 'update'` path.
-- No schema changes.
+- `/tmp/browser/klawsome-admin/screenshots/*.png` — one per step
+- `/tmp/browser/klawsome-admin/report.md` — pass/fail per case, with the cms-admin request/response summary, console errors, and a final "DB state restored ✅/❌" line
+- Short chat summary highlighting any real bugs found (especially anything blackout-related), plus recommended fixes to plan separately
 
-## Files
+## Revert guarantee
 
-- `src/components/admin/BookingScheduleEditor.tsx` — remove slot input
-- `src/components/admin/BookingsCalendar.tsx` (new) — month grid + detail dialog
-- `src/pages/KlawsomeAdmin.tsx` — new `<TabsTrigger value="bookings">📆 Bookings</TabsTrigger>` + content
-- `supabase/functions/cms-admin/index.ts` — add `event_bookings` to `TABLES_ALLOWED`
+Every mutation is paired with its inverse in the same script, wrapped in try/finally so a mid-script crash still runs cleanup. Before finishing, the script re-reads `event_blackout_dates`, `event_availability`, and `event_bookings` and diffs against the baseline snapshot; the report fails loudly if anything drifted.
 
 ## Out of scope
 
-- Manually creating bookings from the admin (bookings still come only from the customer wizard)
-- iCal/Google Calendar sync (can be a follow-up)
-- Rescheduling by drag-and-drop
+- Fixing bugs found (separate plan after the report)
+- Load / concurrency testing
+- Auth flow changes
