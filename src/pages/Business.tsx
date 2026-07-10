@@ -6,7 +6,7 @@ import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import KawaiiNav from '@/components/KawaiiNav';
 import KawaiiFooter from '@/components/KawaiiFooter';
 import { toast } from 'sonner';
-import { useCmsTable, type BusinessSection, type BusinessPricingTier, type BusinessHowStep } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, type BusinessSection, type BusinessPricingTier, type BusinessHowStep, type SiteSettings } from '@/hooks/useCmsContent';
 
 const FloatingIcon = ({ children, delay = 0, className = '' }: { children: React.ReactNode; delay?: number; className?: string }) => (
   <motion.div
