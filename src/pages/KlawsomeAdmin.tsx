@@ -430,35 +430,6 @@ const KlawsomeAdmin = () => {
               <CardHeader><CardTitle className="text-white font-heading">Store Hours</CardTitle></CardHeader>
               <CardContent><StoreHoursEditor password={storedPassword} /></CardContent>
             </Card>
-          </TabsContent>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">Hero & Story</CardTitle></CardHeader>
-              <CardContent>
-                <SingleRowEditor password={storedPassword} table="homepage_content" fields={[
-                  { key: 'hero_headline', label: 'Hero Headline' },
-                  { key: 'hero_subheadline', label: 'Hero Subheadline' },
-                  { key: 'hero_cta_text', label: 'Hero CTA Button' },
-                  { key: 'hero_image_url', label: 'Hero Image URL' },
-                  { key: 'story_title', label: 'Story Title' },
-                  { key: 'story_body', label: 'Story Body', multiline: true },
-                  { key: 'story_image_url', label: 'Story Image URL' },
-                  { key: 'about_title', label: 'About Title' },
-                  { key: 'about_subtitle', label: 'About Subtitle' },
-                ]} />
-              </CardContent>
-            </Card>
-            <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-              <CardHeader><CardTitle className="text-white font-heading">How It Works Steps</CardTitle></CardHeader>
-              <CardContent>
-                <MultiRowEditor password={storedPassword} table="homepage_steps" columns={[
-                  { key: 'icon', label: 'Icon', width: '60px' },
-                  { key: 'title', label: 'Title' },
-                  { key: 'description', label: 'Description', type: 'textarea' },
-                  { key: 'sort_order', label: 'Order', width: '60px' },
-                ]} />
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* ─── Tokens ─── */}
           <TabsContent value="tokens">
