@@ -29,7 +29,6 @@ export function useAvailability(pathway: Pathway | null) {
     enabled: !!eventType,
     queryFn: async (): Promise<Availability | null> => {
       const { data, error } = await supabase
-        // @ts-expect-error — table added in migration, types regenerate after approval
         .from('event_availability')
         .select('hours, slot_minutes, lead_time_hours')
         .eq('event_type', eventType!)
@@ -44,7 +43,6 @@ export function useAvailability(pathway: Pathway | null) {
     enabled: !!eventType,
     queryFn: async (): Promise<Set<string>> => {
       const { data, error } = await supabase
-        // @ts-expect-error — table added in migration
         .from('event_blackout_dates')
         .select('blackout_date')
         .eq('event_type', eventType!);

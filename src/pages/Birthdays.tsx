@@ -152,7 +152,7 @@ const Birthdays = () => {
               </p>
 
               <div className="flex gap-3 flex-wrap">
-                <Button size="hero" onClick={openBookingModal} className="bg-white text-klawsome-navy hover:bg-white/90">
+                <Button size="hero" onClick={() => openBookingModal()} className="bg-white text-klawsome-navy hover:bg-white/90">
                   Book a Birthday Party
                 </Button>
                 <Button asChild size="hero" variant="heroGhost">
@@ -215,7 +215,7 @@ const Birthdays = () => {
             <div />
             <div className="col-span-2 flex justify-end">
               <Button
-                onClick={openBookingModal}
+                onClick={() => openBookingModal()}
                 size="lg"
                 className="w-full rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
               >
@@ -301,7 +301,7 @@ const Birthdays = () => {
           </div>
 
           <div className="mt-10 text-center">
-            <Button onClick={openBookingModal} size="hero" className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
+            <Button onClick={() => openBookingModal()} size="hero" className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
               Add These to Your Booking
             </Button>
           </div>

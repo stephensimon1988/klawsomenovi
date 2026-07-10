@@ -309,7 +309,7 @@ function validateStep(
   _blackouts: Set<string> | undefined,
   zipInfo: ReturnType<typeof getMilesForZip> | null,
 ): boolean {
-  switch (step) {
+  switch (step as string) {
     case 'pathway': return !!s.pathway;
     case 'package': return !!pkg;
     case 'datetime': return !!s.date && !!s.time;
