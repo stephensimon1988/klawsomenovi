@@ -417,8 +417,6 @@ const KlawsomeAdmin = () => {
                   { key: 'tiktok_url', label: 'TikTok URL' },
                   { key: 'facebook_url', label: 'Facebook URL' },
                   { key: 'youtube_url', label: 'YouTube URL' },
-                  { key: 'gift_card_url', label: 'Gift Card URL' },
-                  { key: 'newsletter_text', label: 'Newsletter Text', multiline: true },
                 ]} />
               </CardContent>
             </Card>
