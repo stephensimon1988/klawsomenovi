@@ -430,6 +430,7 @@ const KlawsomeAdmin = () => {
               <CardHeader><CardTitle className="text-white font-heading">Store Hours</CardTitle></CardHeader>
               <CardContent><StoreHoursEditor password={storedPassword} /></CardContent>
             </Card>
+          </TabsContent>
 
         </Tabs>
       </div>
