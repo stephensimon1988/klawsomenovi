@@ -48,7 +48,7 @@ const Birthdays = () => {
     .slice(0, 4);
 
   const faqItems = allFaqs?.filter(f => f.page === 'birthdays') || [];
-  const bookingEmail = content?.booking_email || 'events@klawsomenovi.com';
+  const bookingEmail = content?.booking_email || settings?.events_email || 'events@klawsomenovi.com';
 
   const privateOpt = (partyOptions || []).find(o => /private/i.test(o.name) && !/semi/i.test(o.name));
   const semiOpt = (partyOptions || []).find(o => /semi/i.test(o.name));
