@@ -1,56 +1,70 @@
-# Wire all pages to Vital Info + Hours
+# Admin tab: Booking Schedule
 
-## Goal
-Every place on the site that shows phone, email, address, social links, or store hours reads from `site_settings` / `store_hours` (edited in `/klawsome-admin`). No hardcoded copies that silently override the admin.
+Add a "Booking Schedule" tab to `/klawsome-admin` that controls when customers can book each of the four service types.
 
-## Audit findings (what's already wired vs. not)
+## What already exists
 
-**Already CMS-wired (via `useCmsContent`)**
-- `KawaiiFooter` — email, phone, address, socials (with hardcoded fallbacks)
-- `KawaiiVisit` — address + hours (with hardcoded fallbacks)
-- Homepage About/Hero/Story blocks
+The booking wizard reads from `event_availability` (per event_type):
+- `event_type` — one of `private`, `semi_private`, `rental`, `mobile`
+- `hours` — JSON `{ mon, tue, wed, thu, fri, sat, sun }`, each either `null` (closed) or `{ open: "HH:MM", close: "HH:MM" }` (24h)
+- `slot_minutes` — booking slot granularity (default 60)
+- `lead_time_hours` — earliest booking cutoff (default 48/72)
 
-**Hardcoded — bypasses admin today**
-- `KawaiiContactInfo.tsx` — team@ / events@ emails, phone, address
-- `FloatingContactWidget.tsx` — hardcoded email recipients
-- `KawaiiNav.tsx` — any address/phone in header
-- `Birthdays.tsx` — `bookingEmail` fallback `events@klawsomenovi.com`
-- `Business.tsx` / `BusinessDevelopment.tsx` — `hello@`, `team@`, "Novi, MI (48375)"
-- `BookingWizard.tsx` — hardcoded `events@klawsomenovi.com`
-- `data/jobDescriptions.ts` — full street address + store hours embedded in job copy
-- Fallback hours strings in `KawaiiVisit` ("Closed Mondays")
+Plus `event_blackout_dates` (per event_type, per date) to block specific days.
 
-## Plan
+The wizard is wired to these tables via `useAvailability`, so anything saved here takes effect immediately in the booking flow.
 
-### 1. Extend Vital Info (site_settings) with missing fields
-Add editable fields the site actually uses but the admin doesn't expose:
-- `events_email` (separate from general `email`)
-- `booking_phone` (if different from main phone)
-- Keep existing: business_name, phone, email, address, google_maps_url, instagram_url, tiktok_url, facebook_url, youtube_url
+## New admin tab
 
-### 2. Rewire every hardcoded reference to CMS
-Replace hardcoded strings with `useCmsContent()` reads + a single shared fallback (used only if the row is truly missing):
-- `KawaiiContactInfo` → email / events_email / phone / address from settings
-- `FloatingContactWidget` → recipients from settings
-- `Birthdays` → booking email from settings (drop hardcoded fallback)
-- `Business`, `BusinessDevelopment` → contact email + address from settings
-- `BookingWizard` → events email from settings
-- `KawaiiFooter`, `KawaiiVisit` → keep wiring, remove stale hardcoded fallbacks
-- `jobDescriptions.ts` → template strings that inject address + hours at render time (or a note that job copy is static — see Open Question)
+New tab labeled **Schedule** with a section per event type:
 
-### 3. Rewire hours everywhere
-- Ensure `KawaiiVisit`, footer hours block, and any "hours" mention on Birthdays / Business / Careers read from `store_hours` (via `useCmsContent().hours`), formatted by a small shared helper.
-- Remove "Closed Mondays" hardcoded caption; derive from data.
+```text
+Private Parties        [Slot: 60 min]  [Lead time: 48 h]
+  Mon  [ Closed ]
+  Tue  [ Closed ]
+  Wed  [12:00] → [20:00]   [x Open]
+  Thu  [12:00] → [20:00]   [x Open]
+  Fri  [12:00] → [21:00]   [x Open]
+  Sat  [11:00] → [21:00]   [x Open]
+  Sun  [11:00] → [20:00]   [x Open]
 
-### 4. Add a build-time guard
-Small script (`scripts/check-hardcoded-contact.mjs`) that greps `src/**` for the literal phone / emails / address and fails if new hardcoded copies appear. Wired into the existing `scripts/` folder pattern.
+  Blackout dates
+  • 2026-07-04  Independence Day        [Remove]
+  • 2026-12-25  Christmas               [Remove]
+  [ + Add blackout date ]
+  [ Save Private Parties ]
 
-### 5. Manual verification checklist
-After changes, walk these routes and confirm every element updates when the admin value changes:
-`/`, `/rental`, `/birthdays`, `/business`, `/business-development`, `/careers`, `/community-partners`, `/gallery`, `/faq`, `/news`, `/our-story`, `/rewards`, `/store`, `/klawsome-video-game`, `/claw-machine-tips`, footer + nav on every page, Floating Contact widget, Booking Wizard "email us" screen.
+Semi-Private Parties   …  (same shape)
+Rental (in-store rental of a machine)  …
+Klawsome Mobile (delivered / off-site) …
+```
+
+Per event type:
+- Open/close time inputs per day + a "Closed" toggle that greys the times
+- Slot minutes (numeric) and Lead time hours (numeric)
+- Blackout list with add/remove (date + optional reason)
+- Single "Save" button per event type that writes the whole `hours` object plus scalars
+
+Time inputs are `<input type="time">` so we get native 24h pickers and store `HH:MM` strings, matching what `useAvailability` already parses.
+
+## Data / API
+
+- Reuse the existing `cms-admin` edge function pattern — add `event_availability` and `event_blackout_dates` to `TABLES_ALLOWED`, then all CRUD flows through the existing password-gated function.
+- No schema changes needed (tables and RLS already in place).
+- The `hours` column is `jsonb`; the editor serializes/deserializes it into the seven-day form.
+
+## Files
+
+- `src/pages/KlawsomeAdmin.tsx` — new `<TabsTrigger value="schedule">` + `<TabsContent>`
+- `src/components/admin/BookingScheduleEditor.tsx` (new) — the per-event-type editor block
+- `supabase/functions/cms-admin/index.ts` — extend `TABLES_ALLOWED` with the two booking tables
+
+## Out of scope
+
+- Editing booking-add-ons or per-service durations beyond the slot size (Klawsome Mobile's 1h/2h/all-day live in Shopify variants, not here).
+- Viewing/managing individual bookings — the tab is only for scheduling rules.
 
 ## Open questions
 
-1. **Job descriptions** in `src/data/jobDescriptions.ts` embed the full address and tentative hours inside long paragraphs. Do you want those rewritten to pull from CMS at render time, or leave that copy static (since it's legal/HR-style text)?
-2. **Separate "events" email** — right now the site uses `team@klawsomenovi.com` for general and `events@klawsomenovi.com` for bookings. Add a second `events_email` field in Vital Info, or collapse both to a single `email`?
-3. **Phone number** — do you also want a `booking_phone` distinct from the main phone, or one number everywhere?
+1. Do you want a single global "operating hours" that applies to all four service types, or keep them independent (current setup allows different hours per type — e.g. rental opens earlier than private parties)?
+2. Do you want per-day "buffer" minutes between bookings (turnover time) as a separate field, or is `slot_minutes` enough for now?
