@@ -9,8 +9,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Home, Coins, Newspaper, Cake, Briefcase, Building2, Save, Plus, Trash2, HelpCircle, Image, Star, Gift, Trophy, BookOpen, Layout, ImageIcon, FileText, Users, Mic, Truck } from 'lucide-react';
-import ImageLibraryEditor from '@/components/admin/ImageLibraryEditor';
+import { Lock, Settings, Save, Plus, Trash2 } from 'lucide-react';
 
 import { toast } from 'sonner';
 
@@ -401,23 +400,6 @@ const KlawsomeAdmin = () => {
           <TabsList className="bg-white/5 border border-white/10 flex-wrap h-auto gap-1 p-1">
             <TabsTrigger value="vital" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Settings className="w-3 h-3 mr-1" />Vital Info</TabsTrigger>
             <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
-            <TabsTrigger value="homepage" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Home className="w-3 h-3 mr-1" />Homepage</TabsTrigger>
-            <TabsTrigger value="tokens" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Coins className="w-3 h-3 mr-1" />Tokens</TabsTrigger>
-            <TabsTrigger value="news" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Newspaper className="w-3 h-3 mr-1" />News</TabsTrigger>
-            <TabsTrigger value="birthdays" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Cake className="w-3 h-3 mr-1" />Birthdays</TabsTrigger>
-            <TabsTrigger value="careers" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Briefcase className="w-3 h-3 mr-1" />Careers</TabsTrigger>
-            <TabsTrigger value="business" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Building2 className="w-3 h-3 mr-1" />Business</TabsTrigger>
-            <TabsTrigger value="faq" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><HelpCircle className="w-3 h-3 mr-1" />FAQ</TabsTrigger>
-            <TabsTrigger value="heroes" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Layout className="w-3 h-3 mr-1" />Page Heroes</TabsTrigger>
-            <TabsTrigger value="reviews" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Star className="w-3 h-3 mr-1" />Reviews</TabsTrigger>
-            <TabsTrigger value="giftcards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Gift className="w-3 h-3 mr-1" />Gift Cards</TabsTrigger>
-            <TabsTrigger value="rewards" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Trophy className="w-3 h-3 mr-1" />Rewards</TabsTrigger>
-            <TabsTrigger value="gallery" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Image className="w-3 h-3 mr-1" />Gallery</TabsTrigger>
-            <TabsTrigger value="ourstory" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><BookOpen className="w-3 h-3 mr-1" />Our Story</TabsTrigger>
-            <TabsTrigger value="imagelib" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><ImageIcon className="w-3 h-3 mr-1" />Image Library</TabsTrigger>
-            <TabsTrigger value="rental" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Truck className="w-3 h-3 mr-1" />Rental</TabsTrigger>
-            <TabsTrigger value="pagesections" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><FileText className="w-3 h-3 mr-1" />Page Sections</TabsTrigger>
-            <TabsTrigger value="team" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs"><Users className="w-3 h-3 mr-1" />Team</TabsTrigger>
           </TabsList>
 
           {/* ─── Vital Info ─── */}
