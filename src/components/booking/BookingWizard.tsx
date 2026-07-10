@@ -328,7 +328,7 @@ function validateStep(
 
 function StepBar({ step, pathway }: { step: Step; pathway: Pathway | null }) {
   const order = stepOrder(pathway).filter((s) => s !== 'done');
-  const idx = Math.max(0, order.indexOf(step));
+  const idx = Math.max(0, order.indexOf(step as Exclude<Step, 'done'>));
   return (
     <div className="flex gap-1 mt-2">
       {order.map((s, i) => (
