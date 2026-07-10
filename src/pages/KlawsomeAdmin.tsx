@@ -431,9 +431,6 @@ const KlawsomeAdmin = () => {
               <CardContent><StoreHoursEditor password={storedPassword} /></CardContent>
             </Card>
           </TabsContent>
-
-          {/* ─── Homepage ─── */}
-          <TabsContent value="homepage" className="space-y-6">
             <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
               <CardHeader><CardTitle className="text-white font-heading">Hero & Story</CardTitle></CardHeader>
               <CardContent>
