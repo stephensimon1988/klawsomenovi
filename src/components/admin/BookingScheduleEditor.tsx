@@ -34,6 +34,84 @@ const DAYS: { key: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'; label:
   { key: 'sun', label: 'Sun' },
 ];
 
+const DAY_KEY_BY_INDEX = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
+
+function fmtTime(t: string) {
+  const [h, m] = t.split(':').map(Number);
+  const period = h >= 12 ? 'pm' : 'am';
+  const hr = ((h + 11) % 12) + 1;
+  return m ? `${hr}:${String(m).padStart(2, '0')}${period}` : `${hr}${period}`;
+}
+
+function Next7Preview({
+  hours,
+  blackouts,
+}: {
+  hours: HoursMap;
+  blackouts: BlackoutRow[];
+}) {
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const blackoutMap = new Map(blackouts.map((b) => [b.blackout_date, b.reason]));
+  const days = Array.from({ length: 7 }, (_, i) => {
+    const d = new Date(today);
+    d.setDate(today.getDate() + i);
+    const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+    const dayKey = DAY_KEY_BY_INDEX[d.getDay()];
+    const dayHours = hours[dayKey];
+    const blackoutReason = blackoutMap.get(iso);
+    let status: 'open' | 'closed' | 'blackout' = 'closed';
+    if (blackoutReason !== undefined) status = 'blackout';
+    else if (dayHours) status = 'open';
+    return { d, iso, dayHours, status, blackoutReason };
+  });
+
+  return (
+    <div className="pt-4 border-t border-white/10 space-y-2">
+      <p className="text-white/60 text-xs font-heading uppercase tracking-wider">Preview — next 7 days</p>
+      <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2">
+        {days.map(({ d, iso, dayHours, status, blackoutReason }) => (
+          <div
+            key={iso}
+            className={`rounded-lg border p-2 text-xs ${
+              status === 'blackout'
+                ? 'bg-red-500/10 border-red-400/40'
+                : status === 'open'
+                ? 'bg-emerald-500/10 border-emerald-400/40'
+                : 'bg-white/5 border-white/10'
+            }`}
+          >
+            <div className="flex items-baseline justify-between">
+              <span className="text-white font-heading text-sm">
+                {d.toLocaleDateString(undefined, { weekday: 'short' })}
+              </span>
+              <span className="text-white/60 font-mono text-[11px]">
+                {d.toLocaleDateString(undefined, { month: 'numeric', day: 'numeric' })}
+              </span>
+            </div>
+            <div className="mt-1">
+              {status === 'blackout' ? (
+                <>
+                  <div className="text-red-300 font-heading uppercase text-[10px] tracking-wider">Blackout</div>
+                  {blackoutReason && (
+                    <div className="text-white/60 truncate" title={blackoutReason}>{blackoutReason}</div>
+                  )}
+                </>
+              ) : status === 'open' && dayHours ? (
+                <div className="text-emerald-200">
+                  {fmtTime(dayHours.open)}–{fmtTime(dayHours.close)}
+                </div>
+              ) : (
+                <div className="text-white/40 uppercase text-[10px] tracking-wider font-heading">Closed</div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 type DayHours = { open: string; close: string } | null;
 type HoursMap = Record<string, DayHours>;
 
@@ -237,6 +315,8 @@ function EventTypeEditor({
             </Button>
           </div>
         </div>
+
+        <Next7Preview hours={hours} blackouts={blackouts} />
     </div>
   );
 }
