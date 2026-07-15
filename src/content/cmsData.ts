@@ -1402,7 +1402,7 @@ export const cmsData: Record<string, any[]> = {
       "source": "Spartan Story Hub (MSU)",
       "date": "April 2026",
       "url": "https://spartan.msu.edu/spartan-story-hub/news/2026/04/klawsome-filipino-claw-arcade",
-      "image_url": "/__l5e/assets-v1/7c5aa719-5b7e-42a8-b5fd-23b6cca23a39/spartan.jpg",
+      "image_url": "/__l5e/assets-v1/849b91f1-1778-4382-b8c8-45fdb84a5997/spartan-article.jpg",
       "is_active": true,
       "sort_order": -3,
       "created_at": "2026-04-14T15:05:34.646269+00:00"
