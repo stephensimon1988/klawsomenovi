@@ -31,11 +31,16 @@ const KawaiiGiftCards = () => {
               {content?.body_2 || 'Choose from one of many designs.'}
             </p>
             <Button
-              disabled
-              aria-disabled="true"
-              className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-muted text-muted-foreground uppercase cursor-not-allowed opacity-60 hover:bg-muted"
+              asChild
+              className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-primary text-primary-foreground uppercase hover:bg-primary/90"
             >
-              {content?.cta_text || 'Purchase Now'} — Temporarily Unavailable
+              <a
+                href={content?.cta_url || 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order'}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {content?.cta_text || 'Purchase Now'}
+              </a>
             </Button>
           </div>
 
