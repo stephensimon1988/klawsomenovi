@@ -69,8 +69,8 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
     <>
       <section className={`relative ${minH} flex items-end overflow-hidden bg-secondary`}>
         <div
-          className="absolute inset-0 bg-cover bg-center"
-          style={{ backgroundImage: `url('${bg}')` }}
+          className="absolute inset-0 bg-cover bg-no-repeat"
+          style={{ backgroundImage: `url('${bg}')`, backgroundPosition }}
         />
         <div
           className={
