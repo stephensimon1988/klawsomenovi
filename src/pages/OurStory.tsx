@@ -4,6 +4,7 @@ import KawaiiDivider, { DividerVariant } from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurStorySection } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
+import whereItBeganImage from '@/assets/our-story-where-it-began.png.asset.json';
 import klawsomeFamilyBrandImage from '@/assets/klawsome-family-brand.jpg.asset.json';
 import ourStoryBanner from '@/assets/our-story-banner.jpg.asset.json';
 
