@@ -1,47 +1,30 @@
-## Bigger, more readable popups site-wide
+## What's happening
 
-Enforce a 75% width / 90% height minimum on every popup surface (Dialog, Sheet/Drawer, AlertDialog) and bump typography inside them so text is easier to read.
+You edited Store Hours in `/klawsome-admin` and the **Visit Us** section on the homepage actually did pick that up — it shows "11:00 AM to 9:00 PM" (live from the DB). What did **not** change is the **hero subheadline** ("Open Tuesday to Sunday 11 a.m. to 9 p.m. Closed Mondays") and the "Tuesday–Sunday / Closed Mondays" labels near the Hours card. Those are still hard-coded strings, not derived from the `store_hours` table.
 
-### What changes
+At the same time, the admin only exposes four editable areas today — **Vital Info, Hours, Booking Schedule, Bookings**. Everything else on the site (hero headline, story copy, token tiers, FAQs, news, birthdays, reviews, gift cards, careers, page heroes, etc.) is baked into `src/content/cmsData.ts` and is not touchable from `/klawsome-admin` at all. This plan focuses on making the fields you *can* currently edit fully propagate. If you also want new admin tabs to edit that other content, that's a separate (larger) piece of work — call it out and I'll plan it next.
 
-**Base UI primitives** (one place, applies everywhere):
+## Changes
 
-- `src/components/ui/dialog.tsx` — change `DialogContent` default classes from `w-full max-w-lg p-6` to:
-  - `w-[95vw] sm:w-[75vw] min-h-[90vh] max-w-[75vw] max-h-[95vh] p-8 sm:p-10 flex flex-col overflow-hidden`
-  - Add `text-base sm:text-lg` as the default body text size on the content (so all inner `text-sm` copy reads one step larger by default).
-  - Bump `DialogTitle` from `text-lg` → `text-2xl sm:text-3xl`.
-  - Bump `DialogDescription` from `text-sm` → `text-base sm:text-lg`.
-  - Grow the close-X hit target from `h-4 w-4` → `h-6 w-6` with more padding.
+### 1. Hero subheadline is now live
+- `src/components/KawaiiHero.tsx`: stop reading `hero_subheadline` from static `homepage_content`. Instead, compose a live subheadline from `store_hours` (e.g. `"Open Tuesday–Sunday, 11:00 AM to 9:00 PM. Closed Mondays."`), with a graceful fallback while the query is loading.
 
-- `src/components/ui/alert-dialog.tsx` — same width/height/typography treatment on `AlertDialogContent`, `AlertDialogTitle`, `AlertDialogDescription`.
+### 2. Visit Us section fully live
+- `src/components/KawaiiVisit.tsx`:
+  - Replace the hard-coded `"Tuesday–Sunday, {hoursText}"` and `"Closed Mondays"` with a helper that reads `store_hours` and outputs the actual open-day range plus the actual closed-day(s).
+  - Keep the same visual layout; only the strings become dynamic.
 
-- `src/components/ui/sheet.tsx` — for the right/left side sheets (used by the cart drawer), widen from `sm:max-w-sm` default to `sm:max-w-[50vw]` and bump inner title/description sizing to match dialogs. Top/bottom sheets get `min-h-[90vh]`.
+### 3. Shared "hours summary" helper
+- Add `src/lib/hoursSummary.ts` exporting `formatHoursSummary(hours: StoreHour[])` returning `{ dayRange, timeRange, closedDays, full }`. Both Hero and Visit use it so the wording stays consistent and future components can reuse it.
 
-**Popups with hard-coded width overrides** — relax so they inherit the new defaults:
+### 4. Propagation audit for currently-editable fields
+Verify every reference to Vital Info + Store Hours reads from the live hook (they mostly do already). Confirmed live: `KawaiiFooter`, `KawaiiContactInfo`, `KawaiiVisit`, `FloatingContactWidget`, `Business`, `BusinessDevelopment`, `Birthdays`. No changes needed there — just documented so we know the audit is complete.
 
-- `src/components/booking/BookingWizard.tsx` — replace `max-w-3xl w-[95vw] p-0` with classes that keep the internal layout but let width/height come from the base (`p-0` stays because the wizard manages its own padding; add `!max-w-[75vw] !min-h-[90vh]`). Bump inner step copy: package titles, labels, and small helper text move up one size (e.g. `text-sm` → `text-base`, `text-xs` → `text-sm`) so the whole wizard is easier to read on desktop and mobile.
-- `src/components/admin/BookingsCalendar.tsx` — remove `max-w-lg`, let it inherit. Row labels grow one size.
-- `src/components/JobDescriptionDialog.tsx` — remove custom `max-w-2xl` / height caps, let it inherit; body prose gets `prose-lg`.
-- `src/components/FloatingContactWidget.tsx` — same override cleanup + one-step-up type.
-- `src/components/shopify/QuickAddModal.tsx` — same cleanup; product title `text-xl` → `text-2xl`, price `text-2xl` → `text-3xl`, variant/option labels move up.
-- `src/components/shopify/CartDrawer.tsx` — widen sheet to the new default; product names `font-medium` → `text-lg font-semibold`, price/qty controls scale up.
-- `src/components/shopify/SizeChart.tsx` — inherit new sizing; table cells `text-sm` → `text-base`.
+### 5. Cache freshness
+`useCmsContent`'s live query has a 60s `staleTime`. Confirm this is acceptable; changes made in admin show up on the site within ~60s or on next page load. No code change unless you want instant refresh (would need a broadcast channel or shorter staleTime).
 
-### Mobile behavior
+## Explicitly out of scope (flag if you want it)
+- Adding admin editors for `homepage_content` (hero headline / story), `token_tiers`, `news_articles`, `faqs`, `birthdays_content`, `reviews`, `gift_cards_content`, `page_heroes`, `our_story_sections`, `rewards_benefits`, `business_sections`, `party_options`, `job_listings`, `invite_templates`. Each would need (a) a new admin tab, (b) moving that table into `LIVE_TABLES`, and (c) seeding the DB from `cmsData.ts`.
 
-Below `sm` (≤640px) popups become effectively full-screen (`w-[95vw] min-h-[90vh]`) — matches your rule and stays comfortable to tap. Above `sm` the 75%/90% floor kicks in.
-
-### Not changing
-
-- Toasts (Sonner) — those are notifications, not popups.
-- Dropdown menus, popovers, tooltips, and command palette — they anchor to triggers and shouldn't take 75% of the screen.
-- Any popup's internal business logic; only presentation.
-
-### Technical section
-
-Sizing lives on the base `DialogContent` / `AlertDialogContent` / `SheetContent` so every popup — current and future — picks it up. Individual popups that previously overrode `max-w-*` will have those overrides removed rather than fought with `!important`, except the booking wizard which needs `!max-w-[75vw]` because it currently sets `max-w-3xl`. Typography bumps are Tailwind size increments (`text-sm→text-base`, `text-base→text-lg`, `text-lg→text-2xl`, `text-2xl→text-3xl`) — no new tokens.
-
-### Questions
-
-1. Should this apply to the **cart drawer** too? Right now the cart is a side-sheet — going to 75% width makes it a very wide panel on desktop. I'd propose `sm:max-w-[50vw]` for the cart specifically so it stays drawer-shaped, and reserve the full 75%/90% rule for centered modal dialogs. OK to keep that carve-out?
-2. Any popup you want to **exclude** from the bigger sizing (e.g., the small admin status-change dialog)?
+## Question before I build
+Do you want me to also expand `/klawsome-admin` with tabs for the other content areas (homepage hero copy, FAQs, news, token tiers, reviews, gift cards, etc.), or just do the propagation fix above for now?

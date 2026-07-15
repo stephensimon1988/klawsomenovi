@@ -2,7 +2,8 @@ import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LottieAccent from './LottieAccent';
-import { useCmsSingle, type HomepageContent } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, type HomepageContent, type StoreHour } from '@/hooks/useCmsContent';
+import { formatHoursSummary } from '@/lib/hoursSummary';
 import { openBookingModal } from './BookNowDialog';
 import { Link } from 'react-router-dom';
 gsap.registerPlugin(ScrollTrigger);
@@ -15,9 +16,13 @@ const KawaiiHero = () => {
   const [stuck, setStuck] = useState(false);
 
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
+  const { data: hours } = useCmsTable<StoreHour>('store_hours');
+  const hoursSummary = formatHoursSummary(hours);
 
   const headline = content?.hero_headline || "Michigan's first stand-alone claw arcade";
-  const subheadline = content?.hero_subheadline || 'Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes.';
+  const subheadline = hoursSummary.hasData
+    ? hoursSummary.full
+    : (content?.hero_subheadline || 'Step into Klawsome and experience bright, colorful machines filled with kawaii plushies and prizes.');
   const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp';
 
   useEffect(() => {
