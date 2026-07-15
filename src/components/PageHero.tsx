@@ -43,7 +43,7 @@ const hashPath = () => {
 
 const pickGalleryHero = () => GALLERY_HEROES[hashPath() % GALLERY_HEROES.length];
 
-const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false, jumpLinks, overlay = 'gradient' }: PageHeroProps) => {
+const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left', height = 'lg', hideJoinCta = false, jumpLinks, overlay = 'gradient', backgroundPosition = 'center' }: PageHeroProps) => {
   const minH = height === 'lg' ? 'min-h-[70vh]' : 'min-h-[55vh]';
   const alignCls = align === 'center' ? 'text-center mx-auto' : '';
   const bg = imageUrl && imageUrl.trim() ? imageUrl : pickGalleryHero();
