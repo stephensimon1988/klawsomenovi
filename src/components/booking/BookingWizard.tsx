@@ -6,7 +6,7 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   ADDONS,
@@ -538,8 +538,17 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
 }
 
 function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null }) {
+function DeliveryStep({
+  zip, onZipChange, zipInfo, resolving,
+}: {
+  zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null; resolving: boolean;
+}) {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
-  const eventsEmail = settings?.events_email || 'events@klawsomenovi.com';
+  const { data: storeHours } = useCmsTable<StoreHour>('store_hours');
+  const phone = (settings?.phone || '').trim();
+  const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
+  const hoursNote = todaysHoursNote(storeHours);
+  const showCall = zipInfo && !zipInfo.known && (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found');
   return (
     <div className="space-y-4 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
@@ -547,6 +556,9 @@ function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange:
         <Label htmlFor="zip">Delivery ZIP code</Label>
         <Input id="zip" value={zip} onChange={(e) => onZipChange(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="e.g. 48377" inputMode="numeric" maxLength={5} />
       </div>
+      {resolving && zip.length === 5 && !zipInfo && (
+        <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking distance…</p>
+      )}
       {zipInfo && zipInfo.known && (
         <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
           <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
@@ -557,14 +569,56 @@ function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange:
           )}
         </div>
       )}
-      {zipInfo && !zipInfo.known && zip.length === 5 && (
-        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm">
-          <p className="font-heading font-bold text-destructive">We'll need to quote delivery for this ZIP.</p>
-          <p className="text-muted-foreground mt-1">Please email {eventsEmail} and we'll confirm before you book.</p>
+      {showCall && (
+        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
+          <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
+          <p className="text-foreground">
+            {zipInfo.reason === 'out_of_range' && typeof zipInfo.miles === 'number'
+              ? <>This ZIP is about <strong>{zipInfo.miles} mi</strong> away — outside our standard auto-quote range.</>
+              : <>We couldn't auto-quote delivery for this ZIP.</>}
+            {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
+          </p>
+          {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
+          {phone && (
+            <Button asChild size="sm" className="rounded-full">
+              <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
+            </Button>
+          )}
         </div>
+      )}
+      {zipInfo && !zipInfo.known && zipInfo.reason === 'invalid' && zip.length === 5 && (
+        <p className="text-sm text-destructive">Please enter a valid 5-digit US ZIP code.</p>
       )}
     </div>
   );
+}
+
+// Returns a short human note about today's hours, or null if we don't have data.
+function todaysHoursNote(rows: StoreHour[] | undefined): string | null {
+  if (!rows || rows.length === 0) return null;
+  const dow = new Date().getDay(); // 0=Sun
+  const today = rows.find((r) => Number(r.day_of_week) === dow);
+  if (!today) return null;
+  if (today.is_closed) {
+    // find next open day
+    for (let i = 1; i <= 7; i++) {
+      const next = rows.find((r) => Number(r.day_of_week) === (dow + i) % 7);
+      if (next && !next.is_closed) {
+        return `We're closed today — call ${next.day_label} after ${fmtHM(next.open_time)}.`;
+      }
+    }
+    return "We're closed today.";
+  }
+  return `Business hours today: ${fmtHM(today.open_time)}–${fmtHM(today.close_time)}.`;
+}
+
+function fmtHM(t: string | null | undefined): string {
+  if (!t) return '';
+  const [h, m] = t.split(':').map(Number);
+  if (isNaN(h)) return t;
+  const suffix = h >= 12 ? 'PM' : 'AM';
+  const hr = ((h + 11) % 12) + 1;
+  return m ? `${hr}:${String(m).padStart(2, '0')} ${suffix}` : `${hr} ${suffix}`;
 }
 
 function ContactStep({ contact, pathway, onChange }: { contact: State['contact']; pathway: Pathway; onChange: (c: State['contact']) => void }) {
