@@ -753,13 +753,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 3
     },
     {
-      "id": "novi-community-fest-03",
-      "section": "novi-community-fest",
-      "image_url": "/gallery/novi-community-fest-03.webp",
-      "caption": "Kids trying the claw for the first time",
-      "sort_order": 4
-    },
-    {
       "id": "novi-community-fest-04",
       "section": "novi-community-fest",
       "image_url": "/gallery/novi-community-fest-04.webp",
@@ -792,7 +785,7 @@ export const cmsData: Record<string, any[]> = {
       "section": "novi-community-fest",
       "image_url": "/gallery/novi-community-fest-08.webp",
       "caption": "Family fun under the Klawsome tent",
-      "sort_order": 9
+      "sort_order": 1
     },
     {
       "id": "novi-community-fest-09",
