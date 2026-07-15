@@ -19,7 +19,7 @@ const KawaiiVisit = () => {
 
   const dayRange = hoursSummary.dayRange || 'Tuesday–Sunday';
   const timeRange = hoursSummary.timeRange || '11 a.m. to 9 p.m.';
-  const closedDays = hoursSummary.closedDays || 'Closed Mondays';
+  const closedDays = hoursSummary.closedDays;
 
   return (
     <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
