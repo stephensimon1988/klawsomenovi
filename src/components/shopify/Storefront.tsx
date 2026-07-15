@@ -322,6 +322,10 @@ const ProductCard = ({
   const handleAdd = async (e: React.MouseEvent) => {
     e.stopPropagation();
     if (!variant) return;
+    if (isGiftCard(n)) {
+      window.open('https://app.squareup.com/gift/ML1R35ZH9VKRW/order', '_blank', 'noopener,noreferrer');
+      return;
+    }
     if (hasVariations) {
       setOpen(true);
       return;
@@ -346,7 +350,13 @@ const ProductCard = ({
     if (matching) setSelectedVariantId(matching.id);
   };
 
-  const openModal = () => setOpen(true);
+  const openModal = () => {
+    if (isGiftCard(n)) {
+      window.open('https://app.squareup.com/gift/ML1R35ZH9VKRW/order', '_blank', 'noopener,noreferrer');
+      return;
+    }
+    setOpen(true);
+  };
 
   // Pick a kawaii tag color based on first matching category
   const cat = CATEGORIES.find((c) => c.match(n));
