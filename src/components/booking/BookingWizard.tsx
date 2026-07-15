@@ -324,7 +324,7 @@ function validateStep(
   step: Step, s: State, pkg: PackageOption | null,
   availability: { slot_minutes: number; lead_time_hours: number } | null | undefined,
   _blackouts: Set<string> | undefined,
-  zipInfo: ReturnType<typeof getMilesForZip> | null,
+  zipInfo: ZipLookup | null,
 ): boolean {
   switch (step as string) {
     case 'pathway': return !!s.pathway;
@@ -537,7 +537,7 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
   );
 }
 
-function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange: (z: string) => void; zipInfo: ReturnType<typeof getMilesForZip> | null }) {
+function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null }) {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const eventsEmail = settings?.events_email || 'events@klawsomenovi.com';
   return (
@@ -592,7 +592,7 @@ function ReviewStep({
   pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
-  zipInfo: ReturnType<typeof getMilesForZip> | null; deliveryCents: number; totalCents: number;
+  zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
   const startAt = state.date && state.time ? combineDateTime(state.date, state.time) : null;
