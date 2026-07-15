@@ -63,6 +63,7 @@ async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
 // regardless of which sort tab is active.
 const EEVEE_ORDER = ['eevee', 'vaporeon', 'jolteon', 'flareon', 'espeon', 'umbreon', 'leafeon', 'glaceon', 'sylveon'];
 const EEVEE_RE = /eevee|vaporeon|jolteon|flareon|espeon|umbreon|leafeon|glaceon|sylveon/i;
+const PRINTED_3D_RE = /3d printed/i;
 
 function eeveeRank(p: ShopifyProduct): number {
   const hay = `${p.node.title} ${p.node.tags.join(' ')}`.toLowerCase();
@@ -76,12 +77,23 @@ function isEevee(p: ShopifyProduct): boolean {
   return EEVEE_RE.test(`${p.node.title} ${p.node.tags.join(' ')}`);
 }
 
+function is3dPrintedEevee(p: ShopifyProduct): boolean {
+  return isEevee(p) && PRINTED_3D_RE.test(`${p.node.title} ${p.node.tags.join(' ')}`);
+}
+
 function groupEeveelutions(edges: ShopifyProduct[]): ShopifyProduct[] {
   const firstIdx = edges.findIndex(isEevee);
   if (firstIdx === -1) return edges;
-  const eevees = edges.filter(isEevee).sort((a, b) => eeveeRank(a) - eeveeRank(b));
+
+  const threeDeeEevees = edges.filter(is3dPrintedEevee).sort((a, b) => eeveeRank(a) - eeveeRank(b));
+  const non3dEevees = edges
+    .filter((p) => isEevee(p) && !is3dPrintedEevee(p))
+    .sort((a, b) => eeveeRank(a) - eeveeRank(b));
   const rest = edges.filter((p) => !isEevee(p));
-  return [...rest.slice(0, firstIdx), ...eevees, ...rest.slice(firstIdx)];
+
+  // Keep non-3D Eeveelutions grouped at their natural position, but move the
+  // 3D printed Eeveelutions to the very end of the list.
+  return [...rest.slice(0, firstIdx), ...non3dEevees, ...rest.slice(firstIdx), ...threeDeeEevees];
 }
 
 const TAB_ACCENTS: Record<SortMode, string> = {
