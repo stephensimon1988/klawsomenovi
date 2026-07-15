@@ -2178,7 +2178,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "About Us",
       "title": "Our Story",
       "subtitle": "",
-      "image_url": "/__l5e/assets-v1/ec162f34-b50c-4599-97e2-ac8cd5c994ee/our-story-banner.png",
+      "image_url": "/__l5e/assets-v1/f876852e-4483-42a9-9545-a4972f32158a/our-story-banner.jpg",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 5
