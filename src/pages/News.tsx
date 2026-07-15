@@ -21,7 +21,7 @@ const News = () => {
         eyebrow={hero?.eyebrow || 'Press'}
         title={hero?.title || 'News'}
         subtitle={hero?.subtitle || 'See what people are saying about us.'}
-        imageUrl={hero?.image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/21f62e3c-4e42-4460-ad61-8959feae0a54/AgnesMichal_CandidClapping.webp'}
+        imageUrl={hero?.image_url || newsBanner.url}
       >
         <img
           src="https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/5634d99f-8f37-4229-a409-dfbb9b66697c/As+Seen+On.webp"
