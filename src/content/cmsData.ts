@@ -873,56 +873,56 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "080606a9-0f09-4ba0-b672-d8803747c32d",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/4b9b9251-97dd-4814-9d88-5f4ede40440f/IMG-20251123-WA0065.webp",
       "caption": "Families enjoying the arcade",
       "sort_order": 17
     },
     {
       "id": "pp-paaralang-shirt-claw",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/gallery/private-party-paaralang-shirt-claw.webp",
       "caption": "Staff assisting party guests to grab prizes",
       "sort_order": 18
     },
     {
       "id": "pp-ice-cream-cone-plush",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/gallery/private-party-ice-cream-cone-plush-machine.webp",
       "caption": "Ice cream cone plushies stacked in the claw machine",
       "sort_order": 19
     },
     {
       "id": "pp-girl-strawberry-claw",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/gallery/private-party-girl-playing-strawberry-claw.webp",
       "caption": "Focused player going for mini Earth Day plushies",
       "sort_order": 20
     },
     {
       "id": "pp-girl-koi-fish",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/gallery/private-party-girl-playing-koi-fish-machine.webp",
       "caption": "Trying her luck on the koi fish claw machine",
       "sort_order": 21
     },
     {
       "id": "pp-kids-turtle-machine",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/gallery/private-party-kids-turtle-plush-machine.webp",
       "caption": "Kids gathered around the green turtle plush machine",
       "sort_order": 22
     },
     {
       "id": "09596f23-c0f0-4065-ac8c-8f6b52068057",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0b0121fc-43db-42df-ac24-f492fc34cef3/PXL_20251123_165459736.webp",
       "caption": "Birthday balloons and decorations",
       "sort_order": 5
     },
     {
       "id": "17c37df8-9102-4743-b5eb-b633008f2886",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.webp",
       "caption": "Dinosaur birthday cake",
       "sort_order": 12
@@ -950,7 +950,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "4ad0730e-762d-49b0-9444-61b8abc42962",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f122357-5ae3-4412-8699-8a1b06e1f5a8/PXL_20251123_165134954.MP.webp",
       "caption": "Celebrating Filipino Traditions",
       "sort_order": 7
@@ -971,7 +971,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "5657a3a8-92df-4ddf-a94d-dededc7f7d37",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/606820e7-4e9a-4b76-86df-13db765394fc/PXL_20251123_042431224.webp",
       "caption": "Party setup with claw machines",
       "sort_order": 16
@@ -1013,14 +1013,14 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "69d07032-c875-40a5-988d-5cd614410ded",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9afcf44d-4bde-4a78-bc61-961613b981c2/PXL_20251123_164404578.webp",
       "caption": "Indoor arcade party",
       "sort_order": 11
     },
     {
       "id": "7cc3c8fb-07bd-42d3-b0fc-cb09943ac701",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/ef928fc3-8ede-4daf-b733-6bc18ea62d09/PXL_20251123_171320314.MP.webp",
       "caption": "Birthday cake celebration",
       "sort_order": 2
@@ -1034,7 +1034,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "8a515d74-af3e-42b4-b886-3a2fdb461d3f",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e5549656-b613-4e53-8e69-fe2736834823/PXL_20251123_171313007.MP.webp",
       "caption": "Party group photo",
       "sort_order": 3
@@ -1048,7 +1048,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "90f4c65d-0902-4caa-b68b-9ffb51b869b4",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/646f8aba-749e-4931-b275-6e5394eb8d9d/PXL_20251123_164340558.webp",
       "caption": "Crowd at arcade party",
       "sort_order": 9
@@ -1069,7 +1069,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "a30a2227-1f7d-4cfd-b113-08c275b47636",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/720c33bf-ce63-4135-82dc-3f34cdb68158/IMG-20251123-WA0066.webp",
       "caption": "Lively birthday party",
       "sort_order": 13
@@ -1118,7 +1118,7 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "e8a884c4-5f1f-45a6-a02f-54918d1872df",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/b423ffd5-9411-4093-96d5-b7dc4a6149b3/IMG-20251123-WA0064.webp",
       "caption": "Pizza party with balloon arch",
       "sort_order": 14
@@ -1160,42 +1160,42 @@ export const cmsData: Record<string, any[]> = {
     },
     {
       "id": "summer-balloon-arch",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/d399a51f-eadb-4806-8343-458298565fd9/party1.jpg",
       "caption": "Blue balloon arch at the entrance",
       "sort_order": 1000
     },
     {
       "id": "summer-pretzel-jar",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/4d9e86cb-889f-4001-bdd5-42ffc4393c48/party-2.jpg",
       "caption": "Pretzels and candy jars on the party table",
       "sort_order": 1001
     },
     {
       "id": "summer-horchata-straws",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/a8611c11-a0f1-4265-8461-5b50ee8fc087/party3.jpg",
       "caption": "Fun summer lemonade station",
       "sort_order": 1002
     },
     {
       "id": "summer-cow-plush",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/dd0f2f3a-ae45-4fc4-ab78-bd0199bceb2f/party-5.jpg",
       "caption": "Going for the mini ice cream plushies",
       "sort_order": 1003
     },
     {
       "id": "summer-cake-reveal",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/5a0df974-f800-403b-ac16-abc3767b3eb7/party6.jpg",
       "caption": "Cake reveal with the birthday crew",
       "sort_order": 1004
     },
     {
       "id": "summer-sakura-pond",
-      "section": "private_summer",
+      "section": "private_minecraft",
       "image_url": "/__l5e/assets-v1/5d89ef57-1457-4fae-9a9f-2fe25870888d/party7.jpg",
       "caption": "Walk around the Sakura Novi pond",
       "sort_order": 1005
