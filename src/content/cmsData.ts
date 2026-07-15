@@ -2783,7 +2783,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "99f44111-5907-4496-8d70-37de7121e0f0",
       "page": "home",
       "section_key": "scheduling",
-      "label": "Book Your Visit",
+      "label": "Book an Event with Klawsome",
       "sort_order": 8,
       "is_visible": true,
       "section_height": "auto",
@@ -4789,7 +4789,7 @@ export const cmsData: Record<string, any[]> = {
       "row_order": 0,
       "block_type": "heading",
       "content": {
-        "text": "Book Your Visit"
+        "text": "Book an Event with Klawsome"
       }
     },
     {

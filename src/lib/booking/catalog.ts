@@ -37,8 +37,8 @@ export const PATHWAY_BASE_CENTS: Record<Pathway, number> = {
 };
 
 export const RENTAL_PACKAGES: PackageOption[] = [
-  { id: 'rent-1hr', label: '1-Hour Party Package', price: '$445', priceCents: 44500, variantId: gid(52297295561006), description: '40 plushies included OR your supplied product (5–10 in, 0–5 lb).' },
-  { id: 'rent-2hr', label: '2-Hour Extended Party', price: '$645', priceCents: 64500, variantId: gid(52297298411822), description: '40 regular-size plushies (based on availability) OR your product.' },
+  { id: 'rent-1hr', label: '1-Hour Party Package', price: '$445', priceCents: 44500, variantId: gid(52297295561006), description: '40 regular-size plushies (based on availability) OR your supplied product (5–10 in, 0–5 lb).' },
+  { id: 'rent-2hr', label: '2-Hour Extended Party', price: '$645', priceCents: 64500, variantId: gid(52297298411822), description: '40 regular-size plushies (based on availability) OR your supplied product (5–10 in, 0–5 lb).' },
 ];
 
 export const MOBILE_PACKAGES: PackageOption[] = [
