@@ -225,12 +225,12 @@ function BookingWizardDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="max-w-3xl w-[95vw] p-0 overflow-hidden">
-        <DialogHeader className="px-6 pt-5 pb-3 border-b">
+      <DialogContent className="p-0 gap-0">
+        <DialogHeader className="px-6 pt-5 pb-3 border-b shrink-0">
           <DialogTitle className="font-heading">Book with Klawsome</DialogTitle>
           <StepBar step={step} pathway={pathway} />
         </DialogHeader>
-        <div className="px-6 py-6 max-h-[75vh] overflow-y-auto">
+        <div className="px-6 py-6 flex-1 overflow-y-auto text-base">
           {step === 'pathway' && (
             <PathwayStep onPick={(p) => { setState((s) => ({ ...s, pathway: p })); setStep(nextAfterPathway(p)); }} />
           )}
