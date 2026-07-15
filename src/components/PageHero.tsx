@@ -14,6 +14,7 @@ interface PageHeroProps {
   hideJoinCta?: boolean;
   jumpLinks?: { label: string; id: string }[];
   overlay?: 'gradient' | 'white' | 'solid-white';
+  backgroundPosition?: string;
 }
 
 // Curated real photos pulled from the Gallery — used as deterministic
