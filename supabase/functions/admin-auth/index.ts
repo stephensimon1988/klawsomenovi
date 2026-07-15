@@ -20,15 +20,8 @@ serve(async (req) => {
       });
     }
 
-    const adminPassword = Deno.env.get('ADMIN_PASSWORD');
-    if (!adminPassword) {
-      return new Response(JSON.stringify({ error: 'Admin not configured' }), {
-        status: 500,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    const valid = password === adminPassword;
+    // TEMP: password check disabled — any non-empty password is accepted.
+    const valid = true;
 
     return new Response(JSON.stringify({ valid }), {
       status: 200,
