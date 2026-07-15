@@ -547,7 +547,10 @@ function DeliveryStep({
   const phone = (settings?.phone || '').trim();
   const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
   const hoursNote = todaysHoursNote(storeHours);
-  const showCall = zipInfo && !zipInfo.known && (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found');
+  const showCall =
+    zipInfo && zipInfo.known === false && (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found')
+      ? zipInfo
+      : null;
   return (
     <div className="space-y-4 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
@@ -572,8 +575,8 @@ function DeliveryStep({
         <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
           <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
           <p className="text-foreground">
-            {zipInfo.reason === 'out_of_range' && typeof zipInfo.miles === 'number'
-              ? <>This ZIP is about <strong>{zipInfo.miles} mi</strong> away — outside our standard auto-quote range.</>
+            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number'
+              ? <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
               : <>We couldn't auto-quote delivery for this ZIP.</>}
             {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
           </p>
@@ -585,7 +588,7 @@ function DeliveryStep({
           )}
         </div>
       )}
-      {zipInfo && !zipInfo.known && zipInfo.reason === 'invalid' && zip.length === 5 && (
+      {zipInfo && zipInfo.known === false && zipInfo.reason === 'invalid' && zip.length === 5 && (
         <p className="text-sm text-destructive">Please enter a valid 5-digit US ZIP code.</p>
       )}
     </div>
