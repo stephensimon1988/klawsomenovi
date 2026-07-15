@@ -249,7 +249,7 @@ export function BookingsCalendar({ password }: { password: string }) {
 
       {/* Detail dialog */}
       <Dialog open={!!selected} onOpenChange={(o) => !o && setSelected(null)}>
-        <DialogContent className="max-w-lg bg-klawsome-navy border-white/10 text-white">
+        <DialogContent className="bg-klawsome-navy border-white/10 text-white">
           {selected && (
             <>
               <DialogHeader>

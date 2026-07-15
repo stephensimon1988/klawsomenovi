@@ -31,7 +31,7 @@ export const CartDrawer = () => {
           )}
         </Button>
       </SheetTrigger>
-      <SheetContent className="w-full sm:max-w-lg flex flex-col h-full">
+      <SheetContent className="flex flex-col h-full">
         <SheetHeader className="flex-shrink-0">
           <SheetTitle className="font-heading">Your Cart</SheetTitle>
           <SheetDescription>
