@@ -2145,7 +2145,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "In The News",
       "title": "Klawsome in the press",
       "subtitle": "See where Klawsome has been featured.",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/21f62e3c-4e42-4460-ad61-8959feae0a54/AgnesMichal_CandidClapping.webp",
+      "image_url": "/__l5e/assets-v1/88d12298-54e9-4584-9a1c-d1a585a7e6ce/news-banner.png",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 4
