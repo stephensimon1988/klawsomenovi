@@ -5,6 +5,7 @@ import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurS
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
 import familyBrandImage from '@/assets/family-brand.png.asset.json';
+import ourStoryBanner from '@/assets/our-story-banner.png.asset.json';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
@@ -13,7 +14,7 @@ const OurStory = () => {
 
   const title = hero?.title || content?.story_title || 'Our Story';
   const body = content?.story_body || '';
-  const image = hero?.image_url || content?.story_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp';
+  const image = hero?.image_url || content?.story_image_url || ourStoryBanner.url;
 
   const VARIANTS: DividerVariant[] = ['wave', 'scallop', 'cloud', 'bumps', 'petals', 'zigzag-soft', 'brush', 'blob'];
 

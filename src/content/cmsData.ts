@@ -2178,7 +2178,7 @@ export const cmsData: Record<string, any[]> = {
       "eyebrow": "About Us",
       "title": "Our Story",
       "subtitle": "",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp",
+      "image_url": "/__l5e/assets-v1/ec162f34-b50c-4599-97e2-ac8cd5c994ee/our-story-banner.png",
       "cta_text": "",
       "cta_url": "",
       "sort_order": 5
