@@ -27,6 +27,26 @@ function isGiftCard(n: ShopifyProduct['node']): boolean {
   return n.productType.toLowerCase() === 'gift cards' || hay.includes('gift card');
 }
 
+// /store is for physical goods + gift cards only. Filter out any party /
+// event / booking products (packages, add-ons, deposits, etc.).
+function isPartyProduct(n: ShopifyProduct['node']): boolean {
+  const hay = `${n.title} ${n.tags.join(' ')} ${n.productType} ${n.vendor}`.toLowerCase();
+  if (hay.includes('gift card')) return false;
+  return [
+    'party',
+    'birthday',
+    'event',
+    'booking',
+    'reservation',
+    'private rental',
+    'semi-private',
+    'package',
+    'deposit',
+    'add-on',
+    'add on',
+  ].some((w) => hay.includes(w));
+}
+
 async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
   const { sortKey, reverse } = shopifySortVars(sort);
   const data = await storefrontApiRequest(PRODUCTS_QUERY, {
@@ -36,7 +56,7 @@ async function fetchProducts(sort: SortMode): Promise<ShopifyProduct[]> {
   });
   if (!data) return [];
   const edges: ShopifyProduct[] = data?.data?.products?.edges || [];
-  return groupEeveelutions(edges);
+  return groupEeveelutions(edges.filter((p) => !isPartyProduct(p.node)));
 }
 
 // Canonical Eeveelution order so Vaporeon always sits next to its siblings,
