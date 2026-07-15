@@ -6,6 +6,7 @@ import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
 import heroImage from '@/assets/claw-machine-header.jpg';
 import plushiesImage from '@/assets/claw-machine-plushies.jpg';
+import tipStrategyVideo from '@/assets/tip-strategy-basics.mp4.asset.json';
 import pandasImage from '@/assets/claw-machine-pandas.jpg';
 
 // Real photos from the Klawsome gallery library
