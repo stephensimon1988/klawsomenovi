@@ -131,7 +131,7 @@ const FloatingContactWidget = () => {
       </div>
 
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-md bg-white border-2 border-klawsome-navy rounded-3xl">
+        <DialogContent className="bg-white border-2 border-klawsome-navy rounded-3xl">
           <DialogHeader>
             <DialogTitle className="font-heading text-klawsome-navy text-2xl">Say hi to Klawsome! 🦊</DialogTitle>
             <DialogDescription className="font-body text-foreground/70">

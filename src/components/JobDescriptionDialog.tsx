@@ -21,7 +21,7 @@ const JobDescriptionDialog = ({ title, url, fallbackDescription, applyUrl, trigg
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
-      <DialogContent className="max-w-3xl w-[95vw] max-h-[85vh] p-0 flex flex-col bg-white">
+      <DialogContent className="p-0 gap-0 bg-white">
         <DialogHeader className="px-6 pt-6 pb-3 border-b shrink-0">
           <DialogTitle className="font-heading text-klawsome-navy text-2xl pr-8">{title}</DialogTitle>
         </DialogHeader>
