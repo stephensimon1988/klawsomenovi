@@ -48,7 +48,7 @@ export function formatHoursSummary(hours: StoreHour[] | undefined | null): Hours
     .filter((h) => h.is_closed)
     .sort((a, b) => a.day_of_week - b.day_of_week);
 
-  const dayRange = formatDayRanges(open);
+  const dayRange = open.length === 7 ? 'Everyday' : formatDayRanges(open);
   const firstOpen = open[0];
   const timeRange = firstOpen ? `${firstOpen.open_time} to ${firstOpen.close_time}` : '';
   const closedDays = pluralClosed(closed.map((h) => h.day_label));
