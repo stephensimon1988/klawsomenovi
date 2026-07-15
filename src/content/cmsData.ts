@@ -920,14 +920,6 @@ export const cmsData: Record<string, any[]> = {
       "caption": "Birthday balloons and decorations",
       "sort_order": 5
     },
-    {
-      "id": "0f169e54-36a1-48e4-a8ce-9c123e275599",
-      "section": "private_minecraft",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da5c9a88-f35c-4e8c-8c9b-ec448be828e8/PXL_20251123_165445477.MP.webp",
-      "caption": "Kids at Minecraft party",
-      "sort_order": 4
-    },
-    {
       "id": "17c37df8-9102-4743-b5eb-b633008f2886",
       "section": "private_summer",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.webp",
@@ -948,14 +940,6 @@ export const cmsData: Record<string, any[]> = {
       "caption": "Klawsome booth with Pikachu mascot",
       "sort_order": 1
     },
-    {
-      "id": "2f7e61bb-a2cf-4302-b373-5f2a5713202a",
-      "section": "private_minecraft",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.webp",
-      "caption": "Minecraft themed party setup",
-      "sort_order": 1
-    },
-    {
       "id": "42826a52-a0d2-43e1-9a88-0d9e53226daa",
       "section": "semi_private",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/316fd98d-521c-4271-b4fa-054ddee61f43/PXL_20251123_235547569.MP.webp",
