@@ -3,6 +3,7 @@ import { Button } from './ui/button';
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 import FramedImage from './FramedImage';
+import { formatHoursSummary } from '@/lib/hoursSummary';
 
 const KawaiiVisit = () => {
   const imageRef = useGsapScroll<HTMLDivElement>({ type: 'slideLeft', distance: 80, duration: 1 });
@@ -10,15 +11,15 @@ const KawaiiVisit = () => {
 
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: hours } = useCmsTable<StoreHour>('store_hours');
+  const hoursSummary = formatHoursSummary(hours);
 
   const address = settings?.address || '42768 Grand River Ave Suite C-140, Novi, MI 48375';
   const mapsUrl = settings?.google_maps_url || 'https://www.google.com/maps/place/42768+Grand+River+Ave+Suite+C-140,+Novi,+MI+48375';
   const phone = settings?.phone || '(248) 938-4093';
 
-  const openDays = hours?.filter(h => !h.is_closed) || [];
-  const hoursText = openDays.length > 0
-    ? `${openDays[0]?.open_time} to ${openDays[0]?.close_time}`
-    : '11 a.m. to 9 p.m.';
+  const dayRange = hoursSummary.dayRange || 'Tuesday–Sunday';
+  const timeRange = hoursSummary.timeRange || '11 a.m. to 9 p.m.';
+  const closedDays = hoursSummary.closedDays || 'Closed Mondays';
 
   return (
     <section id="visit" className="section-y section-x bg-[hsl(var(--klawsome-baby-pink))]">
@@ -49,8 +50,8 @@ const KawaiiVisit = () => {
               </div>
               <div className="min-w-0">
                 <p className="font-heading font-bold text-foreground">Hours</p>
-                <p className="text-foreground/80">Tuesday–Sunday, {hoursText}</p>
-                <p className="text-sm text-muted-foreground mt-1">Closed Mondays</p>
+                <p className="text-foreground/80">{dayRange}, {timeRange}</p>
+                {closedDays && <p className="text-sm text-muted-foreground mt-1">{closedDays}</p>}
               </div>
             </div>
 
