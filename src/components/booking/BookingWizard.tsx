@@ -272,7 +272,7 @@ function BookingWizardDialog() {
           )}
         </div>
         {step !== 'done' && step !== 'pathway' && (
-          <div className="flex items-center justify-between border-t px-6 py-4 bg-muted/30">
+          <div className="flex items-center justify-between border-t px-6 py-4 bg-muted/30 shrink-0">
             <Button variant="ghost" onClick={goBack} disabled={submitting || (step === stepOrder(pathway)[1] && !!initialPathway)}>
               <ChevronLeft className="mr-1 h-4 w-4" /> Back
             </Button>
