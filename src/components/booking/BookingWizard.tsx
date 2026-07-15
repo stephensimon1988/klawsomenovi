@@ -21,10 +21,10 @@ import {
   type PackageOption,
   type AddOnDef,
 } from '@/lib/booking/catalog';
-import { getMilesForZip } from '@/lib/booking/zipMiles';
+import { getMilesForZip, type ZipLookup } from '@/lib/booking/zipMiles';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
-import { useCmsSingle, type SiteSettings } from '@/hooks/useCmsContent';
+import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 
 export type OpenBookingDetail = { pathway?: Pathway };
 
@@ -98,11 +98,27 @@ function BookingWizardDialog() {
 
   const selectedPackage = useMemo(() => pkgs.find((p) => p.id === state.packageId) || null, [pkgs, state.packageId]);
 
-  const zipInfo = pathway === 'rental' || pathway === 'mobile' ? getMilesForZip(state.zip) : null;
+  const needsDelivery = pathway === 'rental' || pathway === 'mobile';
+  const [zipInfo, setZipInfo] = useState<ZipLookup | null>(null);
+  const [zipResolving, setZipResolving] = useState(false);
+  useEffect(() => {
+    if (!needsDelivery) { setZipInfo(null); return; }
+    const clean = state.zip.trim();
+    if (clean.length < 5) { setZipInfo(null); return; }
+    let cancelled = false;
+    setZipResolving(true);
+    getMilesForZip(clean).then((r) => {
+      if (cancelled) return;
+      setZipInfo(r);
+      setZipResolving(false);
+    });
+    return () => { cancelled = true; };
+  }, [state.zip, needsDelivery]);
+
   const deliveryCents = zipInfo?.known
     ? Math.max(0, Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)) * 300
     : 0;
-  const zipBlocked = (pathway === 'rental' || pathway === 'mobile') && state.zip.trim().length > 0 && zipInfo && !zipInfo.known;
+  const zipBlocked = needsDelivery && state.zip.trim().length === 5 && zipInfo && !zipInfo.known;
 
   const availableAddons = pathway ? addonsFor(pathway) : [];
 
@@ -236,7 +252,7 @@ function BookingWizardDialog() {
             <AddonsStep addons={availableAddons} selected={state.addons} onChange={(a) => setState((s) => ({ ...s, addons: a }))} />
           )}
           {step === 'delivery' && (
-            <DeliveryStep zip={state.zip} onZipChange={(z) => setState((s) => ({ ...s, zip: z }))} zipInfo={zipInfo} />
+            <DeliveryStep zip={state.zip} onZipChange={(z) => setState((s) => ({ ...s, zip: z }))} zipInfo={zipInfo} resolving={zipResolving} />
           )}
           {step === 'contact' && (
             <ContactStep contact={state.contact} pathway={pathway!} onChange={(c) => setState((s) => ({ ...s, contact: c }))} />
