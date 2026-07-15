@@ -920,6 +920,7 @@ export const cmsData: Record<string, any[]> = {
       "caption": "Birthday balloons and decorations",
       "sort_order": 5
     },
+    {
       "id": "17c37df8-9102-4743-b5eb-b633008f2886",
       "section": "private_summer",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.webp",
@@ -940,6 +941,7 @@ export const cmsData: Record<string, any[]> = {
       "caption": "Klawsome booth with Pikachu mascot",
       "sort_order": 1
     },
+    {
       "id": "42826a52-a0d2-43e1-9a88-0d9e53226daa",
       "section": "semi_private",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/316fd98d-521c-4271-b4fa-054ddee61f43/PXL_20251123_235547569.MP.webp",
