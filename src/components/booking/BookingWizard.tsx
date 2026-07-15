@@ -537,7 +537,6 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
   );
 }
 
-function DeliveryStep({ zip, onZipChange, zipInfo }: { zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null }) {
 function DeliveryStep({
   zip, onZipChange, zipInfo, resolving,
 }: {
