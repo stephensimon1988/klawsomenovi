@@ -91,6 +91,12 @@ export const ADDONS: AddOnDef[] = [
 export const DELIVERY_SURCHARGE_VARIANT = gid(52297332719918);
 export const DELIVERY_PER_MILE_CENTS = 300;
 export const FREE_DELIVERY_MILES = 20;
+// Any auto-quoted distance beyond this cap forces a "call to confirm" gate
+// instead of proceeding to checkout. Tunable.
+export const SERVICE_AREA_CAP_MILES = 60;
+// Multiplier applied to straight-line ZIP-centroid distance to approximate
+// driving miles. Tunable.
+export const ROAD_FACTOR = 1.3;
 
 export function addonsFor(pathway: Pathway): AddOnDef[] {
   return ADDONS.filter((a) => a.scope.includes(pathway));

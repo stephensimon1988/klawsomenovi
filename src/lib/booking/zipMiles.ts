@@ -1,9 +1,15 @@
-// Approximate driving distance in miles from Klawsome Novi (48377) to
-// common Michigan ZIP codes within ~75 miles. Straight-line distance is
-// used as a heuristic where driving isn't pre-computed; staff can quote
-// any ZIP not in this list.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-const RAW: Record<string, number> = {
+// Approximate driving distance in miles from Klawsome Novi (48377) to any
+// US ZIP, backed by the US Census 2020 ZCTA centroid dataset served from
+// /data/zcta-centroids.json. Local top-ZIP cache below returns instantly
+// for the common Detroit-area ZIPs without touching the network.
+import { ROAD_FACTOR, SERVICE_AREA_CAP_MILES } from './catalog';
+
+// Klawsome Novi origin (ZIP 48377 centroid).
+const ORIGIN_LAT = 42.5054;
+const ORIGIN_LNG = -83.4736;
+
+// Local cache for common Detroit-area ZIPs — instant response, no fetch.
+const LOCAL_MILES: Record<string, number> = {
   // Novi + neighbors (0–8 mi)
   '48377': 0, '48375': 3, '48376': 3, '48374': 4,
   '48167': 6, '48168': 7, '48170': 9,
@@ -43,12 +49,49 @@ const RAW: Record<string, number> = {
 
 export type ZipLookup =
   | { known: true; miles: number }
-  | { known: false };
+  | { known: false; reason: 'invalid' | 'not_found' | 'out_of_range'; miles?: number };
 
-export function getMilesForZip(zip: string): ZipLookup {
-  const clean = (zip || '').trim().slice(0, 5);
-  if (!/^\d{5}$/.test(clean)) return { known: false };
-  const miles = RAW[clean];
-  if (typeof miles !== 'number') return { known: false };
+// Haversine great-circle distance in miles.
+function haversineMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
+  const R = 3958.7613; // mean Earth radius, miles
+  const toRad = (d: number) => (d * Math.PI) / 180;
+  const dLat = toRad(lat2 - lat1);
+  const dLng = toRad(lng2 - lng1);
+  const a = Math.sin(dLat / 2) ** 2 + Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) * Math.sin(dLng / 2) ** 2;
+  return 2 * R * Math.asin(Math.min(1, Math.sqrt(a)));
+}
+
+let centroidCache: Record<string, [number, number]> | null = null;
+let centroidPromise: Promise<Record<string, [number, number]> | null> | null = null;
+
+async function loadCentroids(): Promise<Record<string, [number, number]> | null> {
+  if (centroidCache) return centroidCache;
+  if (centroidPromise) return centroidPromise;
+  centroidPromise = fetch('/data/zcta-centroids.json')
+    .then((r) => (r.ok ? r.json() : null))
+    .then((data) => {
+      centroidCache = data;
+      return data;
+    })
+    .catch(() => null);
+  return centroidPromise;
+}
+
+function classifyMiles(miles: number): ZipLookup {
+  if (miles > SERVICE_AREA_CAP_MILES) return { known: false, reason: 'out_of_range', miles };
   return { known: true, miles };
+}
+
+export async function getMilesForZip(zip: string): Promise<ZipLookup> {
+  const clean = (zip || '').trim().slice(0, 5);
+  if (!/^\d{5}$/.test(clean)) return { known: false, reason: 'invalid' };
+  const local = LOCAL_MILES[clean];
+  if (typeof local === 'number') return classifyMiles(local);
+  const centroids = await loadCentroids();
+  if (!centroids) return { known: false, reason: 'not_found' };
+  const pt = centroids[clean];
+  if (!pt) return { known: false, reason: 'not_found' };
+  const straight = haversineMiles(ORIGIN_LAT, ORIGIN_LNG, pt[0], pt[1]);
+  const miles = Math.round(straight * ROAD_FACTOR);
+  return classifyMiles(miles);
 }
