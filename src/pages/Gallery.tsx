@@ -25,9 +25,9 @@ const Gallery = () => {
     private_summer: 'Summer Party',
     semi_private: 'Semi-Private Events',
     gallery: 'The Arcade',
-    'novi-library-paaralang': 'Novi Public Library / Paaralang Pilipino',
+    'novi-library-paaralang': 'Novi Public Library',
     'canned-food-drive': 'Gleaners Canned Food Drive / Toys for Tots',
-    'msu-pass': 'MSU Pass Collab',
+    'msu-pass': 'MSU PASS/Paralang Pilipino/Colorful Connection Collabs',
     'novi-community-fest': 'Novi Community Fest',
     'trunk-or-treat': 'Trunk or Treat',
   };

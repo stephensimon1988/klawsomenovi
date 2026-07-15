@@ -753,13 +753,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 3
     },
     {
-      "id": "novi-community-fest-03",
-      "section": "novi-community-fest",
-      "image_url": "/gallery/novi-community-fest-03.webp",
-      "caption": "Kids trying the claw for the first time",
-      "sort_order": 4
-    },
-    {
       "id": "novi-community-fest-04",
       "section": "novi-community-fest",
       "image_url": "/gallery/novi-community-fest-04.webp",
@@ -792,7 +785,7 @@ export const cmsData: Record<string, any[]> = {
       "section": "novi-community-fest",
       "image_url": "/gallery/novi-community-fest-08.webp",
       "caption": "Family fun under the Klawsome tent",
-      "sort_order": 9
+      "sort_order": 1
     },
     {
       "id": "novi-community-fest-09",
@@ -889,7 +882,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "pp-paaralang-shirt-claw",
       "section": "private_summer",
       "image_url": "/gallery/private-party-paaralang-shirt-claw.webp",
-      "caption": "Guest in Paaralang Pilipino shirt eyeing the plush prizes",
+      "caption": "Staff assisting party guests to grab prizes",
       "sort_order": 18
     },
     {
@@ -903,7 +896,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "pp-girl-strawberry-claw",
       "section": "private_summer",
       "image_url": "/gallery/private-party-girl-playing-strawberry-claw.webp",
-      "caption": "Focused player going for a strawberry plush",
+      "caption": "Focused player going for mini Earth Day plushies",
       "sort_order": 20
     },
     {
@@ -928,13 +921,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 5
     },
     {
-      "id": "0f169e54-36a1-48e4-a8ce-9c123e275599",
-      "section": "private_minecraft",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/da5c9a88-f35c-4e8c-8c9b-ec448be828e8/PXL_20251123_165445477.MP.webp",
-      "caption": "Kids at Minecraft party",
-      "sort_order": 4
-    },
-    {
       "id": "17c37df8-9102-4743-b5eb-b633008f2886",
       "section": "private_summer",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/f698aba6-b99d-4d0d-91f2-f2d8a3130444/PXL_20251123_154427454.webp",
@@ -956,13 +942,6 @@ export const cmsData: Record<string, any[]> = {
       "sort_order": 1
     },
     {
-      "id": "2f7e61bb-a2cf-4302-b373-5f2a5713202a",
-      "section": "private_minecraft",
-      "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/a94b12dd-ae78-4248-af3e-4f9277f1056f/PXL_20251123_165437496.MP.webp",
-      "caption": "Minecraft themed party setup",
-      "sort_order": 1
-    },
-    {
       "id": "42826a52-a0d2-43e1-9a88-0d9e53226daa",
       "section": "semi_private",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/316fd98d-521c-4271-b4fa-054ddee61f43/PXL_20251123_235547569.MP.webp",
@@ -973,14 +952,14 @@ export const cmsData: Record<string, any[]> = {
       "id": "4ad0730e-762d-49b0-9444-61b8abc42962",
       "section": "private_summer",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/1f122357-5ae3-4412-8699-8a1b06e1f5a8/PXL_20251123_165134954.MP.webp",
-      "caption": "Birthday celebration with balloons",
+      "caption": "Celebrating Filipino Traditions",
       "sort_order": 7
     },
     {
       "id": "4d25989d-46f9-4845-894a-44e5d48efa5e",
       "section": "beginning",
       "image_url": "/__l5e/assets-v1/886dba37-ed72-4b82-9bd7-b48fd79e12cd/KlawsomeCrewSelfieWall.webp",
-      "caption": "Klawsome crew selfie wall",
+      "caption": "Summer Interns at Novi Chamber of Commerce",
       "sort_order": 6
     },
     {
@@ -1050,7 +1029,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "84bcea5d-53d7-4251-b5ac-6305ec4e0880",
       "section": "beginning",
       "image_url": "https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/eac946a6-e513-4e64-acdc-dd5024eb5a61/IMG_1638.webp",
-      "caption": "Filipino flag celebration",
+      "caption": "Filipino School Community",
       "sort_order": 7
     },
     {
@@ -1197,14 +1176,14 @@ export const cmsData: Record<string, any[]> = {
       "id": "summer-horchata-straws",
       "section": "private_summer",
       "image_url": "/__l5e/assets-v1/a8611c11-a0f1-4265-8461-5b50ee8fc087/party3.jpg",
-      "caption": "Horchata dispenser and tropical straws",
+      "caption": "Fun summer lemonade station",
       "sort_order": 1002
     },
     {
       "id": "summer-cow-plush",
       "section": "private_summer",
       "image_url": "/__l5e/assets-v1/dd0f2f3a-ae45-4fc4-ab78-bd0199bceb2f/party-5.jpg",
-      "caption": "Going for the cow plush",
+      "caption": "Going for the mini ice cream plushies",
       "sort_order": 1003
     },
     {
