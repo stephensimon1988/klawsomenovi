@@ -125,6 +125,7 @@ const CommunityPartners = () => {
         title="Community Outreach"
         subtitle="Klawsome is proud to team up with local schools, student orgs, libraries, and nonprofits across metro Detroit. Here are some of the people we get to show up for."
         imageUrl={communityHeroAsset.url}
+        backgroundPosition="center 25%"
         jumpLinks={[
           { label: 'Get Started', id: 'how' },
           { label: 'Sponsorships', id: 'donations' },
