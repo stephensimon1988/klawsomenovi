@@ -389,6 +389,9 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
       {pathway === 'rental' && (
         <p className="text-xs text-muted-foreground font-body mt-2">Free delivery within 20 miles; $3/mile beyond 20.</p>
       )}
+      {(pathway === 'rental' || pathway === 'mobile') && (
+        <p className="text-xs italic text-muted-foreground font-body mt-1">*Plushie selection subject to stock.</p>
+      )}
     </div>
   );
 }
