@@ -89,31 +89,12 @@ const ClawMachineTips = () => {
                 </p>
               </div>
             </div>
-            <div className="group relative">
-              <div
-                className="absolute -inset-3 rounded-kawaii"
-                style={{ backgroundColor: 'hsl(var(--klawsome-baby-pink))' }}
-                aria-hidden
-              />
-              <div
-                className="framed-frame relative overflow-hidden rounded-kawaii shadow-lg w-full aspect-square"
-                style={{ ['--frame-rot' as string]: '5deg' }}
-              >
-                <video
-                  src={tipStrategyVideo.url}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  className="framed-img w-full h-full object-cover"
-                  style={{
-                    ['--img-rot' as string]: '-5deg',
-                    ['--img-scale' as string]: '1.15',
-                    ['--img-scale-hover' as string]: '1.22',
-                  }}
-                />
-              </div>
-            </div>
+            <video
+              src={tipStrategyVideo.url}
+              controls
+              preload="metadata"
+              className="w-full rounded-kawaii shadow-lg"
+            />
           </div>
         </div>
       </section>
