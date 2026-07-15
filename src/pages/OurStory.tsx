@@ -5,6 +5,7 @@ import { useCmsSingle, useCmsTable, usePageHero, type HomepageContent, type OurS
 import PageHero from '@/components/PageHero';
 import FramedImage from '@/components/FramedImage';
 import familyBrandImage from '@/assets/family-brand.png.asset.json';
+import ourStoryBanner from '@/assets/our-story-banner.png.asset.json';
 
 const OurStory = () => {
   const { data: content } = useCmsSingle<HomepageContent>('homepage_content');
