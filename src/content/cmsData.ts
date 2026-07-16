@@ -1372,6 +1372,32 @@ export const cmsData: Record<string, any[]> = {
       "is_active": true,
       "sort_order": 2,
       "created_at": "2026-04-14T15:06:01.891239+00:00"
+    },
+    {
+      "id": "job-arcade-manager-in-training",
+      "title": "Arcade Manager (In-Training)",
+      "category": "in-store",
+      "description": "Learn to lead a growing arcade. Support daily operations, help train the team, and work closely with the founders in a high-visibility role. 20–29 hours per week with performance-based bonus opportunity.",
+      "image_url": "",
+      "job_desc_url": "",
+      "apply_url": "https://docs.google.com/forms/d/e/1FAIpQLSe8Yystm9IQTRdobvZzx-e6kntMIWUGF3TLigzAnk2Z0IQbAg/viewform",
+      "is_paid": true,
+      "is_active": true,
+      "sort_order": 3,
+      "created_at": "2026-04-14T15:06:01.891239+00:00"
+    },
+    {
+      "id": "job-mobile-arcade-specialist",
+      "title": "Mobile Arcade Specialist",
+      "category": "in-store",
+      "description": "Dynamic role focused on Klawsome!'s innovative mobile arcade — driving to events, staffing the trailer, and delivering memorable guest experiences. Varied hours per week with performance-based bonus opportunity and growth potential as Klawsome expands.",
+      "image_url": "",
+      "job_desc_url": "",
+      "apply_url": "https://docs.google.com/forms/d/e/1FAIpQLSe8Yystm9IQTRdobvZzx-e6kntMIWUGF3TLigzAnk2Z0IQbAg/viewform",
+      "is_paid": true,
+      "is_active": true,
+      "sort_order": 4,
+      "created_at": "2026-04-14T15:06:01.891239+00:00"
     }
   ],
   "news_articles": [

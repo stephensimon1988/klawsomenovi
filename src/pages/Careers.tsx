@@ -5,7 +5,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsTable, usePageHero, type JobListing } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import JobDescriptionDialog from '@/components/JobDescriptionDialog';
-import { GraduationCap, Crown, PartyPopper, ShoppingCart, TrendingUp, Sparkles, type LucideIcon } from 'lucide-react';
+import { GraduationCap, Crown, PartyPopper, ShoppingCart, TrendingUp, Sparkles, Rocket, Truck, type LucideIcon } from 'lucide-react';
 import DOMPurify from 'isomorphic-dompurify';
 
 const ROLE_META: Record<string, { icon: LucideIcon; tagline: string }> = {
@@ -28,6 +28,14 @@ const ROLE_META: Record<string, { icon: LucideIcon; tagline: string }> = {
   'Corporate Development Fellow': {
     icon: TrendingUp,
     tagline: 'Research markets and shape the story that grows Klawsome beyond a single location.',
+  },
+  'Arcade Manager (In-Training)': {
+    icon: Rocket,
+    tagline: 'Learn to lead a growing arcade — high-visibility role working directly with the founders.',
+  },
+  'Mobile Arcade Specialist': {
+    icon: Truck,
+    tagline: "Drive the Klawsome trailer to events and deliver memorable guest experiences on the road.",
   },
 };
 
