@@ -185,6 +185,8 @@ export function BookingsCalendar({ password }: { password: string }) {
 
       {/* Upcoming */}
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
+
+        {/* Legend handled below */}
         <CardHeader><CardTitle className="text-white font-heading text-base">Upcoming (next 14 days)</CardTitle></CardHeader>
         <CardContent>
           {loading ? (
