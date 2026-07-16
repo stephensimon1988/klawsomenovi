@@ -185,8 +185,6 @@ export function BookingsCalendar({ password }: { password: string }) {
 
       {/* Upcoming */}
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
-
-        {/* Legend handled below */}
         <CardHeader><CardTitle className="text-white font-heading text-base">Upcoming (next 14 days)</CardTitle></CardHeader>
         <CardContent>
           {loading ? (
@@ -219,6 +217,24 @@ export function BookingsCalendar({ password }: { password: string }) {
       {/* Calendar grid */}
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
         <CardContent className="p-3">
+          {/* Legend */}
+          <div className="flex flex-wrap items-center gap-3 mb-3 px-1 text-[11px] text-white/60">
+            <span className="font-heading uppercase tracking-wider text-white/50">Legend:</span>
+            {Object.entries(TYPE_META).map(([k, v]) => (
+              <span key={k} className="flex items-center gap-1.5">
+                <span className={`w-2.5 h-2.5 rounded-full ${v.color}`} />
+                {v.label}
+              </span>
+            ))}
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-white/30 ring-1 ring-red-400/70" />
+              Blackout dot (per event type)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="text-red-400 font-heading">BLACKOUT</span>
+              = all types blocked
+            </span>
+          </div>
           <div className="grid grid-cols-7 gap-1 mb-1">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
               <div key={d} className="text-white/50 text-xs font-heading uppercase text-center py-1">{d}</div>
