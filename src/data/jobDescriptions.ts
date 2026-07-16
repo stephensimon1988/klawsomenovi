@@ -367,4 +367,95 @@ export const JOB_DESCRIPTIONS: Record<string, JobDetail> = {
       },
     ],
   },
+
+  'Arcade Manager (In-Training)': {
+    meta: [
+      { label: 'Full / Part-Time', value: 'Part-Time (20–29 hours/week)' },
+      { label: 'Compensation', value: 'Performance-based bonus opportunity' },
+      { label: 'Reports To', value: 'Founders / Owners (Agnes & Michal)' },
+    ],
+    summary:
+      'Klawsome! is a local, Asian-owned business with a mission to share Asian culture and the love of claw machines with young families in the community. The Arcade Manager (In-Training) is a high-visibility role learning to lead a growing arcade — working closely with the founders on daily operations, guest experience, and team support, with growth potential as Klawsome expands.',
+    sections: [
+      {
+        heading: 'Role Snapshot',
+        items: [
+          'Arcade Manager in Training',
+          '20 to 29 hours per week',
+          'Performance based bonus opportunity',
+          'High visibility role with founders',
+          'Growth potential as Klawsome expands',
+        ],
+      },
+      {
+        heading: 'Great Fit if You Have…',
+        items: [
+          'Customer service experience with interest in games, events, and guest experience',
+          'Arcade, retail, barista, restaurant, or family entertainment background',
+          'Reliable weekend availability',
+          'Comfortable leading by example',
+        ],
+      },
+      {
+        heading: 'What You Will Do',
+        items: [
+          'Support daily arcade operations',
+          'Help guests with games, prizes, and questions',
+          'Keep the space clean, organized, and welcoming',
+          'Assist with opening, closing, and shift flow',
+          'Help train and support team members',
+          'Communicate issues, ideas, and guest feedback',
+          'Learn how to help manage a growing arcade business',
+        ],
+      },
+      {
+        heading: 'How to Apply',
+        body: 'Email your resume to team@klawsomenovi.com or use the Apply Here button to submit an application today!',
+      },
+    ],
+  },
+
+  'Mobile Arcade Specialist': {
+    meta: [
+      { label: 'Full / Part-Time', value: 'Part-Time (varied hours/week)' },
+      { label: 'Compensation', value: 'Performance-based bonus opportunity' },
+      { label: 'Reports To', value: 'Founders / Owners (Agnes & Michal)' },
+    ],
+    summary:
+      "Klawsome! is a local, Asian-owned business with a mission to share Asian culture and the love of claw machines with young families in the community. The Mobile Arcade Specialist is a dynamic role focused on Klawsome!'s innovative mobile arcade — driving to events, staffing the trailer, and delivering memorable guest experiences on the road, with growth potential as Klawsome expands.",
+    sections: [
+      {
+        heading: 'Role Snapshot',
+        items: [
+          "Dynamic role focused on Klawsome!'s innovative mobile arcade",
+          'Varied hours per week',
+          'Performance based bonus opportunity',
+          'Growth potential as Klawsome expands',
+        ],
+      },
+      {
+        heading: 'Great Fit if You Have…',
+        items: [
+          "Driver's license, clean driving record, and willingness to drive a 16 ft trailer attached to a truck",
+          'Customer service experience with interest in games, events, and guest experience',
+          'Arcade, retail, barista, restaurant, or family entertainment background',
+          'Reliable weekend availability',
+        ],
+      },
+      {
+        heading: 'What You Will Do',
+        items: [
+          'Driving to and staffing events',
+          'Helping guests with games, prizes, and questions',
+          'Keeping the space clean, organized, and welcoming',
+          'Preparing and stocking the trailer with plushies according to event requests',
+          'Communicating issues, ideas, and guest feedback throughout events',
+        ],
+      },
+      {
+        heading: 'How to Apply',
+        body: 'Email your resume to team@klawsomenovi.com or use the Apply Here button to submit an application today!',
+      },
+    ],
+  },
 };
