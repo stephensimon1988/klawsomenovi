@@ -48,6 +48,8 @@ const TYPE_META: Record<string, { label: string; color: string }> = {
   mobile: { label: 'Mobile', color: 'bg-emerald-500/80' },
 };
 
+const ALL_TYPE_KEYS = ['private', 'semi_private', 'rental', 'mobile'] as const;
+
 const STATUS_OPTIONS = ['pending', 'confirmed', 'cancelled', 'completed'];
 
 const fmtTime = (iso: string) =>
@@ -99,11 +101,17 @@ export function BookingsCalendar({ password }: { password: string }) {
     return map;
   }, [filtered]);
 
-  const blackoutSet = useMemo(() => {
-    const s = new Set<string>();
-    blackouts.forEach((b) => s.add(b.blackout_date));
-    return s;
-  }, [blackouts]);
+  // Group blackouts by date, filtered by the active type filter.
+  const blackoutsByDay = useMemo(() => {
+    const map = new Map<string, Blackout[]>();
+    blackouts.forEach((b) => {
+      if (typeFilter !== 'all' && b.event_type !== typeFilter) return;
+      const arr = map.get(b.blackout_date) || [];
+      arr.push(b);
+      map.set(b.blackout_date, arr);
+    });
+    return map;
+  }, [blackouts, typeFilter]);
 
   // Build calendar grid (Sun-Sat)
   const gridDays = useMemo(() => {
@@ -209,6 +217,24 @@ export function BookingsCalendar({ password }: { password: string }) {
       {/* Calendar grid */}
       <Card className="border-white/10 bg-white/5 backdrop-blur-sm">
         <CardContent className="p-3">
+          {/* Legend */}
+          <div className="flex flex-wrap items-center gap-3 mb-3 px-1 text-[11px] text-white/60">
+            <span className="font-heading uppercase tracking-wider text-white/50">Legend:</span>
+            {Object.entries(TYPE_META).map(([k, v]) => (
+              <span key={k} className="flex items-center gap-1.5">
+                <span className={`w-2.5 h-2.5 rounded-full ${v.color}`} />
+                {v.label}
+              </span>
+            ))}
+            <span className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-white/30 ring-1 ring-red-400/70" />
+              Blackout dot (per event type)
+            </span>
+            <span className="flex items-center gap-1.5">
+              <span className="text-red-400 font-heading">BLACKOUT</span>
+              = all types blocked
+            </span>
+          </div>
           <div className="grid grid-cols-7 gap-1 mb-1">
             {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => (
               <div key={d} className="text-white/50 text-xs font-heading uppercase text-center py-1">{d}</div>
@@ -220,14 +246,38 @@ export function BookingsCalendar({ password }: { password: string }) {
               const inMonth = d.getMonth() === cursor.getMonth();
               const isToday = iso === todayIso;
               const dayBookings = byDay.get(iso) || [];
-              const isBlackout = blackoutSet.has(iso);
+              const dayBlackouts = blackoutsByDay.get(iso) || [];
+              const blackoutTypes = new Set(dayBlackouts.map((b) => b.event_type));
+              const isFullBlackout =
+                typeFilter === 'all' && ALL_TYPE_KEYS.every((k) => blackoutTypes.has(k));
               return (
                 <div key={i} className={`min-h-[110px] rounded border p-1.5 text-xs
                   ${inMonth ? 'bg-white/5 border-white/10' : 'bg-white/[0.02] border-white/5 opacity-50'}
                   ${isToday ? 'ring-2 ring-klawsome-yellow' : ''}`}>
                   <div className="flex items-center justify-between mb-1">
                     <span className={`font-heading ${isToday ? 'text-klawsome-yellow' : 'text-white/80'}`}>{d.getDate()}</span>
-                    {isBlackout && <span className="text-[10px] text-red-400 font-heading">BLACKOUT</span>}
+                    {isFullBlackout ? (
+                      <span
+                        className="text-[10px] text-red-400 font-heading"
+                        title="All event types blacked out"
+                      >
+                        BLACKOUT
+                      </span>
+                    ) : dayBlackouts.length > 0 ? (
+                      <div className="flex items-center gap-0.5">
+                        {dayBlackouts.map((b) => {
+                          const meta = TYPE_META[b.event_type];
+                          const title = `${meta?.label || b.event_type} blackout${b.reason ? ` — ${b.reason}` : ''}`;
+                          return (
+                            <span
+                              key={b.id}
+                              title={title}
+                              className={`w-2 h-2 rounded-full ring-1 ring-red-400/60 ${meta?.color || 'bg-white/40'}`}
+                            />
+                          );
+                        })}
+                      </div>
+                    ) : null}
                   </div>
                   <div className="space-y-1">
                     {dayBookings.slice(0, 4).map((b) => (

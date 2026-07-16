@@ -1,22 +1,33 @@
-## Goal
-Re-enable gift card purchasing, but route users to the existing Square gift card page: `https://app.squareup.com/gift/ML1R35ZH9VKRW/order`.
+## How blackouts work today
 
-## Changes
+Blackouts are already **per event type**, not global. There are 4 event types, each with its own blackout list:
 
-### 1. `src/components/KawaiiGiftCards.tsx` (homepage gift cards section)
-Replace the disabled "Temporarily Unavailable" `Button` with an active anchor-style button that opens the Square URL in a new tab.
-- Use `content?.cta_url` (falls back to the Square URL) so the CMS-configured link keeps working.
-- Restore original button styling (pink pill, hover state) — remove the `disabled`, `aria-disabled`, muted classes.
-- Open with `target="_blank"` and `rel="noopener noreferrer"`.
+- Private Parties
+- Semi-Private Parties
+- In-Store Rental
+- Klawsome Mobile
 
-### 2. `src/components/shopify/Storefront.tsx` (store grid)
-Change the Add to cart flow for gift-card products only:
-- In `ProductCard.handleAdd`, when `isGiftCard(n)` is true, call `window.open('https://app.squareup.com/gift/ML1R35ZH9VKRW/order', '_blank', 'noopener,noreferrer')` instead of adding to the Shopify cart or opening `QuickAddModal`.
-- Also short-circuit `openModal` (thumbnail click) for gift cards so clicking the tile also sends them to Square, matching the previous behavior.
-- Keep the button label as "Add to cart" (no other visual changes requested).
+In the admin **Schedule** editor, each event type has its own "Blackout dates" list (with optional reason). Adding a blackout under Klawsome Mobile only blocks Mobile bookings — Private, Semi-Private and Rental stay bookable on that same day.
 
-Non-gift-card products keep the existing Shopify cart flow untouched.
+## Why the calendar looks confusing
 
-## Out of scope
-- No changes to `QuickAddModal`, `CartDrawer`, or the Shopify cart store.
-- No CMS/data edits — the Square URL already exists in `cmsData.ts` under `gift_cards_content.cta_url`.
+The **Calendar** tab currently merges all four event types into a single `Set<blackout_date>` and stamps a red "BLACKOUT" label on any day that has *at least one* event-type blackout. It doesn't say which event type is blocked or why. So a day you only blacked out for Mobile visually looks the same as a day blacked out for everything.
+
+## Plan — surface per-event blackouts on the calendar
+
+Edit `src/components/admin/BookingsCalendar.tsx` only. No schema changes.
+
+1. **Group blackouts by day → array of `{event_type, reason}`** instead of a flat `Set` of dates.
+2. **Respect the existing "Type" filter**: when a specific type is selected, only show that type's blackout dot on the day. When "All types" is selected, show one small colored dot per blacked-out event type using the same `TYPE_META` colors as bookings (pink=Private, purple=Semi, sky=Rental, emerald=Mobile).
+3. **Replace the red "BLACKOUT" text** with a compact row of colored dots at the top-right of the day cell. Each dot has a `title` tooltip like `"Klawsome Mobile — Founder out of town"` (event label + reason if present).
+4. **Full-blackout shortcut**: if all 4 event types are blacked out on the same day, render a single red "BLACKOUT" pill (current styling) so the "everything closed" case still reads at a glance.
+5. **Legend row** below the month header: small chips showing the 4 event-type colors + a "Blackout" swatch, so admins can decode the dots without hovering.
+6. **Detail popover on click** (optional, low-risk): clicking a day cell with blackouts opens a lightweight popover listing each blacked-out event type and its reason. If this adds too much scope we can defer — the tooltips from step 3 already cover the main need.
+
+Result: a day blocked only for Mobile shows a single emerald dot (with tooltip); a day blocked for all four types shows the red "BLACKOUT" pill.
+
+### Technical notes
+
+- Data source stays `event_blackout_dates` (already loaded).
+- No changes to `BookingScheduleEditor.tsx`, `useAvailability.ts`, or the customer-facing booking flow — those already scope blackouts by event type correctly.
+- Reuse `TYPE_META` for colors/labels so calendar bookings and blackout dots stay visually consistent.
