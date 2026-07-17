@@ -36,6 +36,52 @@ const DAYS: { key: 'mon' | 'tue' | 'wed' | 'thu' | 'fri' | 'sat' | 'sun'; label:
 
 const DAY_KEY_BY_INDEX = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'] as const;
 
+const MAX_RANGE_DAYS = 366;
+
+function parseISO(iso: string): Date {
+  const [y, m, d] = iso.split('-').map(Number);
+  return new Date(Date.UTC(y, m - 1, d));
+}
+function toISO(d: Date): string {
+  return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+}
+function expandRange(startISO: string, endISO: string): string[] {
+  const start = parseISO(startISO);
+  const end = parseISO(endISO);
+  if (end < start) return [];
+  const out: string[] = [];
+  for (let t = start.getTime(); t <= end.getTime(); t += 86400000) {
+    out.push(toISO(new Date(t)));
+    if (out.length > MAX_RANGE_DAYS) break;
+  }
+  return out;
+}
+function fmtISO(iso: string): string {
+  return parseISO(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+}
+
+interface BlackoutGroup {
+  start: string;
+  end: string;
+  reason: string | null;
+  ids: string[];
+}
+function groupBlackouts(rows: BlackoutRow[]): BlackoutGroup[] {
+  const sorted = [...rows].sort((a, b) => a.blackout_date.localeCompare(b.blackout_date));
+  const groups: BlackoutGroup[] = [];
+  for (const r of sorted) {
+    const last = groups[groups.length - 1];
+    const nextDay = last ? toISO(new Date(parseISO(last.end).getTime() + 86400000)) : null;
+    if (last && (last.reason || '') === (r.reason || '') && r.blackout_date === nextDay) {
+      last.end = r.blackout_date;
+      last.ids.push(r.id);
+    } else {
+      groups.push({ start: r.blackout_date, end: r.blackout_date, reason: r.reason, ids: [r.id] });
+    }
+  }
+  return groups;
+}
+
 function fmtTime(t: string) {
   const [h, m] = t.split(':').map(Number);
   const period = h >= 12 ? 'pm' : 'am';
