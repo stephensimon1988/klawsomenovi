@@ -189,6 +189,8 @@ function BookingWizardDialog() {
         { key: 'event_type', value: pathway },
         { key: 'start_at', value: startAt.toISOString() },
         { key: 'party_size', value: state.contact.partySize },
+        { key: 'adults', value: state.contact.adults },
+        { key: 'children', value: state.contact.children },
         { key: 'celebrant_name', value: state.contact.celebrantName },
         { key: 'celebrant_age', value: state.contact.celebrantAge },
         { key: 'favorites', value: state.contact.favorites },
