@@ -448,6 +448,7 @@ export function BookingScheduleEditor({ password }: { password: string }) {
         Set the days and times customers can book each service. Blackout dates block booking for a specific day.
         Changes take effect immediately on the booking flow.
       </p>
+      <AllTypesBlackout password={password} blackouts={blackouts} onReload={load} />
       <Accordion type="multiple" className="space-y-3">
         {EVENT_TYPES.map((t) => (
           <AccordionItem
