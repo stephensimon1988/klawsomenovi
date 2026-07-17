@@ -60,6 +60,7 @@ export function BookingsCalendar({ password }: { password: string }) {
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [blackouts, setBlackouts] = useState<Blackout[]>([]);
   const [loading, setLoading] = useState(true);
+  const [syncing, setSyncing] = useState(false);
   const [cursor, setCursor] = useState(() => { const d = new Date(); d.setDate(1); return d; });
   const [typeFilter, setTypeFilter] = useState('all');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -81,6 +82,23 @@ export function BookingsCalendar({ password }: { password: string }) {
   }, [password]);
 
   useEffect(() => { load(); }, [load]);
+
+  const sync = useCallback(async (silent = false) => {
+    setSyncing(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('shopify-booking-sync', { body: {} });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+      if (!silent) toast.success(`Synced ${data?.upserted ?? 0} bookings from Shopify`);
+      await load();
+    } catch (e: any) {
+      if (!silent) toast.error(`Sync failed: ${e.message}`);
+    }
+    setSyncing(false);
+  }, [load]);
+
+  // Auto-sync once on mount so admin always sees latest paid bookings
+  useEffect(() => { sync(true); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, []);
 
   const filtered = useMemo(
     () => bookings.filter((b) =>
@@ -164,6 +182,15 @@ export function BookingsCalendar({ password }: { password: string }) {
           </Button>
           <Button size="sm" variant="outline" className="ml-2 text-white border-white/20 bg-white/5 hover:bg-white/10"
             onClick={() => { const d = new Date(); d.setDate(1); setCursor(d); }}>Today</Button>
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={syncing}
+            className="ml-2 text-white border-white/20 bg-white/5 hover:bg-white/10"
+            onClick={() => sync(false)}
+          >
+            {syncing ? 'Syncing…' : 'Sync Shopify'}
+          </Button>
         </div>
         <div className="flex items-center gap-2">
           <Select value={typeFilter} onValueChange={setTypeFilter}>

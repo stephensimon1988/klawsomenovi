@@ -1,22 +1,36 @@
-## Changes
+## What's happening
 
-### 1. `src/components/booking/BookingWizard.tsx` — Contact step
-On the Contact step, when pathway is `private` or `semi`:
+The Nov 7 booking (KLW-2607161547-NUD8, 20-person private party) *did* go through — Shopify order #1007 exists and is Paid. But `/klawsome-admin` reads from the `event_bookings` table in Lovable Cloud, and that table is empty (verified via a live query). Nothing in the codebase writes to `event_bookings` — the BookingWizard just creates a Shopify cart and hands the buyer to Shopify checkout. So every completed booking is currently only recorded on the Shopify side, invisible to the admin calendar.
 
-- Change the "Party size" input to two labeled numeric inputs shown side-by-side: **Adults** and **Children** (each capped at 12, `max={12}`). The combined value replaces the current single `partySize` field going into the Shopify cart attributes as `party_size` (`"{adults} adults, {children} children"`).
-- Above these inputs, render a highlighted note card with this copy (from the attached screenshot):
+## Fix
 
-  > **How many adults and children are allowed?**
-  > • As Klawsome has limited space, a maximum of **12 adults** are allowed along with a maximum of **12 children**.
-  > • Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.
+### 1. New edge function `shopify-order-webhook`
+- Receives Shopify `orders/paid` (and `orders/create` as a fallback) webhooks.
+- Verifies the HMAC using a shared secret (new `SHOPIFY_WEBHOOK_SECRET`).
+- Reads `note_attributes` from the order — the BookingWizard already writes every field we need there (`booking_ref`, `event_type`, `start_at`, `party_size`, `adults`, `children`, `celebrant_name`, `celebrant_age`, `favorites`, `notes`, `contact_name/email/phone`, `zip`, `miles`, addons).
+- Upserts a row into `event_bookings` keyed on `booking_ref`, populating `shopify_order_id`, `total_cents` (from order total), and `status = 'confirmed'`.
+- Idempotent: repeat deliveries update the same row.
 
-- Update `validateStep('contact')`: for private/semi require both adults ≥ 1 and children ≥ 0, and reject any value > 12 for either field. Non-birthday pathways keep today's behavior.
+### 2. Register the webhook once
+- Add a small admin-triggered action (button on `/klawsome-admin`) that calls the Shopify Admin API to register the webhook against the deployed edge function URL. This avoids needing the store owner to configure it manually.
 
-State shape stays backward compatible: keep `partySize` string, add `adults` and `children` string fields on `contact`.
+### 3. Backfill existing paid bookings
+- One-time task in the same deploy: fetch recent Shopify orders whose `note_attributes` contain a `booking_ref` starting with `KLW-` and insert them into `event_bookings` (covers order #1007 and any others already paid). Runs from the same edge function via a `?backfill=1` call the admin button triggers once.
 
-### 2. Confirmation email recipients — no code change
-`supabase/functions/send-transactional-email/index.ts` already routes booking confirmations to both `team@klawsomenovi.com` and `events@klawsomenovi.com`. I'll confirm in the plan output rather than modify anything.
+### 4. Optional but recommended: pre-write on checkout start
+- When the BookingWizard successfully creates the Shopify cart, also insert a `pending` row into `event_bookings` via a new lightweight edge function. The webhook later flips it to `confirmed` and adds `shopify_order_id`. This means abandoned checkouts show up as pending in the admin (useful for follow-up) instead of vanishing.
+- If you'd rather keep the admin view "paid only," skip this and rely solely on the webhook — say the word.
 
-## Out of scope
-- No changes to rental/mobile pathways.
-- No new admin toggles for the cap (hard-coded to 12 as requested).
+## Files touched
+- `supabase/functions/shopify-order-webhook/index.ts` (new)
+- `supabase/functions/shopify-order-webhook/deno.json` (new)
+- `src/components/booking/BookingWizard.tsx` (optional: call the new pending-insert function)
+- `supabase/functions/booking-create-pending/index.ts` (new, only if we do step 4)
+- `src/pages/KlawsomeAdmin.tsx` or `src/components/admin/BookingsCalendar.tsx` (add "Sync Shopify bookings" button)
+- New secret: `SHOPIFY_WEBHOOK_SECRET`
+
+## Verification
+- After deploy + backfill, `event_bookings` will contain order #1007 (Nov 7, private, 20 pax, Madden's 6th birthday). The admin calendar's Nov 7 cell will show it, and future paid bookings will appear within seconds of Shopify marking them paid.
+
+## Open question
+Do you want step 4 (pending rows on checkout start) so you can see abandoned/in-progress bookings, or webhook-only (paid bookings only)?
