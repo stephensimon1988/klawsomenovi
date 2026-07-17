@@ -635,12 +635,37 @@ function fmtHM(t: string | null | undefined): string {
 function ContactStep({ contact, pathway, onChange }: { contact: State['contact']; pathway: Pathway; onChange: (c: State['contact']) => void }) {
   const isBirthday = pathway === 'private' || pathway === 'semi';
   const set = (k: keyof State['contact'], v: string) => onChange({ ...contact, [k]: v });
+  const setCount = (k: 'adults' | 'children', v: string) => {
+    const digits = v.replace(/\D/g, '');
+    const n = digits === '' ? '' : String(Math.min(12, Number(digits)));
+    const next = { ...contact, [k]: n };
+    const a = Number(next.adults) || 0;
+    const c2 = Number(next.children) || 0;
+    next.partySize = a || c2 ? `${a} adults, ${c2} children` : '';
+    onChange(next);
+  };
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {isBirthday && (
+        <div className="md:col-span-2 rounded-2xl border border-primary/30 bg-primary/5 p-4">
+          <p className="font-heading font-bold text-foreground mb-2">How many adults and children are allowed?</p>
+          <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground font-body">
+            <li>As Klawsome has limited space, a maximum of <strong>12 adults</strong> are allowed along with a maximum of <strong>12 children</strong>.</li>
+            <li>Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.</li>
+          </ul>
+        </div>
+      )}
       <div className="md:col-span-2"><Label>Your name *</Label><Input value={contact.name} onChange={(e) => set('name', e.target.value)} /></div>
       <div><Label>Email *</Label><Input type="email" value={contact.email} onChange={(e) => set('email', e.target.value)} /></div>
       <div><Label>Phone *</Label><Input type="tel" value={contact.phone} onChange={(e) => set('phone', e.target.value)} /></div>
-      <div><Label>Party size</Label><Input inputMode="numeric" value={contact.partySize} onChange={(e) => set('partySize', e.target.value.replace(/\D/g, ''))} /></div>
+      {isBirthday ? (
+        <>
+          <div><Label>Adults * (max 12)</Label><Input inputMode="numeric" max={12} value={contact.adults} onChange={(e) => setCount('adults', e.target.value)} /></div>
+          <div><Label>Children (max 12)</Label><Input inputMode="numeric" max={12} value={contact.children} onChange={(e) => setCount('children', e.target.value)} /></div>
+        </>
+      ) : (
+        <div><Label>Party size</Label><Input inputMode="numeric" value={contact.partySize} onChange={(e) => set('partySize', e.target.value.replace(/\D/g, ''))} /></div>
+      )}
       {isBirthday && (
         <>
           <div><Label>Celebrant's name</Label><Input value={contact.celebrantName} onChange={(e) => set('celebrantName', e.target.value)} /></div>
