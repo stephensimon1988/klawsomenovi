@@ -196,8 +196,10 @@ function EventTypeEditor({
   const [hours, setHours] = useState<HoursMap>(availability?.hours || {});
   const [leadHours, setLeadHours] = useState<number>(availability?.lead_time_hours ?? 48);
   const [saving, setSaving] = useState(false);
-  const [newDate, setNewDate] = useState('');
+  const [rangeStart, setRangeStart] = useState('');
+  const [rangeEnd, setRangeEnd] = useState('');
   const [newReason, setNewReason] = useState('');
+  const [adding, setAdding] = useState(false);
 
   useEffect(() => {
     setHours(availability?.hours || {});
@@ -225,35 +227,58 @@ function EventTypeEditor({
   };
 
   const addBlackout = async () => {
-    if (!newDate) {
-      toast.error('Pick a date first');
+    if (!rangeStart) {
+      toast.error('Pick a start date');
       return;
     }
+    const end = rangeEnd || rangeStart;
+    const dates = expandRange(rangeStart, end);
+    if (!dates.length) {
+      toast.error('End date must be on or after start date');
+      return;
+    }
+    const existing = new Set(blackouts.map((b) => b.blackout_date));
+    const toAdd = dates.filter((d) => !existing.has(d));
+    if (!toAdd.length) {
+      toast.info('All dates in that range are already blacked out');
+      return;
+    }
+    setAdding(true);
+    const tId = toast.loading(`Adding ${toAdd.length} blackout${toAdd.length > 1 ? 's' : ''}…`);
     try {
-      await cmsInvoke(password, {
-        action: 'insert',
-        table: 'event_blackout_dates',
-        data: { event_type: eventType, blackout_date: newDate, reason: newReason || null },
-      });
-      setNewDate('');
+      for (const d of toAdd) {
+        await cmsInvoke(password, {
+          action: 'insert',
+          table: 'event_blackout_dates',
+          data: { event_type: eventType, blackout_date: d, reason: newReason || null },
+        });
+      }
+      setRangeStart('');
+      setRangeEnd('');
       setNewReason('');
-      toast.success('Blackout added');
+      toast.success(`Added ${toAdd.length} blackout${toAdd.length > 1 ? 's' : ''}`, { id: tId });
       onReload();
     } catch (e: any) {
-      toast.error(e.message);
+      toast.error(e.message, { id: tId });
+    }
+    setAdding(false);
+  };
+
+  const removeGroup = async (ids: string[]) => {
+    if (!confirm(`Remove ${ids.length > 1 ? `${ids.length} blackout dates` : 'this blackout'}?`)) return;
+    const tId = toast.loading('Removing…');
+    try {
+      for (const id of ids) {
+        await cmsInvoke(password, { action: 'delete', table: 'event_blackout_dates', id });
+      }
+      toast.success('Removed', { id: tId });
+      onReload();
+    } catch (e: any) {
+      toast.error(e.message, { id: tId });
     }
   };
 
-  const removeBlackout = async (id: string) => {
-    if (!confirm('Remove this blackout?')) return;
-    try {
-      await cmsInvoke(password, { action: 'delete', table: 'event_blackout_dates', id });
-      toast.success('Removed');
-      onReload();
-    } catch (e: any) {
-      toast.error(e.message);
-    }
-  };
+  const groups = groupBlackouts(blackouts);
 
   return (
     <div className="space-y-5 pb-2">
@@ -320,18 +345,23 @@ function EventTypeEditor({
         {/* Blackout dates */}
         <div className="pt-4 border-t border-white/10 space-y-3">
           <p className="text-white/60 text-xs font-heading uppercase tracking-wider">Blackout dates</p>
-          {blackouts.length === 0 ? (
+          {groups.length === 0 ? (
             <p className="text-white/40 text-sm italic">No blackout dates</p>
           ) : (
             <ul className="space-y-1">
-              {blackouts.map((b) => (
-                <li key={b.id} className="flex items-center gap-3 text-white/80 text-sm">
-                  <span className="font-mono text-white">{b.blackout_date}</span>
-                  <span className="flex-1 text-white/60">{b.reason || '—'}</span>
+              {groups.map((g) => (
+                <li key={g.ids[0]} className="flex items-center gap-3 text-white/80 text-sm">
+                  <span className="font-mono text-white whitespace-nowrap">
+                    {g.start === g.end ? fmtISO(g.start) : `${fmtISO(g.start)} → ${fmtISO(g.end)}`}
+                    {g.ids.length > 1 && (
+                      <span className="text-white/40 ml-2">({g.ids.length} days)</span>
+                    )}
+                  </span>
+                  <span className="flex-1 text-white/60">{g.reason || '—'}</span>
                   <Button
                     size="sm"
                     variant="ghost"
-                    onClick={() => removeBlackout(b.id)}
+                    onClick={() => removeGroup(g.ids)}
                     className="text-red-400 h-7 px-2"
                   >
                     <Trash2 className="w-3 h-3" />
@@ -340,26 +370,45 @@ function EventTypeEditor({
               ))}
             </ul>
           )}
-          <div className="grid grid-cols-[160px_1fr_auto] gap-2">
-            <Input
-              type="date"
-              value={newDate}
-              onChange={(e) => setNewDate(e.target.value)}
-              className="bg-white/10 border-white/20 text-white text-sm"
-            />
-            <Input
-              placeholder="Reason (optional)"
-              value={newReason}
-              onChange={(e) => setNewReason(e.target.value)}
-              className="bg-white/10 border-white/20 text-white text-sm"
-            />
+          <div className="grid grid-cols-1 md:grid-cols-[150px_150px_1fr_auto] gap-2">
+            <label className="flex flex-col gap-1 text-white/50 text-[10px] font-heading uppercase tracking-wider">
+              Start
+              <Input
+                type="date"
+                value={rangeStart}
+                onChange={(e) => setRangeStart(e.target.value)}
+                className="bg-white/10 border-white/20 text-white text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-white/50 text-[10px] font-heading uppercase tracking-wider">
+              End (optional)
+              <Input
+                type="date"
+                value={rangeEnd}
+                onChange={(e) => setRangeEnd(e.target.value)}
+                className="bg-white/10 border-white/20 text-white text-sm"
+              />
+            </label>
+            <label className="flex flex-col gap-1 text-white/50 text-[10px] font-heading uppercase tracking-wider">
+              Reason
+              <Input
+                placeholder="Reason (optional)"
+                value={newReason}
+                onChange={(e) => setNewReason(e.target.value)}
+                className="bg-white/10 border-white/20 text-white text-sm"
+              />
+            </label>
             <Button
               onClick={addBlackout}
-              className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold"
+              disabled={adding}
+              className="self-end bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold"
             >
-              <Plus className="w-4 h-4 mr-1" /> Add
+              <Plus className="w-4 h-4 mr-1" /> {adding ? 'Adding…' : 'Add'}
             </Button>
           </div>
+          <p className="text-white/40 text-xs">
+            Leave End blank to blackout a single day. Max {MAX_RANGE_DAYS} days per range.
+          </p>
         </div>
 
         <Next7Preview hours={hours} blackouts={blackouts} />
