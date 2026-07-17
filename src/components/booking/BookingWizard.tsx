@@ -42,7 +42,7 @@ interface State {
   addons: Record<string, { qty: number; character?: string }>;
   zip: string;
   contact: {
-    name: string; email: string; phone: string; partySize: string;
+    name: string; email: string; phone: string; partySize: string; adults: string; children: string;
     celebrantName: string; celebrantAge: string; favorites: string; notes: string;
   };
   checkoutUrl: string | null;
@@ -56,7 +56,7 @@ const emptyState = (): State => ({
   time: null,
   addons: {},
   zip: '',
-  contact: { name: '', email: '', phone: '', partySize: '', celebrantName: '', celebrantAge: '', favorites: '', notes: '' },
+  contact: { name: '', email: '', phone: '', partySize: '', adults: '', children: '', celebrantName: '', celebrantAge: '', favorites: '', notes: '' },
   checkoutUrl: null,
   bookingRef: null,
 });
