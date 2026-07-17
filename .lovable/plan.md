@@ -1,36 +1,31 @@
-## What's happening
+## Goal
 
-The Nov 7 booking (KLW-2607161547-NUD8, 20-person private party) *did* go through — Shopify order #1007 exists and is Paid. But `/klawsome-admin` reads from the `event_bookings` table in Lovable Cloud, and that table is empty (verified via a live query). Nothing in the codebase writes to `event_bookings` — the BookingWizard just creates a Shopify cart and hands the buyer to Shopify checkout. So every completed booking is currently only recorded on the Shopify side, invisible to the admin calendar.
+Make blackouts in `/klawsome-admin` → Booking Schedule easier to manage:
+1. Enter a **date range** instead of one day at a time.
+2. Optionally apply that range to **all 4 event types** at once ("every kind of event booking").
+3. **Display consecutive blackout dates as a single range row** (e.g. `2026-07-11 → 2026-08-24 · Launch blackout — Klawsome Mobile opens Aug 24, 2026`) instead of one line per day.
+4. Support **multiple range blackouts** in the future — nothing prevents adding another range for holidays, etc.
 
-## Fix
+Data model stays the same (one row per date in `event_blackout_dates`) so the booking flow and calendar keep working unchanged; ranges are just a UI convenience for entry and display.
 
-### 1. New edge function `shopify-order-webhook`
-- Receives Shopify `orders/paid` (and `orders/create` as a fallback) webhooks.
-- Verifies the HMAC using a shared secret (new `SHOPIFY_WEBHOOK_SECRET`).
-- Reads `note_attributes` from the order — the BookingWizard already writes every field we need there (`booking_ref`, `event_type`, `start_at`, `party_size`, `adults`, `children`, `celebrant_name`, `celebrant_age`, `favorites`, `notes`, `contact_name/email/phone`, `zip`, `miles`, addons).
-- Upserts a row into `event_bookings` keyed on `booking_ref`, populating `shopify_order_id`, `total_cents` (from order total), and `status = 'confirmed'`.
-- Idempotent: repeat deliveries update the same row.
+## Changes
 
-### 2. Register the webhook once
-- Add a small admin-triggered action (button on `/klawsome-admin`) that calls the Shopify Admin API to register the webhook against the deployed edge function URL. This avoids needing the store owner to configure it manually.
+**`src/components/admin/BookingScheduleEditor.tsx`**
 
-### 3. Backfill existing paid bookings
-- One-time task in the same deploy: fetch recent Shopify orders whose `note_attributes` contain a `booking_ref` starting with `KLW-` and insert them into `event_bookings` (covers order #1007 and any others already paid). Runs from the same edge function via a `?backfill=1` call the admin button triggers once.
+Per-event-type editor (the existing card):
+- Replace the single date input with **Start date + End date + Reason + Add** row.
+- On Add: expand the range into daily rows and bulk-insert via `cmsInvoke` (`event_blackout_dates`).
+- Replace the flat day list with a **grouped list**: consecutive dates that share the same `reason` collapse into one row showing `YYYY-MM-DD → YYYY-MM-DD · reason` (single days still show as one date). Trash icon deletes every row in that group.
 
-### 4. Optional but recommended: pre-write on checkout start
-- When the BookingWizard successfully creates the Shopify cart, also insert a `pending` row into `event_bookings` via a new lightweight edge function. The webhook later flips it to `confirmed` and adds `shopify_order_id`. This means abandoned checkouts show up as pending in the admin (useful for follow-up) instead of vanishing.
-- If you'd rather keep the admin view "paid only," skip this and rely solely on the webhook — say the word.
+New "All event types" section at the top of the editor:
+- Start date, End date, Reason, Add-to-all button.
+- Inserts the expanded dates for **all 4 event types** in one call, then reloads. Existing dates for a given (type, date) are skipped so re-adding is safe.
 
-## Files touched
-- `supabase/functions/shopify-order-webhook/index.ts` (new)
-- `supabase/functions/shopify-order-webhook/deno.json` (new)
-- `src/components/booking/BookingWizard.tsx` (optional: call the new pending-insert function)
-- `supabase/functions/booking-create-pending/index.ts` (new, only if we do step 4)
-- `src/pages/KlawsomeAdmin.tsx` or `src/components/admin/BookingsCalendar.tsx` (add "Sync Shopify bookings" button)
-- New secret: `SHOPIFY_WEBHOOK_SECRET`
+**No schema changes**, no changes to `BookingWizard`, `useAvailability`, or `BookingsCalendar` — they already read the per-day rows.
 
-## Verification
-- After deploy + backfill, `event_bookings` will contain order #1007 (Nov 7, private, 20 pax, Madden's 6th birthday). The admin calendar's Nov 7 cell will show it, and future paid bookings will appear within seconds of Shopify marking them paid.
+## Technical notes
 
-## Open question
-Do you want step 4 (pending rows on checkout start) so you can see abandoned/in-progress bookings, or webhook-only (paid bookings only)?
+- Grouping: sort rows by `blackout_date`, walk the list, start a new group whenever the next date isn't exactly +1 day from the previous or the reason differs.
+- Range expansion done in JS (UTC-safe date arithmetic) — capped at e.g. 366 days per submit to avoid runaway inputs.
+- Bulk insert uses sequential `cmsInvoke` calls (the existing edge action only inserts one row at a time); a small progress toast covers the wait.
+- Deleting a grouped range issues one delete per underlying row id, then reloads.
