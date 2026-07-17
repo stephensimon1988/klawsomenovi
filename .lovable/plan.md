@@ -1,33 +1,22 @@
-## How blackouts work today
+## Changes
 
-Blackouts are already **per event type**, not global. There are 4 event types, each with its own blackout list:
+### 1. `src/components/booking/BookingWizard.tsx` — Contact step
+On the Contact step, when pathway is `private` or `semi`:
 
-- Private Parties
-- Semi-Private Parties
-- In-Store Rental
-- Klawsome Mobile
+- Change the "Party size" input to two labeled numeric inputs shown side-by-side: **Adults** and **Children** (each capped at 12, `max={12}`). The combined value replaces the current single `partySize` field going into the Shopify cart attributes as `party_size` (`"{adults} adults, {children} children"`).
+- Above these inputs, render a highlighted note card with this copy (from the attached screenshot):
 
-In the admin **Schedule** editor, each event type has its own "Blackout dates" list (with optional reason). Adding a blackout under Klawsome Mobile only blocks Mobile bookings — Private, Semi-Private and Rental stay bookable on that same day.
+  > **How many adults and children are allowed?**
+  > • As Klawsome has limited space, a maximum of **12 adults** are allowed along with a maximum of **12 children**.
+  > • Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.
 
-## Why the calendar looks confusing
+- Update `validateStep('contact')`: for private/semi require both adults ≥ 1 and children ≥ 0, and reject any value > 12 for either field. Non-birthday pathways keep today's behavior.
 
-The **Calendar** tab currently merges all four event types into a single `Set<blackout_date>` and stamps a red "BLACKOUT" label on any day that has *at least one* event-type blackout. It doesn't say which event type is blocked or why. So a day you only blacked out for Mobile visually looks the same as a day blacked out for everything.
+State shape stays backward compatible: keep `partySize` string, add `adults` and `children` string fields on `contact`.
 
-## Plan — surface per-event blackouts on the calendar
+### 2. Confirmation email recipients — no code change
+`supabase/functions/send-transactional-email/index.ts` already routes booking confirmations to both `team@klawsomenovi.com` and `events@klawsomenovi.com`. I'll confirm in the plan output rather than modify anything.
 
-Edit `src/components/admin/BookingsCalendar.tsx` only. No schema changes.
-
-1. **Group blackouts by day → array of `{event_type, reason}`** instead of a flat `Set` of dates.
-2. **Respect the existing "Type" filter**: when a specific type is selected, only show that type's blackout dot on the day. When "All types" is selected, show one small colored dot per blacked-out event type using the same `TYPE_META` colors as bookings (pink=Private, purple=Semi, sky=Rental, emerald=Mobile).
-3. **Replace the red "BLACKOUT" text** with a compact row of colored dots at the top-right of the day cell. Each dot has a `title` tooltip like `"Klawsome Mobile — Founder out of town"` (event label + reason if present).
-4. **Full-blackout shortcut**: if all 4 event types are blacked out on the same day, render a single red "BLACKOUT" pill (current styling) so the "everything closed" case still reads at a glance.
-5. **Legend row** below the month header: small chips showing the 4 event-type colors + a "Blackout" swatch, so admins can decode the dots without hovering.
-6. **Detail popover on click** (optional, low-risk): clicking a day cell with blackouts opens a lightweight popover listing each blacked-out event type and its reason. If this adds too much scope we can defer — the tooltips from step 3 already cover the main need.
-
-Result: a day blocked only for Mobile shows a single emerald dot (with tooltip); a day blocked for all four types shows the red "BLACKOUT" pill.
-
-### Technical notes
-
-- Data source stays `event_blackout_dates` (already loaded).
-- No changes to `BookingScheduleEditor.tsx`, `useAvailability.ts`, or the customer-facing booking flow — those already scope blackouts by event type correctly.
-- Reuse `TYPE_META` for colors/labels so calendar bookings and blackout dots stay visually consistent.
+## Out of scope
+- No changes to rental/mobile pathways.
+- No new admin toggles for the cap (hard-coded to 12 as requested).
