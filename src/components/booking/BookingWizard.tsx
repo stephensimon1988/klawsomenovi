@@ -336,7 +336,14 @@ function validateStep(
     case 'delivery': return !!zipInfo?.known;
     case 'contact': {
       const c = s.contact;
-      return !!c.name.trim() && /.+@.+\..+/.test(c.email) && !!c.phone.trim();
+      if (!(c.name.trim() && /.+@.+\..+/.test(c.email) && c.phone.trim())) return false;
+      if (s.pathway === 'private' || s.pathway === 'semi') {
+        const a = Number(c.adults);
+        const k = Number(c.children);
+        if (!Number.isFinite(a) || a < 1 || a > 12) return false;
+        if (!Number.isFinite(k) || k < 0 || k > 12) return false;
+      }
+      return true;
     }
     case 'review': return true;
     default: return true;
