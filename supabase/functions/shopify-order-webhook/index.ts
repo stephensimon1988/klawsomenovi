@@ -7,6 +7,128 @@
 
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
+import { buildGoogleCalendarUrl, icsBookingRow } from '../_shared/ics.ts';
+
+const ADMIN_RECIPIENTS = ['team@klawsomenovi.com', 'events@klawsomenovi.com'];
+
+function prettyDate(iso: string): string {
+  try {
+    return new Date(iso).toLocaleString('en-US', {
+      weekday: 'long',
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
+      hour: 'numeric',
+      minute: '2-digit',
+      timeZone: 'America/Detroit',
+      timeZoneName: 'short',
+    });
+  } catch {
+    return iso;
+  }
+}
+
+function eventTypeLabel(t: string): string {
+  const v = (t || '').toLowerCase();
+  if (v === 'private') return 'Private Party';
+  if (v === 'semi-private' || v === 'semi_private') return 'Semi-Private Party';
+  if (v === 'rental') return 'Full Venue Rental';
+  if (v === 'mobile') return 'Klawsome Mobile';
+  return 'Klawsome Booking';
+}
+
+function locationLine(t: string): string {
+  const v = (t || '').toLowerCase();
+  if (v === 'mobile') return "Klawsome Mobile — we'll come to you";
+  return '42768 Grand River Ave Suite C-140, Novi, MI 48375';
+}
+
+async function sendBookingEmails(
+  supabase: ReturnType<typeof createClient>,
+  bookingRef: string,
+) {
+  const { data: row, error } = await supabase
+    .from('event_bookings')
+    .select('*')
+    .eq('booking_ref', bookingRef)
+    .maybeSingle();
+  if (error || !row) {
+    console.error('sendBookingEmails: booking lookup failed', { bookingRef, error });
+    return;
+  }
+
+  const ev = icsBookingRow(row);
+  const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+  const icsUrl = `${supabaseUrl}/functions/v1/booking-ics?ref=${encodeURIComponent(bookingRef)}`;
+  const googleCalendarUrl = buildGoogleCalendarUrl(ev);
+  const startPretty = prettyDate(row.start_at);
+  const typeLabel = eventTypeLabel(row.event_type);
+  const loc = locationLine(row.event_type);
+  const totalDollars = row.total_cents
+    ? `$${(Number(row.total_cents) / 100).toFixed(2)}`
+    : undefined;
+
+  const recipients: Array<{ email: string; template: string; extra: Record<string, unknown> }> = [];
+  if (row.contact_email) {
+    recipients.push({
+      email: row.contact_email,
+      template: 'booking-confirmation-customer',
+      extra: {
+        contactName: row.contact_name,
+        eventTypeLabel: typeLabel,
+        startPretty,
+        partySize: row.party_size,
+        celebrantName: row.celebrant_name
+          ? `${row.celebrant_name}${row.celebrant_age ? ` (age ${row.celebrant_age})` : ''}`
+          : undefined,
+        locationLine: loc,
+        bookingRef: row.booking_ref,
+        googleCalendarUrl,
+        icsUrl,
+      },
+    });
+  }
+  for (const adminEmail of ADMIN_RECIPIENTS) {
+    recipients.push({
+      email: adminEmail,
+      template: 'booking-confirmation-admin',
+      extra: {
+        contactName: row.contact_name,
+        contactEmail: row.contact_email,
+        contactPhone: row.contact_phone,
+        eventTypeLabel: typeLabel,
+        startPretty,
+        partySize: row.party_size,
+        celebrantName: row.celebrant_name,
+        celebrantAge: row.celebrant_age,
+        locationLine: loc,
+        zip: row.zip,
+        bookingRef: row.booking_ref,
+        shopifyOrderId: row.shopify_order_id ? String(row.shopify_order_id) : undefined,
+        totalDollars,
+        specialRequests: row.special_requests || row.favorites || undefined,
+        googleCalendarUrl,
+        icsUrl,
+        adminUrl: 'https://klawsomearcade.com/klawsome-admin',
+      },
+    });
+  }
+
+  await Promise.all(
+    recipients.map((r) =>
+      supabase.functions
+        .invoke('send-transactional-email', {
+          body: {
+            templateName: r.template,
+            recipientEmail: r.email,
+            idempotencyKey: `booking-confirm-${bookingRef}-${r.email}`,
+            templateData: r.extra,
+          },
+        })
+        .catch((e) => console.error('booking email invoke failed', { to: r.email, e })),
+    ),
+  );
+}
 
 function b64(bytes: Uint8Array) {
   let s = '';
@@ -103,6 +225,11 @@ Deno.serve(async (req) => {
       .eq('booking_ref', bookingRef)
       .maybeSingle();
     if (existing) {
+      const { data: prev } = await supabase
+        .from('event_bookings')
+        .select('status')
+        .eq('booking_ref', bookingRef)
+        .maybeSingle();
       const { error } = await supabase
         .from('event_bookings')
         .update(patch)
@@ -112,6 +239,11 @@ Deno.serve(async (req) => {
           status: 500,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' },
         });
+      }
+      // Send confirmation emails only when this webhook transitioned the booking
+      // into `confirmed`, so retries/duplicate deliveries don't re-notify.
+      if (paid && prev?.status !== 'confirmed') {
+        await sendBookingEmails(supabase, bookingRef);
       }
       return new Response(JSON.stringify({ ok: true, updated: bookingRef }), {
         headers: { ...corsHeaders, 'Content-Type': 'application/json' },

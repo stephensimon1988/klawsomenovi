@@ -25,6 +25,14 @@ const ALLOWED_RECIPIENTS = new Set<string>([
   'events@klawsomenovi.com',
 ])
 
+// Templates that are only invoked from trusted server code (Shopify webhook,
+// signed by HMAC before hitting our endpoint) and therefore may be sent to any
+// recipient supplied by the caller — e.g. the paying customer's email.
+const TRUSTED_TEMPLATES = new Set<string>([
+  'booking-confirmation-customer',
+  'booking-confirmation-admin',
+])
+
 // Generate a cryptographically random 32-byte hex token
 function generateToken(): string {
   const bytes = new Uint8Array(32)
@@ -126,9 +134,13 @@ Deno.serve(async (req) => {
     )
   }
 
-  // Enforce recipient allowlist unless the template pins its own `to` address.
-  // Templates with a fixed `to` are trusted (defined server-side in the registry).
-  if (!template.to && !ALLOWED_RECIPIENTS.has(effectiveRecipient.toLowerCase())) {
+  // Enforce recipient allowlist unless the template pins its own `to` address
+  // or is in the trusted-templates set (invoked from signed server code only).
+  if (
+    !template.to &&
+    !TRUSTED_TEMPLATES.has(templateName) &&
+    !ALLOWED_RECIPIENTS.has(effectiveRecipient.toLowerCase())
+  ) {
     console.warn('Rejected email to non-allowlisted recipient', {
       templateName,
       effectiveRecipient,
