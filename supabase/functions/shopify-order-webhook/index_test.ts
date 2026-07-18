@@ -33,6 +33,7 @@ Deno.test('webhook updates pending booking to confirmed', async () => {
     start_at: new Date().toISOString(),
     status: 'pending_payment',
     contact_name: 'Test Guest',
+    contact_email: 'test@example.com',
   });
   if (insertError) throw insertError;
 
