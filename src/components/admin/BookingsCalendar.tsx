@@ -87,7 +87,7 @@ export function BookingsCalendar({ password }: { password: string }) {
     setSyncing(true);
     try {
       await load();
-      if (!silent) toast.success('Bookings refreshed');
+      if (!silent) toast.success('Bookings refreshed (new paid orders arrive via Shopify webhook)');
     } catch (e: any) {
       if (!silent) toast.error(`Refresh failed: ${e.message}`);
     }
