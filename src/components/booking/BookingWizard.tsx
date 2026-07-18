@@ -211,9 +211,33 @@ function BookingWizardDialog() {
         toast.error('Could not start checkout', { description: result.error });
         return;
       }
-      // Persist a pending booking record (best-effort — RLS blocks anon writes,
-      // so we skip this from the browser; the Shopify order webhook will
-      // create the confirmed record post-payment.)
+      // Persist a pending booking record via service-role edge function so the
+      // admin calendar shows the booking immediately. Status updates to
+      // confirmed when the Shopify order sync runs.
+      try {
+        const { supabase } = await import('@/integrations/supabase/client');
+        await supabase.functions.invoke('create-pending-booking', {
+          body: {
+            booking_ref: ref,
+            event_type: pathway,
+            start_at: startAt.toISOString(),
+            contact_name: state.contact.name,
+            contact_email: state.contact.email,
+            contact_phone: state.contact.phone,
+            party_size: state.contact.partySize || String((Number(state.contact.adults) || 0) + (Number(state.contact.children) || 0)),
+            celebrant_name: state.contact.celebrantName,
+            celebrant_age: state.contact.celebrantAge,
+            favorites: state.contact.favorites,
+            notes: state.contact.notes,
+            zip: state.zip,
+            miles: zipInfo?.known ? zipInfo.miles : null,
+            addons: state.addons,
+            shopify_cart_id: result.checkoutUrl,
+          },
+        });
+      } catch (err) {
+        console.warn('pending booking insert failed', err);
+      }
       setState((s) => ({ ...s, checkoutUrl: result.checkoutUrl, bookingRef: ref }));
       setStep('done');
       window.open(result.checkoutUrl, '_blank');
