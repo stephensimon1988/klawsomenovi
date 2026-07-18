@@ -4,18 +4,32 @@ import { corsHeaders } from 'npm:@supabase/supabase-js@2/cors';
 const SHOP = 'u2riqy-et.myshopify.com';
 const API_VERSION = '2025-07';
 
-function pickToken(): { token: string; name: string } | null {
-  const candidates = [
+function listTokens(): { token: string; name: string }[] {
+  const names = [
+    ...Object.keys(Deno.env.toObject()).filter((k) => k.startsWith('SHOPIFY_ONLINE_ACCESS_TOKEN')),
     'SHOPIFY_ADMIN_API_TOKEN',
     'SHOPIFY_ACCESS_TOKEN',
-    // Lovable Shopify integration online access token (user-scoped)
-    ...Object.keys(Deno.env.toObject()).filter((k) => k.startsWith('SHOPIFY_ONLINE_ACCESS_TOKEN')),
   ];
-  for (const name of candidates) {
+  const out: { token: string; name: string }[] = [];
+  const seen = new Set<string>();
+  for (const name of names) {
     const v = Deno.env.get(name);
-    if (v && v.length > 10) return { token: v, name };
+    if (v && v.length > 10 && !seen.has(v)) { seen.add(v); out.push({ token: v, name }); }
   }
-  return null;
+  return out;
+}
+
+async function pickWorkingToken(): Promise<{ token: string; name: string; attempts: { name: string; status: number }[] }> {
+  const attempts: { name: string; status: number }[] = [];
+  for (const t of listTokens()) {
+    const r = await fetch(`https://${SHOP}/admin/api/${API_VERSION}/shop.json`, {
+      headers: { 'X-Shopify-Access-Token': t.token },
+    });
+    attempts.push({ name: t.name, status: r.status });
+    await r.body?.cancel();
+    if (r.ok) return { ...t, attempts };
+  }
+  throw new Error(`No working Shopify Admin token. Attempts: ${JSON.stringify(attempts)}`);
 }
 
 async function shopifyAdmin(token: string, query: string, variables: Record<string, unknown> = {}) {
@@ -69,13 +83,7 @@ function inferEventType(title: string): string {
 Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') return new Response('ok', { headers: corsHeaders });
   try {
-    const picked = pickToken();
-    if (!picked) {
-      return new Response(JSON.stringify({ error: 'No Shopify Admin token configured' }), {
-        status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
+    const picked = await pickWorkingToken();
     const data = await shopifyAdmin(picked.token, ORDERS_QUERY, { first: 50 });
     const orders = (data?.orders?.edges ?? []).map((e: any) => e.node);
 
