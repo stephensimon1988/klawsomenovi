@@ -86,10 +86,13 @@ export function BookingsCalendar({ password }: { password: string }) {
   const sync = useCallback(async (silent = false) => {
     setSyncing(true);
     try {
+      const { data, error } = await supabase.functions.invoke('shopify-booking-sync', { body: {} });
+      if (error) throw error;
+      if (data?.error) throw new Error(data.error);
       await load();
-      if (!silent) toast.success('Bookings refreshed');
+      if (!silent) toast.success(`Synced ${data?.upserted ?? 0} bookings from Shopify (${data?.skipped ?? 0} non-booking orders skipped)`);
     } catch (e: any) {
-      if (!silent) toast.error(`Refresh failed: ${e.message}`);
+      if (!silent) toast.error(`Sync failed: ${e.message}`);
     }
     setSyncing(false);
   }, [load]);
@@ -183,7 +186,7 @@ export function BookingsCalendar({ password }: { password: string }) {
             className="ml-2 text-white border-white/20 bg-white/5 hover:bg-white/10"
             onClick={() => sync(false)}
           >
-            {syncing ? 'Refreshing…' : 'Refresh'}
+            {syncing ? 'Syncing…' : 'Sync Shopify'}
           </Button>
         </div>
         <div className="flex items-center gap-2">
