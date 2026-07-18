@@ -1,31 +1,29 @@
-# Booking confirmation emails with calendar invites
+## Goal
+Lock the booking wizard so:
+- **Private parties**: only bookable 9:00–11:00 AM (before the arcade opens to the public)
+- **Semi-private parties**: only bookable 11:00 AM–9:00 PM (during public hours)
 
-## Current state
-No booking confirmation email is sent from our side today. The only email a customer gets is Shopify's default order receipt (no calendar link). The admin emails (`team@klawsomenovi.com`, `events@klawsomenovi.com`) currently receive nothing from the booking flow.
+## Current state (verified)
+The `event_availability` table drives the time-slot generator in `src/hooks/useAvailability.ts`. Right now:
+- `private` row: opens at 11:00 or 12:00 depending on day, closes 20:00/21:00, Mon/Tue closed.
+- `semi_private` row: same schedule as private.
 
-## What to build
-When a booking is paid (Shopify webhook flips it to `confirmed`), send **one** transactional email to:
-- the customer
-- `team@klawsomenovi.com`
-- `events@klawsomenovi.com`
+That's why guests can book private parties at any public-hours slot today.
 
-All three recipients get the **same calendar invite** — a real `.ics` attachment they can click "Add to calendar" on in Gmail / Apple Mail / Outlook. The email body differs slightly (customer gets a friendly confirmation; admin copy is a heads-up "new booking" summary), but the `.ics` payload is identical so everyone lands on the same event in their calendar.
+Store is currently open **every day 11 AM – 9 PM** (from `store_hours`).
 
 ## Changes
-1. **New template** `supabase/functions/_shared/transactional-email-templates/booking-confirmation-customer.tsx` — friendly confirmation with date/time, party type, guest count, address (or "we'll come to you" for Mobile), and a note that the `.ics` is attached.
-2. **New template** `booking-confirmation-admin.tsx` — internal summary: customer name/email/phone, event type, date/time, guest counts, ZIP + quoted delivery fee (for Mobile), booking ref, link to `/klawsome-admin`.
-3. **New ICS helper** `supabase/functions/_shared/ics.ts` — builds a valid VCALENDAR/VEVENT string from a booking row (UID = `booking_ref@klawsomenovi.com`, organizer = events@, location depends on event type, 2-hour default duration).
-4. **Extend `send-transactional-email`** to accept an optional `attachments: [{ filename, contentBase64, contentType }]` field and pass it through to the underlying provider call (Lovable email API supports attachments on transactional sends).
-5. **Register templates** in `registry.ts`.
-6. **Trigger from `shopify-order-webhook`** — after we flip a booking to `confirmed`, invoke `send-transactional-email` three times (customer, team@, events@) with the same generated `.ics` attachment. Idempotency key = `booking-confirm-${booking_ref}-${recipient}` so webhook retries don't double-send.
-7. Deploy the two edge functions.
 
-## Out of scope
-- No changes to the booking wizard UI.
-- No email on the "pending_payment" step — only fires once payment is confirmed via the Shopify webhook (matches how Shopify's own receipt works).
-- Not touching the Shopify order receipt itself.
+### 1. Update `event_availability` rows (data change, no code)
+- **private** → every day open 09:00–11:00, 60-min slots (yields exactly 9:00 AM and 10:00 AM start options — a 10 AM start would finish right at open, so we'll keep only the 9:00 AM slot by setting close to 10:00 if you'd prefer a single slot; default plan is 09:00–11:00 which offers 9 AM and 10 AM).
+- **semi_private** → every day open 11:00–21:00, 60-min slots. Last bookable start = 8:00 PM (party ends at 9 PM close).
+- Mobile and rental rows are untouched.
 
-## Technical notes
-- ICS `DTSTART`/`DTEND` in UTC with `Z` suffix; include `METHOD:REQUEST` and a `SEQUENCE:0` so calendar clients treat it as an invite.
-- Attachment filename: `klawsome-booking-${booking_ref}.ics`, content type `text/calendar; method=REQUEST; charset=utf-8`.
-- Admin recipients hardcoded in the webhook, not the template (keeps templates recipient-agnostic).
+### 2. No frontend code changes needed
+The wizard reads these rows live, so updating them propagates immediately to `/index` "Start Booking" and the admin schedule editor.
+
+### 3. Admin visibility
+`BookingScheduleEditor` in `/klawsome-admin` already shows per-event-type hours, so the owner can tweak the windows themselves after this change without needing engineering help again.
+
+## Open question
+Only one slot vs. two for private: with a 09:00–11:00 window and 60-min slots the wizard offers **9:00 AM and 10:00 AM** start times (10 AM party ends at 11 AM right as public opens). If you want only a single 9:00 AM start, we set close to 10:00 instead. Default in this plan: keep both (9 AM and 10 AM).
