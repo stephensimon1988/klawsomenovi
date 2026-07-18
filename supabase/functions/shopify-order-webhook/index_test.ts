@@ -12,7 +12,7 @@ async function b64Hmac(rawBody: Uint8Array, secret: string) {
     false,
     ['sign'],
   );
-  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, rawBody));
+  const sig = new Uint8Array(await crypto.subtle.sign('HMAC', key, rawBody as BufferSource));
   let s = '';
   for (const b of sig) s += String.fromCharCode(b);
   return btoa(s);
