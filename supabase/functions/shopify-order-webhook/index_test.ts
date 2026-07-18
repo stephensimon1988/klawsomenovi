@@ -82,5 +82,6 @@ Deno.test('webhook rejects unsigned payload', async () => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ id: 1 }),
   });
+  await res.text();
   assertEquals(res.status, 401);
 });
