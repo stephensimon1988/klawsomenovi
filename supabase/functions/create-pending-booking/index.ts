@@ -25,7 +25,7 @@ Deno.serve(async (req) => {
       special_requests: body.notes ?? null,
       zip: body.zip ?? null,
       miles: body.miles ? Number(body.miles) : null,
-      addons: body.addons ?? null,
+      addons: body.addons ?? {},
       shopify_cart_id: body.shopify_cart_id ?? null,
       total_cents: body.total_cents ? Number(body.total_cents) : null,
     };
