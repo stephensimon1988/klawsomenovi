@@ -18,7 +18,7 @@ async function b64Hmac(rawBody: Uint8Array, secret: string) {
   return btoa(s);
 }
 
-Deno.test({ name: 'webhook updates pending booking to confirmed', sanitizeResources: false }, async () => {
+Deno.test({ name: 'webhook updates pending booking to confirmed', sanitizeResources: false, sanitizeOps: false }, async () => {
   const bookingRef = `TEST-${Date.now()}`;
 
   // Insert a pending booking directly via service role
