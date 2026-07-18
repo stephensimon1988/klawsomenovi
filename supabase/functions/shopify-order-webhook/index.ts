@@ -87,14 +87,12 @@ Deno.serve(async (req) => {
 
   const patch: Record<string, unknown> = {
     shopify_order_id: String(order?.id ?? ''),
-    shopify_order_number: order?.order_number ?? order?.name ?? null,
     total_cents: order?.total_price ? Math.round(Number(order.total_price) * 100) : null,
     contact_email: order?.email ?? order?.contact_email ?? null,
     contact_name:
       [order?.customer?.first_name, order?.customer?.last_name].filter(Boolean).join(' ') || null,
     contact_phone: order?.phone ?? order?.customer?.phone ?? null,
     status: paid ? 'confirmed' : 'pending_payment',
-    paid_at: paid ? new Date().toISOString() : null,
   };
   for (const k of Object.keys(patch)) if (patch[k] == null || patch[k] === '') delete patch[k];
 
