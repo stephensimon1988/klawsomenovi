@@ -1,12 +1,9 @@
 import { useEffect, useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import LottieAccent from './LottieAccent';
 import { useCmsSingle, useCmsTable, type HomepageContent, type StoreHour } from '@/hooks/useCmsContent';
 import { formatHoursSummary } from '@/lib/hoursSummary';
 import { openBookingModal } from './BookNowDialog';
 import { Link } from 'react-router-dom';
-gsap.registerPlugin(ScrollTrigger);
 
 const KawaiiHero = () => {
   const sectionRef = useRef<HTMLElement>(null);
@@ -26,29 +23,56 @@ const KawaiiHero = () => {
   const heroImage = content?.hero_image_url || 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/9dbb036d-bd01-425e-b085-2833702bc6c9/Klawsome_FriendsFamily-056.webp';
 
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.to(bgRef.current, {
-        y: 120,
-        ease: 'none',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top top',
-          end: 'bottom top',
-          scrub: 1,
-        },
-      });
+    const prefersReduced =
+      typeof window !== 'undefined' &&
+      window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReduced) return;
 
-      const textChildren = textRef.current?.children;
-      if (textChildren) {
-        gsap.fromTo(
-          textChildren,
-          { opacity: 0, y: 60 },
-          { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: 'power3.out', delay: 0.3 }
-        );
+    let ctx: { revert: () => void } | null = null;
+    let cancelled = false;
+
+    const start = async () => {
+      const [{ default: gsap }, { ScrollTrigger }] = await Promise.all([
+        import('gsap'),
+        import('gsap/ScrollTrigger'),
+      ]);
+      if (cancelled) return;
+      gsap.registerPlugin(ScrollTrigger);
+      ctx = gsap.context(() => {
+        gsap.to(bgRef.current, {
+          y: 120,
+          ease: 'none',
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: 'top top',
+            end: 'bottom top',
+            scrub: 1,
+          },
+        });
+        const textChildren = textRef.current?.children;
+        if (textChildren) {
+          gsap.fromTo(
+            textChildren,
+            { opacity: 0, y: 60 },
+            { opacity: 1, y: 0, duration: 1, stagger: 0.2, ease: 'power3.out', delay: 0.3 }
+          );
+        }
+      }, sectionRef);
+    };
+
+    const w = window as Window & { requestIdleCallback?: (cb: () => void) => number };
+    const idle = w.requestIdleCallback;
+    const handle = idle ? idle(start) : window.setTimeout(start, 200);
+
+    return () => {
+      cancelled = true;
+      if (idle) {
+        (window as Window & { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback?.(handle as number);
+      } else {
+        window.clearTimeout(handle as number);
       }
-    }, sectionRef);
-
-    return () => ctx.revert();
+      ctx?.revert();
+    };
   }, []);
 
   useEffect(() => {
