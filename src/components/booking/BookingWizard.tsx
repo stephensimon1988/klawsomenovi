@@ -674,7 +674,7 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
         <div className="md:col-span-2 rounded-2xl border border-primary/30 bg-primary/5 p-4">
           <p className="font-heading font-bold text-foreground mb-2">How many adults and children are allowed?</p>
           <ul className="list-disc pl-5 space-y-1 text-sm text-muted-foreground font-body">
-            <li>As Klawsome has limited space, a maximum of <strong>12 adults</strong> are allowed along with a maximum of <strong>12 children</strong>.</li>
+            <li>As Klawsome has limited space, a maximum of <strong>12 adults</strong> are allowed along with a <strong>separate</strong> maximum of <strong>12 children</strong> (up to 24 guests total, counted separately).</li>
             <li>Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.</li>
           </ul>
         </div>
