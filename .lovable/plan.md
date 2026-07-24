@@ -1,29 +1,26 @@
-## Goal
-Lock the booking wizard so:
-- **Private parties**: only bookable 9:00–11:00 AM (before the arcade opens to the public)
-- **Semi-private parties**: only bookable 11:00 AM–9:00 PM (during public hours)
+# Party cap wording + booking sync check
 
 ## Current state (verified)
-The `event_availability` table drives the time-slot generator in `src/hooks/useAvailability.ts`. Right now:
-- `private` row: opens at 11:00 or 12:00 depending on day, closes 20:00/21:00, Mon/Tue closed.
-- `semi_private` row: same schedule as private.
-
-That's why guests can book private parties at any public-hours slot today.
-
-Store is currently open **every day 11 AM – 9 PM** (from `store_hours`).
+- Booking wizard **already** enforces separate caps: up to 12 adults **and** up to 12 children (not a combined 12). See `BookingWizard.tsx` lines 367–368, 687–688.
+- Wizard note already reads: "a maximum of 12 adults are allowed along with a maximum of 12 children..." (line 677).
+- FAQ (`cmsData.ts` line 280) uses slightly off wording: "along with **the** maximum of 12 children" — reads like a shared cap.
+- Database check: new bookings **are** flowing into `/klawsome-admin`. Since Nov 7:
+  - `KLW-2607181853` — Sarah Imbrunone, private, Aug 8 2026, **confirmed** (paid)
+  - `KLW-2607192048` — Carmen Gutierriez, private, Aug 22 2026, **pending_payment** (never checked out)
+  - Note: both were booked at afternoon times, meaning they were created **before** we enforced the 9–11 AM private-party rule. New attempts will be blocked going forward.
 
 ## Changes
 
-### 1. Update `event_availability` rows (data change, no code)
-- **private** → every day open 09:00–11:00, 60-min slots (yields exactly 9:00 AM and 10:00 AM start options — a 10 AM start would finish right at open, so we'll keep only the 9:00 AM slot by setting close to 10:00 if you'd prefer a single slot; default plan is 09:00–11:00 which offers 9 AM and 10 AM).
-- **semi_private** → every day open 11:00–21:00, 60-min slots. Last bookable start = 8:00 PM (party ends at 9 PM close).
-- Mobile and rental rows are untouched.
+1. **Reword the "12 + 12" rule everywhere it appears** so it clearly reads as two independent caps, not a combined 12:
+   - `src/content/cmsData.ts` FAQ answer (line 280) — change "along with **the** maximum of 12 children" → "along with **a separate** maximum of 12 children".
+   - `src/components/booking/BookingWizard.tsx` note block (line 677) — same tightening + add a short "(24 total, counted separately)" clarifier.
+   - Add matching copy to `src/pages/Birthdays.tsx` party-rules section (currently silent on capacity) so it's stated on the marketing page too.
 
-### 2. No frontend code changes needed
-The wizard reads these rows live, so updating them propagates immediately to `/index` "Start Booking" and the admin schedule editor.
+2. **Backend booking check — no code change needed.** Confirm to the user that:
+   - Bookings are landing in `event_bookings` and rendering on the admin calendar.
+   - Sarah's Aug 8 booking is `confirmed` (webhook fired), Carmen's Aug 22 is `pending_payment` (abandoned checkout).
+   - Old afternoon private bookings pre-date the 9–11 AM enforcement; new ones can't slip through.
 
-### 3. Admin visibility
-`BookingScheduleEditor` in `/klawsome-admin` already shows per-event-type hours, so the owner can tweak the windows themselves after this change without needing engineering help again.
-
-## Open question
-Only one slot vs. two for private: with a 09:00–11:00 window and 60-min slots the wizard offers **9:00 AM and 10:00 AM** start times (10 AM party ends at 11 AM right as public opens). If you want only a single 9:00 AM start, we set close to 10:00 instead. Default in this plan: keep both (9 AM and 10 AM).
+## Out of scope
+- No change to numeric caps (still 12 adults + 12 children).
+- No change to booking flow, emails, webhooks, or Shopify sync.

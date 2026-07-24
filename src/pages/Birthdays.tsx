@@ -152,6 +152,13 @@ const Birthdays = () => {
                 and expect a response within three business days.
               </p>
 
+              <div className="rounded-kawaii bg-white/10 border border-white/20 p-5 mb-10">
+                <p className="font-heading font-bold text-white mb-2">Guest limits</p>
+                <p className="text-white/80 font-body text-sm leading-relaxed">
+                  As Klawsome has limited space, a maximum of <strong>12 adults</strong> are allowed along with a <strong>separate</strong> maximum of <strong>12 children</strong> (up to 24 guests total, counted separately). We keep a limit on guests to ensure a fun and comfortable experience for everyone.
+                </p>
+              </div>
+
               <div className="flex gap-3 flex-wrap">
                 <Button size="hero" onClick={() => openBookingModal()} className="bg-white text-klawsome-navy hover:bg-white/90">
                   Book a Birthday Party

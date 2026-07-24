@@ -277,7 +277,7 @@ export const cmsData: Record<string, any[]> = {
     {
       "id": "66092dcc-3cf6-46bf-a987-a4d0743a456c",
       "question": "How many adults and children are allowed?",
-      "answer": "As Klawsome has limited space, a maximum of 12 adults are allowed along with the maximum of 12 children. Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.",
+      "answer": "As Klawsome has limited space, a maximum of 12 adults are allowed along with a separate maximum of 12 children (up to 24 guests total, counted separately). Klawsome keeps a limit on guests to ensure a fun and comfortable experience for everyone.",
       "page": "birthdays",
       "sort_order": 23
     },
