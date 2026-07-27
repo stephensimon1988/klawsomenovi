@@ -40,8 +40,20 @@ const KawaiiFooter = ({ prevColor = 'white' }: KawaiiFooterProps) => {
       <footer id="contact" className="py-16 px-6 lg:px-12 bg-white border-t border-klawsome-navy/15">
         <div className="container mx-auto">
           <div className="flex flex-col md:flex-row items-start justify-between gap-12 mb-12">
-            <div>
-              <img src={klawsomeLogo} alt="Klawsome" className="h-32 w-auto mb-4" />
+            <div className="flex items-center gap-6">
+              <img src={klawsomeLogo} alt="Klawsome" className="h-32 w-auto" />
+              <a
+                href="https://www.kayak.com/Novi.28807.guide"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Kayak Novi Guide"
+              >
+                <img
+                  src="https://content.r9cdn.net/res/images/horizon/ui/seo/marketing/poibadges/POI_BADGES_GUIDES_ORANGE.png?v=e9d3a144da5c831c5049ece6ebfc57d47e904ab7&cluster=4"
+                  alt="Featured on Kayak Novi Guide"
+                  className="h-32 w-auto"
+                />
+              </a>
             </div>
 
             <div className="flex flex-wrap gap-12">
