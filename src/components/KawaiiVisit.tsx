@@ -52,7 +52,7 @@ const KawaiiVisit = () => {
                 <p className="font-heading font-bold text-foreground">Hours</p>
                 <p className="text-foreground/80">{dayRange}, {timeRange}</p>
                 {closedDays && <p className="text-sm text-muted-foreground mt-1">{closedDays}</p>}
-                <p className="text-sm font-heading font-bold text-primary mt-2">☀️ Special Summer Hours — Open every day, 11 a.m. to 9 p.m.</p>
+                <p className="text-sm font-heading font-bold text-primary mt-2">☀️ Special Summer Hours — Open every day, 11 a.m. to 9 p.m. CLOSED Saturday, July 4, 2026. Re-OPEN Sunday, July 5.</p>
               </div>
             </div>
 
