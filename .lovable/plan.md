@@ -1,50 +1,50 @@
+## Goal
 
-# Performance optimization (no functionality changes)
+Replace the current Klawsome Mobile packages ($445 / $645 / $1495 all-day) with the pricing sheet: three tiers, 1 or 2 hours, weekday vs weekend rates, plus a per-additional-hour rate.
 
-The site's core cost is heavy media plus a few always-mounted animations. All fixes below are presentation-layer only — no changes to booking, admin, payments, Shopify/webhooks, database, or auth.
+## Pricing to implement
 
-## What's actually slow (verified)
+| Tier | Hours | Tokens | Weekday | Weekend |
+|---|---|---|---|---|
+| Token pre-buy | 1 | 400 | $595 | $720 |
+| Token pre-buy | 2 | 600 | $795 | $920 |
+| Token pre-buy | +1 hr | 100 | $195 | $245 |
+| Unlimited play | 1 | Infinite (30-token tray at a time) | $1,190 | $1,245 |
+| Unlimited play | 2 | Infinite (30-token tray at a time) | $2,150 | $2,450 |
+| Unlimited play | +1 hr | — | $950 | $1,045 |
+| Reserve arcade (tokens bought separately) | 1 | — | $295 | $395 |
+| Reserve arcade | 2 | — | $545 | $645 |
+| Reserve arcade | +1 hr | — | $195 | $245 |
 
-- `public/gallery/` = **34 MB** across 101 files. Many single WebP images are 450–600 KB even though they render at thumbnail size. The `/gallery` page is by far the heaviest route.
-- `public/hero-intro.mp4` = **5.3 MB** in `public/` (unoptimized, no poster).
-- `src/assets/klawsome-crew-plush.png` (426 KB PNG), `our-story-intro.png` (117 KB PNG), `klawsome-logo.png` (139 KB PNG) — PNGs that should be WebP.
-- `KawaiiHero` loads **gsap + ScrollTrigger** eagerly on the homepage, and `LottieAccent` (lottie-react) is mounted immediately.
-- `App.tsx` already lazy-loads routes and defers extras — good baseline, small further wins available.
+Weekday = Mon–Fri, Weekend = Sat–Sun, based on the selected event date.
 
-## Changes
+## Shopify work
 
-### 1. Image asset diet (biggest win)
-- Re-encode every `public/gallery/*.webp` at `quality ~72`, `max-width 1600`, stripped metadata. Target ≤ ~150 KB each; expect ~34 MB → ~8–10 MB total. Visual quality preserved.
-- Convert three heavy PNGs to WebP and swap imports: `klawsome-crew-plush.png`, `our-story-intro.png`, `klawsome-logo.png`.
-- Add `loading="lazy"` and `decoding="async"` to every non-hero `<img>` on `/gallery`, `/news`, `/community-outreach`, `/our-story`, `/careers`, and gallery-style rows on the homepage. Only the LCP hero image keeps `fetchpriority="high"`.
-- Add explicit `width`/`height` (or aspect-ratio) on gallery thumbnails to eliminate layout shift.
+Create one product, "Klawsome Mobile", with options Tier / Duration / Day type:
+- 12 base variants (3 tiers x 1hr,2hr x weekday,weekend)
+- 6 "additional hour" variants (3 tiers x weekday,weekend), sold as quantity = number of extra hours
 
-### 2. Hero video
-- Add a lightweight WebP poster and set `<video preload="metadata" playsinline muted>` so the 5.3 MB file only fetches on interaction / when the section scrolls in via `IntersectionObserver`.
-- Consider a smaller 720p re-encode of `hero-intro.mp4` (target ~1.5 MB). Ship as `.mp4` still, no format change.
+Variants are untracked inventory, no shipping (delivery is already billed via the existing per-mile surcharge variant). The old mobile variants stay in Shopify but are no longer referenced by the site.
 
-### 3. Defer animation libraries
-- Move `gsap` + `ScrollTrigger` in `KawaiiHero` behind a `requestIdleCallback` / `IntersectionObserver` dynamic `import()`. Fade-in still works; parallax activates after first paint. Removes gsap from the initial critical chunk.
-- Lazy-mount `LottieAccent` the same way (already `exclude`d from optimizeDeps — just gate the mount).
+## Booking wizard changes
 
-### 4. Route/data hygiene
-- Add `staleTime: 5 * 60_000` and `refetchOnWindowFocus: false` on the `QueryClient` default so `site_settings` / `store_hours` / `google-rating` don't re-fetch on every tab focus.
-- Prefetch the `/gallery`, `/store`, `/birthdays` route chunks on idle (they're the most-visited).
+1. **Date first for Mobile.** Reorder the mobile flow so the date/time step comes before the package step, since the date decides weekday vs weekend pricing. Order becomes: pathway → datetime → package → add-ons → delivery → contact → review.
+2. **New package step for Mobile.** Show the three tiers as cards; each card shows the 1-hour and 2-hour price for the selected day type, with tokens/description. A "day type" badge ("Weekday pricing" / "Weekend pricing") explains the rate shown.
+3. **Extra hours control.** Replace the generic "$145 Extra Hour" add-on for Mobile with a stepper on the package step that uses the tier + day-type specific additional-hour variant and price. Rental keeps its existing $145 extra-hour add-on.
+4. **Totals.** Estimated total and review screen use the day-type-correct base price plus extra hours plus existing add-ons and delivery surcharge.
+5. **Checkout lines.** Cart line for the chosen tier/duration/day-type variant, plus a line for the additional-hour variant with quantity = extra hours, plus existing add-on and delivery lines. Booking attributes gain `tier`, `duration_hours`, `day_type`, and `extra_hours` so they appear on the Shopify order and the admin record.
+6. **Duration in the record.** `duration_minutes` sent to `create-pending-booking` reflects base hours + extra hours instead of the default 60.
 
-### 5. Head / network
-- Add `<link rel="preconnect">` for the Shopify Storefront + Google Fonts hosts already used.
-- Keep the existing hero image `preload` — leave that alone.
+## Copy updates
 
-## Explicitly NOT touching
-
-- No changes to `BookingWizard`, edge functions, webhooks, Shopify/Square integrations, admin pages, RLS, or database.
-- No new dependencies, no framework/router changes.
-- No design/palette/font changes.
+Update the Mobile pathway card ("from $445") and any Mobile pricing copy on the Rental/Business pages to "from $295" with a note that rates vary by weekday/weekend and tier.
 
 ## Technical notes
 
-- Re-encoding will use `sharp` via a one-off script run locally in the sandbox (not shipped). Output files replace the originals in `public/gallery/`; filenames unchanged so all references keep working.
-- Dynamic imports for gsap/lottie use `const { default: gsap } = await import('gsap')` inside a `useEffect` gated by `IntersectionObserver`. If the user has `prefers-reduced-motion`, skip loading gsap entirely.
-- Expected impact: initial JS ~ -80–120 KB gz (gsap+lottie out of critical path), `/gallery` payload ~ -25 MB, LCP on homepage unchanged or slightly better (video no longer competes with hero image).
+- `src/lib/booking/catalog.ts`: replace `MOBILE_PACKAGES` with a `MOBILE_TIERS` structure keyed by tier with weekday/weekend prices per duration and per extra hour, plus new variant IDs.
+- `src/components/booking/BookingWizard.tsx`: step reorder for mobile, new tier picker + extra-hours stepper, total and cart-line logic.
+- No database schema change needed; extra detail rides in the existing `addons` JSON and attributes.
 
-Approve and I'll implement in a single pass.
+## Verification
+
+Build, then walk the Mobile flow in the preview for a weekday date and a weekend date, confirming prices switch, extra hours add correctly, and the review total matches the sheet.
