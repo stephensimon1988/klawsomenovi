@@ -847,12 +847,14 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
 }
 
 function ReviewStep({
-  pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents,
+  pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents, dayType, mobileBaseCents, mobileExtraCents,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
   zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
+  dayType: DayType; mobileBaseCents: number; mobileExtraCents: number;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
+  const tier = MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null;
   const startAt = state.date && state.time ? combineDateTime(state.date, state.time) : null;
   const addonEntries = Object.entries(state.addons).map(([id, sel]) => {
     const def = ADDONS.find((a) => a.id === id)!;
@@ -862,7 +864,16 @@ function ReviewStep({
     <div className="space-y-4">
       <div className="rounded-2xl border border-border p-4 bg-card">
         <p className="text-xs uppercase font-heading font-bold text-muted-foreground">Booking</p>
-        <p className="font-heading font-bold text-lg mt-1">{p.label}{selectedPackage ? ` — ${selectedPackage.label}` : ''}</p>
+        <p className="font-heading font-bold text-lg mt-1">
+          {p.label}
+          {selectedPackage ? ` — ${selectedPackage.label}` : ''}
+          {pathway === 'mobile' && tier ? ` — ${tier.label}` : ''}
+        </p>
+        {pathway === 'mobile' && tier && (
+          <p className="text-sm text-muted-foreground mt-1">
+            {state.mobileHours + state.mobileExtraHours} hour{state.mobileHours + state.mobileExtraHours === 1 ? '' : 's'} · {dayType === 'weekend' ? 'Weekend' : 'Weekday'} rate
+          </p>
+        )}
         {startAt && <p className="text-sm text-muted-foreground mt-1">{startAt.toLocaleString(undefined, { weekday: 'long', month: 'long', day: 'numeric', hour: 'numeric', minute: '2-digit' })}</p>}
       </div>
       <div className="rounded-2xl border border-border p-4 bg-card">
@@ -872,6 +883,12 @@ function ReviewStep({
             <Row label={p.label} amount={PATHWAY_BASE_CENTS[pathway]} />
           )}
           {selectedPackage && <Row label={selectedPackage.label} amount={selectedPackage.priceCents} />}
+          {pathway === 'mobile' && tier && (
+            <Row label={`${tier.label} — ${state.mobileHours} hr (${dayType === 'weekend' ? 'weekend' : 'weekday'})`} amount={mobileBaseCents} />
+          )}
+          {pathway === 'mobile' && tier && state.mobileExtraHours > 0 && (
+            <Row label={`Additional hours × ${state.mobileExtraHours}`} amount={mobileExtraCents} />
+          )}
           {addonEntries.map(({ def, sel }) => (
             <Row key={def.id} label={`${def.label}${sel.character ? ` — ${sel.character}` : ''}${sel.qty > 1 ? ` × ${sel.qty}` : ''}`} amount={def.priceCents * sel.qty} />
           ))}
