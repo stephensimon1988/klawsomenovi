@@ -17,7 +17,7 @@ export const PATHWAYS: PathwayDef[] = [
   { id: 'private', label: 'Klawsome Private Party', subtitle: 'Exclusive space, your color + music, 325 tokens.', price: '$319', duration: '1 hour', variantId: gid(52297242738990), needsDelivery: false },
   { id: 'semi', label: 'Semi-Private Party', subtitle: 'Paris Baguette table + 325 tokens.', price: '$250', duration: '1 hour', variantId: gid(52297250636078), needsDelivery: false },
   { id: 'rental', label: 'Rent a Klaw Machine', subtitle: 'We bring the arcade to you.', price: 'from $445', duration: '1 or 2 hours', variantId: '', needsDelivery: true },
-  { id: 'mobile', label: 'Book Klawsome Mobile', subtitle: 'Mobile claw machine arcade for your event.', price: 'from $445', duration: '1hr / 2hr / all-day', variantId: '', needsDelivery: true },
+  { id: 'mobile', label: 'Book Klawsome Mobile', subtitle: 'Mobile claw machine arcade for your event. Weekday & weekend rates.', price: 'from $295', duration: '1 or 2 hours + extra hours', variantId: '', needsDelivery: true },
 ];
 
 export interface PackageOption {
@@ -41,11 +41,96 @@ export const RENTAL_PACKAGES: PackageOption[] = [
   { id: 'rent-2hr', label: '2-Hour Extended Party', price: '$645', priceCents: 64500, variantId: gid(52297298411822), description: '40 regular-size plushies (based on availability) OR your supplied product (5–10 in, 0–5 lb).' },
 ];
 
-export const MOBILE_PACKAGES: PackageOption[] = [
-  { id: 'mobile-1hr', label: '1 Hour', price: '$445', priceCents: 44500, variantId: gid(52297329475886) },
-  { id: 'mobile-2hr', label: '2 Hours', price: '$645', priceCents: 64500, variantId: gid(52297329508654) },
-  { id: 'mobile-day', label: 'All Day (Unlimited)', price: '$1495', priceCents: 149500, variantId: gid(52297329541422) },
+/* ---------- Klawsome Mobile: tiered, weekday/weekend pricing ---------- */
+
+export type MobileTierId = 'token' | 'unlimited' | 'reserve';
+export type DayType = 'weekday' | 'weekend';
+export type MobileDuration = 1 | 2;
+
+interface MobileRate { cents: number; variantId: string }
+
+export interface MobileTierDef {
+  id: MobileTierId;
+  label: string;
+  description: string;
+  tokensNote: Record<MobileDuration, string>;
+  extraHourNote?: string;
+  rates: Record<DayType, { 1: MobileRate; 2: MobileRate; extra: MobileRate }>;
+}
+
+export const MOBILE_TIERS: MobileTierDef[] = [
+  {
+    id: 'token',
+    label: 'Token Pre-Buy',
+    description: 'Pre-purchased tokens for your guests to play with.',
+    tokensNote: { 1: '400 tokens included', 2: '600 tokens included' },
+    extraHourNote: '100 tokens per additional hour',
+    rates: {
+      weekday: {
+        1: { cents: 59500, variantId: gid(52373062975790) },
+        2: { cents: 79500, variantId: gid(52373063041326) },
+        extra: { cents: 19500, variantId: gid(52373063106862) },
+      },
+      weekend: {
+        1: { cents: 72000, variantId: gid(52373063008558) },
+        2: { cents: 92000, variantId: gid(52373063074094) },
+        extra: { cents: 24500, variantId: gid(52373063139630) },
+      },
+    },
+  },
+  {
+    id: 'unlimited',
+    label: 'Unlimited Play',
+    description: 'Unlimited play for the whole event — no token limit.',
+    tokensNote: {
+      1: 'Infinite play (30-token tray at a time)',
+      2: 'Infinite play (30-token tray at a time)',
+    },
+    rates: {
+      weekday: {
+        1: { cents: 119000, variantId: gid(52373063172398) },
+        2: { cents: 215000, variantId: gid(52373063237934) },
+        extra: { cents: 95000, variantId: gid(52373063303470) },
+      },
+      weekend: {
+        1: { cents: 124500, variantId: gid(52373063205166) },
+        2: { cents: 245000, variantId: gid(52373063270702) },
+        extra: { cents: 104500, variantId: gid(52373063336238) },
+      },
+    },
+  },
+  {
+    id: 'reserve',
+    label: 'Reserve Arcade',
+    description: 'Reserve the arcade for your group — tokens purchased separately.',
+    tokensNote: { 1: 'Tokens bought separately', 2: 'Tokens bought separately' },
+    rates: {
+      weekday: {
+        1: { cents: 29500, variantId: gid(52373063369006) },
+        2: { cents: 54500, variantId: gid(52373063434542) },
+        extra: { cents: 19500, variantId: gid(52373063500078) },
+      },
+      weekend: {
+        1: { cents: 39500, variantId: gid(52373063401774) },
+        2: { cents: 64500, variantId: gid(52373063467310) },
+        extra: { cents: 24500, variantId: gid(52373063532846) },
+      },
+    },
+  },
 ];
+
+export function dayTypeFor(date: Date | null | undefined): DayType {
+  if (!date) return 'weekday';
+  const d = date.getDay();
+  return d === 0 || d === 6 ? 'weekend' : 'weekday';
+}
+
+export function mobileRate(tier: MobileTierDef, day: DayType, key: MobileDuration | 'extra'): MobileRate {
+  return tier.rates[day][key];
+}
+
+export const fmtUSD = (cents: number) =>
+  `$${(cents / 100).toLocaleString('en-US', { minimumFractionDigits: cents % 100 ? 2 : 0, maximumFractionDigits: 2 })}`;
 
 export interface AddOnDef {
   id: string;
@@ -83,7 +168,7 @@ export const ADDONS: AddOnDef[] = [
   },
   { id: 'xl-plushie', label: 'XL Plushie', price: '$89', priceCents: 8900, variantId: gid(52297272557870), description: "An XL plushie of the celebrant's choice (19-plushie trade-in value or smaller).", scope: ['private', 'semi'] },
   { id: 'photographer', label: 'Event Photographer', price: '$79 / hr', priceCents: 7900, variantId: gid(52297274818862), description: 'On-staff photographer for one hour to capture the celebration.', scope: ['private', 'semi'] },
-  { id: 'extra-hour', label: 'Extra Hour', price: '$145', priceCents: 14500, variantId: gid(52297302540590), description: 'Add another hour to your rental.', scope: ['rental', 'mobile'] },
+  { id: 'extra-hour', label: 'Extra Hour', price: '$145', priceCents: 14500, variantId: gid(52297302540590), description: 'Add another hour to your rental.', scope: ['rental'] },
   { id: 'plush-refill', label: 'Plushie Refill', price: '$200', priceCents: 20000, variantId: gid(52297306538286), description: 'Refill the machine with fresh plushies.', scope: ['rental', 'mobile'] },
   { id: 'extra-machine', label: 'Additional Machine', price: '$245', priceCents: 24500, variantId: gid(52297315746094), description: 'Add a second claw machine.', scope: ['rental'] },
 ];
