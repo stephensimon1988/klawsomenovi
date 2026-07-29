@@ -289,7 +289,7 @@ function BookingWizardDialog() {
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      <DialogContent className="p-0 gap-0">
+      <DialogContent className="p-0 gap-0 booking-dialog">
         <DialogHeader className="px-6 pt-5 pb-3 border-b shrink-0">
           <DialogTitle className="font-heading">Book with Klawsome</DialogTitle>
           <StepBar step={step} pathway={pathway} />
