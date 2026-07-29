@@ -502,6 +502,7 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
 function DateTimeStep({
   date, time, onChange, hours, blackouts, slotMinutes, leadHours,
 }: {
+</PLACEHOLDER>
   date: Date | null; time: string | null; onChange: (d: Date | null, t: string | null) => void;
   hours: Parameters<typeof isDateAvailable>[1]; blackouts: Set<string> | undefined; slotMinutes: number; leadHours: number;
 }) {
