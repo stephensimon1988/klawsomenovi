@@ -13,13 +13,18 @@ import {
   addonsFor,
   DELIVERY_SURCHARGE_VARIANT,
   FREE_DELIVERY_MILES,
-  MOBILE_PACKAGES,
+  MOBILE_TIERS,
+  dayTypeFor,
+  fmtUSD,
   PATHWAYS,
   PATHWAY_BASE_CENTS,
   RENTAL_PACKAGES,
   type Pathway,
   type PackageOption,
   type AddOnDef,
+  type MobileTierId,
+  type MobileDuration,
+  type DayType,
 } from '@/lib/booking/catalog';
 import { getMilesForZip, type ZipLookup } from '@/lib/booking/zipMiles';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
@@ -37,6 +42,9 @@ type Step = 'pathway' | 'package' | 'datetime' | 'addons' | 'delivery' | 'contac
 interface State {
   pathway: Pathway | null;
   packageId: string | null;
+  mobileTier: MobileTierId | null;
+  mobileHours: MobileDuration;
+  mobileExtraHours: number;
   date: Date | null;
   time: string | null;
   addons: Record<string, { qty: number; character?: string }>;
@@ -52,6 +60,9 @@ interface State {
 const emptyState = (): State => ({
   pathway: null,
   packageId: null,
+  mobileTier: null,
+  mobileHours: 1,
+  mobileExtraHours: 0,
   date: null,
   time: null,
   addons: {},
@@ -63,7 +74,6 @@ const emptyState = (): State => ({
 
 function packagesFor(pathway: Pathway | null): PackageOption[] {
   if (pathway === 'rental') return RENTAL_PACKAGES;
-  if (pathway === 'mobile') return MOBILE_PACKAGES;
   return [];
 }
 
@@ -98,6 +108,14 @@ function BookingWizardDialog() {
 
   const selectedPackage = useMemo(() => pkgs.find((p) => p.id === state.packageId) || null, [pkgs, state.packageId]);
 
+  const dayType: DayType = dayTypeFor(state.date);
+  const mobileTier = useMemo(
+    () => MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null,
+    [state.mobileTier],
+  );
+  const mobileBaseCents = mobileTier ? mobileTier.rates[dayType][state.mobileHours].cents : 0;
+  const mobileExtraCents = mobileTier ? mobileTier.rates[dayType].extra.cents * state.mobileExtraHours : 0;
+
   const needsDelivery = pathway === 'rental' || pathway === 'mobile';
   const [zipInfo, setZipInfo] = useState<ZipLookup | null>(null);
   const [zipResolving, setZipResolving] = useState(false);
@@ -126,13 +144,14 @@ function BookingWizardDialog() {
     let sum = 0;
     if (pathway && pathway !== 'rental' && pathway !== 'mobile') sum += PATHWAY_BASE_CENTS[pathway];
     if (selectedPackage) sum += selectedPackage.priceCents;
+    if (pathway === 'mobile') sum += mobileBaseCents + mobileExtraCents;
     for (const [id, sel] of Object.entries(state.addons)) {
       const def = ADDONS.find((a) => a.id === id);
       if (def) sum += def.priceCents * (sel.qty || 0);
     }
     sum += deliveryCents;
     return sum;
-  }, [pathway, selectedPackage, state.addons, deliveryCents]);
+  }, [pathway, selectedPackage, state.addons, deliveryCents, mobileBaseCents, mobileExtraCents]);
 
   const canNext = validateStep(step, state, selectedPackage, availability, blackouts, zipInfo);
 
@@ -166,6 +185,19 @@ function BookingWizardDialog() {
       if (pathway === 'private' || pathway === 'semi') {
         const p = PATHWAYS.find((x) => x.id === pathway)!;
         lines.push({ merchandiseId: p.variantId, quantity: 1, attributes: lineAttrs });
+      } else if (pathway === 'mobile' && mobileTier) {
+        lines.push({
+          merchandiseId: mobileTier.rates[dayType][state.mobileHours].variantId,
+          quantity: 1,
+          attributes: lineAttrs,
+        });
+        if (state.mobileExtraHours > 0) {
+          lines.push({
+            merchandiseId: mobileTier.rates[dayType].extra.variantId,
+            quantity: state.mobileExtraHours,
+            attributes: lineAttrs,
+          });
+        }
       } else if (selectedPackage) {
         lines.push({ merchandiseId: selectedPackage.variantId, quantity: 1, attributes: lineAttrs });
       }
@@ -200,6 +232,10 @@ function BookingWizardDialog() {
         { key: 'contact_phone', value: state.contact.phone },
         { key: 'zip', value: state.zip },
         { key: 'miles', value: zipInfo?.known ? String(zipInfo.miles) : '' },
+        { key: 'tier', value: pathway === 'mobile' && mobileTier ? mobileTier.label : '' },
+        { key: 'day_type', value: pathway === 'mobile' ? dayType : '' },
+        { key: 'duration_hours', value: pathway === 'mobile' ? String(state.mobileHours + state.mobileExtraHours) : '' },
+        { key: 'extra_hours', value: pathway === 'mobile' && state.mobileExtraHours ? String(state.mobileExtraHours) : '' },
       ].filter((a) => a.value && a.value.length > 0);
 
       const result = await createBookingCart({
@@ -221,6 +257,7 @@ function BookingWizardDialog() {
             booking_ref: ref,
             event_type: pathway,
             start_at: startAt.toISOString(),
+            duration_minutes: pathway === 'mobile' ? (state.mobileHours + state.mobileExtraHours) * 60 : 60,
             contact_name: state.contact.name,
             contact_email: state.contact.email,
             contact_phone: state.contact.phone,
@@ -233,6 +270,7 @@ function BookingWizardDialog() {
             miles: zipInfo?.known ? zipInfo.miles : null,
             addons: state.addons,
             shopify_cart_id: result.checkoutUrl,
+            total_cents: totalCents,
           },
         });
       } catch (err) {
@@ -261,7 +299,18 @@ function BookingWizardDialog() {
             <PathwayStep onPick={(p) => { setState((s) => ({ ...s, pathway: p })); setStep(nextAfterPathway(p)); }} />
           )}
           {step === 'package' && pathway && (
-            <PackageStep pathway={pathway} packages={pkgs} selectedId={state.packageId} onSelect={(id) => setState((s) => ({ ...s, packageId: id }))} />
+            pathway === 'mobile' ? (
+              <MobileTierStep
+                dayType={dayType}
+                date={state.date}
+                tierId={state.mobileTier}
+                hours={state.mobileHours}
+                extraHours={state.mobileExtraHours}
+                onChange={(patch) => setState((s) => ({ ...s, ...patch }))}
+              />
+            ) : (
+              <PackageStep pathway={pathway} packages={pkgs} selectedId={state.packageId} onSelect={(id) => setState((s) => ({ ...s, packageId: id }))} />
+            )
           )}
           {step === 'datetime' && pathway && (
             <DateTimeStep
@@ -291,6 +340,9 @@ function BookingWizardDialog() {
               zipInfo={zipInfo}
               deliveryCents={deliveryCents}
               totalCents={totalCents}
+              dayType={dayType}
+              mobileBaseCents={mobileBaseCents}
+              mobileExtraCents={mobileExtraCents}
             />
           )}
           {step === 'done' && (
@@ -325,18 +377,20 @@ function BookingWizardDialog() {
 /* ---------- helpers ---------- */
 
 function stepOrder(pathway: Pathway | null): Step[] {
-  const needsPackage = pathway === 'rental' || pathway === 'mobile';
   const needsDelivery = pathway === 'rental' || pathway === 'mobile';
   const base: Step[] = ['pathway'];
-  if (needsPackage) base.push('package');
-  base.push('datetime', 'addons');
+  if (pathway === 'rental') base.push('package');
+  base.push('datetime');
+  // Mobile pricing depends on the date (weekday vs weekend), so tiers come after.
+  if (pathway === 'mobile') base.push('package');
+  base.push('addons');
   if (needsDelivery) base.push('delivery');
   base.push('contact', 'review', 'done');
   return base;
 }
 
 function nextAfterPathway(p: Pathway): Step {
-  return p === 'rental' || p === 'mobile' ? 'package' : 'datetime';
+  return p === 'rental' ? 'package' : 'datetime';
 }
 
 function combineDateTime(date: Date, time: string): Date {
@@ -354,7 +408,7 @@ function validateStep(
 ): boolean {
   switch (step as string) {
     case 'pathway': return !!s.pathway;
-    case 'package': return !!pkg;
+    case 'package': return s.pathway === 'mobile' ? !!s.mobileTier : !!pkg;
     case 'datetime': return !!s.date && !!s.time;
     case 'addons': return true;
     case 'delivery': return !!zipInfo?.known;
