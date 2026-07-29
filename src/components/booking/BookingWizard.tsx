@@ -499,10 +499,99 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
   );
 }
 
+function MobileTierStep({
+  dayType, date, tierId, hours, extraHours, onChange,
+}: {
+  dayType: DayType;
+  date: Date | null;
+  tierId: MobileTierId | null;
+  hours: MobileDuration;
+  extraHours: number;
+  onChange: (patch: Partial<State>) => void;
+}) {
+  const selected = MOBILE_TIERS.find((t) => t.id === tierId) || null;
+  return (
+    <div className="space-y-4">
+      <div className="flex flex-wrap items-center gap-3">
+        <p className="text-sm text-muted-foreground font-body">Pick your Klawsome Mobile package.</p>
+        <span className="text-xs font-heading font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">
+          {dayType === 'weekend' ? 'Weekend pricing' : 'Weekday pricing'}
+          {date ? ` · ${date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}` : ''}
+        </span>
+      </div>
+
+      <div className="flex gap-2">
+        {([1, 2] as MobileDuration[]).map((h) => (
+          <button
+            key={h}
+            onClick={() => onChange({ mobileHours: h })}
+            className={cn(
+              'px-4 py-2 rounded-full text-sm font-heading font-bold border transition',
+              hours === h ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50',
+            )}
+          >
+            {h} {h === 1 ? 'Hour' : 'Hours'}
+          </button>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-3">
+        {MOBILE_TIERS.map((t) => {
+          const rate = t.rates[dayType][hours];
+          const active = tierId === t.id;
+          return (
+            <button
+              key={t.id}
+              onClick={() => onChange({ mobileTier: t.id })}
+              className={cn(
+                'text-left rounded-2xl border p-5 transition-all',
+                active ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
+              )}
+            >
+              <div className="flex items-start justify-between gap-3">
+                <div>
+                  <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
+                  <p className="text-sm text-muted-foreground font-body mt-1">{t.description}</p>
+                  <p className="text-sm text-foreground font-body mt-1">{t.tokensNote[hours]}</p>
+                </div>
+                <div className="shrink-0 text-right">
+                  <p className="font-heading font-bold text-2xl text-primary">{fmtUSD(rate.cents)}</p>
+                  <p className="text-xs text-muted-foreground">+{fmtUSD(t.rates[dayType].extra.cents)} / extra hr</p>
+                </div>
+              </div>
+            </button>
+          );
+        })}
+      </div>
+
+      {selected && (
+        <div className="rounded-2xl border border-border bg-card p-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="font-heading font-bold text-foreground">Additional hours</p>
+            <p className="text-sm text-muted-foreground font-body">
+              {fmtUSD(selected.rates[dayType].extra.cents)} per extra hour
+              {selected.extraHourNote ? ` · ${selected.extraHourNote}` : ''}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => onChange({ mobileExtraHours: Math.max(0, extraHours - 1) })} className="w-8 h-8 rounded-full border border-border">−</button>
+            <span className="w-6 text-center">{extraHours}</span>
+            <button onClick={() => onChange({ mobileExtraHours: Math.min(8, extraHours + 1) })} className="w-8 h-8 rounded-full border border-border">+</button>
+          </div>
+        </div>
+      )}
+
+      <p className="text-xs text-muted-foreground font-body">
+        Weekday rates apply Mon–Fri; weekend rates apply Sat–Sun. Free delivery within 20 miles; $3/mile beyond 20.
+      </p>
+      <p className="text-xs italic text-muted-foreground font-body">*Plushie selection subject to stock.</p>
+    </div>
+  );
+}
+
 function DateTimeStep({
   date, time, onChange, hours, blackouts, slotMinutes, leadHours,
 }: {
-</PLACEHOLDER>
   date: Date | null; time: string | null; onChange: (d: Date | null, t: string | null) => void;
   hours: Parameters<typeof isDateAvailable>[1]; blackouts: Set<string> | undefined; slotMinutes: number; leadHours: number;
 }) {
