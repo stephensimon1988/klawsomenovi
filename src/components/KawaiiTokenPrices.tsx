@@ -2,7 +2,7 @@ import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
 
 const fallbackTiers = [
-  { price: '$10', tokens: '10', bonus: '—', is_highlight: false },
+  { price: '$10', tokens: '10', bonus: '-', is_highlight: false },
   { price: '$30', tokens: '30 + 5', bonus: '16%', is_highlight: false },
   { price: '$50', tokens: '50 + 10', bonus: '20%', is_highlight: false },
   { price: '$100', tokens: '100 + 25', bonus: '25%', is_highlight: true },
