@@ -42,7 +42,6 @@ export const CONTENT_TABS: ContentTab[] = [
     render: (pw) => (
       <Panel title="News & Press">
         <MultiRowEditor password={pw} table="news_articles" searchKeys={['title', 'source']} columns={[
-          { key: 'image_url', label: 'Image', type: 'image', width: '90px' },
           { key: 'title', label: 'Title', type: 'textarea' },
           { key: 'source', label: 'Source' },
           { key: 'date', label: 'Date' },
@@ -50,7 +49,7 @@ export const CONTENT_TABS: ContentTab[] = [
           { key: 'image_url', label: 'Image URL', type: 'textarea' },
           { key: 'is_active', label: 'Visible', type: 'bool' },
           { key: 'sort_order', label: 'Order', type: 'number', width: '90px' },
-        ].filter((c, i, arr) => arr.findIndex((x) => x.key === c.key && x.type === c.type) === i) as any} />
+        ]} />
       </Panel>
     ),
   },
