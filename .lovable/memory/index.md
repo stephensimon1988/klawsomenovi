@@ -15,3 +15,4 @@ New sections must always get a CMS table + Command Center tab + frontend hook co
 - [CMS content sync](mem://constraint/cms-content-sync) — Never change site content only in code; always update DB record too
 - [New sections → CMS](mem://constraint/new-sections-cms) — New content sections must get DB table + admin tab + frontend hook
 - [Card grid alignment](mem://design/card-grid-alignment) — Grid alignment rules for card layouts
+- [Admin CMS tabs](mem://features/admin-cms) — Live DB-backed content tabs in /klawsome-admin, hybrid fallback to cmsData.ts

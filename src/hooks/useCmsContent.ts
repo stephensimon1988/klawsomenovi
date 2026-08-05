@@ -1,12 +1,26 @@
-// Hybrid CMS layer: `site_settings` and `store_hours` fetch live from
-// Supabase (edited via /klawsome-admin). All other tables still come from
-// the static cmsData.ts snapshot.
+// Hybrid CMS layer: tables listed in LIVE_TABLES fetch live from Supabase
+// (edited via /klawsome-admin), with the static cmsData.ts snapshot as
+// fallback. Everything else still comes from the snapshot.
 import { useQuery } from '@tanstack/react-query';
 import { supabase } from '@/integrations/supabase/client';
 import { cmsData } from '@/content/cmsData';
 
 // Tables that read live from Supabase instead of cmsData.ts
-const LIVE_TABLES = new Set(['site_settings', 'store_hours']);
+const LIVE_TABLES = new Set([
+  'site_settings',
+  'store_hours',
+  'token_tiers',
+  'news_articles',
+  'faq_items',
+  'job_listings',
+  'party_options',
+  'rental_packages',
+  'homepage_content',
+  'homepage_steps',
+  'gallery_photos',
+  'reviews',
+  'page_heroes',
+]);
 
 function sortRows<T extends Record<string, any>>(rows: T[]): T[] {
   if (!rows || rows.length === 0) return rows;
@@ -32,7 +46,9 @@ function useLiveTable<T>(table: string, enabled = true) {
 export function useCmsTable<T = Record<string, unknown>>(table: string, _options?: { enabled?: boolean }) {
   const fallback = (cmsData[table] as T[]) || [];
   const live = useLiveTable<T>(table, LIVE_TABLES.has(table));
-  const rows = LIVE_TABLES.has(table) ? (live.data ?? fallback) : fallback;
+  const rows = LIVE_TABLES.has(table)
+    ? (live.data && live.data.length ? live.data : fallback)
+    : fallback;
   return {
     data: sortRows(rows as any) as T[],
     isLoading: LIVE_TABLES.has(table) ? live.isLoading : false,
@@ -44,7 +60,9 @@ export function useCmsTable<T = Record<string, unknown>>(table: string, _options
 export function useCmsSingle<T = Record<string, unknown>>(table: string) {
   const fallback = (cmsData[table] as T[]) || [];
   const live = useLiveTable<T>(table, LIVE_TABLES.has(table));
-  const rows = LIVE_TABLES.has(table) ? (live.data ?? fallback) : fallback;
+  const rows = LIVE_TABLES.has(table)
+    ? (live.data && live.data.length ? live.data : fallback)
+    : fallback;
   return {
     data: (rows[0] ?? null) as T | null,
     isLoading: LIVE_TABLES.has(table) ? live.isLoading : false,
@@ -54,13 +72,15 @@ export function useCmsSingle<T = Record<string, unknown>>(table: string) {
 }
 
 export function usePageHero(pageKey: string) {
-  const rows = (cmsData['page_heroes'] as any[]) || [];
+  const live = useLiveTable<any>('page_heroes', true);
+  const fallback = (cmsData['page_heroes'] as any[]) || [];
+  const rows = live.data && live.data.length ? live.data : fallback;
   const match = rows.find((r) => r.page_key === pageKey) ?? null;
   return {
     data: match,
-    isLoading: false,
-    isError: false,
-    error: null as Error | null,
+    isLoading: live.isLoading && fallback.length === 0,
+    isError: live.isError,
+    error: live.error as Error | null,
   };
 }
 
@@ -69,6 +89,7 @@ export interface SiteSettings {
   id: string; business_name: string; phone: string; email: string; events_email: string; address: string;
   google_maps_url: string; instagram_url: string; tiktok_url: string; facebook_url: string;
   youtube_url: string;
+  announcement_enabled?: boolean; announcement_title?: string; announcement_body?: string;
 }
 export interface StoreHour {
   id: string; day_of_week: number; day_label: string; open_time: string;

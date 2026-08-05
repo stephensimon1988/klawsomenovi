@@ -260,9 +260,384 @@ export type Database = {
         }
         Relationships: []
       }
+      faq_items: {
+        Row: {
+          answer: string
+          created_at: string
+          id: string
+          page: string
+          question: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          answer?: string
+          created_at?: string
+          id?: string
+          page?: string
+          question?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          id?: string
+          page?: string
+          question?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      gallery_photos: {
+        Row: {
+          caption: string
+          created_at: string
+          id: string
+          image_url: string
+          section: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          section?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          caption?: string
+          created_at?: string
+          id?: string
+          image_url?: string
+          section?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homepage_content: {
+        Row: {
+          about_subtitle: string
+          about_title: string
+          created_at: string
+          hero_cta_text: string
+          hero_headline: string
+          hero_image_url: string
+          hero_subheadline: string
+          id: string
+          story_body: string
+          story_image_url: string
+          story_title: string
+          updated_at: string
+        }
+        Insert: {
+          about_subtitle?: string
+          about_title?: string
+          created_at?: string
+          hero_cta_text?: string
+          hero_headline?: string
+          hero_image_url?: string
+          hero_subheadline?: string
+          id?: string
+          story_body?: string
+          story_image_url?: string
+          story_title?: string
+          updated_at?: string
+        }
+        Update: {
+          about_subtitle?: string
+          about_title?: string
+          created_at?: string
+          hero_cta_text?: string
+          hero_headline?: string
+          hero_image_url?: string
+          hero_subheadline?: string
+          id?: string
+          story_body?: string
+          story_image_url?: string
+          story_title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      homepage_steps: {
+        Row: {
+          created_at: string
+          description: string
+          icon: string
+          id: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          icon?: string
+          id?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      job_listings: {
+        Row: {
+          apply_url: string
+          category: string
+          created_at: string
+          description: string
+          id: string
+          image_url: string
+          is_active: boolean
+          is_paid: boolean
+          job_desc_url: string
+          sort_order: number
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          apply_url?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_paid?: boolean
+          job_desc_url?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          apply_url?: string
+          category?: string
+          created_at?: string
+          description?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          is_paid?: boolean
+          job_desc_url?: string
+          sort_order?: number
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      news_articles: {
+        Row: {
+          created_at: string
+          date: string
+          id: string
+          image_url: string
+          is_active: boolean
+          sort_order: number
+          source: string
+          title: string
+          updated_at: string
+          url: string
+        }
+        Insert: {
+          created_at?: string
+          date?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          sort_order?: number
+          source?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Update: {
+          created_at?: string
+          date?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          sort_order?: number
+          source?: string
+          title?: string
+          updated_at?: string
+          url?: string
+        }
+        Relationships: []
+      }
+      page_heroes: {
+        Row: {
+          created_at: string
+          cta_text: string
+          cta_url: string
+          eyebrow: string
+          id: string
+          image_url: string
+          page_key: string
+          sort_order: number
+          subtitle: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          page_key?: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          eyebrow?: string
+          id?: string
+          image_url?: string
+          page_key?: string
+          sort_order?: number
+          subtitle?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      party_options: {
+        Row: {
+          created_at: string
+          description: string
+          features: string[]
+          id: string
+          name: string
+          price: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string
+          features?: string[]
+          id?: string
+          name?: string
+          price?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          description?: string
+          features?: string[]
+          id?: string
+          name?: string
+          price?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      rental_packages: {
+        Row: {
+          created_at: string
+          cta_text: string
+          cta_url: string
+          description: string
+          features: string[]
+          id: string
+          is_highlight: boolean
+          name: string
+          price: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          description?: string
+          features?: string[]
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          cta_text?: string
+          cta_url?: string
+          description?: string
+          features?: string[]
+          id?: string
+          is_highlight?: boolean
+          name?: string
+          price?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      reviews: {
+        Row: {
+          author_name: string
+          author_role: string
+          created_at: string
+          id: string
+          is_active: boolean
+          rating: number
+          review_text: string
+          sort_order: number
+          updated_at: string
+        }
+        Insert: {
+          author_name?: string
+          author_role?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          rating?: number
+          review_text?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Update: {
+          author_name?: string
+          author_role?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          rating?: number
+          review_text?: string
+          sort_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       site_settings: {
         Row: {
           address: string
+          announcement_body: string
+          announcement_enabled: boolean
+          announcement_title: string
           business_name: string
           email: string
           events_email: string
@@ -277,6 +652,9 @@ export type Database = {
         }
         Insert: {
           address?: string
+          announcement_body?: string
+          announcement_enabled?: boolean
+          announcement_title?: string
           business_name?: string
           email?: string
           events_email?: string
@@ -291,6 +669,9 @@ export type Database = {
         }
         Update: {
           address?: string
+          announcement_body?: string
+          announcement_enabled?: boolean
+          announcement_title?: string
           business_name?: string
           email?: string
           events_email?: string
@@ -359,6 +740,39 @@ export type Database = {
           id?: string
           metadata?: Json | null
           reason?: string
+        }
+        Relationships: []
+      }
+      token_tiers: {
+        Row: {
+          bonus: string
+          created_at: string
+          id: string
+          is_highlight: boolean
+          price: string
+          sort_order: number
+          tokens: string
+          updated_at: string
+        }
+        Insert: {
+          bonus?: string
+          created_at?: string
+          id?: string
+          is_highlight?: boolean
+          price?: string
+          sort_order?: number
+          tokens?: string
+          updated_at?: string
+        }
+        Update: {
+          bonus?: string
+          created_at?: string
+          id?: string
+          is_highlight?: boolean
+          price?: string
+          sort_order?: number
+          tokens?: string
+          updated_at?: string
         }
         Relationships: []
       }

@@ -4,247 +4,14 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-// Table/Badge also used by multi-row editor
-import { Badge } from '@/components/ui/badge';
-import { Textarea } from '@/components/ui/textarea';
 import { Switch } from '@/components/ui/switch';
-import { Lock, Settings, Save, Plus, Trash2 } from 'lucide-react';
+import { Lock, Settings, Save } from 'lucide-react';
 
 import { toast } from 'sonner';
 import { BookingScheduleEditor } from '@/components/admin/BookingScheduleEditor';
 import { BookingsCalendar } from '@/components/admin/BookingsCalendar';
-
-// ─── CMS helpers ────────────────────────────────────────────
-const cmsInvoke = async (password: string, body: Record<string, unknown>) => {
-  const { data, error } = await supabase.functions.invoke('cms-admin', {
-    body: { password, ...body },
-  });
-  if (error) throw error;
-  if (data?.error) throw new Error(data.error);
-  return data;
-};
-
-// ─── Reusable field editor ──────────────────────────────────
-function FieldRow({ label, value, onChange, multiline = false }: {
-  label: string; value: string; onChange: (v: string) => void; multiline?: boolean;
-}) {
-  return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-2 items-start">
-      <label className="text-white/70 text-sm font-heading pt-2 md:text-right pr-4">{label}</label>
-      <div className="md:col-span-2">
-        {multiline ? (
-          <Textarea value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30 min-h-[80px]" />
-        ) : (
-          <Input value={value} onChange={(e) => onChange(e.target.value)} className="bg-white/10 border-white/20 text-white placeholder:text-white/30" />
-        )}
-      </div>
-    </div>
-  );
-}
-
-// ─── Single-row editor (site_settings, homepage_content, birthdays_content) ─
-function SingleRowEditor({ table, password, fields }: {
-  table: string; password: string;
-  fields: { key: string; label: string; multiline?: boolean }[];
-}) {
-  const [row, setRow] = useState<Record<string, string>>({});
-  const [original, setOriginal] = useState<Record<string, string>>({});
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table });
-      const r = res.rows?.[0] || {};
-      const mapped: Record<string, string> = {};
-      fields.forEach((f) => (mapped[f.key] = r[f.key] ?? ''));
-      setRow(mapped);
-      setOriginal({ ...mapped, id: r.id });
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [table, password, fields]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const save = async () => {
-    setSaving(true);
-    try {
-      await cmsInvoke(password, { action: 'upsert', table, data: { ...row, id: original.id } });
-      toast.success('Saved!');
-      setOriginal({ ...row, id: original.id });
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(false);
-  };
-
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
-
-  const dirty = fields.some((f) => row[f.key] !== original[f.key]);
-
-  return (
-    <div className="space-y-4">
-      {fields.map((f) => (
-        <FieldRow key={f.key} label={f.label} value={row[f.key] || ''} onChange={(v) => setRow({ ...row, [f.key]: v })} multiline={f.multiline} />
-      ))}
-      <div className="flex justify-end pt-2">
-        <Button onClick={save} disabled={saving || !dirty} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
-          <Save className="w-4 h-4 mr-2" />{saving ? 'Saving…' : 'Save Changes'}
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-// ─── Multi-row editor (token_tiers, news_articles, etc.) ────
-function MultiRowEditor({ table, password, columns, defaultRow }: {
-  table: string; password: string;
-  columns: { key: string; label: string; type?: 'text' | 'textarea' | 'bool' | 'array'; width?: string }[];
-  defaultRow?: Record<string, unknown>;
-}) {
-  const [rows, setRows] = useState<any[]>([]);
-  const [editing, setEditing] = useState<Record<string, any>>({});
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState<string | null>(null);
-
-  const load = useCallback(async () => {
-    setLoading(true);
-    try {
-      const res = await cmsInvoke(password, { action: 'read', table });
-      setRows(res.rows || []);
-    } catch (e: any) { toast.error(e.message); }
-    setLoading(false);
-  }, [table, password]);
-
-  useEffect(() => { load(); }, [load]);
-
-  const startEdit = (row: any) => setEditing({ ...editing, [row.id]: { ...row } });
-  const cancelEdit = (id: string) => {
-    const next = { ...editing };
-    delete next[id];
-    setEditing(next);
-  };
-  const updateField = (id: string, key: string, value: any) => {
-    setEditing({ ...editing, [id]: { ...editing[id], [key]: value } });
-  };
-
-  const saveRow = async (id: string) => {
-    setSaving(id);
-    try {
-      const edited = editing[id];
-      const { id: _, ...data } = edited;
-      await cmsInvoke(password, { action: 'update', table, id, data });
-      toast.success('Row saved');
-      cancelEdit(id);
-      load();
-    } catch (e: any) { toast.error(e.message); }
-    setSaving(null);
-  };
-
-  const addRow = async () => {
-    try {
-      const newData = defaultRow || {};
-      columns.forEach((c) => {
-        if (!(c.key in (newData as any))) {
-          if (c.type === 'bool') (newData as any)[c.key] = true;
-          else if (c.type === 'array') (newData as any)[c.key] = [];
-          else (newData as any)[c.key] = '';
-        }
-      });
-      (newData as any).sort_order = rows.length;
-      await cmsInvoke(password, { action: 'insert', table, data: newData });
-      toast.success('Row added');
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  const deleteRow = async (id: string) => {
-    if (!confirm('Delete this row?')) return;
-    try {
-      await cmsInvoke(password, { action: 'delete', table, id });
-      toast.success('Deleted');
-      load();
-    } catch (e: any) { toast.error(e.message); }
-  };
-
-  if (loading) return <p className="text-white/40 py-8 text-center">Loading…</p>;
-
-  return (
-    <div className="space-y-4">
-      <div className="overflow-x-auto">
-        <Table>
-          <TableHeader>
-            <TableRow className="border-white/10 hover:bg-transparent">
-              {columns.map((c) => (
-                <TableHead key={c.key} className="text-white/60 font-heading" style={{ width: c.width }}>{c.label}</TableHead>
-              ))}
-              <TableHead className="text-white/60 font-heading w-[120px]">Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((row) => {
-              const isEditing = editing[row.id];
-              return (
-                <TableRow key={row.id} className="border-white/10 hover:bg-white/5">
-                  {columns.map((c) => (
-                    <TableCell key={c.key} className="text-white/80 align-top">
-                      {isEditing ? (
-                        c.type === 'bool' ? (
-                          <Switch checked={!!isEditing[c.key]} onCheckedChange={(v) => updateField(row.id, c.key, v)} />
-                        ) : c.type === 'array' ? (
-                          <Textarea
-                            value={(isEditing[c.key] || []).join('\n')}
-                            onChange={(e) => updateField(row.id, c.key, e.target.value.split('\n'))}
-                            className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]"
-                            placeholder="One per line"
-                          />
-                        ) : c.type === 'textarea' ? (
-                          <Textarea value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm min-h-[60px]" />
-                        ) : (
-                          <Input value={isEditing[c.key] || ''} onChange={(e) => updateField(row.id, c.key, e.target.value)} className="bg-white/10 border-white/20 text-white text-sm" />
-                        )
-                      ) : (
-                        c.type === 'bool' ? (
-                          <Badge variant="outline" className={row[c.key] ? 'text-green-300 border-green-500/30' : 'text-red-300 border-red-500/30'}>
-                            {row[c.key] ? 'Yes' : 'No'}
-                          </Badge>
-                        ) : c.type === 'array' ? (
-                          <span className="text-sm">{(row[c.key] || []).join(', ') || '—'}</span>
-                        ) : (
-                          <span className="text-sm line-clamp-2">{row[c.key] || '—'}</span>
-                        )
-                      )}
-                    </TableCell>
-                  ))}
-                  <TableCell className="align-top">
-                    <div className="flex gap-1">
-                      {isEditing ? (
-                        <>
-                          <Button size="sm" onClick={() => saveRow(row.id)} disabled={saving === row.id} className="bg-green-600 hover:bg-green-700 text-white text-xs h-7 px-2">
-                            {saving === row.id ? '…' : 'Save'}
-                          </Button>
-                          <Button size="sm" variant="ghost" onClick={() => cancelEdit(row.id)} className="text-white/50 text-xs h-7 px-2">Cancel</Button>
-                        </>
-                      ) : (
-                        <>
-                          <Button size="sm" variant="ghost" onClick={() => startEdit(row)} className="text-klawsome-yellow text-xs h-7 px-2">Edit</Button>
-                          <Button size="sm" variant="ghost" onClick={() => deleteRow(row.id)} className="text-red-400 text-xs h-7 px-2"><Trash2 className="w-3 h-3" /></Button>
-                        </>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </div>
-      <Button onClick={addRow} className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold">
-        <Plus className="w-4 h-4 mr-2" />Add Row
-      </Button>
-    </div>
-  );
-}
+import { SingleRowEditor, cmsInvoke } from '@/components/admin/CmsEditors';
+import { CONTENT_TABS } from '@/components/admin/ContentTabs';
 
 // ─── Store Hours Editor ─────────────────────────────────────
 function StoreHoursEditor({ password }: { password: string }) {
@@ -404,6 +171,9 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
             <TabsTrigger value="schedule" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📅 Booking Schedule</TabsTrigger>
             <TabsTrigger value="bookings" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📆 Bookings</TabsTrigger>
+            {CONTENT_TABS.map((t) => (
+              <TabsTrigger key={t.value} value={t.value} className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">{t.label}</TabsTrigger>
+            ))}
           </TabsList>
 
           {/* ─── Vital Info ─── */}
@@ -444,6 +214,12 @@ const KlawsomeAdmin = () => {
           <TabsContent value="bookings">
             <BookingsCalendar password={storedPassword} />
           </TabsContent>
+
+          {CONTENT_TABS.map((t) => (
+            <TabsContent key={t.value} value={t.value}>
+              {t.render(storedPassword)}
+            </TabsContent>
+          ))}
 
         </Tabs>
       </div>
