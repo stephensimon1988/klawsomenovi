@@ -20,9 +20,9 @@ const Index = () => {
       <KawaiiAbout />
       <KawaiiDivider variant="scallop" from="baby-blue" to="baby-pink" stroke="baby-blue" />
       <KawaiiVisit />
-      <KawaiiDivider variant="cloud" from="baby-pink" to="red" stroke="white" />
+      <KawaiiDivider variant="cloud" from="baby-pink" to="baby-blue" stroke="white" />
       <KawaiiTokenPrices />
-      <KawaiiDivider variant="bumps" from="red" to="white" stroke="baby-pink" />
+      <KawaiiDivider variant="bumps" from="baby-blue" to="white" stroke="baby-pink" />
       <KawaiiReviews />
       <KawaiiDivider variant="petals" from="white" to="baby-blue" stroke="baby-pink" />
       <KawaiiNews />
