@@ -5215,7 +5215,7 @@ export const cmsData: Record<string, any[]> = {
       "id": "bc0b5e4e-5723-4ed6-93e8-6138db329f20",
       "price": "$10",
       "tokens": "10",
-      "bonus": "",
+      "bonus": "-",
       "is_highlight": false,
       "sort_order": 1
     },
