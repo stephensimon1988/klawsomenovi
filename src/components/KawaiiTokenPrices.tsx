@@ -1,5 +1,6 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
+import topPickGif from '@/assets/klawsome-top-pick.gif.asset.json';
 
 const fallbackTiers = [
   { price: '$10', tokens: '10', bonus: '-', is_highlight: false },
@@ -66,17 +67,12 @@ const KawaiiTokenPrices = () => {
 
                 {tier.is_highlight && (
                   <div className="absolute top-1/2 -translate-y-1/2 -right-6 md:-right-10 pointer-events-none">
-                    <div className="relative w-24 h-24 md:w-28 md:h-28 animate-[spin_18s_linear_infinite]">
-                      <svg viewBox="0 0 100 100" className="w-full h-full">
-                        <path
-                          d="M50 2 L59 26 L80 12 L74 36 L98 34 L80 50 L98 66 L74 64 L80 88 L59 74 L50 98 L41 74 L20 88 L26 64 L2 66 L20 50 L2 34 L26 36 L20 12 L41 26 Z"
-                          fill="hsl(var(--klawsome-yellow))"
-                        />
-                      </svg>
-                    </div>
-                    <span className="absolute inset-0 flex flex-col items-center justify-center font-heading font-bold text-klawsome-navy text-base md:text-lg leading-none text-center">
-                      TOP<br />PICK
-                    </span>
+                    <img
+                      src={topPickGif.url}
+                      alt="Top pick"
+                      loading="lazy"
+                      className="w-28 h-28 md:w-32 md:h-32 object-contain"
+                    />
                   </div>
                 )}
               </div>
