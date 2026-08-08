@@ -39,7 +39,7 @@ const KawaiiTokenPrices = () => {
               src={coinstackImg.url}
               alt="Klawsome token coins with characters"
               loading="lazy"
-              className="w-full h-auto mt-4"
+              className="w-3/5 h-auto mt-4 mx-auto"
             />
           </div>
 
