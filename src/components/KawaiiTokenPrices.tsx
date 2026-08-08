@@ -1,6 +1,7 @@
 import { useGsapScroll, useGsapStagger } from '@/hooks/useGsapScroll';
 import { useCmsTable, type TokenTier } from '@/hooks/useCmsContent';
 import topPickGif from '@/assets/klawsome-top-pick.gif.asset.json';
+import coinstackImg from '@/assets/coinstack-klawsome.png.asset.json';
 
 const fallbackTiers = [
   { price: '$10', tokens: '10', bonus: '-', is_highlight: false },
@@ -35,8 +36,8 @@ const KawaiiTokenPrices = () => {
               Token<br />Prices
             </h2>
             <img
-              src="https://nrxfzjysodxqmwsstcim.supabase.co/storage/v1/object/public/site-images/transparent-png/panda-cat-fox-vending-machine-toys.webp"
-              alt="Klawsome characters with tokens"
+              src={coinstackImg.url}
+              alt="Klawsome token coins with characters"
               loading="lazy"
               className="w-full h-auto mt-4"
             />
