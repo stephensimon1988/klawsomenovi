@@ -67,7 +67,7 @@ const KawaiiTokenPrices = () => {
                 </div>
 
                 {tier.is_highlight && (
-                  <div className="absolute top-1/2 -translate-y-1/2 -right-6 md:-right-10 pointer-events-none">
+                  <div className="absolute top-1/2 -translate-y-1/2 -right-6 md:-right-10 pointer-events-none hidden md:block">
                     <img
                       src={topPickGif.url}
                       alt="Top pick"
