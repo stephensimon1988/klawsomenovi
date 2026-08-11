@@ -233,7 +233,7 @@ export const Storefront = () => {
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
           <Button size="cta"
             onClick={() => { setInteracted(true); surpriseMe(); }}
-            className="rounded-full bg-klawsome-baby-blue hover:bg-klawsome-baby-blue/80 text-foreground font-heading font-bold px-6"
+            className="bg-klawsome-baby-blue hover:bg-klawsome-baby-blue/80 text-foreground font-heading font-bold"
           >
             <Shuffle className="w-4 h-4 mr-2" />
             Surprise Me!
