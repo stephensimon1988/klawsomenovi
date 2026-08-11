@@ -137,7 +137,7 @@ const Rental = () => {
                     <button
                       type="button"
                       onClick={() => openBookingModal('rental')}
-                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
+                      className={`btn-cta mt-8 ${ 
                         p.is_highlight
                           ? 'bg-background text-foreground hover:bg-background/90'
                           : 'bg-foreground text-background hover:bg-foreground/90'
@@ -196,10 +196,9 @@ const Rental = () => {
                   <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
                     <div />
                     <div className="col-span-2 flex justify-end">
-                      <Button
+                      <Button size="cta"
                         onClick={() => openBookingModal('rental')}
-                        size="lg"
-                        className="w-full rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
+                        className="w-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
                       >
                         Book Your Event
                       </Button>
@@ -212,10 +211,9 @@ const Rental = () => {
                         {addOns.map((p) => renderCard(p, true))}
                       </div>
                       <div className="mt-10 flex justify-center">
-                        <Button
+                        <Button size="cta"
                           onClick={() => openBookingModal('rental')}
-                          size="lg"
-                          className="rounded-full px-10 py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"
+                          className="font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"
                         >
                           Add to Rental
                         </Button>
@@ -254,7 +252,7 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={() => openBookingModal('rental')}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                    className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
                     Book Event
                   </button>
@@ -282,7 +280,7 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={() => openBookingModal('rental')}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                    className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
                     Book Event
                   </button>
@@ -315,7 +313,7 @@ const Rental = () => {
             <div className="mt-10 flex justify-center">
               <a
                 href="/faq"
-                className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+                className="btn-cta bg-foreground text-background hover:bg-foreground/90"
               >
                 See all FAQs <span>→</span>
               </a>
@@ -352,7 +350,7 @@ const Rental = () => {
               <div className="mt-10 flex justify-center">
                 <a
                   href="/gallery"
-                  className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 hover:bg-foreground/90 transition-colors"
+                  className="btn-cta bg-foreground text-background hover:bg-foreground/90"
                 >
                   See full gallery <span>→</span>
                 </a>
@@ -374,7 +372,7 @@ const Rental = () => {
             href="/klawsome-rental-waiver.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+            className="btn-cta bg-foreground text-background hover:bg-foreground/90"
           >
             Download Waiver (PDF) <span>↓</span>
           </a>

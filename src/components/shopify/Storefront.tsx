@@ -231,9 +231,9 @@ export const Storefront = () => {
       {/* Action bar: Surprise Me + active category indicator */}
       <div className="ds-container section-x py-6">
         <div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
-          <Button
+          <Button size="cta"
             onClick={() => { setInteracted(true); surpriseMe(); }}
-            className="rounded-full bg-klawsome-baby-blue hover:bg-klawsome-baby-blue/80 text-foreground font-heading font-bold px-6"
+            className="bg-klawsome-baby-blue hover:bg-klawsome-baby-blue/80 text-foreground font-heading font-bold"
           >
             <Shuffle className="w-4 h-4 mr-2" />
             Surprise Me!
@@ -428,11 +428,10 @@ const ProductCard = ({
               ? `$${parseFloat(n.priceRange.minVariantPrice.amount).toFixed(0)} - $${parseFloat(n.priceRange.maxVariantPrice.amount).toFixed(0)}`
               : `$${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}`}
           </span>
-          <Button
-            size="sm"
+          <Button size="cta"
             disabled={!variant || isLoading || !variant.availableForSale}
             onClick={handleAdd}
-            className="rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold text-xs"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
           >
             {variant?.availableForSale === false ? 'Sold out' : 'Add to cart'}
           </Button>

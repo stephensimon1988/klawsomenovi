@@ -87,10 +87,9 @@ const Rewards = () => {
             </h1>
 
             <div className="mt-8 md:mt-10">
-              <Button
+              <Button size="cta"
                 asChild
-                size="lg"
-                className="rounded-full px-10 py-6 text-base font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
+                className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
               >
                 <a
                   href={hero?.cta_url || 'https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty'}
@@ -119,7 +118,7 @@ const Rewards = () => {
               <a
                 key={l.id}
                 href={`#${l.id}`}
-                className="inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px]"
+                className="btn-cta bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px]"
               >
                 {l.label}
               </a>
@@ -226,10 +225,9 @@ const Rewards = () => {
           </div>
 
           <div className="text-center mt-16">
-            <Button
+            <Button size="cta"
               asChild
-              size="lg"
-              className="rounded-full px-10 py-6 text-base font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
+              className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
             >
               <a
                 href="https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty"

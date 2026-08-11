@@ -66,12 +66,12 @@ const JobDescriptionDialog = ({ title, url, fallbackDescription, applyUrl, trigg
 
         <div className="px-6 py-3 border-t flex flex-wrap justify-end gap-2 shrink-0">
           {url && (
-            <Button asChild variant="outline" size="sm" className="rounded-full font-heading">
+            <Button size="cta" asChild variant="outline" className="font-heading">
               <a href={url} target="_blank" rel="noopener noreferrer">Open PDF</a>
             </Button>
           )}
           {applyUrl && (
-            <Button asChild size="sm" className="rounded-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
+            <Button size="cta" asChild className="font-heading font-bold bg-primary hover:bg-primary/90 text-white">
               <a href={applyUrl}>Apply Here</a>
             </Button>
           )}

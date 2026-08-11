@@ -155,10 +155,10 @@ const Business = () => {
               Three ways to bring the magic of Klawsome into your world - whether you're a business owner, entrepreneur, or creator 🤝
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+              <Button size="cta" asChild className="font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
                 <a href="#contact">Get in Touch 📩</a>
               </Button>
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+              <Button size="cta" asChild className="font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                 <a href="#hosted">View Opportunities ⭐</a>
               </Button>
             </div>
@@ -215,7 +215,7 @@ const Business = () => {
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
                 {hosted?.subtitle}
               </p>
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+              <Button size="cta" asChild className="font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
                 <a href="#contact">Apply for a Hosted Machine</a>
               </Button>
             </div>
@@ -284,7 +284,7 @@ const Business = () => {
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
                 {partner?.subtitle}
               </p>
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+              <Button size="cta" asChild className="font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                 <a href="#contact">Apply to Be a Partner ⭐</a>
               </Button>
             </div>
@@ -330,7 +330,7 @@ const Business = () => {
               </div>
 
               <div className="text-center">
-                <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+                <Button size="cta" asChild className="font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                   <a href="#contact">Become a Partner →</a>
                 </Button>
               </div>
@@ -348,7 +348,7 @@ const Business = () => {
               <p className="text-white/60 font-body font-semibold text-base md:text-lg max-w-xl mx-auto mb-8 leading-relaxed">
                 {plushie?.subtitle}
               </p>
-              <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
+              <Button size="cta" asChild className="font-heading font-semibold bg-primary hover:bg-primary/90 text-white hover:scale-105 transition-all duration-300">
                 <a href="#contact">Start a Custom Order</a>
               </Button>
             </div>
@@ -403,7 +403,7 @@ const Business = () => {
               </div>
 
               <div className="text-center">
-                <Button asChild size="lg" className="rounded-bubble px-8 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+                <Button size="cta" asChild className="font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                   <a href="#contact">Start Your Custom Order →</a>
                 </Button>
               </div>
@@ -493,7 +493,7 @@ const Business = () => {
                 </div>
               </div>
               <div className="text-center mt-7">
-                <Button type="submit" size="lg" className="rounded-bubble px-14 py-6 text-lg font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
+                <Button size="cta" type="submit" className="font-heading font-semibold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 hover:scale-105 transition-all duration-300">
                   Send Message →
                 </Button>
                 <p className="text-xs text-white/60 font-body font-bold mt-3">

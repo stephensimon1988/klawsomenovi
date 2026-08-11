@@ -25,6 +25,8 @@ const buttonVariants = cva(
         icon: "h-10 w-10",
         hero: "h-auto rounded-full px-8 py-3.5 text-sm font-heading font-bold tracking-wider uppercase",
         heroSm: "h-auto rounded-full px-5 py-2.5 text-xs font-heading font-bold tracking-wider uppercase",
+        // Site-wide standard CTA: same height + font size on every public page.
+        cta: "h-[45px] rounded-full px-8 text-[18px] leading-none font-heading font-bold tracking-wider uppercase",
       },
     },
     defaultVariants: {

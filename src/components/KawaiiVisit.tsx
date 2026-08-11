@@ -63,10 +63,10 @@ const KawaiiVisit = () => {
             </div>
 
             <div className="flex gap-4">
-              <Button asChild className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
+              <Button size="cta" asChild className="font-heading font-bold tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
                 <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Directions</a>
               </Button>
-              <Button asChild variant="outline" className="rounded-full px-8 font-heading font-bold text-xs tracking-wider border-foreground/20 text-foreground hover:bg-foreground/5 uppercase">
+              <Button size="cta" asChild variant="outline" className="font-heading font-bold tracking-wider border-foreground/20 text-foreground hover:bg-foreground/5 uppercase">
                 <a href={`tel:${phone.replace(/[^+\d]/g, '')}`}>Call Us</a>
               </Button>
             </div>

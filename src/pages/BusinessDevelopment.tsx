@@ -360,7 +360,7 @@ const BusinessDevelopment = () => {
           </div>
 
           <div className="text-center">
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
+            <Button size="cta" asChild className="font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
               <a href="#contact">Apply for a Hosted Machine →</a>
             </Button>
           </div>
@@ -419,7 +419,7 @@ const BusinessDevelopment = () => {
           </div>
 
           <div className="text-center">
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
+            <Button size="cta" asChild className="font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg">
               <a href="#contact">Let's Talk Partnership →</a>
             </Button>
           </div>
@@ -496,7 +496,7 @@ const BusinessDevelopment = () => {
           </div>
 
           <div className="text-center">
-            <Button asChild size="lg" className="rounded-full px-8 py-6 font-heading font-bold bg-white hover:bg-white/90 text-primary shadow-lg">
+            <Button size="cta" asChild className="font-heading font-bold bg-white hover:bg-white/90 text-primary shadow-lg">
               <a href="#contact">Start Your Custom Order →</a>
             </Button>
           </div>
@@ -530,10 +530,9 @@ const BusinessDevelopment = () => {
           </div>
         </div>
         <div className="ds-container mt-12 text-center">
-          <Button
+          <Button size="cta"
             asChild
-            size="lg"
-            className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
+            className="font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
           >
             <a href={`mailto:${contactEmail}?subject=Collaborate%20with%20Klawsome`}>
               Collaborate With Us
@@ -608,7 +607,7 @@ const BusinessDevelopment = () => {
                 </div>
               </div>
               <div className="text-center mt-7">
-                <Button type="submit" size="lg" className="rounded-full px-12 py-6 text-base font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all">
+                <Button size="cta" type="submit" className="font-heading font-bold bg-primary hover:bg-primary/90 text-white shadow-lg hover:scale-105 transition-all">
                   Send Message →
                 </Button>
                 <p className="mt-4 text-xs text-muted-foreground font-bold">We'll reply within 1–2 business days.</p>
