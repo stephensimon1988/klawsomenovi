@@ -14,6 +14,90 @@ export type Database = {
   }
   public: {
     Tables: {
+      booking_approval_requests: {
+        Row: {
+          city: string
+          contact_email: string
+          contact_name: string
+          contact_phone: string
+          created_at: string
+          customer_notes: string
+          decided_at: string | null
+          event_type: string
+          id: string
+          is_indoors: boolean
+          over_200: boolean
+          party_size: number | null
+          request_code: string
+          requested_date: string | null
+          staff_note: string
+          status: string
+          updated_at: string
+          zip: string
+          zip_level: string
+        }
+        Insert: {
+          city?: string
+          contact_email?: string
+          contact_name: string
+          contact_phone: string
+          created_at?: string
+          customer_notes?: string
+          decided_at?: string | null
+          event_type?: string
+          id?: string
+          is_indoors?: boolean
+          over_200?: boolean
+          party_size?: number | null
+          request_code: string
+          requested_date?: string | null
+          staff_note?: string
+          status?: string
+          updated_at?: string
+          zip: string
+          zip_level?: string
+        }
+        Update: {
+          city?: string
+          contact_email?: string
+          contact_name?: string
+          contact_phone?: string
+          created_at?: string
+          customer_notes?: string
+          decided_at?: string | null
+          event_type?: string
+          id?: string
+          is_indoors?: boolean
+          over_200?: boolean
+          party_size?: number | null
+          request_code?: string
+          requested_date?: string | null
+          staff_note?: string
+          status?: string
+          updated_at?: string
+          zip?: string
+          zip_level?: string
+        }
+        Relationships: []
+      }
+      booking_approval_status: {
+        Row: {
+          request_code: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          request_code: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          request_code?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string

@@ -27,7 +27,16 @@ import {
   type MobileDuration,
   type DayType,
 } from '@/lib/booking/catalog';
-import { getMilesForZip, type ZipLookup } from '@/lib/booking/zipMiles';
+import { getMilesForZip, getServiceLevel, type ZipLookup } from '@/lib/booking/zipMiles';
+import {
+  createApprovalRequest,
+  fetchApprovalStatus,
+  getStoredApproval,
+  storeApproval,
+  subscribeApprovalStatus,
+  type ApprovalRecord,
+  type ApprovalStatus,
+} from '@/lib/booking/approvals';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
@@ -50,6 +59,8 @@ interface State {
   time: string | null;
   addons: Record<string, { qty: number; character?: string }>;
   zip: string;
+  isIndoors: boolean | null;
+  over200: boolean | null;
   contact: {
     name: string; email: string; phone: string; partySize: string; adults: string; children: string;
     celebrantName: string; celebrantAge: string; favorites: string; notes: string;
@@ -69,6 +80,8 @@ const emptyState = (): State => ({
   time: null,
   addons: {},
   zip: '',
+  isIndoors: null,
+  over200: null,
   contact: { name: '', email: '', phone: '', partySize: '', adults: '', children: '', celebrantName: '', celebrantAge: '', favorites: '', notes: '' },
   checkoutUrl: null,
   bookingRef: null,
@@ -122,19 +135,75 @@ function BookingWizardDialog() {
   const needsDelivery = pathway === 'rental' || pathway === 'mobile';
   const [zipInfo, setZipInfo] = useState<ZipLookup | null>(null);
   const [zipResolving, setZipResolving] = useState(false);
+  const [approval, setApproval] = useState<ApprovalRecord | null>(null);
+
+  // Indoors or 200+ guests = automatic exception to the ZIP safety screen.
+  const exceptionOk = state.isIndoors === true || state.over200 === true;
+  const approvalUnlocked = approval?.status === 'approved' && approval.zip === state.zip.trim();
+  const bypassSafety = exceptionOk || approvalUnlocked;
+
+  // Restore any approval already recorded for this ZIP on this device.
+  useEffect(() => {
+    const clean = state.zip.trim();
+    if (!needsDelivery || clean.length < 5) { setApproval(null); return; }
+    setApproval(getStoredApproval(clean));
+  }, [state.zip, needsDelivery]);
+
+  // Live-track the pending request: unlocks the wizard the moment staff approves.
+  useEffect(() => {
+    const code = approval?.code;
+    if (!code) return;
+    let cancelled = false;
+    const apply = (st: ApprovalStatus) => {
+      setApproval((prev) => {
+        if (!prev || prev.code !== code || prev.status === st) return prev;
+        const next = { ...prev, status: st };
+        storeApproval(next);
+        return next;
+      });
+    };
+    fetchApprovalStatus(code).then((st) => { if (!cancelled && st) apply(st); });
+    const unsub = subscribeApprovalStatus(code, apply);
+    const poll = window.setInterval(() => {
+      fetchApprovalStatus(code).then((st) => { if (!cancelled && st) apply(st); });
+    }, 15000);
+    return () => { cancelled = true; unsub(); window.clearInterval(poll); };
+  }, [approval?.code]);
+
   useEffect(() => {
     if (!needsDelivery) { setZipInfo(null); return; }
     const clean = state.zip.trim();
     if (clean.length < 5) { setZipInfo(null); return; }
     let cancelled = false;
     setZipResolving(true);
-    getMilesForZip(clean).then((r) => {
+    getMilesForZip(clean, { bypassSafety }).then((r) => {
       if (cancelled) return;
       setZipInfo(r);
       setZipResolving(false);
     });
     return () => { cancelled = true; };
-  }, [state.zip, needsDelivery]);
+  }, [state.zip, needsDelivery, bypassSafety]);
+
+  const submitApproval = async (notes: string) => {
+    const clean = state.zip.trim();
+    const svc = await getServiceLevel(clean);
+    const rec = await createApprovalRequest({
+      zip: clean,
+      city: svc.city,
+      zipLevel: svc.level,
+      eventType: pathway ?? 'mobile',
+      contactName: state.contact.name,
+      contactPhone: state.contact.phone,
+      contactEmail: state.contact.email,
+      requestedDate: state.date ? state.date.toISOString().slice(0, 10) : null,
+      partySize: state.contact.partySize ? Number(state.contact.partySize) : null,
+      isIndoors: state.isIndoors === true,
+      over200: state.over200 === true,
+      notes,
+    });
+    setApproval(rec);
+    return rec;
+  };
 
   const deliveryCents = zipInfo?.known
     ? Math.max(0, Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)) * 300
@@ -240,6 +309,9 @@ function BookingWizardDialog() {
         { key: 'duration_hours', value: pathway === 'mobile' ? String(state.mobileHours + state.mobileExtraHours) : '' },
         { key: 'extra_hours', value: pathway === 'mobile' && state.mobileExtraHours ? String(state.mobileExtraHours) : '' },
         { key: 'safety_policy_accepted', value: state.safetyAccepted ? new Date().toISOString() : '' },
+        { key: 'indoors', value: needsDelivery && state.isIndoors !== null ? (state.isIndoors ? 'yes' : 'no') : '' },
+        { key: 'over_200_guests', value: needsDelivery && state.over200 !== null ? (state.over200 ? 'yes' : 'no') : '' },
+        { key: 'zip_approval_code', value: approvalUnlocked && approval ? approval.code : '' },
       ].filter((a) => a.value && a.value.length > 0);
 
       const result = await createBookingCart({
@@ -332,7 +404,19 @@ function BookingWizardDialog() {
             <AddonsStep addons={availableAddons} selected={state.addons} onChange={(a) => setState((s) => ({ ...s, addons: a }))} />
           )}
           {step === 'delivery' && (
-            <DeliveryStep zip={state.zip} onZipChange={(z) => setState((s) => ({ ...s, zip: z }))} zipInfo={zipInfo} resolving={zipResolving} />
+            <DeliveryStep
+              zip={state.zip}
+              onZipChange={(z) => setState((s) => ({ ...s, zip: z }))}
+              zipInfo={zipInfo}
+              resolving={zipResolving}
+              isIndoors={state.isIndoors}
+              over200={state.over200}
+              onGateChange={(k, v) => setState((s) => ({ ...s, [k]: v }))}
+              approval={approval}
+              onRequestApproval={submitApproval}
+              contactDefaults={state.contact}
+              onContactChange={(c) => setState((s) => ({ ...s, contact: { ...s.contact, ...c } }))}
+            />
           )}
           {step === 'contact' && (
             <ContactStep contact={state.contact} pathway={pathway!} onChange={(c) => setState((s) => ({ ...s, contact: c }))} />
@@ -418,7 +502,7 @@ function validateStep(
     case 'package': return s.pathway === 'mobile' ? !!s.mobileTier : !!pkg;
     case 'datetime': return !!s.date && !!s.time;
     case 'addons': return true;
-    case 'delivery': return !!zipInfo?.known;
+    case 'delivery': return s.isIndoors !== null && s.over200 !== null && !!zipInfo?.known;
     case 'contact': {
       const c = s.contact;
       if (!(c.name.trim() && /.+@.+\..+/.test(c.email) && c.phone.trim())) return false;
@@ -721,87 +805,221 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
   );
 }
 
+function GateToggle({
+  label, help, value, onChange,
+}: { label: string; help?: string; value: boolean | null; onChange: (v: boolean) => void }) {
+  return (
+    <div className="space-y-2">
+      <Label>{label}</Label>
+      {help && <p className="text-xs text-muted-foreground font-body">{help}</p>}
+      <div className="flex gap-2">
+        {[true, false].map((opt) => (
+          <Button
+            key={String(opt)}
+            type="button"
+            size="sm"
+            variant={value === opt ? 'default' : 'outline'}
+            className="rounded-full min-w-[84px]"
+            onClick={() => onChange(opt)}
+          >
+            {opt ? 'Yes' : 'No'}
+          </Button>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 function DeliveryStep({
   zip, onZipChange, zipInfo, resolving,
+  isIndoors, over200, onGateChange,
+  approval, onRequestApproval, contactDefaults, onContactChange,
 }: {
   zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null; resolving: boolean;
+  isIndoors: boolean | null; over200: boolean | null;
+  onGateChange: (key: 'isIndoors' | 'over200', value: boolean) => void;
+  approval: ApprovalRecord | null;
+  onRequestApproval: (notes: string) => Promise<ApprovalRecord>;
+  contactDefaults: { name: string; email: string; phone: string };
+  onContactChange: (c: Partial<{ name: string; email: string; phone: string }>) => void;
 }) {
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: storeHours } = useCmsTable<StoreHour>('store_hours');
   const phone = (settings?.phone || '').trim();
   const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
   const hoursNote = todaysHoursNote(storeHours);
-  const showCall =
-    zipInfo && zipInfo.known === false &&
-    (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found' || zipInfo.reason === 'review')
+  const gatesAnswered = isIndoors !== null && over200 !== null;
+
+  const [notes, setNotes] = useState('');
+  const [submitting, setSubmitting] = useState(false);
+  const [showForm, setShowForm] = useState(false);
+
+  const restricted =
+    zipInfo && zipInfo.known === false && (zipInfo.reason === 'blocked' || zipInfo.reason === 'review')
       ? zipInfo
       : null;
-  const blocked = zipInfo && zipInfo.known === false && zipInfo.reason === 'blocked' ? zipInfo : null;
+  const showCall =
+    zipInfo && zipInfo.known === false &&
+    (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found')
+      ? zipInfo
+      : null;
+
+  const approvalForZip = approval && approval.zip === zip.trim() ? approval : null;
+
+  const submit = async () => {
+    if (!contactDefaults.name.trim() || contactDefaults.phone.replace(/\D/g, '').length < 10) {
+      toast.error('Please add your name and a phone number we can call back.');
+      return;
+    }
+    setSubmitting(true);
+    try {
+      await onRequestApproval(notes);
+      toast.success('Request sent! Give us a call and we\u2019ll approve it while you\u2019re on the line.');
+      setShowForm(false);
+    } catch (e: any) {
+      toast.error(e?.message || 'Could not send the request. Please call us instead.');
+    }
+    setSubmitting(false);
+  };
+
   return (
-    <div className="space-y-4 max-w-md">
+    <div className="space-y-5 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
-      <div className="space-y-2">
-        <Label htmlFor="zip">Delivery ZIP code</Label>
-        <Input id="zip" value={zip} onChange={(e) => onZipChange(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="e.g. 48377" inputMode="numeric" maxLength={5} />
-      </div>
-      {resolving && zip.length === 5 && !zipInfo && (
-        <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking distance…</p>
+
+      <GateToggle
+        label="Is your event fully indoors?"
+        help="Indoor venues are always eligible, no matter the ZIP code."
+        value={isIndoors}
+        onChange={(v) => onGateChange('isIndoors', v)}
+      />
+      <GateToggle
+        label="Will attendance be over 200 people?"
+        help="Large, staffed events qualify for an automatic exception."
+        value={over200}
+        onChange={(v) => onGateChange('over200', v)}
+      />
+
+      {!gatesAnswered && (
+        <p className="text-sm text-muted-foreground">Answer both questions above to continue.</p>
       )}
-      {zipInfo && zipInfo.known && (
-        <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
-          <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
-          {zipInfo.miles <= FREE_DELIVERY_MILES ? (
-            <p className="text-primary mt-1">Free delivery ✓</p>
-          ) : (
-            <p className="text-foreground mt-1">Delivery surcharge: ${(Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES) * 3).toFixed(2)} ({Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} extra miles × $3)</p>
+
+      {gatesAnswered && (
+        <>
+          <div className="space-y-2">
+            <Label htmlFor="zip">Delivery ZIP code</Label>
+            <Input id="zip" value={zip} onChange={(e) => onZipChange(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="e.g. 48377" inputMode="numeric" maxLength={5} />
+          </div>
+          {(isIndoors || over200) && (
+            <p className="text-sm text-primary font-body">
+              {isIndoors ? 'Indoor event' : 'Event over 200 guests'} — service-area restrictions don't apply. ✓
+            </p>
           )}
-        </div>
-      )}
-      {blocked && (
-        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
-          <p className="font-heading font-bold text-destructive flex items-center gap-2">
-            <ShieldAlert className="w-4 h-4" /> We don't service this area
-          </p>
-          <p className="text-foreground">
-            Unfortunately Klawsome Mobile doesn't currently travel to{' '}
-            <strong>{blocked.city ? blocked.city : `ZIP ${zip}`}</strong>. We only operate where we can
-            safely park and secure the trailer and reasonably protect our employees and equipment.
-          </p>
-          <p className="text-foreground">
-            If your event is at a venue with secured parking or on-site security, give us a call and we'll
-            take a look — or book an in-store party at Klawsome instead.
-          </p>
-          {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
-          {phone && (
-            <Button asChild size="sm" variant="outline" className="rounded-full">
-              <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
-            </Button>
+          {resolving && zip.length === 5 && !zipInfo && (
+            <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking distance…</p>
           )}
-        </div>
-      )}
-      {showCall && (
-        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
-          <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
-          <p className="text-foreground">
-            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number' ? (
-              <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
-            ) : showCall.reason === 'review' ? (
-              <>Events in <strong>{showCall.city || `ZIP ${zip}`}</strong> need a quick review of parking, loading, and security before we can book online.</>
-            ) : (
-              <>We couldn't auto-quote delivery for this ZIP.</>
-            )}
-            {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
-          </p>
-          {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
-          {phone && (
-            <Button asChild size="sm" className="rounded-full">
-              <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
-            </Button>
+          {zipInfo && zipInfo.known && (
+            <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
+              <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
+              {zipInfo.miles <= FREE_DELIVERY_MILES ? (
+                <p className="text-primary mt-1">Free delivery ✓</p>
+              ) : (
+                <p className="text-foreground mt-1">Delivery surcharge: ${(Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES) * 3).toFixed(2)} ({Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} extra miles × $3)</p>
+              )}
+              {approvalForZip?.status === 'approved' && (
+                <p className="text-primary mt-1">Approved by our team ✓ (request #{approvalForZip.code})</p>
+              )}
+            </div>
           )}
-        </div>
-      )}
-      {zipInfo && zipInfo.known === false && zipInfo.reason === 'invalid' && zip.length === 5 && (
-        <p className="text-sm text-destructive">Please enter a valid 5-digit US ZIP code.</p>
+
+          {restricted && (
+            <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
+              <p className="font-heading font-bold text-destructive flex items-center gap-2">
+                <ShieldAlert className="w-4 h-4" /> Give us a call before booking this area
+              </p>
+              <p className="text-foreground">
+                Outdoor events in <strong>{restricted.city || `ZIP ${zip}`}</strong> need a quick review of
+                parking, loading, and on-site security before we can book online.
+              </p>
+              {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
+              {phone && (
+                <Button asChild size="sm" className="rounded-full">
+                  <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
+                </Button>
+              )}
+
+              {approvalForZip?.status === 'pending' ? (
+                <div className="rounded-lg bg-background/60 border border-border p-3 space-y-1">
+                  <p className="font-heading font-bold text-foreground flex items-center gap-2">
+                    <Loader2 className="w-4 h-4 animate-spin" /> Waiting on approval — request #{approvalForZip.code}
+                  </p>
+                  <p className="text-muted-foreground text-xs">
+                    Call us and mention your request number. This page unlocks automatically the second our
+                    team approves it — no need to refresh or start over.
+                  </p>
+                </div>
+              ) : approvalForZip?.status === 'denied' ? (
+                <div className="rounded-lg bg-background/60 border border-destructive/30 p-3 space-y-1">
+                  <p className="font-heading font-bold text-destructive">Request #{approvalForZip.code} wasn't approved</p>
+                  <p className="text-muted-foreground text-xs">
+                    Please give us a call — we can look at an indoor option or an in-store party instead.
+                  </p>
+                </div>
+              ) : showForm ? (
+                <div className="rounded-lg bg-background/60 border border-border p-3 space-y-3">
+                  <p className="font-heading font-bold text-foreground">Request approval</p>
+                  <div className="space-y-2">
+                    <Label htmlFor="ap-name">Your name</Label>
+                    <Input id="ap-name" value={contactDefaults.name} onChange={(e) => onContactChange({ name: e.target.value })} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ap-phone">Phone</Label>
+                    <Input id="ap-phone" value={contactDefaults.phone} onChange={(e) => onContactChange({ phone: e.target.value })} inputMode="tel" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ap-email">Email (optional)</Label>
+                    <Input id="ap-email" value={contactDefaults.email} onChange={(e) => onContactChange({ email: e.target.value })} inputMode="email" />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="ap-notes">Venue details (parking, security, indoor/outdoor)</Label>
+                    <Textarea id="ap-notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} />
+                  </div>
+                  <Button size="sm" className="rounded-full" disabled={submitting} onClick={submit}>
+                    {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
+                    Send request
+                  </Button>
+                </div>
+              ) : (
+                <Button size="sm" variant="outline" className="rounded-full" onClick={() => setShowForm(true)}>
+                  Request approval for this address
+                </Button>
+              )}
+            </div>
+          )}
+
+          {showCall && (
+            <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
+              <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
+              <p className="text-foreground">
+                {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number' ? (
+                  <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
+                ) : (
+                  <>We couldn't auto-quote delivery for this ZIP.</>
+                )}
+                {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
+              </p>
+              {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
+              {phone && (
+                <Button asChild size="sm" className="rounded-full">
+                  <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
+                </Button>
+              )}
+            </div>
+          )}
+
+          {zipInfo && zipInfo.known === false && zipInfo.reason === 'invalid' && zip.length === 5 && (
+            <p className="text-sm text-destructive">Please enter a valid 5-digit US ZIP code.</p>
+          )}
+        </>
       )}
     </div>
   );

@@ -16,7 +16,7 @@ const TABLES_ALLOWED = [
   'gallery_photos', 'image_library',
   'page_content_sections', 'team_members', 'press_articles', 'rental_packages',
   'event_availability', 'event_blackout_dates', 'event_bookings',
-  'service_area_zips',
+  'service_area_zips', 'booking_approval_requests',
 ];
 
 serve(async (req) => {
@@ -47,6 +47,27 @@ serve(async (req) => {
     const supabase = createClient(supabaseUrl, serviceKey);
 
     // READ — fetch all rows from a table
+    // DECIDE APPROVAL — approve or deny a restricted-ZIP booking request
+    if (action === 'decide_approval') {
+      const decision = String(body.decision || '');
+      if (!id) return json({ error: 'id required' }, 400);
+      if (!['approved', 'denied', 'pending'].includes(decision)) {
+        return json({ error: 'Invalid decision' }, 400);
+      }
+      const { data: row, error } = await supabase
+        .from('booking_approval_requests')
+        .update({
+          status: decision,
+          staff_note: String(body.staff_note ?? '').slice(0, 1000),
+          decided_at: decision === 'pending' ? null : new Date().toISOString(),
+        })
+        .eq('id', id)
+        .select()
+        .single();
+      if (error) return json({ error: error.message }, 500);
+      return json({ row });
+    }
+
     if (action === 'read') {
       if (!table) return json({ error: 'Table required' }, 400);
       const { data: rows, error } = await supabase

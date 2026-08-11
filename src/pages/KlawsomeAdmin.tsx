@@ -10,6 +10,7 @@ import { Lock, Settings, Save } from 'lucide-react';
 import { toast } from 'sonner';
 import { BookingScheduleEditor } from '@/components/admin/BookingScheduleEditor';
 import { BookingsCalendar } from '@/components/admin/BookingsCalendar';
+import { ApprovalsEditor } from '@/components/admin/ApprovalsEditor';
 import { SingleRowEditor, cmsInvoke } from '@/components/admin/CmsEditors';
 import { CONTENT_TABS } from '@/components/admin/ContentTabs';
 
@@ -171,6 +172,7 @@ const KlawsomeAdmin = () => {
             <TabsTrigger value="hours" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🕐 Hours</TabsTrigger>
             <TabsTrigger value="schedule" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📅 Booking Schedule</TabsTrigger>
             <TabsTrigger value="bookings" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">📆 Bookings</TabsTrigger>
+            <TabsTrigger value="approvals" className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">🛡 Approvals</TabsTrigger>
             {CONTENT_TABS.map((t) => (
               <TabsTrigger key={t.value} value={t.value} className="data-[state=active]:bg-klawsome-yellow data-[state=active]:text-klawsome-navy text-white/60 font-heading text-xs">{t.label}</TabsTrigger>
             ))}
@@ -213,6 +215,11 @@ const KlawsomeAdmin = () => {
           {/* ─── Bookings Calendar ─── */}
           <TabsContent value="bookings">
             <BookingsCalendar password={storedPassword} />
+          </TabsContent>
+
+          {/* ─── Booking Approvals ─── */}
+          <TabsContent value="approvals">
+            <ApprovalsEditor password={storedPassword} />
           </TabsContent>
 
           {CONTENT_TABS.map((t) => (
