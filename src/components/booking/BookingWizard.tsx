@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   ADDONS,
@@ -55,6 +56,7 @@ interface State {
   };
   checkoutUrl: string | null;
   bookingRef: string | null;
+  safetyAccepted: boolean;
 }
 
 const emptyState = (): State => ({
@@ -70,6 +72,7 @@ const emptyState = (): State => ({
   contact: { name: '', email: '', phone: '', partySize: '', adults: '', children: '', celebrantName: '', celebrantAge: '', favorites: '', notes: '' },
   checkoutUrl: null,
   bookingRef: null,
+  safetyAccepted: false,
 });
 
 function packagesFor(pathway: Pathway | null): PackageOption[] {
@@ -343,6 +346,8 @@ function BookingWizardDialog() {
               dayType={dayType}
               mobileBaseCents={mobileBaseCents}
               mobileExtraCents={mobileExtraCents}
+              safetyAccepted={state.safetyAccepted}
+              onSafetyChange={(v) => setState((s) => ({ ...s, safetyAccepted: v }))}
             />
           )}
           {step === 'done' && (
@@ -359,7 +364,7 @@ function BookingWizardDialog() {
               {zipBlocked && <span className="ml-3 text-destructive">We'll quote delivery for this ZIP.</span>}
             </div>
             {step === 'review' ? (
-              <Button onClick={submit} disabled={submitting} className="bg-primary text-primary-foreground">
+              <Button onClick={submit} disabled={submitting || !canNext} className="bg-primary text-primary-foreground">
                 {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Preparing…</> : <>Continue to Payment <ChevronRight className="ml-1 h-4 w-4" /></>}
               </Button>
             ) : (
@@ -423,7 +428,7 @@ function validateStep(
       }
       return true;
     }
-    case 'review': return true;
+    case 'review': return !!s.safetyAccepted;
     default: return true;
   }
 }
