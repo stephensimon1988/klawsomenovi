@@ -49,7 +49,51 @@ const LOCAL_MILES: Record<string, number> = {
 
 export type ZipLookup =
   | { known: true; miles: number }
-  | { known: false; reason: 'invalid' | 'not_found' | 'out_of_range'; miles?: number };
+  | {
+      known: false;
+      reason: 'invalid' | 'not_found' | 'out_of_range' | 'blocked' | 'review';
+      miles?: number;
+      city?: string;
+    };
+
+export type ServiceLevel = 'allowed' | 'review' | 'blocked';
+
+type ServiceRow = { zip: string; city: string; level: string };
+
+let serviceCache: Record<string, ServiceRow> | null = null;
+let servicePromise: Promise<Record<string, ServiceRow>> | null = null;
+
+// Service-area safety list (managed in /klawsome-admin → Service Area).
+// Anything not on the list is treated as allowed.
+async function loadServiceArea(): Promise<Record<string, ServiceRow>> {
+  if (serviceCache) return serviceCache;
+  if (servicePromise) return servicePromise;
+  servicePromise = (async () => {
+    try {
+      const { supabase } = await import('@/integrations/supabase/client');
+      const { data, error } = await supabase
+        .from('service_area_zips')
+        .select('zip, city, level');
+      if (error) throw error;
+      const map: Record<string, ServiceRow> = {};
+      for (const r of (data ?? []) as ServiceRow[]) map[String(r.zip).trim()] = r;
+      serviceCache = map;
+      return map;
+    } catch {
+      serviceCache = {};
+      return serviceCache;
+    }
+  })();
+  return servicePromise;
+}
+
+export async function getServiceLevel(zip: string): Promise<{ level: ServiceLevel; city?: string }> {
+  const map = await loadServiceArea();
+  const row = map[(zip || '').trim()];
+  const level = (row?.level || 'allowed').toLowerCase();
+  if (level === 'blocked' || level === 'review') return { level, city: row?.city };
+  return { level: 'allowed', city: row?.city };
+}
 
 // Haversine great-circle distance in miles.
 function haversineMiles(lat1: number, lng1: number, lat2: number, lng2: number): number {
@@ -85,6 +129,10 @@ function classifyMiles(miles: number): ZipLookup {
 export async function getMilesForZip(zip: string): Promise<ZipLookup> {
   const clean = (zip || '').trim().slice(0, 5);
   if (!/^\d{5}$/.test(clean)) return { known: false, reason: 'invalid' };
+  // Safety screening comes first — a restricted area can't be quoted at all.
+  const service = await getServiceLevel(clean);
+  if (service.level === 'blocked') return { known: false, reason: 'blocked', city: service.city };
+  if (service.level === 'review') return { known: false, reason: 'review', city: service.city };
   const local = LOCAL_MILES[clean];
   if (typeof local === 'number') return classifyMiles(local);
   const centroids = await loadCentroids();
