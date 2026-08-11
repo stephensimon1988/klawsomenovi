@@ -116,7 +116,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
                 <a
                   key={l.id}
                   href={`#${l.id}`}
-                  className="btn-cta bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-navy)/0.4)]"
+                  className="btn-cta btn-cta--sub bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-navy)/0.4)]"
                 >
                   {l.label}
                 </a>
