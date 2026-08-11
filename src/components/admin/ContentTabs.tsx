@@ -211,4 +211,25 @@ export const CONTENT_TABS: ContentTab[] = [
       </Panel>
     ),
   },
+  {
+    value: 'service-area',
+    label: '🛡 Service Area',
+    render: (pw) => (
+      <Panel title="Klawsome Mobile Service Area">
+        <p className="text-xs text-white/50 mb-4 font-heading">
+          Controls which ZIP codes can book Klawsome Mobile. Level must be one of:{' '}
+          <strong>allowed</strong> (books normally), <strong>review</strong> (customer must call to confirm
+          before checkout), or <strong>blocked</strong> (cannot book online). Any ZIP not listed here is
+          treated as allowed.
+        </p>
+        <MultiRowEditor password={pw} table="service_area_zips" searchKeys={['zip', 'city', 'notes']} filterKey="level" filterLabel="levels" columns={[
+          { key: 'zip', label: 'ZIP', width: '90px' },
+          { key: 'city', label: 'City / Neighborhood' },
+          { key: 'level', label: 'Level', width: '120px' },
+          { key: 'notes', label: 'Internal Note', type: 'textarea' },
+          { key: 'sort_order', label: 'Order', type: 'number', width: '90px' },
+        ]} />
+      </Panel>
+    ),
+  },
 ];

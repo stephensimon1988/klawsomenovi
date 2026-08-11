@@ -197,6 +197,7 @@ export type Database = {
           miles: number | null
           party_size: number | null
           pathway: string
+          safety_policy_accepted_at: string | null
           shopify_cart_id: string | null
           shopify_order_id: string | null
           special_requests: string | null
@@ -223,6 +224,7 @@ export type Database = {
           miles?: number | null
           party_size?: number | null
           pathway: string
+          safety_policy_accepted_at?: string | null
           shopify_cart_id?: string | null
           shopify_order_id?: string | null
           special_requests?: string | null
@@ -249,6 +251,7 @@ export type Database = {
           miles?: number | null
           party_size?: number | null
           pathway?: string
+          safety_policy_accepted_at?: string | null
           shopify_cart_id?: string | null
           shopify_order_id?: string | null
           special_requests?: string | null
@@ -629,6 +632,39 @@ export type Database = {
           review_text?: string
           sort_order?: number
           updated_at?: string
+        }
+        Relationships: []
+      }
+      service_area_zips: {
+        Row: {
+          city: string
+          created_at: string
+          id: string
+          level: string
+          notes: string
+          sort_order: number
+          updated_at: string
+          zip: string
+        }
+        Insert: {
+          city?: string
+          created_at?: string
+          id?: string
+          level?: string
+          notes?: string
+          sort_order?: number
+          updated_at?: string
+          zip: string
+        }
+        Update: {
+          city?: string
+          created_at?: string
+          id?: string
+          level?: string
+          notes?: string
+          sort_order?: number
+          updated_at?: string
+          zip?: string
         }
         Relationships: []
       }

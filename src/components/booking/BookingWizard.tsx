@@ -5,8 +5,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
+import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone, ShieldAlert } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   ADDONS,
@@ -55,6 +56,7 @@ interface State {
   };
   checkoutUrl: string | null;
   bookingRef: string | null;
+  safetyAccepted: boolean;
 }
 
 const emptyState = (): State => ({
@@ -70,6 +72,7 @@ const emptyState = (): State => ({
   contact: { name: '', email: '', phone: '', partySize: '', adults: '', children: '', celebrantName: '', celebrantAge: '', favorites: '', notes: '' },
   checkoutUrl: null,
   bookingRef: null,
+  safetyAccepted: false,
 });
 
 function packagesFor(pathway: Pathway | null): PackageOption[] {
@@ -236,6 +239,7 @@ function BookingWizardDialog() {
         { key: 'day_type', value: pathway === 'mobile' ? dayType : '' },
         { key: 'duration_hours', value: pathway === 'mobile' ? String(state.mobileHours + state.mobileExtraHours) : '' },
         { key: 'extra_hours', value: pathway === 'mobile' && state.mobileExtraHours ? String(state.mobileExtraHours) : '' },
+        { key: 'safety_policy_accepted', value: state.safetyAccepted ? new Date().toISOString() : '' },
       ].filter((a) => a.value && a.value.length > 0);
 
       const result = await createBookingCart({
@@ -271,6 +275,7 @@ function BookingWizardDialog() {
             addons: state.addons,
             shopify_cart_id: result.checkoutUrl,
             total_cents: totalCents,
+            safety_policy_accepted_at: state.safetyAccepted ? new Date().toISOString() : null,
           },
         });
       } catch (err) {
@@ -343,6 +348,8 @@ function BookingWizardDialog() {
               dayType={dayType}
               mobileBaseCents={mobileBaseCents}
               mobileExtraCents={mobileExtraCents}
+              safetyAccepted={state.safetyAccepted}
+              onSafetyChange={(v) => setState((s) => ({ ...s, safetyAccepted: v }))}
             />
           )}
           {step === 'done' && (
@@ -359,7 +366,7 @@ function BookingWizardDialog() {
               {zipBlocked && <span className="ml-3 text-destructive">We'll quote delivery for this ZIP.</span>}
             </div>
             {step === 'review' ? (
-              <Button onClick={submit} disabled={submitting} className="bg-primary text-primary-foreground">
+              <Button onClick={submit} disabled={submitting || !canNext} className="bg-primary text-primary-foreground">
                 {submitting ? <><Loader2 className="mr-2 h-4 w-4 animate-spin" /> Preparing…</> : <>Continue to Payment <ChevronRight className="ml-1 h-4 w-4" /></>}
               </Button>
             ) : (
@@ -423,7 +430,7 @@ function validateStep(
       }
       return true;
     }
-    case 'review': return true;
+    case 'review': return !!s.safetyAccepted;
     default: return true;
   }
 }
@@ -725,9 +732,11 @@ function DeliveryStep({
   const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
   const hoursNote = todaysHoursNote(storeHours);
   const showCall =
-    zipInfo && zipInfo.known === false && (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found')
+    zipInfo && zipInfo.known === false &&
+    (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found' || zipInfo.reason === 'review')
       ? zipInfo
       : null;
+  const blocked = zipInfo && zipInfo.known === false && zipInfo.reason === 'blocked' ? zipInfo : null;
   return (
     <div className="space-y-4 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
@@ -748,13 +757,39 @@ function DeliveryStep({
           )}
         </div>
       )}
+      {blocked && (
+        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
+          <p className="font-heading font-bold text-destructive flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4" /> We don't service this area
+          </p>
+          <p className="text-foreground">
+            Unfortunately Klawsome Mobile doesn't currently travel to{' '}
+            <strong>{blocked.city ? blocked.city : `ZIP ${zip}`}</strong>. We only operate where we can
+            safely park and secure the trailer and reasonably protect our employees and equipment.
+          </p>
+          <p className="text-foreground">
+            If your event is at a venue with secured parking or on-site security, give us a call and we'll
+            take a look — or book an in-store party at Klawsome instead.
+          </p>
+          {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
+          {phone && (
+            <Button asChild size="sm" variant="outline" className="rounded-full">
+              <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
+            </Button>
+          )}
+        </div>
+      )}
       {showCall && (
         <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
           <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
           <p className="text-foreground">
-            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number'
-              ? <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
-              : <>We couldn't auto-quote delivery for this ZIP.</>}
+            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number' ? (
+              <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
+            ) : showCall.reason === 'review' ? (
+              <>Events in <strong>{showCall.city || `ZIP ${zip}`}</strong> need a quick review of parking, loading, and security before we can book online.</>
+            ) : (
+              <>We couldn't auto-quote delivery for this ZIP.</>
+            )}
             {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
           </p>
           {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
@@ -848,10 +883,12 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
 
 function ReviewStep({
   pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents, dayType, mobileBaseCents, mobileExtraCents,
+  safetyAccepted, onSafetyChange,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
   zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
   dayType: DayType; mobileBaseCents: number; mobileExtraCents: number;
+  safetyAccepted: boolean; onSafetyChange: (v: boolean) => void;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
   const tier = MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null;
@@ -902,6 +939,28 @@ function ReviewStep({
         <div className="border-t border-border mt-3 pt-3 flex justify-between font-heading font-bold">
           <span>Total</span><span>${(totalCents / 100).toFixed(2)}</span>
         </div>
+      </div>
+      <div className="rounded-2xl border border-border p-4 bg-muted/30">
+        <label htmlFor="safety-policy" className="flex items-start gap-3 cursor-pointer">
+          <Checkbox
+            id="safety-policy"
+            checked={safetyAccepted}
+            onCheckedChange={(v) => onSafetyChange(v === true)}
+            className="mt-1 shrink-0"
+          />
+          <span className="text-sm font-body leading-relaxed">
+            <strong className="font-heading">Service Area &amp; Safety Policy:</strong>{' '}
+            Klawsome Mobile reserves the right to decline or modify an event based on operational,
+            logistical, or safety considerations. Factors may include the specific event location,
+            parking and loading conditions, security arrangements, operating hours, accessibility,
+            ability to safely park and secure the trailer, and other conditions that could reasonably
+            affect the safety of our employees, equipment, or guests. We don't operate in locations
+            where we cannot reasonably protect our employees and equipment.
+          </span>
+        </label>
+        {!safetyAccepted && (
+          <p className="text-xs text-destructive mt-2 ml-8">Please check the box to continue to payment.</p>
+        )}
       </div>
       <p className="text-xs text-muted-foreground font-body">You'll pay through Shopify's secure checkout. Your date and time are held while you complete payment; confirmation goes out once payment succeeds.</p>
     </div>

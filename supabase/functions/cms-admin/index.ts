@@ -16,6 +16,7 @@ const TABLES_ALLOWED = [
   'gallery_photos', 'image_library',
   'page_content_sections', 'team_members', 'press_articles', 'rental_packages',
   'event_availability', 'event_blackout_dates', 'event_bookings',
+  'service_area_zips',
 ];
 
 serve(async (req) => {
