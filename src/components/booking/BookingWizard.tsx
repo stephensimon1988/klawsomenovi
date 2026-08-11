@@ -35,6 +35,7 @@ import {
   storeApproval,
   subscribeApprovalStatus,
   type ApprovalRecord,
+  type ApprovalStatus,
 } from '@/lib/booking/approvals';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
@@ -141,27 +142,33 @@ function BookingWizardDialog() {
   const approvalUnlocked = approval?.status === 'approved' && approval.zip === state.zip.trim();
   const bypassSafety = exceptionOk || approvalUnlocked;
 
-  // Restore (and live-track) any approval already granted for this ZIP on this device.
+  // Restore any approval already recorded for this ZIP on this device.
   useEffect(() => {
     const clean = state.zip.trim();
     if (!needsDelivery || clean.length < 5) { setApproval(null); return; }
-    const stored = getStoredApproval(clean);
-    if (!stored) { setApproval(null); return; }
-    setApproval(stored);
-    let cancelled = false;
-    fetchApprovalStatus(stored.code).then((st) => {
-      if (cancelled || !st) return;
-      const next = { ...stored, status: st };
-      storeApproval(next);
-      setApproval(next);
-    });
-    const unsub = subscribeApprovalStatus(stored.code, (st) => {
-      const next = { ...stored, status: st };
-      storeApproval(next);
-      setApproval(next);
-    });
-    return () => { cancelled = true; unsub(); };
+    setApproval(getStoredApproval(clean));
   }, [state.zip, needsDelivery]);
+
+  // Live-track the pending request: unlocks the wizard the moment staff approves.
+  useEffect(() => {
+    const code = approval?.code;
+    if (!code) return;
+    let cancelled = false;
+    const apply = (st: ApprovalStatus) => {
+      setApproval((prev) => {
+        if (!prev || prev.code !== code || prev.status === st) return prev;
+        const next = { ...prev, status: st };
+        storeApproval(next);
+        return next;
+      });
+    };
+    fetchApprovalStatus(code).then((st) => { if (!cancelled && st) apply(st); });
+    const unsub = subscribeApprovalStatus(code, apply);
+    const poll = window.setInterval(() => {
+      fetchApprovalStatus(code).then((st) => { if (!cancelled && st) apply(st); });
+    }, 15000);
+    return () => { cancelled = true; unsub(); window.clearInterval(poll); };
+  }, [approval?.code]);
 
   useEffect(() => {
     if (!needsDelivery) { setZipInfo(null); return; }
