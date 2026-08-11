@@ -276,8 +276,8 @@ const CommunityPartners = () => {
           <div className="text-center mt-8">
             <Button
               asChild
-              size="lg"
-              className="rounded-full px-10 py-6 text-sm font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
+              size="cta"
+              className="font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
             >
               <a
                 href="https://docs.google.com/forms/d/e/1FAIpQLSeMRqFgE-A5oNAM4pn0ybnAcU6VidlnNWirNqI0wcGDSjvvHw/viewform"

@@ -39,10 +39,10 @@ const Index = () => {
             Birthday parties, machine rentals, or Klawsome Mobile — pick your date and check out securely.
           </p>
           <div className="mt-8 flex flex-wrap justify-center gap-3">
-            <Button size="hero" onClick={() => openBookingModal()} className="bg-primary text-primary-foreground hover:bg-primary/90">
+            <Button size="cta" onClick={() => openBookingModal()} className="bg-primary text-primary-foreground hover:bg-primary/90">
               Start Booking
             </Button>
-            <Button size="hero" variant="outline" onClick={() => openBookingModal('rental')}>
+            <Button size="cta" variant="outline" onClick={() => openBookingModal('rental')}>
               Rent a Machine
             </Button>
           </div>

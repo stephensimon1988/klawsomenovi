@@ -102,8 +102,8 @@ export const CartDrawer = () => {
                 </div>
                 <Button
                   onClick={handleCheckout}
-                  className="w-full rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
-                  size="lg"
+                  className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
+                  size="cta"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <><ExternalLink className="w-4 h-4 mr-2" />Checkout</>}

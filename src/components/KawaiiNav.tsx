@@ -163,7 +163,7 @@ const KawaiiNav = () => {
               </AnimatePresence>
             </div>
             <Button
-              size="sm"
+              size="cta"
               onClick={() => openBookingModal()}
               className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors"
             >
@@ -217,7 +217,7 @@ const KawaiiNav = () => {
                   </div>
                 ))}
               </div>
-              <Button size="sm" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
+              <Button size="cta" onClick={() => { setIsOpen(false); openBookingModal(); }} className="rounded-full px-6 font-heading font-bold text-xs tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors w-full">
                 BOOK EVENT
               </Button>
             </div>

@@ -362,10 +362,10 @@ export const QuickAddModal = ({ product, open, onClose, initialVariantId }: Prop
                   <Plus className="w-5 h-5" />
                 </button>
               </div>
-              <Button
+              <Button size="cta"
                 onClick={handleAdd}
                 disabled={!matchedVariant || !available || isLoading}
-                className="flex-1 h-12 rounded-full bg-klawsome-navy hover:bg-klawsome-navy/90 text-white font-heading font-bold text-lg"
+                className="flex-1 bg-klawsome-navy hover:bg-klawsome-navy/90 text-white font-heading font-bold"
               >
                 {isLoading ? (
                   <Loader2 className="w-5 h-5 animate-spin" />

@@ -89,8 +89,8 @@ const Rewards = () => {
             <div className="mt-8 md:mt-10">
               <Button
                 asChild
-                size="lg"
-                className="rounded-full px-10 py-6 text-base font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
+                size="cta"
+                className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
               >
                 <a
                   href={hero?.cta_url || 'https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty'}
@@ -228,8 +228,8 @@ const Rewards = () => {
           <div className="text-center mt-16">
             <Button
               asChild
-              size="lg"
-              className="rounded-full px-10 py-6 text-base font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
+              size="cta"
+              className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
             >
               <a
                 href="https://profile.squareup.com/merchantportal/ML1R35ZH9VKRW/loyalty"

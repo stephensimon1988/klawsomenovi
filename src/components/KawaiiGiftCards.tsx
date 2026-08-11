@@ -30,9 +30,9 @@ const KawaiiGiftCards = () => {
             <p className="ds-lead mb-10">
               {content?.body_2 || 'Choose from one of many designs.'}
             </p>
-            <Button
+            <Button size="cta"
               asChild
-              className="rounded-full px-8 font-heading font-bold text-xs tracking-wider bg-primary text-primary-foreground uppercase hover:bg-primary/90"
+              className="font-heading font-bold tracking-wider bg-primary text-primary-foreground uppercase hover:bg-primary/90"
             >
               <a
                 href={content?.cta_url || 'https://app.squareup.com/gift/ML1R35ZH9VKRW/order'}

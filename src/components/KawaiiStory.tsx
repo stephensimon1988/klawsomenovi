@@ -33,7 +33,7 @@ const KawaiiStory = () => {
             </p>
             <div className="mt-8 flex flex-wrap items-center gap-4">
               <Button
-                size="lg"
+                size="cta"
                 onClick={() => openBookingModal()}
                 className="rounded-full px-8 font-heading font-bold tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors"
               >

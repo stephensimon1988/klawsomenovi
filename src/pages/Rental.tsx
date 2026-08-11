@@ -196,7 +196,7 @@ const Rental = () => {
                   <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
                     <div />
                     <div className="col-span-2 flex justify-end">
-                      <Button
+                      <Button size="cta"
                         onClick={() => openBookingModal('rental')}
                         size="lg"
                         className="w-full rounded-full py-5 md:py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
@@ -212,7 +212,7 @@ const Rental = () => {
                         {addOns.map((p) => renderCard(p, true))}
                       </div>
                       <div className="mt-10 flex justify-center">
-                        <Button
+                        <Button size="cta"
                           onClick={() => openBookingModal('rental')}
                           size="lg"
                           className="rounded-full px-10 py-6 text-base md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"

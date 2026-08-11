@@ -79,9 +79,9 @@ const Unsubscribe = () => {
             <p className="font-body text-foreground/70 mb-6">
               Click below to confirm you'd like to unsubscribe from Klawsome emails.
             </p>
-            <Button
+            <Button size="cta"
               onClick={handleConfirm}
-              className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold rounded-full px-8 py-6"
+              className="bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold"
             >
               Confirm Unsubscribe
             </Button>

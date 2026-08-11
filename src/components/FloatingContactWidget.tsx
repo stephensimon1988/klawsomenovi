@@ -174,10 +174,10 @@ const FloatingContactWidget = () => {
                 className="rounded-xl"
               />
             </div>
-            <Button
+            <Button size="cta"
               type="submit"
               disabled={submitting}
-              className="w-full bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold rounded-full py-6 text-base"
+              className="w-full bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 font-heading font-bold"
             >
               {submitting ? 'Sending…' : 'Send Message'}
             </Button>
