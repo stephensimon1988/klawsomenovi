@@ -730,9 +730,11 @@ function DeliveryStep({
   const telHref = phone ? `tel:${phone.replace(/[^0-9+]/g, '')}` : '';
   const hoursNote = todaysHoursNote(storeHours);
   const showCall =
-    zipInfo && zipInfo.known === false && (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found')
+    zipInfo && zipInfo.known === false &&
+    (zipInfo.reason === 'out_of_range' || zipInfo.reason === 'not_found' || zipInfo.reason === 'review')
       ? zipInfo
       : null;
+  const blocked = zipInfo && zipInfo.known === false && zipInfo.reason === 'blocked' ? zipInfo : null;
   return (
     <div className="space-y-4 max-w-md">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
@@ -753,13 +755,39 @@ function DeliveryStep({
           )}
         </div>
       )}
+      {blocked && (
+        <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
+          <p className="font-heading font-bold text-destructive flex items-center gap-2">
+            <ShieldAlert className="w-4 h-4" /> We don't service this area
+          </p>
+          <p className="text-foreground">
+            Unfortunately Klawsome Mobile doesn't currently travel to{' '}
+            <strong>{blocked.city ? blocked.city : `ZIP ${zip}`}</strong>. We only operate where we can
+            safely park and secure the trailer and reasonably protect our employees and equipment.
+          </p>
+          <p className="text-foreground">
+            If your event is at a venue with secured parking or on-site security, give us a call and we'll
+            take a look — or book an in-store party at Klawsome instead.
+          </p>
+          {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
+          {phone && (
+            <Button asChild size="sm" variant="outline" className="rounded-full">
+              <a href={telHref}><Phone className="w-4 h-4 mr-2" />Call {phone}</a>
+            </Button>
+          )}
+        </div>
+      )}
       {showCall && (
         <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
           <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
           <p className="text-foreground">
-            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number'
-              ? <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
-              : <>We couldn't auto-quote delivery for this ZIP.</>}
+            {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number' ? (
+              <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
+            ) : showCall.reason === 'review' ? (
+              <>Events in <strong>{showCall.city || `ZIP ${zip}`}</strong> need a quick review of parking, loading, and security before we can book online.</>
+            ) : (
+              <>We couldn't auto-quote delivery for this ZIP.</>
+            )}
             {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
           </p>
           {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
