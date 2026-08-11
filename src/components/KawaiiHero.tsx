@@ -170,7 +170,7 @@ const KawaiiHero = () => {
                 key={l.id}
                 type="button"
                 onClick={() => scrollTo(l.id)}
-                className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                className="btn-cta btn-cta--sub bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
               >
                 {l.label}
               </button>
