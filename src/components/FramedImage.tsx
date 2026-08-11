@@ -89,10 +89,10 @@ const FramedImage = ({
   }
 
   return (
-    <div className="group relative">
+    <div className="group relative max-w-full p-3">
       {/* Stationary colored under-layer (never rotates). */}
       <div
-        className="absolute -inset-3 rounded-kawaii"
+        className="absolute inset-0 rounded-kawaii"
         style={{ backgroundColor: `hsl(var(--klawsome-${underColor}))` }}
         aria-hidden
       />
