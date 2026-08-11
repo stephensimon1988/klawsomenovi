@@ -853,10 +853,12 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
 
 function ReviewStep({
   pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents, dayType, mobileBaseCents, mobileExtraCents,
+  safetyAccepted, onSafetyChange,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
   zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
   dayType: DayType; mobileBaseCents: number; mobileExtraCents: number;
+  safetyAccepted: boolean; onSafetyChange: (v: boolean) => void;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
   const tier = MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null;
@@ -907,6 +909,28 @@ function ReviewStep({
         <div className="border-t border-border mt-3 pt-3 flex justify-between font-heading font-bold">
           <span>Total</span><span>${(totalCents / 100).toFixed(2)}</span>
         </div>
+      </div>
+      <div className="rounded-2xl border border-border p-4 bg-muted/30">
+        <label htmlFor="safety-policy" className="flex items-start gap-3 cursor-pointer">
+          <Checkbox
+            id="safety-policy"
+            checked={safetyAccepted}
+            onCheckedChange={(v) => onSafetyChange(v === true)}
+            className="mt-1 shrink-0"
+          />
+          <span className="text-sm font-body leading-relaxed">
+            <strong className="font-heading">Service Area &amp; Safety Policy:</strong>{' '}
+            Klawsome Mobile reserves the right to decline or modify an event based on operational,
+            logistical, or safety considerations. Factors may include the specific event location,
+            parking and loading conditions, security arrangements, operating hours, accessibility,
+            ability to safely park and secure the trailer, and other conditions that could reasonably
+            affect the safety of our employees, equipment, or guests. We don't operate in locations
+            where we cannot reasonably protect our employees and equipment.
+          </span>
+        </label>
+        {!safetyAccepted && (
+          <p className="text-xs text-destructive mt-2 ml-8">Please check the box to continue to payment.</p>
+        )}
       </div>
       <p className="text-xs text-muted-foreground font-body">You'll pay through Shopify's secure checkout. Your date and time are held while you complete payment; confirmation goes out once payment succeeds.</p>
     </div>
