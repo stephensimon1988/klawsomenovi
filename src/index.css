@@ -280,7 +280,7 @@ html {
   .section-y      { @apply py-24 md:py-24; }            /* standard 96px */
 
   /* Site-wide standard CTA — same height + font size on every public page.
-     Colors stay on the element (bg-*/text-* utilities are applied per button). */
+     Colors stay on the element via per-button background and text utilities. */
   .btn-cta {
     @apply inline-flex items-center justify-center gap-2 h-[45px] rounded-full px-8
            text-[18px] leading-none font-heading font-bold tracking-wider uppercase
