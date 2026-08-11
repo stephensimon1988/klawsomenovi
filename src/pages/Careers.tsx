@@ -213,7 +213,7 @@ const Careers = () => {
                         }
                       />
                       {job.apply_url && (
-                        <Button asChild size="cta" className="w-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
+                        <Button size="cta" asChild className="w-full font-heading font-bold bg-primary hover:bg-primary/90 text-white">
                           <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
                         </Button>
                       )}
@@ -261,7 +261,7 @@ const Careers = () => {
                         }
                       />
                       {job.apply_url && (
-                        <Button asChild size="cta" className="font-heading font-bold bg-primary hover:bg-primary/90 text-white">
+                        <Button size="cta" asChild className="font-heading font-bold bg-primary hover:bg-primary/90 text-white">
                           <a href={job.apply_url} target="_blank" rel="noopener noreferrer">Apply Here</a>
                         </Button>
                       )}

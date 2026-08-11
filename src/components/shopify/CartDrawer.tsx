@@ -100,10 +100,9 @@ export const CartDrawer = () => {
                   <span className="text-lg font-heading font-bold">Total</span>
                   <span className="text-xl font-heading font-bold text-primary">${totalPrice.toFixed(2)}</span>
                 </div>
-                <Button
+                <Button size="cta"
                   onClick={handleCheckout}
                   className="w-full bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"
-                  size="cta"
                   disabled={items.length === 0 || isLoading || isSyncing}
                 >
                   {isLoading || isSyncing ? <Loader2 className="w-4 h-4 animate-spin" /> : <><ExternalLink className="w-4 h-4 mr-2" />Checkout</>}

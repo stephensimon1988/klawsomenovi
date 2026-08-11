@@ -274,9 +274,8 @@ const CommunityPartners = () => {
           </p>
 
           <div className="text-center mt-8">
-            <Button
+            <Button size="cta"
               asChild
-              size="cta"
               className="font-heading font-bold tracking-wider bg-primary hover:bg-primary/90 text-white uppercase"
             >
               <a

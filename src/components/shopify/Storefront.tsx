@@ -428,8 +428,7 @@ const ProductCard = ({
               ? `$${parseFloat(n.priceRange.minVariantPrice.amount).toFixed(0)} - $${parseFloat(n.priceRange.maxVariantPrice.amount).toFixed(0)}`
               : `$${parseFloat(variant?.price.amount ?? n.priceRange.minVariantPrice.amount).toFixed(2)}`}
           </span>
-          <Button
-            size="cta"
+          <Button size="cta"
             disabled={!variant || isLoading || !variant.availableForSale}
             onClick={handleAdd}
             className="bg-primary hover:bg-primary/90 text-primary-foreground font-heading font-bold"

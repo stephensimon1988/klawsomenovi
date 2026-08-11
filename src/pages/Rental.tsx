@@ -198,8 +198,7 @@ const Rental = () => {
                     <div className="col-span-2 flex justify-end">
                       <Button size="cta"
                         onClick={() => openBookingModal('rental')}
-                        size="cta"
-                        className="w-full md:py-6 md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
+                        className="w-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
                       >
                         Book Your Event
                       </Button>
@@ -214,8 +213,7 @@ const Rental = () => {
                       <div className="mt-10 flex justify-center">
                         <Button size="cta"
                           onClick={() => openBookingModal('rental')}
-                          size="cta"
-                          className="md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"
+                          className="font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90"
                         >
                           Add to Rental
                         </Button>

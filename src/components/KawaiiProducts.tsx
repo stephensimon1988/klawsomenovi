@@ -80,7 +80,7 @@ const KawaiiProducts = () => {
                   <p className="text-white/50 text-sm font-body mb-3 line-clamp-2">{product.description}</p>
                   <div className="flex items-center justify-between">
                     <span className="font-heading font-bold text-xl text-klawsome-yellow">{product.price}</span>
-                    <Button asChild size="cta" className="font-heading bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
+                    <Button size="cta" asChild className="font-heading bg-primary hover:bg-primary/90 text-white glow-hover glow-coral">
                       <Link to="/store">Buy</Link>
                     </Button>
                   </div>

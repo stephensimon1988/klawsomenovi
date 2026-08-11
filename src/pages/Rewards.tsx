@@ -87,9 +87,8 @@ const Rewards = () => {
             </h1>
 
             <div className="mt-8 md:mt-10">
-              <Button
+              <Button size="cta"
                 asChild
-                size="cta"
                 className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
               >
                 <a
@@ -226,9 +225,8 @@ const Rewards = () => {
           </div>
 
           <div className="text-center mt-16">
-            <Button
+            <Button size="cta"
               asChild
-              size="cta"
               className="font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white hover:bg-klawsome-navy/90 shadow-lg hover:-translate-y-[3px] transition-all"
             >
               <a

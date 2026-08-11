@@ -162,8 +162,7 @@ const KawaiiNav = () => {
                 )}
               </AnimatePresence>
             </div>
-            <Button
-              size="cta"
+            <Button size="cta"
               onClick={() => openBookingModal()}
               className="font-heading font-bold tracking-wider bg-klawsome-red text-white border border-klawsome-red hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow transition-colors"
             >

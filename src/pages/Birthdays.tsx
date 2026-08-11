@@ -163,7 +163,7 @@ const Birthdays = () => {
                 <Button size="cta" onClick={() => openBookingModal()} className="bg-white text-klawsome-navy hover:bg-white/90">
                   Book a Birthday Party
                 </Button>
-                <Button asChild size="cta" variant="heroGhost">
+                <Button size="cta" asChild variant="heroGhost">
                   <a href="#party-options">See Options</a>
                 </Button>
               </div>
@@ -224,8 +224,7 @@ const Birthdays = () => {
             <div className="col-span-2 flex justify-end">
               <Button size="cta"
                 onClick={() => openBookingModal()}
-                size="cta"
-                className="w-full md:py-6 md:text-lg font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
+                className="w-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
               >
                 Book Your Event
               </Button>
@@ -309,7 +308,7 @@ const Birthdays = () => {
           </div>
 
           <div className="mt-10 text-center">
-            <Button size="cta" onClick={() => openBookingModal()} size="cta" className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
+            <Button size="cta" onClick={() => openBookingModal()} className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
               Add These to Your Booking
             </Button>
           </div>
