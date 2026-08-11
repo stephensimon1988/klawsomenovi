@@ -252,7 +252,7 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={() => openBookingModal('rental')}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                    className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
                     Book Event
                   </button>
@@ -280,7 +280,7 @@ const Rental = () => {
                   <button
                     type="button"
                     onClick={() => openBookingModal('rental')}
-                    className="inline-flex items-center justify-center rounded-full px-8 py-4 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                    className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
                   >
                     Book Event
                   </button>
@@ -313,7 +313,7 @@ const Rental = () => {
             <div className="mt-10 flex justify-center">
               <a
                 href="/faq"
-                className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+                className="btn-cta bg-foreground text-background hover:bg-foreground/90"
               >
                 See all FAQs <span>→</span>
               </a>
@@ -350,7 +350,7 @@ const Rental = () => {
               <div className="mt-10 flex justify-center">
                 <a
                   href="/gallery"
-                  className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 hover:bg-foreground/90 transition-colors"
+                  className="btn-cta bg-foreground text-background hover:bg-foreground/90"
                 >
                   See full gallery <span>→</span>
                 </a>
@@ -372,7 +372,7 @@ const Rental = () => {
             href="/klawsome-rental-waiver.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 rounded-full bg-foreground text-background font-heading font-bold text-xs uppercase tracking-wider px-8 py-4 hover:bg-foreground/90 transition-colors"
+            className="btn-cta bg-foreground text-background hover:bg-foreground/90"
           >
             Download Waiver (PDF) <span>↓</span>
           </a>
