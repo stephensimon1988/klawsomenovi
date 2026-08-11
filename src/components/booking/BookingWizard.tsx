@@ -309,6 +309,9 @@ function BookingWizardDialog() {
         { key: 'duration_hours', value: pathway === 'mobile' ? String(state.mobileHours + state.mobileExtraHours) : '' },
         { key: 'extra_hours', value: pathway === 'mobile' && state.mobileExtraHours ? String(state.mobileExtraHours) : '' },
         { key: 'safety_policy_accepted', value: state.safetyAccepted ? new Date().toISOString() : '' },
+        { key: 'indoors', value: needsDelivery && state.isIndoors !== null ? (state.isIndoors ? 'yes' : 'no') : '' },
+        { key: 'over_200_guests', value: needsDelivery && state.over200 !== null ? (state.over200 ? 'yes' : 'no') : '' },
+        { key: 'zip_approval_code', value: approvalUnlocked && approval ? approval.code : '' },
       ].filter((a) => a.value && a.value.length > 0);
 
       const result = await createBookingCart({
