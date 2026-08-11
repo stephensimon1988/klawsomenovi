@@ -312,6 +312,17 @@ body {
     transform: rotate(0deg) scale(var(--img-scale-hover, 1.22));
   }
 
+  /* Below desktop, flatten the tilt so rotated corners can never bleed
+     sideways out of the page on mobile/tablet. */
+  @media (max-width: 1023px) {
+    .framed-frame {
+      --frame-rot: 0deg;
+    }
+    .framed-img {
+      --img-rot: 0deg;
+    }
+  }
+
   .section-y-sm   { @apply py-16; }                     /* compact */
   .section-y-lg   { @apply py-28 md:py-32; }            /* generous, for hero-adjacent */
   .section-x      { @apply px-6 lg:px-12; }             /* horizontal gutters */
