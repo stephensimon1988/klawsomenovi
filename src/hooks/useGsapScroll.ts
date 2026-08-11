@@ -6,6 +6,15 @@ gsap.registerPlugin(ScrollTrigger);
 
 type AnimationType = 'slideLeft' | 'slideRight' | 'slideUp' | 'slideDown' | 'fadeIn' | 'parallax' | 'scaleIn';
 
+/* Horizontal slide-ins translate elements outside the viewport before they play.
+   On narrow screens (mobile/tablet) that creates real horizontal page overflow,
+   so we degrade them to a vertical slide which can never overflow sideways. */
+const isNarrowViewport = () =>
+  typeof window !== 'undefined' && window.innerWidth < 1024;
+
+const resolveType = (type: AnimationType): AnimationType =>
+  (type === 'slideLeft' || type === 'slideRight') && isNarrowViewport() ? 'slideUp' : type;
+
 interface GsapScrollOptions {
   type?: AnimationType;
   duration?: number;
@@ -20,7 +29,7 @@ interface GsapScrollOptions {
 export function useGsapScroll<T extends HTMLElement = HTMLDivElement>(options: GsapScrollOptions = {}) {
   const ref = useRef<T>(null);
   const {
-    type = 'slideUp',
+    type: requestedType = 'slideUp',
     duration = 1,
     delay = 0,
     distance = 80,
@@ -33,6 +42,8 @@ export function useGsapScroll<T extends HTMLElement = HTMLDivElement>(options: G
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const type = resolveType(requestedType);
 
     let fromVars: gsap.TweenVars = {};
     let toVars: gsap.TweenVars = {};
@@ -86,7 +97,7 @@ export function useGsapScroll<T extends HTMLElement = HTMLDivElement>(options: G
       tween.scrollTrigger?.kill();
       tween.kill();
     };
-  }, [type, duration, delay, distance, scrub, start, end, parallaxSpeed]);
+  }, [requestedType, duration, delay, distance, scrub, start, end, parallaxSpeed]);
 
   return ref;
 }
@@ -102,7 +113,7 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(options: 
   const ref = useRef<T>(null);
   const {
     stagger = 0.12,
-    type = 'slideUp',
+    type: requestedType = 'slideUp',
     duration = 0.8,
     distance = 60,
     childSelector = ':scope > *',
@@ -111,6 +122,8 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(options: 
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
+
+    const type = resolveType(requestedType);
 
     const children = el.querySelectorAll(childSelector);
     if (!children.length) return;
@@ -155,7 +168,7 @@ export function useGsapStagger<T extends HTMLElement = HTMLDivElement>(options: 
     }, el);
 
     return () => ctx.revert();
-  }, [stagger, type, duration, distance, childSelector]);
+  }, [stagger, requestedType, duration, distance, childSelector]);
 
   return ref;
 }

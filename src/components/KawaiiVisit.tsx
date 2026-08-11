@@ -62,7 +62,7 @@ const KawaiiVisit = () => {
               </div>
             </div>
 
-            <div className="flex gap-4">
+            <div className="flex flex-wrap gap-4">
               <Button size="cta" asChild className="font-heading font-bold tracking-wider bg-foreground text-background hover:bg-foreground/90 uppercase">
                 <a href={mapsUrl} target="_blank" rel="noopener noreferrer">Directions</a>
               </Button>

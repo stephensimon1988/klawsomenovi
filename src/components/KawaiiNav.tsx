@@ -109,7 +109,7 @@ const KawaiiNav = () => {
             <img src={klawsomeLogo} alt="Klawsome" className="h-[50px] w-auto" />
           </button>
 
-          <div ref={linksRef} className="hidden md:flex items-center gap-10">
+          <div ref={linksRef} className="hidden lg:flex items-center gap-6 xl:gap-10">
             {navLinks.map((link) => (
               <button
                 key={link.label}
@@ -138,7 +138,7 @@ const KawaiiNav = () => {
                     transition={{ duration: 0.15 }}
                     className="absolute top-full right-0 pt-3"
                   >
-                    <div className="w-[640px] bg-background border border-border rounded-2xl shadow-lg p-5 grid grid-cols-4 gap-5">
+                    <div className="w-[min(640px,calc(100vw-2rem))] bg-background border border-border rounded-2xl shadow-lg p-5 grid grid-cols-2 sm:grid-cols-4 gap-5">
                       {moreGroups.map((group) => (
                         <div key={group.heading}>
                           <p className="font-heading font-black text-[13px] tracking-[0.2em] uppercase text-klawsome-red mb-2 px-2">
@@ -171,7 +171,7 @@ const KawaiiNav = () => {
             <CartDrawer />
           </div>
 
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             <CartDrawer />
             <button onClick={() => setIsOpen(!isOpen)} className="p-2 text-klawsome-navy">
               {isOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
@@ -186,7 +186,7 @@ const KawaiiNav = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden"
+            className="lg:hidden bg-background/95 backdrop-blur-md border-b border-border overflow-hidden"
           >
             <div className="px-6 py-6 space-y-4">
               {navLinks.map((link) => (
