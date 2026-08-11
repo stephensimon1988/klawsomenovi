@@ -28,6 +28,7 @@ Deno.serve(async (req) => {
       addons: body.addons ?? {},
       shopify_cart_id: body.shopify_cart_id ?? null,
       total_cents: body.total_cents ? Number(body.total_cents) : null,
+      safety_policy_accepted_at: body.safety_policy_accepted_at ?? null,
     };
     const { data, error } = await supabase
       .from('event_bookings')
