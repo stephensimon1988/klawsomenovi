@@ -96,7 +96,7 @@ const DynamicSections = ({ pageKey, excludeSectionKeys = [] }: { pageKey: string
                   {s.cta_text && s.cta_url && (
                     <a
                       href={s.cta_url}
-                      className="inline-flex items-center gap-2 mt-8 rounded-full bg-foreground text-background hover:bg-foreground/90 font-heading font-bold text-xs uppercase tracking-wider px-8 py-3 transition-colors"
+                      className="btn-cta mt-8 bg-foreground text-background hover:bg-foreground/90"
                     >
                       {s.cta_text}
                       <span>→</span>

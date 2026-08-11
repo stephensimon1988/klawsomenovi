@@ -137,7 +137,7 @@ const Rental = () => {
                     <button
                       type="button"
                       onClick={() => openBookingModal('rental')}
-                      className={`mt-8 inline-flex items-center justify-center gap-2 rounded-full font-heading font-bold text-xs uppercase tracking-wider px-6 py-3 transition-colors ${
+                      className={`btn-cta mt-8 ${ 
                         p.is_highlight
                           ? 'bg-background text-foreground hover:bg-background/90'
                           : 'bg-foreground text-background hover:bg-foreground/90'

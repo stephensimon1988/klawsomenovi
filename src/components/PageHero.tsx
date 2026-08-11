@@ -63,7 +63,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
   }, [links.length]);
 
   const linkBtnClass =
-    'inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]';
+    'btn-cta bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)] ';
 
   return (
     <>
@@ -90,7 +90,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
               <button
                 type="button"
                 onClick={() => openBookingModal()}
-                className="inline-flex items-center justify-center rounded-full px-4 py-2 text-xs font-heading font-bold bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
+                className="btn-cta bg-klawsome-red text-white border border-klawsome-red shadow-md transition-all duration-200 hover:bg-klawsome-yellow hover:text-klawsome-navy hover:border-klawsome-yellow hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-yellow)/0.7)]"
               >
                 Book Event
               </button>
@@ -116,7 +116,7 @@ const PageHero = ({ eyebrow, title, subtitle, imageUrl, children, align = 'left'
                 <a
                   key={l.id}
                   href={`#${l.id}`}
-                  className="inline-flex items-center justify-center rounded-full px-2.5 py-1.5 text-[10px] sm:px-4 sm:py-2 sm:text-xs font-heading font-bold bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-navy)/0.4)]"
+                  className="btn-cta bg-klawsome-navy text-white border border-klawsome-navy shadow-md transition-all duration-200 hover:bg-white hover:text-klawsome-navy hover:border-white hover:-translate-y-[5px] hover:shadow-[0_8px_24px_-4px_hsl(var(--klawsome-navy)/0.4)]"
                 >
                   {l.label}
                 </a>
