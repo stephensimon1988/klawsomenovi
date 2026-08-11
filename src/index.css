@@ -305,21 +305,25 @@ body {
     transform: rotate(var(--img-rot, -5deg)) scale(var(--img-scale, 1.15));
     transition: transform 420ms cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .group:hover .framed-frame {
-    transform: rotate(0deg);
-  }
-  .group:hover .framed-img {
-    transform: rotate(0deg) scale(var(--img-scale-hover, 1.22));
+  /* Hover straighten/zoom is desktop-only. */
+  @media (min-width: 1024px) {
+    .group:hover .framed-frame {
+      transform: rotate(0deg);
+    }
+    .group:hover .framed-img {
+      transform: rotate(0deg) scale(var(--img-scale-hover, 1.22));
+    }
   }
 
   /* Below desktop, flatten the tilt so rotated corners can never bleed
-     sideways out of the page on mobile/tablet. */
+     sideways out of the page on mobile/tablet. Set transform directly:
+     the rotation vars are inline styles and would win otherwise. */
   @media (max-width: 1023px) {
     .framed-frame {
-      --frame-rot: 0deg;
+      transform: rotate(0deg);
     }
     .framed-img {
-      --img-rot: 0deg;
+      transform: rotate(0deg) scale(var(--img-scale, 1.15));
     }
   }
 
