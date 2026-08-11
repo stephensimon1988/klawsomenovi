@@ -239,6 +239,7 @@ function BookingWizardDialog() {
         { key: 'day_type', value: pathway === 'mobile' ? dayType : '' },
         { key: 'duration_hours', value: pathway === 'mobile' ? String(state.mobileHours + state.mobileExtraHours) : '' },
         { key: 'extra_hours', value: pathway === 'mobile' && state.mobileExtraHours ? String(state.mobileExtraHours) : '' },
+        { key: 'safety_policy_accepted', value: state.safetyAccepted ? new Date().toISOString() : '' },
       ].filter((a) => a.value && a.value.length > 0);
 
       const result = await createBookingCart({
@@ -274,6 +275,7 @@ function BookingWizardDialog() {
             addons: state.addons,
             shopify_cart_id: result.checkoutUrl,
             total_cents: totalCents,
+            safety_policy_accepted_at: state.safetyAccepted ? new Date().toISOString() : null,
           },
         });
       } catch (err) {
