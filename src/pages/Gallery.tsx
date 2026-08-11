@@ -104,7 +104,7 @@ const Gallery = () => {
                   key={section}
                   type="button"
                   onClick={() => scrollToSection(section)}
-                  className="whitespace-nowrap rounded-full px-4 py-1.5 font-heading font-bold text-[11px] tracking-[0.15em] uppercase border border-border text-foreground/70 hover:text-foreground hover:bg-secondary/60 transition-colors"
+                  className="max-w-full break-words rounded-full px-4 py-1.5 font-heading font-bold text-[11px] tracking-[0.15em] uppercase border border-border text-foreground/70 hover:text-foreground hover:bg-secondary/60 transition-colors"
                 >
                   {sectionLabels[section] || section.replace(/[_-]+/g, ' ')}
                 </button>
