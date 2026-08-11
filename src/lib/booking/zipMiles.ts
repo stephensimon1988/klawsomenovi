@@ -126,13 +126,19 @@ function classifyMiles(miles: number): ZipLookup {
   return { known: true, miles };
 }
 
-export async function getMilesForZip(zip: string): Promise<ZipLookup> {
+export async function getMilesForZip(
+  zip: string,
+  opts?: { bypassSafety?: boolean },
+): Promise<ZipLookup> {
   const clean = (zip || '').trim().slice(0, 5);
   if (!/^\d{5}$/.test(clean)) return { known: false, reason: 'invalid' };
-  // Safety screening comes first — a restricted area can't be quoted at all.
-  const service = await getServiceLevel(clean);
-  if (service.level === 'blocked') return { known: false, reason: 'blocked', city: service.city };
-  if (service.level === 'review') return { known: false, reason: 'review', city: service.city };
+  // Safety screening comes first — a restricted area can't be quoted unless the
+  // event qualifies for an exception (indoors / 200+ guests) or staff approved it.
+  if (!opts?.bypassSafety) {
+    const service = await getServiceLevel(clean);
+    if (service.level === 'blocked') return { known: false, reason: 'blocked', city: service.city };
+    if (service.level === 'review') return { known: false, reason: 'review', city: service.city };
+  }
   const local = LOCAL_MILES[clean];
   if (typeof local === 'number') return classifyMiles(local);
   const centroids = await loadCentroids();
