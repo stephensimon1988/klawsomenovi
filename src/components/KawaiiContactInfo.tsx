@@ -19,8 +19,8 @@ const KawaiiContactInfo = () => {
   ];
 
   return (
-    <section className="bg-klawsome-baby-blue py-16 md:py-24">
-      <div className="ds-container-content px-4">
+    <section className="bg-klawsome-baby-blue py-16 md:py-24 section-x">
+      <div className="ds-container-content">
         <div className="ds-cols">
           <FramedImage
             src={contactImage}
