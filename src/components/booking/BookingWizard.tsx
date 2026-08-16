@@ -752,8 +752,9 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
     onChange(next);
   };
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       <p className="text-sm text-muted-foreground font-body">Add extras to your booking. Skip if you're all set.</p>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
       {addons.map((a) => {
         const sel = selected[a.id];
         const active = !!sel;
@@ -800,6 +801,7 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
           </div>
         );
       })}
+      </div>
       {addons.length === 0 && <p className="text-sm text-muted-foreground">No add-ons available for this pathway.</p>}
     </div>
   );
