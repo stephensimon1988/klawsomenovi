@@ -8,11 +8,12 @@ Removed / rewritten:
 - Under "Is your event fully indoors?" — drop "Indoor venues are always eligible, no matter the ZIP code."
 - Under "Will attendance be over 200 people?" — drop "Large, staffed events qualify for an automatic exception."
 - Drop the "Indoor event / Event over 200 guests — service-area restrictions don't apply" confirmation line.
-- Restricted-ZIP panel: keep the call-us headline, phone button, and hours; drop the sentence about parking, loading, and security review. Approval-request panel keeps only "Request approval" + fields (the "Venue details (parking, security, indoor/outdoor)" label becomes just "Notes (optional)").
+- Restricted-ZIP panel: no mention of areas, neighborhoods, cities, ZIP risk, or security. It becomes a neutral logistics line only: "Let's confirm this booking over the phone." plus the phone button and hours. Approval-request panel keeps only "Request approval" + fields; the notes label becomes "Notes (optional)".
 - Pending panel: keep "Waiting on approval — request #X. Call us and mention your request number." Drop the unlock explanation.
-- Denied panel: keep "Request #X wasn't approved. Please give us a call." Drop the indoor/in-store suggestion.
+- Denied panel: keep "Request #X wasn't approved. Please give us a call." Drop any suggested alternative.
 - Out-of-range / not-found panel: single neutral line — "Please call us to confirm delivery for this ZIP before checking out." No mileage-range or auto-quote reasoning.
 - The gates keep a plain "Answer both questions above to continue."
+- Nothing customer-facing ever implies a place or its people are risky. All wording stays neutral scheduling/logistics language ("we need to confirm this one by phone"), and the words blocked, restricted, unsafe, dangerous, crime, and security do not appear in customer-facing copy. The same neutral phrasing applies to the two gate questions, which are asked of every mobile booking regardless of ZIP.
 
 Pricing facts (miles, surcharge, free-delivery threshold) are not explanations and stay as-is.
 
