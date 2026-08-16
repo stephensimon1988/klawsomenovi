@@ -1103,6 +1103,7 @@ function ReviewStep({
   });
   return (
     <div className="space-y-4">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 items-start">
       <div className="rounded-2xl border border-border p-4 bg-card">
         <p className="text-xs uppercase font-heading font-bold text-muted-foreground">Booking</p>
         <p className="font-heading font-bold text-lg mt-1">
@@ -1144,13 +1145,14 @@ function ReviewStep({
           <span>Total</span><span>${(totalCents / 100).toFixed(2)}</span>
         </div>
       </div>
+      </div>
       <div className="rounded-2xl border border-border p-4 bg-muted/30">
         <label htmlFor="safety-policy" className="flex items-start gap-3 cursor-pointer">
           <Checkbox
             id="safety-policy"
             checked={safetyAccepted}
             onCheckedChange={(v) => onSafetyChange(v === true)}
-            className="mt-1 shrink-0"
+            className="mt-1"
           />
           <span className="text-sm font-body leading-relaxed">
             <strong className="font-heading">Service Area &amp; Safety Policy:</strong>{' '}
