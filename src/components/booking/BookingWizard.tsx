@@ -883,41 +883,41 @@ function DeliveryStep({
   };
 
   return (
-    <div className="space-y-5 max-w-md">
+    <div className="space-y-6">
       <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
 
-      <GateToggle
-        label="Is your event fully indoors?"
-        help="Indoor venues are always eligible, no matter the ZIP code."
-        value={isIndoors}
-        onChange={(v) => onGateChange('isIndoors', v)}
-      />
-      <GateToggle
-        label="Will attendance be over 200 people?"
-        help="Large, staffed events qualify for an automatic exception."
-        value={over200}
-        onChange={(v) => onGateChange('over200', v)}
-      />
-
-      {!gatesAnswered && (
-        <p className="text-sm text-muted-foreground">Answer both questions above to continue.</p>
-      )}
-
-      {gatesAnswered && (
-        <>
-          <div className="space-y-2">
-            <Label htmlFor="zip">Delivery ZIP code</Label>
-            <Input id="zip" value={zip} onChange={(e) => onZipChange(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="e.g. 48377" inputMode="numeric" maxLength={5} />
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+        <div className="space-y-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            <GateToggle
+              label="Is your event fully indoors?"
+              value={isIndoors}
+              onChange={(v) => onGateChange('isIndoors', v)}
+            />
+            <GateToggle
+              label="Will attendance be over 200 people?"
+              value={over200}
+              onChange={(v) => onGateChange('over200', v)}
+            />
           </div>
-          {(isIndoors || over200) && (
-            <p className="text-sm text-primary font-body">
-              {isIndoors ? 'Indoor event' : 'Event over 200 guests'} — service-area restrictions don't apply. ✓
-            </p>
+
+          {!gatesAnswered && (
+            <p className="text-sm text-muted-foreground">Answer both questions above to continue.</p>
           )}
-          {resolving && zip.length === 5 && !zipInfo && (
+
+          {gatesAnswered && (
+            <div className="space-y-2 max-w-xs">
+              <Label htmlFor="zip">Delivery ZIP code</Label>
+              <Input id="zip" value={zip} onChange={(e) => onZipChange(e.target.value.replace(/\D/g, '').slice(0, 5))} placeholder="e.g. 48377" inputMode="numeric" maxLength={5} />
+            </div>
+          )}
+        </div>
+
+        <div className="space-y-4">
+          {gatesAnswered && resolving && zip.length === 5 && !zipInfo && (
             <p className="text-sm text-muted-foreground flex items-center gap-2"><Loader2 className="w-3.5 h-3.5 animate-spin" /> Checking distance…</p>
           )}
-          {zipInfo && zipInfo.known && (
+          {gatesAnswered && zipInfo && zipInfo.known && (
             <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
               <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
               {zipInfo.miles <= FREE_DELIVERY_MILES ? (
@@ -926,19 +926,15 @@ function DeliveryStep({
                 <p className="text-foreground mt-1">Delivery surcharge: ${(Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES) * 3).toFixed(2)} ({Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} extra miles × $3)</p>
               )}
               {approvalForZip?.status === 'approved' && (
-                <p className="text-primary mt-1">Approved by our team ✓ (request #{approvalForZip.code})</p>
+                <p className="text-primary mt-1">Confirmed by our team ✓ (request #{approvalForZip.code})</p>
               )}
             </div>
           )}
 
-          {restricted && (
-            <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
-              <p className="font-heading font-bold text-destructive flex items-center gap-2">
-                <ShieldAlert className="w-4 h-4" /> Give us a call before booking this area
-              </p>
-              <p className="text-foreground">
-                Outdoor events in <strong>{restricted.city || `ZIP ${zip}`}</strong> need a quick review of
-                parking, loading, and on-site security before we can book online.
+          {gatesAnswered && restricted && (
+            <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm space-y-3">
+              <p className="font-heading font-bold text-foreground flex items-center gap-2">
+                <Phone className="w-4 h-4" /> Let's confirm this booking over the phone.
               </p>
               {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
               {phone && (
@@ -950,23 +946,19 @@ function DeliveryStep({
               {approvalForZip?.status === 'pending' ? (
                 <div className="rounded-lg bg-background/60 border border-border p-3 space-y-1">
                   <p className="font-heading font-bold text-foreground flex items-center gap-2">
-                    <Loader2 className="w-4 h-4 animate-spin" /> Waiting on approval — request #{approvalForZip.code}
+                    <Loader2 className="w-4 h-4 animate-spin" /> Waiting on confirmation — request #{approvalForZip.code}
                   </p>
-                  <p className="text-muted-foreground text-xs">
-                    Call us and mention your request number. This page unlocks automatically the second our
-                    team approves it — no need to refresh or start over.
-                  </p>
+                  <p className="text-muted-foreground text-xs">Call us and mention your request number.</p>
                 </div>
               ) : approvalForZip?.status === 'denied' ? (
-                <div className="rounded-lg bg-background/60 border border-destructive/30 p-3 space-y-1">
-                  <p className="font-heading font-bold text-destructive">Request #{approvalForZip.code} wasn't approved</p>
-                  <p className="text-muted-foreground text-xs">
-                    Please give us a call — we can look at an indoor option or an in-store party instead.
-                  </p>
+                <div className="rounded-lg bg-background/60 border border-border p-3 space-y-1">
+                  <p className="font-heading font-bold text-foreground">Request #{approvalForZip.code} isn't confirmed</p>
+                  <p className="text-muted-foreground text-xs">Please give us a call.</p>
                 </div>
               ) : showForm ? (
                 <div className="rounded-lg bg-background/60 border border-border p-3 space-y-3">
-                  <p className="font-heading font-bold text-foreground">Request approval</p>
+                  <p className="font-heading font-bold text-foreground">Request a callback</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   <div className="space-y-2">
                     <Label htmlFor="ap-name">Your name</Label>
                     <Input id="ap-name" value={contactDefaults.name} onChange={(e) => onContactChange({ name: e.target.value })} />
@@ -975,13 +967,14 @@ function DeliveryStep({
                     <Label htmlFor="ap-phone">Phone</Label>
                     <Input id="ap-phone" value={contactDefaults.phone} onChange={(e) => onContactChange({ phone: e.target.value })} inputMode="tel" />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 sm:col-span-2">
                     <Label htmlFor="ap-email">Email (optional)</Label>
                     <Input id="ap-email" value={contactDefaults.email} onChange={(e) => onContactChange({ email: e.target.value })} inputMode="email" />
                   </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="ap-notes">Venue details (parking, security, indoor/outdoor)</Label>
+                  <div className="space-y-2 sm:col-span-2">
+                    <Label htmlFor="ap-notes">Notes (optional)</Label>
                     <Textarea id="ap-notes" value={notes} onChange={(e) => setNotes(e.target.value)} rows={3} />
+                  </div>
                   </div>
                   <Button size="sm" className="rounded-full" disabled={submitting} onClick={submit}>
                     {submitting ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : null}
@@ -990,23 +983,15 @@ function DeliveryStep({
                 </div>
               ) : (
                 <Button size="sm" variant="outline" className="rounded-full" onClick={() => setShowForm(true)}>
-                  Request approval for this address
+                  Request a callback
                 </Button>
               )}
             </div>
           )}
 
-          {showCall && (
-            <div className="rounded-xl bg-destructive/10 border border-destructive/30 p-4 text-sm space-y-3">
-              <p className="font-heading font-bold text-destructive">Let's confirm this one over the phone.</p>
-              <p className="text-foreground">
-                {showCall.reason === 'out_of_range' && typeof showCall.miles === 'number' ? (
-                  <>This ZIP is about <strong>{showCall.miles} mi</strong> away — outside our standard auto-quote range.</>
-                ) : (
-                  <>We couldn't auto-quote delivery for this ZIP.</>
-                )}
-                {' '}Please call us during business hours so we can confirm the exact distance and delivery total before you check out.
-              </p>
+          {gatesAnswered && showCall && (
+            <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm space-y-3">
+              <p className="font-heading font-bold text-foreground">Please call us to confirm delivery for this ZIP before checking out.</p>
               {hoursNote && <p className="text-muted-foreground text-xs">{hoursNote}</p>}
               {phone && (
                 <Button asChild size="sm" className="rounded-full">
@@ -1016,11 +1001,11 @@ function DeliveryStep({
             </div>
           )}
 
-          {zipInfo && zipInfo.known === false && zipInfo.reason === 'invalid' && zip.length === 5 && (
+          {gatesAnswered && zipInfo && zipInfo.known === false && zipInfo.reason === 'invalid' && zip.length === 5 && (
             <p className="text-sm text-destructive">Please enter a valid 5-digit US ZIP code.</p>
           )}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
