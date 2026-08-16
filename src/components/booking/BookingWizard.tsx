@@ -560,7 +560,7 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
       <p className="text-sm text-muted-foreground font-body mb-2">
         {pathway === 'rental' ? 'Pick your rental package.' : 'Pick your Klawsome Mobile duration.'}
       </p>
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {packages.map((p) => (
           <button
             key={p.id}
@@ -626,7 +626,7 @@ function MobileTierStep({
         ))}
       </div>
 
-      <div className="grid grid-cols-1 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         {MOBILE_TIERS.map((t) => {
           const rate = t.rates[dayType][hours];
           const active = tierId === t.id;
