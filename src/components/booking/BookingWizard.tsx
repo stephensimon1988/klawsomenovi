@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Calendar } from '@/components/ui/calendar';
 import { Checkbox } from '@/components/ui/checkbox';
 import { cn } from '@/lib/utils';
-import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone, ShieldAlert } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Loader2, ExternalLink, Check, Phone } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   ADDONS,
@@ -537,7 +537,7 @@ function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
   return (
     <div className="space-y-3">
       <p className="text-sm text-muted-foreground font-body mb-2">What are you booking?</p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
         {PATHWAYS.map((p) => (
           <button
             key={p.id}
@@ -806,12 +806,11 @@ function AddonsStep({ addons, selected, onChange }: { addons: AddOnDef[]; select
 }
 
 function GateToggle({
-  label, help, value, onChange,
-}: { label: string; help?: string; value: boolean | null; onChange: (v: boolean) => void }) {
+  label, value, onChange,
+}: { label: string; value: boolean | null; onChange: (v: boolean) => void }) {
   return (
     <div className="space-y-2">
       <Label>{label}</Label>
-      {help && <p className="text-xs text-muted-foreground font-body">{help}</p>}
       <div className="flex gap-2">
         {[true, false].map((opt) => (
           <Button
