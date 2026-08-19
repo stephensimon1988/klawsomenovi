@@ -30,6 +30,17 @@ function formatDayRanges(sortedOpen: StoreHour[]): string {
     else { groups.push(curr); curr = [days[i]]; }
   }
   groups.push(curr);
+  // Week wraps: if the first group starts on Sunday and the last ends on Saturday,
+  // merge them so Sun + Tue–Sat reads "Tuesday–Sunday".
+  if (groups.length > 1) {
+    const first = groups[0];
+    const last = groups[groups.length - 1];
+    if (first[0] === 0 && last[last.length - 1] === 6) {
+      groups.pop();
+      groups.shift();
+      groups.push([...last, ...first]);
+    }
+  }
   const labelFor = (d: number) => sortedOpen.find((h) => h.day_of_week === d)?.day_label || DAY_SHORT[d];
   return groups
     .map((g) => (g.length === 1 ? labelFor(g[0]) : `${labelFor(g[0])}–${labelFor(g[g.length - 1])}`))
