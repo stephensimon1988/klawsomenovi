@@ -55,25 +55,32 @@ const Birthdays = () => {
   const privateOpt = (partyOptions || []).find(o => /private/i.test(o.name) && !/semi/i.test(o.name));
   const semiOpt = (partyOptions || []).find(o => /semi/i.test(o.name));
 
-  const comparisonRows: { label: string; desc?: string; private: boolean | string; semi: boolean | string }[] = [
-    { label: '325 Klaw Machine Tokens', desc: 'Plenty of tokens for everyone to play.', private: true, semi: true },
-    { label: 'Exclusive private space', desc: 'Klawsome closed to the public during your event.', private: true, semi: false },
-    { label: 'Play time', desc: 'How long guests get to play games.', private: '1 hour + 30 min setup', semi: 'Unlimited during business hours' },
-    { 
-      label: 'Location', 
-      desc: 'Where your party is hosted.', 
-      private: 'Klawsome', 
-      semi: 'Paris Baguette next door\nor\nCloud Boba\nor\nOutdoor Space' 
+  type Cv = boolean | string;
+  const comparisonRows: { label: string; desc?: string; private: Cv; semi: Cv; rental: Cv; mobile: Cv }[] = [
+    { label: 'Klaw machine tokens included', desc: 'Plenty of plays for everyone.', private: '325 tokens', semi: '325 tokens', rental: '40 plushies to win', mobile: 'Tokens or unlimited play' },
+    { label: 'Exclusive private space', desc: 'Closed to the public during your event.', private: true, semi: false, rental: 'At your venue', mobile: 'At your venue' },
+    { label: 'Play time', desc: 'How long guests get to play games.', private: '1 hour + 30 min setup', semi: 'Unlimited during business hours', rental: '1 or 2 hours', mobile: '1 or 2 hours + extra hours' },
+    {
+      label: 'Location',
+      desc: 'Where your party is hosted.',
+      private: 'Klawsome',
+      semi: 'Paris Baguette next door\nor\nCloud Boba\nor\nOutdoor Space',
+      rental: 'Your venue',
+      mobile: 'Your venue',
     },
-    { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette' },
-    { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: "Bring any food you'd like", semi: "Paris Baguette or Cloud Boba (depending what you like)" },
-    { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu' },
-    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'See Decor Add-Ons →', semi: 'See Decor Add-Ons →' },
-    { label: 'Ability to choose plushies in one machine', desc: 'Pick the plushies featured in one machine for your party.', private: true, semi: true },
-    { label: 'Choose machine color and music', desc: 'Customize the vibe with your color and music picks.', private: true, semi: false },
+    { label: 'Tables and seating', desc: 'Dedicated space for guests to sit and eat.', private: true, semi: 'At Paris Baguette', rental: 'Provided by your venue', mobile: 'Provided by your venue' },
+    { label: 'Bring your own food', desc: 'Cake and outside food allowed.', private: "Bring any food you'd like", semi: 'Paris Baguette or Cloud Boba (depending what you like)', rental: 'Your venue rules', mobile: 'Your venue rules' },
+    { label: 'Food service', desc: 'Catering available on site.', private: false, semi: 'Paris Baguette menu', rental: false, mobile: false },
+    { label: 'Decoration setup', desc: 'Time and space to decorate before the party.', private: 'See Decor Add-Ons →', semi: 'See Decor Add-Ons →', rental: false, mobile: false },
+    { label: 'Choose the plushies in a machine', desc: 'Pick the plushies featured for your party.', private: true, semi: true, rental: true, mobile: true },
+    { label: 'Choose machine color and music', desc: 'Customize the vibe with your color and music picks.', private: true, semi: false, rental: true, mobile: true },
+    { label: 'Machines included', desc: 'How many claw machines you get.', private: 'Full arcade in store', semi: 'Full arcade in store', rental: '1 machine (add more)', mobile: 'Mobile arcade setup' },
+    { label: 'Delivery to your venue', desc: 'We haul, set up, and pick up.', private: false, semi: false, rental: 'Quoted at checkout', mobile: 'Quoted at checkout' },
   ];
 
-  const Cell = ({ value, color }: { value: boolean | string; color: 'red' | 'yellow' }) => {
+  type Accent = 'red' | 'yellow' | 'blue' | 'pink';
+
+  const Cell = ({ value, color }: { value: Cv; color: Accent }) => {
     if (typeof value === 'string') {
       if (/see decor add-ons/i.test(value)) {
         return (
@@ -94,8 +101,13 @@ const Birthdays = () => {
       );
     }
     if (value) {
+      const bg =
+        color === 'red' ? 'bg-primary'
+        : color === 'yellow' ? 'bg-klawsome-yellow'
+        : color === 'blue' ? 'bg-klawsome-baby-blue'
+        : 'bg-klawsome-baby-pink';
       return (
-        <div className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center mx-auto ${color === 'red' ? 'bg-primary' : 'bg-klawsome-yellow'}`}>
+        <div className={`w-8 h-8 md:w-9 md:h-9 rounded-full flex items-center justify-center mx-auto ${bg}`}>
           <Check className={`w-5 h-5 ${color === 'red' ? 'text-white' : 'text-klawsome-navy'}`} strokeWidth={3} />
         </div>
       );
