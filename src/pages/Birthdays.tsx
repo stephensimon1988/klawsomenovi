@@ -195,53 +195,68 @@ const Birthdays = () => {
             Package Comparison
           </h2>
           <p className="text-white/80 font-body text-center mb-12 max-w-2xl mx-auto">
-            Compare our two birthday party options and pick the one that's right for your celebration.
+            Compare all four Klawsome booking types and pick the one that's right for your celebration.
           </p>
 
-          <div className="rounded-kawaii overflow-hidden border border-white/20 bg-klawsome-navy/40 backdrop-blur-sm">
-            {/* Header */}
-            <div className="grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
-              <div className="p-3 md:p-6" />
-              <div className="p-3 md:p-6 text-center bg-primary border-l border-white/20">
-                <p className="font-heading font-bold text-white text-base md:text-2xl uppercase leading-tight">Private</p>
-                <p className="text-white/80 font-body text-xs mt-1">{privateOpt?.price || '$319'}</p>
+          <p className="text-white/60 font-body text-xs text-center mb-4 lg:hidden">Scroll the table sideways to see every option →</p>
+
+          <div className="rounded-kawaii overflow-x-auto border border-white/20 bg-klawsome-navy/40 backdrop-blur-sm">
+            <div className="min-w-[880px]">
+              {/* Header */}
+              <div className={gridCols}>
+                <div className="p-3 md:p-6" />
+                {columns.map((c) => (
+                  <div key={c.key} className={`p-3 md:p-6 text-center border-l border-white/20 ${c.headerBg}`}>
+                    <p className={`font-heading font-bold text-sm md:text-xl uppercase leading-tight ${c.headerText}`}>{c.label}</p>
+                    <p className={`font-body text-xs mt-1 ${c.headerSub}`}>{c.price}</p>
+                  </div>
+                ))}
               </div>
-              <div className="p-3 md:p-6 text-center bg-klawsome-yellow border-l border-white/20">
-                <p className="font-heading font-bold text-klawsome-navy text-base md:text-2xl uppercase leading-tight">Semi-Private</p>
-                <p className="text-klawsome-navy/80 font-body text-xs mt-1">{semiOpt?.price || '$319'}</p>
+
+              {/* Rows */}
+              {comparisonRows.map((row, i) => (
+                <div
+                  key={i}
+                  className={`${gridCols} border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
+                >
+                  <div className="p-3 md:p-6 flex flex-col justify-center">
+                    <p className="font-heading font-bold text-white text-xs md:text-base leading-tight">{row.label}</p>
+                    {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
+                  </div>
+                  {columns.map((c) => (
+                    <div key={c.key} className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
+                      <Cell value={row[c.key]} color={c.accent} />
+                    </div>
+                  ))}
+                </div>
+              ))}
+
+              {/* Book buttons */}
+              <div className={`${gridCols} border-t border-white/10`}>
+                <div className="p-3 md:p-6" />
+                {columns.map((c) => (
+                  <div key={c.key} className="p-3 md:p-6 border-l border-white/10">
+                    <Button
+                      size="cta"
+                      onClick={() => openBookingModal(c.key)}
+                      className={`w-full font-heading font-bold ${c.btn}`}
+                    >
+                      Book
+                    </Button>
+                  </div>
+                ))}
               </div>
             </div>
-
-            {/* Rows */}
-            {comparisonRows.map((row, i) => (
-              <div
-                key={i}
-                className={`grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr] border-t border-white/10 ${i % 2 === 0 ? 'bg-white/5' : 'bg-transparent'}`}
-              >
-                <div className="p-3 md:p-6 flex flex-col justify-center">
-                  <p className="font-heading font-bold text-white text-xs md:text-base leading-tight">{row.label}</p>
-                  {row.desc && <p className="text-white/60 font-body text-xs mt-1 hidden md:block">{row.desc}</p>}
-                </div>
-                <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
-                  <Cell value={row.private} color="red" />
-                </div>
-                <div className="p-3 md:p-6 flex items-center justify-center text-center border-l border-white/10">
-                  <Cell value={row.semi} color="yellow" />
-                </div>
-              </div>
-            ))}
           </div>
 
-          <div className="mt-6 grid grid-cols-[1.2fr_1fr_1fr] md:grid-cols-[2fr_1fr_1fr]">
-            <div />
-            <div className="col-span-2 flex justify-end">
-              <Button size="cta"
-                onClick={() => openBookingModal()}
-                className="w-full font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
-              >
-                Book Your Event
-              </Button>
-            </div>
+          <div className="mt-8 flex justify-center">
+            <Button
+              size="cta"
+              onClick={() => openBookingModal()}
+              className="font-heading font-bold bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90 animate-glow-pulse-sm md:animate-glow-pulse"
+            >
+              Book Your Event
+            </Button>
           </div>
         </div>
       </section>
