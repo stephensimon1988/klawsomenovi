@@ -171,6 +171,8 @@ const Birthdays = () => {
           { label: 'Party Rules', id: 'party-rules' },
           { label: 'Packages', id: 'party-options' },
           { label: 'Add-Ons', id: 'add-ons' },
+          { label: 'Rental', id: 'rental-addons' },
+          { label: 'Mobile', id: 'mobile-addons' },
           ...(faqItems.length > 0 ? [{ label: 'FAQ', id: 'birthday-faq' }] : []),
         ]}
       />
