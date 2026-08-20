@@ -38,6 +38,8 @@ import {
   type ApprovalStatus,
 } from '@/lib/booking/approvals';
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
+import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
+import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 
@@ -533,6 +535,32 @@ function StepBar({ step, pathway }: { step: Step; pathway: Pathway | null }) {
   );
 }
 
+/* ---------- Card imagery (3:2 landscape, cropped to fill) ---------- */
+
+const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
+  private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
+  semi: { src: '/gallery/private-party-ice-cream-cone-plush-machine.webp', alt: 'Party guests at the ice cream plush claw machine in the Klawsome arcade' },
+  rental: { src: rentalFamilyPlaying, alt: 'Family playing a rented Klawsome claw machine at their venue' },
+  mobile: { src: '/gallery/novi-community-fest-18.webp', alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
+};
+
+const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
+  'rent-1hr': { src: rentalFamilyPlaying, alt: 'Guests playing a rented Klawsome claw machine' },
+  'rent-2hr': { src: rentalReadyToBook, alt: 'Klawsome claw machine ready for an extended party rental' },
+};
+
+const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
+  token: { src: '/gallery/novi-community-fest-01.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
+  unlimited: { src: '/gallery/novi-community-fest-26.webp', alt: 'Kids playing nonstop at the Klawsome Mobile arcade' },
+  reserve: { src: '/gallery/novi-community-fest-24.webp', alt: 'Klawsome Mobile arcade reserved for a group event' },
+};
+
+const CardImage = ({ src, alt }: { src: string; alt: string }) => (
+  <div className="w-full aspect-[3/2] overflow-hidden bg-muted">
+    <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover" />
+  </div>
+);
+
 function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
   return (
     <div className="space-y-3">
@@ -542,17 +570,21 @@ function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
           <button
             key={p.id}
             onClick={() => onPick(p.id)}
-            className="text-left rounded-2xl border border-border bg-card p-5 hover:border-primary hover:shadow-md transition-all"
+            className="text-left rounded-2xl border border-border bg-card overflow-hidden flex flex-col hover:border-primary hover:shadow-md transition-all"
           >
-            <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-            <p className="text-sm text-muted-foreground font-body mt-1">{p.subtitle}</p>
-            <p className="text-sm mt-3"><span className="font-heading font-bold text-primary">{p.price}</span> <span className="text-muted-foreground">· {p.duration}</span></p>
+            <CardImage {...PATHWAY_IMAGES[p.id]} />
+            <div className="p-5">
+              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
+              <p className="text-sm text-muted-foreground font-body mt-1">{p.subtitle}</p>
+              <p className="text-sm mt-3"><span className="font-heading font-bold text-primary">{p.price}</span> <span className="text-muted-foreground">· {p.duration}</span></p>
+            </div>
           </button>
         ))}
       </div>
     </div>
   );
 }
+
 
 function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pathway; packages: PackageOption[]; selectedId: string | null; onSelect: (id: string) => void }) {
   return (
@@ -566,19 +598,19 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
             key={p.id}
             onClick={() => onSelect(p.id)}
             className={cn(
-              'text-left rounded-2xl border p-5 transition-all',
+              'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
               selectedId === p.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
             )}
           >
-            <div className="flex items-start justify-between gap-3">
-              <div>
-                <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-                {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
-              </div>
-              <p className="font-heading font-bold text-2xl text-primary shrink-0">{p.price}</p>
+            {PACKAGE_IMAGES[p.id] && <CardImage {...PACKAGE_IMAGES[p.id]} />}
+            <div className="p-5">
+              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
+              <p className="font-heading font-bold text-2xl text-primary mt-1">{p.price}</p>
+              {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
             </div>
           </button>
         ))}
+
       </div>
       {pathway === 'rental' && (
         <p className="text-xs text-muted-foreground font-body mt-2">Free delivery within 20 miles; $3/mile beyond 20.</p>
@@ -635,22 +667,20 @@ function MobileTierStep({
               key={t.id}
               onClick={() => onChange({ mobileTier: t.id })}
               className={cn(
-                'text-left rounded-2xl border p-5 transition-all',
+                'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
                 active ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
               )}
             >
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
-                  <p className="text-sm text-muted-foreground font-body mt-1">{t.description}</p>
-                  <p className="text-sm text-foreground font-body mt-1">{t.tokensNote[hours]}</p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-heading font-bold text-2xl text-primary">{fmtUSD(rate.cents)}</p>
-                  <p className="text-xs text-muted-foreground">+{fmtUSD(t.rates[dayType].extra.cents)} / extra hr</p>
-                </div>
+              <CardImage {...MOBILE_TIER_IMAGES[t.id]} />
+              <div className="p-5">
+                <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
+                <p className="font-heading font-bold text-2xl text-primary mt-1">{fmtUSD(rate.cents)}</p>
+                <p className="text-xs text-muted-foreground">+{fmtUSD(t.rates[dayType].extra.cents)} / extra hr</p>
+                <p className="text-sm text-muted-foreground font-body mt-2">{t.description}</p>
+                <p className="text-sm text-foreground font-body mt-1">{t.tokensNote[hours]}</p>
               </div>
             </button>
+
           );
         })}
       </div>
