@@ -598,11 +598,12 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
             key={p.id}
             onClick={() => onSelect(p.id)}
             className={cn(
-              'text-left rounded-2xl border p-5 transition-all',
+              'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
               selectedId === p.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
             )}
           >
-            <div className="flex items-start justify-between gap-3">
+            {PACKAGE_IMAGES[p.id] && <CardImage {...PACKAGE_IMAGES[p.id]} />}
+            <div className="p-5 flex items-start justify-between gap-3">
               <div>
                 <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
                 {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
@@ -611,6 +612,7 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
             </div>
           </button>
         ))}
+
       </div>
       {pathway === 'rental' && (
         <p className="text-xs text-muted-foreground font-body mt-2">Free delivery within 20 miles; $3/mile beyond 20.</p>
