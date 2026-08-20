@@ -80,6 +80,43 @@ const Birthdays = () => {
 
   type Accent = 'red' | 'yellow' | 'blue' | 'pink';
 
+  const rentalFrom = fmtUSD(Math.min(...RENTAL_PACKAGES.map((p) => p.priceCents)));
+  const mobileFrom = fmtUSD(Math.min(...MOBILE_TIERS.map((t) => mobileRate(t, 'weekday', 1).cents)));
+
+  const gridCols = 'grid grid-cols-[minmax(170px,1.6fr)_repeat(4,minmax(160px,1fr))]';
+
+  const columns: {
+    key: 'private' | 'semi' | 'rental' | 'mobile';
+    label: string;
+    price: string;
+    accent: Accent;
+    headerBg: string;
+    headerText: string;
+    headerSub: string;
+    btn: string;
+  }[] = [
+    {
+      key: 'private', label: 'Private Party', price: privateOpt?.price || '$319', accent: 'red',
+      headerBg: 'bg-primary', headerText: 'text-white', headerSub: 'text-white/80',
+      btn: 'bg-white text-klawsome-navy hover:bg-white/90',
+    },
+    {
+      key: 'semi', label: 'Semi-Private', price: semiOpt?.price || '$250', accent: 'yellow',
+      headerBg: 'bg-klawsome-yellow', headerText: 'text-klawsome-navy', headerSub: 'text-klawsome-navy/80',
+      btn: 'bg-klawsome-yellow text-klawsome-navy hover:bg-klawsome-yellow/90',
+    },
+    {
+      key: 'rental', label: 'Rent a Klaw Machine', price: `from ${rentalFrom}`, accent: 'blue',
+      headerBg: 'bg-klawsome-baby-blue', headerText: 'text-klawsome-navy', headerSub: 'text-klawsome-navy/80',
+      btn: 'bg-klawsome-baby-blue text-klawsome-navy hover:bg-klawsome-baby-blue/90',
+    },
+    {
+      key: 'mobile', label: 'Klawsome Mobile', price: `from ${mobileFrom}`, accent: 'pink',
+      headerBg: 'bg-klawsome-baby-pink', headerText: 'text-klawsome-navy', headerSub: 'text-klawsome-navy/80',
+      btn: 'bg-klawsome-baby-pink text-klawsome-navy hover:bg-klawsome-baby-pink/90',
+    },
+  ];
+
   const Cell = ({ value, color }: { value: Cv; color: Accent }) => {
     if (typeof value === 'string') {
       if (/see decor add-ons/i.test(value)) {
