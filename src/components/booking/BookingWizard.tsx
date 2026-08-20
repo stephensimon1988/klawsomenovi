@@ -541,7 +541,7 @@ const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
   private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
   semi: { src: '/gallery/private-party-ice-cream-cone-plush-machine.webp', alt: 'Party guests at the ice cream plush claw machine in the Klawsome arcade' },
   rental: { src: rentalFamilyPlaying, alt: 'Family playing a rented Klawsome claw machine at their venue' },
-  mobile: { src: '/gallery/novi-community-fest-13.webp', alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
+  mobile: { src: '/gallery/novi-community-fest-18.webp', alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
 };
 
 const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
@@ -550,9 +550,9 @@ const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
 };
 
 const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
-  token: { src: '/gallery/novi-community-fest-24.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
+  token: { src: '/gallery/novi-community-fest-01.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
   unlimited: { src: '/gallery/novi-community-fest-26.webp', alt: 'Kids playing nonstop at the Klawsome Mobile arcade' },
-  reserve: { src: '/gallery/msu-pass-07.webp', alt: 'Klawsome Mobile arcade reserved for a group event' },
+  reserve: { src: '/gallery/novi-community-fest-24.webp', alt: 'Klawsome Mobile arcade reserved for a group event' },
 };
 
 const CardImage = ({ src, alt }: { src: string; alt: string }) => (
