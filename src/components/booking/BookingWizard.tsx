@@ -669,11 +669,12 @@ function MobileTierStep({
               key={t.id}
               onClick={() => onChange({ mobileTier: t.id })}
               className={cn(
-                'text-left rounded-2xl border p-5 transition-all',
+                'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
                 active ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
               )}
             >
-              <div className="flex items-start justify-between gap-3">
+              <CardImage {...MOBILE_TIER_IMAGES[t.id]} />
+              <div className="p-5 flex items-start justify-between gap-3">
                 <div>
                   <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
                   <p className="text-sm text-muted-foreground font-body mt-1">{t.description}</p>
@@ -685,6 +686,7 @@ function MobileTierStep({
                 </div>
               </div>
             </button>
+
           );
         })}
       </div>
