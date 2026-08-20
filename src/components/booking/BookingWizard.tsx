@@ -533,6 +533,32 @@ function StepBar({ step, pathway }: { step: Step; pathway: Pathway | null }) {
   );
 }
 
+/* ---------- Card imagery (3:2 landscape, cropped to fill) ---------- */
+
+const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
+  private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
+  semi: { src: '/gallery/private-party-ice-cream-cone-plush-machine.webp', alt: 'Party guests at the ice cream plush claw machine in the Klawsome arcade' },
+  rental: { src: rentalFamilyPlaying, alt: 'Family playing a rented Klawsome claw machine at their venue' },
+  mobile: { src: '/gallery/novi-community-fest-13.webp', alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
+};
+
+const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
+  'rent-1hr': { src: rentalFamilyPlaying, alt: 'Guests playing a rented Klawsome claw machine' },
+  'rent-2hr': { src: rentalReadyToBook, alt: 'Klawsome claw machine ready for an extended party rental' },
+};
+
+const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
+  token: { src: '/gallery/novi-community-fest-24.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
+  unlimited: { src: '/gallery/novi-community-fest-26.webp', alt: 'Kids playing nonstop at the Klawsome Mobile arcade' },
+  reserve: { src: '/gallery/msu-pass-07.webp', alt: 'Klawsome Mobile arcade reserved for a group event' },
+};
+
+const CardImage = ({ src, alt }: { src: string; alt: string }) => (
+  <div className="w-full aspect-[3/2] overflow-hidden bg-muted">
+    <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover" />
+  </div>
+);
+
 function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
   return (
     <div className="space-y-3">
@@ -542,17 +568,21 @@ function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
           <button
             key={p.id}
             onClick={() => onPick(p.id)}
-            className="text-left rounded-2xl border border-border bg-card p-5 hover:border-primary hover:shadow-md transition-all"
+            className="text-left rounded-2xl border border-border bg-card overflow-hidden flex flex-col hover:border-primary hover:shadow-md transition-all"
           >
-            <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-            <p className="text-sm text-muted-foreground font-body mt-1">{p.subtitle}</p>
-            <p className="text-sm mt-3"><span className="font-heading font-bold text-primary">{p.price}</span> <span className="text-muted-foreground">· {p.duration}</span></p>
+            <CardImage {...PATHWAY_IMAGES[p.id]} />
+            <div className="p-5">
+              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
+              <p className="text-sm text-muted-foreground font-body mt-1">{p.subtitle}</p>
+              <p className="text-sm mt-3"><span className="font-heading font-bold text-primary">{p.price}</span> <span className="text-muted-foreground">· {p.duration}</span></p>
+            </div>
           </button>
         ))}
       </div>
     </div>
   );
 }
+
 
 function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pathway; packages: PackageOption[]; selectedId: string | null; onSelect: (id: string) => void }) {
   return (
