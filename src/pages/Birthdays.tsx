@@ -307,8 +307,17 @@ const Birthdays = () => {
             Make It Extra Special
           </h2>
           <p className="text-klawsome-navy/80 font-body text-center mb-12 max-w-2xl mx-auto">
-            Take your party to the next level with these optional upgrades.
+            Take your event to the next level with these optional upgrades. Each group below shows which booking type it goes with.
           </p>
+
+          {/* ---------- Group 1: In-Store Parties ---------- */}
+          <div className="mb-6 rounded-kawaii bg-klawsome-navy/10 border border-klawsome-navy/15 p-5">
+            <p className="ds-eyebrow text-primary mb-1">In-Store Party Add-Ons</p>
+            <h3 className="font-heading font-bold text-2xl text-klawsome-navy uppercase leading-tight">Private &amp; Semi-Private Parties</h3>
+            <p className="text-klawsome-navy/70 font-body text-sm mt-1">
+              Goes with: Private Party and Semi-Private Party bookings at Klawsome.
+            </p>
+          </div>
 
           {/* Themed Decoration Packages — split into 2 cards on top */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
@@ -316,17 +325,19 @@ const Birthdays = () => {
               <p className="ds-eyebrow text-primary mb-2">Decor</p>
               <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Private Event Decorations</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$129</p>
-              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1 mb-4">
                 Tablecloths, paper plates / silverware / napkins, and two balloon bouquets or one large balloon arch attached to the table.
               </p>
+              <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-primary text-white px-3 py-1.5 rounded-full">Private only</span>
             </div>
             <div className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col border-l-4 border-l-klawsome-yellow">
               <p className="ds-eyebrow text-primary mb-2">Decor</p>
               <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Paris Baguette Basic Decor</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$89</p>
-              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
-                For semi-private events. Tablecloth, paper plates / silverware / napkins, and a balloon bouquet on the table. Wall hangings not allowed; color scheme can be requested.
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1 mb-4">
+                Tablecloth, paper plates / silverware / napkins, and a balloon bouquet on the table. Wall hangings not allowed; color scheme can be requested.
               </p>
+              <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-yellow text-klawsome-navy px-3 py-1.5 rounded-full">Semi-private only</span>
             </div>
           </div>
 
@@ -341,13 +352,14 @@ const Birthdays = () => {
               </p>
               <div>
                 <p className="text-xs uppercase tracking-wider font-heading font-bold text-klawsome-navy/60 mb-2">Choose your character</p>
-                <div className="flex flex-wrap gap-2">
+                <div className="flex flex-wrap gap-2 mb-4">
                   {['Pikachu', 'Cinnamoroll', 'Hello Kitty', 'Kuromi', 'Bluey'].map((c) => (
                     <span key={c} className="text-xs font-heading font-bold bg-klawsome-yellow text-klawsome-navy px-3 py-1.5 rounded-full">
                       {c}
                     </span>
                   ))}
                 </div>
+                <span className="inline-block text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white px-3 py-1.5 rounded-full">Private &amp; semi-private</span>
               </div>
             </div>
 
@@ -356,9 +368,10 @@ const Birthdays = () => {
               <p className="ds-eyebrow text-primary mb-2">Gift</p>
               <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">XL Plushie</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$89</p>
-              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1 mb-4">
                 An XL plushie of the birthday celebrant's choice — at the 19 Plushies trade-in price or smaller.
               </p>
+              <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white px-3 py-1.5 rounded-full">Private &amp; semi-private</span>
             </div>
 
             {/* Book Event Photographer */}
@@ -366,15 +379,82 @@ const Birthdays = () => {
               <p className="ds-eyebrow text-primary mb-2">Photo Session</p>
               <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">Book Event Photographer</h3>
               <p className="text-3xl font-heading font-bold text-primary mb-3">$79<span className="text-sm text-klawsome-navy/60 font-body font-normal"> / hour</span></p>
-              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1">
+              <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1 mb-4">
                 Book our on-staff photographer for a photography session during the event. Perfect for capturing the celebration.
               </p>
+              <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-navy text-white px-3 py-1.5 rounded-full">Private &amp; semi-private</span>
             </div>
           </div>
 
           <div className="mt-10 text-center">
             <Button size="cta" onClick={() => openBookingModal()} className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
-              Add These to Your Booking
+              Add These to a Party Booking
+            </Button>
+          </div>
+
+          {/* ---------- Group 2: Rent a Klaw Machine ---------- */}
+          <div id="rental-addons" className="mt-16 mb-6 rounded-kawaii bg-klawsome-baby-blue border border-klawsome-navy/15 p-5">
+            <p className="ds-eyebrow text-klawsome-navy/70 mb-1">Rent a Klaw Machine</p>
+            <h3 className="font-heading font-bold text-2xl text-klawsome-navy uppercase leading-tight">Machine Rental Add-Ons</h3>
+            <p className="text-klawsome-navy/70 font-body text-sm mt-1">
+              Goes with: Rent a Klaw Machine bookings at your venue. Rentals start at {rentalFrom} for 1 hour ({fmtUSD(RENTAL_PACKAGES[1].priceCents)} for 2 hours) and include 40 regular-size plushies or your own supplied product. Delivery is quoted at checkout.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {ADDONS.filter((a) => a.scope.includes('rental')).map((a) => (
+              <div key={a.id} className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col border-l-4 border-l-klawsome-baby-blue">
+                <p className="ds-eyebrow text-primary mb-2">Rental Upgrade</p>
+                <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">{a.label}</h3>
+                <p className="text-3xl font-heading font-bold text-primary mb-3">{a.price}</p>
+                <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed flex-1 mb-4">{a.description}</p>
+                <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-baby-blue text-klawsome-navy px-3 py-1.5 rounded-full">
+                  {a.scope.includes('mobile') ? 'Rental & Klawsome Mobile' : 'Machine rental only'}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Button size="cta" onClick={() => openBookingModal('rental')} className="bg-klawsome-navy text-white hover:bg-klawsome-navy/90">
+              Book a Machine Rental
+            </Button>
+          </div>
+
+          {/* ---------- Group 3: Klawsome Mobile ---------- */}
+          <div id="mobile-addons" className="mt-16 mb-6 rounded-kawaii bg-white border border-klawsome-navy/15 p-5 border-l-4 border-l-primary">
+            <p className="ds-eyebrow text-primary mb-1">Klawsome Mobile</p>
+            <h3 className="font-heading font-bold text-2xl text-klawsome-navy uppercase leading-tight">Mobile Arcade Options</h3>
+            <p className="text-klawsome-navy/70 font-body text-sm mt-1">
+              Goes with: Klawsome Mobile bookings at your venue. Pick a play tier below — rates differ for weekdays and weekends, and delivery is quoted at checkout.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {MOBILE_TIERS.map((t) => (
+              <div key={t.id} className="bg-white rounded-kawaii p-6 border border-klawsome-navy/10 shadow-sm flex flex-col">
+                <p className="ds-eyebrow text-primary mb-2">Play Tier</p>
+                <h3 className="font-heading font-bold text-xl text-klawsome-navy mb-2">{t.label}</h3>
+                <p className="text-3xl font-heading font-bold text-primary mb-1">
+                  {fmtUSD(mobileRate(t, 'weekday', 1).cents)}
+                  <span className="text-sm text-klawsome-navy/60 font-body font-normal"> / 1 hr weekday</span>
+                </p>
+                <p className="text-klawsome-navy/60 font-body text-xs mb-3">
+                  Weekend from {fmtUSD(mobileRate(t, 'weekend', 1).cents)} · 2 hours from {fmtUSD(mobileRate(t, 'weekday', 2).cents)}
+                </p>
+                <p className="text-klawsome-navy/80 font-body text-sm leading-relaxed mb-2">{t.description}</p>
+                <p className="text-klawsome-navy/70 font-body text-sm flex-1 mb-4">
+                  1 hour: {t.tokensNote[1]} · 2 hours: {t.tokensNote[2]}
+                  {t.extraHourNote ? ` · ${t.extraHourNote}` : ''}
+                </p>
+                <span className="self-start text-xs font-heading font-bold uppercase tracking-wider bg-klawsome-baby-pink text-klawsome-navy px-3 py-1.5 rounded-full">Klawsome Mobile only</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 text-center">
+            <Button size="cta" onClick={() => openBookingModal('mobile')} className="bg-primary text-white hover:bg-primary/90">
+              Book Klawsome Mobile
             </Button>
           </div>
         </div>
