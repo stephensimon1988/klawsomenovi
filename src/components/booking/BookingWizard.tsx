@@ -603,12 +603,10 @@ function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pat
             )}
           >
             {PACKAGE_IMAGES[p.id] && <CardImage {...PACKAGE_IMAGES[p.id]} />}
-            <div className="p-5 flex items-start justify-between gap-3">
-              <div>
-                <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-                {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
-              </div>
-              <p className="font-heading font-bold text-2xl text-primary shrink-0">{p.price}</p>
+            <div className="p-5">
+              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
+              <p className="font-heading font-bold text-2xl text-primary mt-1">{p.price}</p>
+              {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
             </div>
           </button>
         ))}
@@ -674,16 +672,12 @@ function MobileTierStep({
               )}
             >
               <CardImage {...MOBILE_TIER_IMAGES[t.id]} />
-              <div className="p-5 flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
-                  <p className="text-sm text-muted-foreground font-body mt-1">{t.description}</p>
-                  <p className="text-sm text-foreground font-body mt-1">{t.tokensNote[hours]}</p>
-                </div>
-                <div className="shrink-0 text-right">
-                  <p className="font-heading font-bold text-2xl text-primary">{fmtUSD(rate.cents)}</p>
-                  <p className="text-xs text-muted-foreground">+{fmtUSD(t.rates[dayType].extra.cents)} / extra hr</p>
-                </div>
+              <div className="p-5">
+                <p className="font-heading font-bold text-lg text-foreground">{t.label}</p>
+                <p className="font-heading font-bold text-2xl text-primary mt-1">{fmtUSD(rate.cents)}</p>
+                <p className="text-xs text-muted-foreground">+{fmtUSD(t.rates[dayType].extra.cents)} / extra hr</p>
+                <p className="text-sm text-muted-foreground font-body mt-2">{t.description}</p>
+                <p className="text-sm text-foreground font-body mt-1">{t.tokensNote[hours]}</p>
               </div>
             </button>
 
