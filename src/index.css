@@ -295,9 +295,9 @@ body {
            whitespace-nowrap transition-colors;
   }
 
-  /* Sticky sub-nav variant — 12pt text, 10px shorter than the standard CTA. */
+  /* Sticky sub-nav variant — ~25% smaller than the standard CTA. */
   .btn-cta--sub {
-    @apply h-[35px] px-6 text-[16px];
+    @apply h-[28px] px-4 text-[12px];
   }
 
   /* FramedImage — frame tilts at rest, straightens flush over the stationary
