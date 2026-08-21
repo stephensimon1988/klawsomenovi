@@ -41,6 +41,7 @@ import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } fr
 import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
 import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
 import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg.asset.json';
+import rentKlawMachine from '@/assets/rent-klaw-machine.png.asset.json';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 
@@ -541,13 +542,13 @@ function StepBar({ step, pathway }: { step: Step; pathway: Pathway | null }) {
 const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
   private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
   semi: { src: '/gallery/private-party-ice-cream-cone-plush-machine.webp', alt: 'Party guests at the ice cream plush claw machine in the Klawsome arcade' },
-  rental: { src: rentalFamilyPlaying, alt: 'Family playing a rented Klawsome claw machine at their venue' },
+  rental: { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
   mobile: { src: klawsomeMobileArcadeSetup.url, alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
 };
 
 const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
-  'rent-1hr': { src: rentalFamilyPlaying, alt: 'Guests playing a rented Klawsome claw machine' },
-  'rent-2hr': { src: rentalReadyToBook, alt: 'Klawsome claw machine ready for an extended party rental' },
+  'rent-1hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
+  'rent-2hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
 };
 
 const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
