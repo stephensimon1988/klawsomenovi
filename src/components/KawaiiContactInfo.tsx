@@ -31,7 +31,7 @@ const KawaiiContactInfo = () => {
           />
           <ul className="space-y-6">
             {items.map(({ icon: Icon, label, value, href, desc }) => (
-              <li key={label} className="flex gap-4 rounded-2xl bg-background/70 p-5 shadow-sm">
+              <li key={label} className="flex flex-col md:flex-row items-center text-center md:items-start md:text-left gap-4 rounded-2xl bg-background/70 p-5 shadow-sm">
                 <div className="flex-shrink-0 w-11 h-11 rounded-full bg-primary/15 text-primary flex items-center justify-center">
                   <Icon className="w-5 h-5" />
                 </div>
