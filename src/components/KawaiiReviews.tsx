@@ -18,11 +18,15 @@ const KawaiiReviews = () => {
   // de-duped by author+text so we don't repeat entries.
   const seen = new Set<string>();
   const reviews: DisplayReview[] = [...googleReviews, ...cmsMapped].filter(r => {
-    const key = `${r.name}::${r.text.slice(0, 60)}`;
+    const text = (r.text || '').trim();
+    const name = (r.name || '').trim();
+    if (!text || !name) return false;
+    const key = `${name}::${text.slice(0, 60)}`;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;
   });
+
   const [currentIndex, setCurrentIndex] = useState(0);
   const [rating, setRating] = useState(4.9);
   const [reviewCount, setReviewCount] = useState<number | null>(null);
