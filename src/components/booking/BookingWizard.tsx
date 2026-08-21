@@ -40,6 +40,7 @@ import {
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
 import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
+import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg.asset.json';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 
@@ -541,7 +542,7 @@ const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
   private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
   semi: { src: '/gallery/private-party-ice-cream-cone-plush-machine.webp', alt: 'Party guests at the ice cream plush claw machine in the Klawsome arcade' },
   rental: { src: rentalFamilyPlaying, alt: 'Family playing a rented Klawsome claw machine at their venue' },
-  mobile: { src: '/gallery/novi-community-fest-18.webp', alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
+  mobile: { src: klawsomeMobileArcadeSetup.url, alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
 };
 
 const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
