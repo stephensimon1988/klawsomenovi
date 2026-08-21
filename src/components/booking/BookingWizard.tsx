@@ -40,6 +40,7 @@ import {
 import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
 import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
 import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
+import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg.asset.json';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
 
