@@ -540,7 +540,7 @@ function StepBar({ step, pathway }: { step: Step; pathway: Pathway | null }) {
 /* ---------- Card imagery (3:2 landscape, cropped to fill) ---------- */
 
 const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
-  private: { src: '/gallery/private-party-kids-turtle-plush-machine.webp', alt: 'Kids playing a plushie claw machine during a private Klawsome party' },
+  private: { src: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/e5549656-b613-4e53-8e69-fe2736834823/PXL_20251123_171313007.MP.webp', alt: 'Private party guests celebrating at Klawsome' },
   semi: { src: 'https://images.squarespace-cdn.com/content/v1/679927505e618d391ae386e6/0749c2ac-c737-4dfe-b58c-8f679c0cc4a9/PXL_20251123_235616186.webp', alt: 'Semi-private party guests enjoying the Klawsome arcade' },
   rental: { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
   mobile: { src: klawsomeMobileArcadeSetup.url, alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
