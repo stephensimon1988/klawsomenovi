@@ -558,7 +558,7 @@ const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
 };
 
 const CardImage = ({ src, alt }: { src: string; alt: string }) => (
-  <div className="w-full aspect-[3/2] overflow-hidden bg-muted">
+  <div className="w-full aspect-[3/2] overflow-hidden bg-muted rounded-t-2xl -mt-px -mx-px">
     <img src={src} alt={alt} loading="lazy" className="w-full h-full object-cover" />
   </div>
 );
