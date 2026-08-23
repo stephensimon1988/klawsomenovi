@@ -56,8 +56,11 @@ function expandRange(startISO: string, endISO: string): string[] {
   }
   return out;
 }
+const MONTH_ABBR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 function fmtISO(iso: string): string {
-  return parseISO(iso).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+  const [y, m, d] = iso.split('-').map(Number);
+  if (!y || !m || !d) return iso;
+  return `${MONTH_ABBR[m - 1]} ${d}, ${y}`;
 }
 
 interface BlackoutGroup {
