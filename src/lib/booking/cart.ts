@@ -36,11 +36,19 @@ export async function createBookingCart(params: {
   return { cartId: cart.id, checkoutUrl: formatCheckoutUrl(cart.checkoutUrl) };
 }
 
-export function deliveryLine(miles: number): CartLine | null {
-  const extra = Math.max(0, Math.ceil(miles - FREE_DELIVERY_MILES));
-  if (extra <= 0) return null;
-  return { merchandiseId: DELIVERY_SURCHARGE_VARIANT, quantity: extra };
+/** Delivery lines for a quoted distance: an optional base fee plus per-mile surcharge. */
+export function deliveryLines(miles: number, rule: DeliveryRule): CartLine[] {
+  const lines: CartLine[] = [];
+  if (rule.baseCents > 0 && rule.baseVariantId) {
+    lines.push({ merchandiseId: rule.baseVariantId, quantity: 1 });
+  }
+  const billable = Math.max(0, Math.ceil(miles - rule.freeMiles));
+  if (billable > 0) {
+    lines.push({ merchandiseId: DELIVERY_SURCHARGE_VARIANT, quantity: billable });
+  }
+  return lines;
 }
+
 
 export function generateBookingRef(): string {
   const stamp = new Date().toISOString().replace(/[-:TZ.]/g, '').slice(2, 12);
