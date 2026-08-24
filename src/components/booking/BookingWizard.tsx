@@ -484,6 +484,8 @@ function BookingWizardDialog() {
               onRequestApproval={submitApproval}
               contactDefaults={state.contact}
               onContactChange={(c) => setState((s) => ({ ...s, contact: { ...s.contact, ...c } }))}
+              deliveryRule={deliveryRule}
+
             />
           )}
           {step === 'contact' && (
