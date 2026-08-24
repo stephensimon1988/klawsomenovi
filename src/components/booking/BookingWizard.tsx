@@ -14,18 +14,26 @@ import {
   addonsFor,
   DELIVERY_SURCHARGE_VARIANT,
   FREE_DELIVERY_MILES,
+  MACHINES,
+  machineById,
+  deliveryRuleFor,
+  deliveryCentsFor,
   MOBILE_TIERS,
   dayTypeFor,
   fmtUSD,
   PATHWAYS,
   PATHWAY_BASE_CENTS,
-  RENTAL_PACKAGES,
   type Pathway,
   type PackageOption,
   type AddOnDef,
   type MobileTierId,
   type MobileDuration,
   type DayType,
+  type MachineId,
+  type MachineDef,
+  type DeliveryRule,
+  type PlushChoice,
+  type Fulfillment,
 } from '@/lib/booking/catalog';
 import { getMilesForZip, getServiceLevel, type ZipLookup } from '@/lib/booking/zipMiles';
 import {
@@ -37,7 +45,8 @@ import {
   type ApprovalRecord,
   type ApprovalStatus,
 } from '@/lib/booking/approvals';
-import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
+import { createBookingCart, deliveryLines, generateBookingRef, type CartLine } from '@/lib/booking/cart';
+
 import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
 import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
 import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg.asset.json';
