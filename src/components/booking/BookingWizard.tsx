@@ -65,6 +65,10 @@ type Step = 'pathway' | 'package' | 'datetime' | 'addons' | 'delivery' | 'contac
 interface State {
   pathway: Pathway | null;
   packageId: string | null;
+  machine: MachineId | null;
+  blocks: number;
+  fulfillment: Fulfillment | null;
+  plushChoice: PlushChoice | null;
   mobileTier: MobileTierId | null;
   mobileHours: MobileDuration;
   mobileExtraHours: number;
@@ -86,6 +90,10 @@ interface State {
 const emptyState = (): State => ({
   pathway: null,
   packageId: null,
+  machine: null,
+  blocks: 1,
+  fulfillment: null,
+  plushChoice: null,
   mobileTier: null,
   mobileHours: 1,
   mobileExtraHours: 0,
@@ -101,10 +109,10 @@ const emptyState = (): State => ({
   safetyAccepted: false,
 });
 
-function packagesFor(pathway: Pathway | null): PackageOption[] {
-  if (pathway === 'rental') return RENTAL_PACKAGES;
+function packagesFor(_pathway: Pathway | null): PackageOption[] {
   return [];
 }
+
 
 function BookingWizardDialog() {
   const [open, setOpen] = useState(false);
