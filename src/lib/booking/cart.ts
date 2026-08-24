@@ -1,5 +1,5 @@
 import { formatCheckoutUrl, storefrontApiRequest } from '@/lib/shopify';
-import { DELIVERY_SURCHARGE_VARIANT, FREE_DELIVERY_MILES } from './catalog';
+import { DELIVERY_SURCHARGE_VARIANT, type DeliveryRule } from './catalog';
 
 export interface CartAttribute { key: string; value: string }
 export interface CartLine {
