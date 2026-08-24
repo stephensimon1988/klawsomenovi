@@ -1119,16 +1119,20 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
 
 function ReviewStep({
   pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents, dayType, mobileBaseCents, mobileExtraCents,
-  safetyAccepted, onSafetyChange,
+  machine, deliveryRule, safetyAccepted, onSafetyChange,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
   zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
   dayType: DayType; mobileBaseCents: number; mobileExtraCents: number;
+  machine: MachineDef | null; deliveryRule: DeliveryRule;
   safetyAccepted: boolean; onSafetyChange: (v: boolean) => void;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
   const tier = MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null;
   const startAt = state.date && state.time ? combineDateTime(state.date, state.time) : null;
+  const extraBlocks = Math.max(0, state.blocks - 1);
+  const extraBlockCents = machine?.extraBlock ? machine.extraBlock[dayType].cents * extraBlocks : 0;
+  const billableMiles = zipInfo?.known ? Math.max(0, Math.ceil(zipInfo.miles - deliveryRule.freeMiles)) : 0;
   const addonEntries = Object.entries(state.addons).map(([id, sel]) => {
     const def = ADDONS.find((a) => a.id === id)!;
     return { def, sel };
@@ -1141,8 +1145,16 @@ function ReviewStep({
         <p className="font-heading font-bold text-lg mt-1">
           {p.label}
           {selectedPackage ? ` — ${selectedPackage.label}` : ''}
+          {pathway === 'rental' && machine ? ` — ${machine.label}` : ''}
           {pathway === 'mobile' && tier ? ` — ${tier.label}` : ''}
         </p>
+        {pathway === 'rental' && machine && (
+          <p className="text-sm text-muted-foreground mt-1">
+            {machine.unit === 'whole_day' ? 'Whole day' : `${state.blocks} × 4-hour block${state.blocks === 1 ? '' : 's'}`}
+            {' · '}{dayType === 'weekend' ? 'Weekend' : 'Weekday'} rate
+            {' · '}{state.fulfillment === 'pickup' ? 'Self-pickup' : 'Delivered'}
+          </p>
+        )}
         {pathway === 'mobile' && tier && (
           <p className="text-sm text-muted-foreground mt-1">
             {state.mobileHours + state.mobileExtraHours} hour{state.mobileHours + state.mobileExtraHours === 1 ? '' : 's'} · {dayType === 'weekend' ? 'Weekend' : 'Weekday'} rate
@@ -1157,6 +1169,21 @@ function ReviewStep({
             <Row label={p.label} amount={PATHWAY_BASE_CENTS[pathway]} />
           )}
           {selectedPackage && <Row label={selectedPackage.label} amount={selectedPackage.priceCents} />}
+          {pathway === 'rental' && machine && (
+            <Row
+              label={`${machine.label} — ${machine.unit === 'whole_day' ? 'whole day' : 'first 4-hour block'} (${dayType === 'weekend' ? 'weekend' : 'weekday'})`}
+              amount={machine.first[dayType].cents}
+            />
+          )}
+          {pathway === 'rental' && machine && extraBlocks > 0 && (
+            <Row label={`Additional 4-hour blocks × ${extraBlocks}`} amount={extraBlockCents} />
+          )}
+          {pathway === 'rental' && machine && state.plushChoice === 'pack' && (
+            <Row label={machine.plushPack.label} amount={machine.plushPack.priceCents} />
+          )}
+          {pathway === 'rental' && state.plushChoice === 'byo' && (
+            <p className="text-muted-foreground">Bringing your own plush</p>
+          )}
           {pathway === 'mobile' && tier && (
             <Row label={`${tier.label} — ${state.mobileHours} hr (${dayType === 'weekend' ? 'weekend' : 'weekday'})`} amount={mobileBaseCents} />
           )}
@@ -1166,10 +1193,16 @@ function ReviewStep({
           {addonEntries.map(({ def, sel }) => (
             <Row key={def.id} label={`${def.label}${sel.character ? ` — ${sel.character}` : ''}${sel.qty > 1 ? ` × ${sel.qty}` : ''}`} amount={def.priceCents * sel.qty} />
           ))}
-          {deliveryCents > 0 && zipInfo?.known && (
-            <Row label={`Delivery surcharge (${Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} mi × $3)`} amount={deliveryCents} />
+          {pathway === 'rental' && state.fulfillment === 'pickup' && (
+            <Row label="Self-pickup from Klawsome" amount={0} />
           )}
-          {deliveryCents === 0 && (pathway === 'rental' || pathway === 'mobile') && zipInfo?.known && (
+          {deliveryCents > 0 && zipInfo?.known && (
+            <Row
+              label={`Delivery${deliveryRule.baseCents > 0 ? ' (base fee' : ''}${deliveryRule.baseCents > 0 && billableMiles > 0 ? ' + ' : ''}${billableMiles > 0 ? `${billableMiles} mi × $3` : ''}${deliveryRule.baseCents > 0 ? ')' : ''}`}
+              amount={deliveryCents}
+            />
+          )}
+          {deliveryCents === 0 && (pathway === 'rental' || pathway === 'mobile') && state.fulfillment !== 'pickup' && zipInfo?.known && (
             <p className="text-primary text-sm">Free delivery ✓</p>
           )}
         </div>
@@ -1178,6 +1211,7 @@ function ReviewStep({
         </div>
       </div>
       </div>
+
       <div className="rounded-2xl border border-border p-4 bg-muted/30">
         <label htmlFor="safety-policy" className="flex items-start gap-3 cursor-pointer">
           <Checkbox
