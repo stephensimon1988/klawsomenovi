@@ -256,7 +256,8 @@ export const CONTENT_TABS: ContentTab[] = [
         <div className="mt-8">
           <p className="text-xs text-white/50 mb-3 font-heading">
             Delivery fees, free-mile allowance and plush packs. Option key must be{' '}
-            <strong>delivery_base</strong>, <strong>free_miles</strong> or <strong>plush_pack</strong>.
+            <strong>delivery_base</strong>, <strong>free_miles</strong>, <strong>per_mile</strong> or{' '}
+            <strong>plush_pack</strong>.
           </p>
           <MultiRowEditor password={pw} table="booking_rental_options" searchKeys={['machine', 'option_key', 'label']} filterKey="machine" filterLabel="machines" columns={[
             { key: 'machine', label: 'Machine', width: '110px' },
