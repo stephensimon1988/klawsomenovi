@@ -8,7 +8,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate, type SiteSettings } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
-import { RENTAL_PACKAGES, MOBILE_TIERS, ADDONS, fmtUSD, mobileRate } from '@/lib/booking/catalog';
+import { MACHINES, MOBILE_TIERS, ADDONS, fmtUSD, mobileRate } from '@/lib/booking/catalog';
 import FramedImage from '@/components/FramedImage';
 import { Link } from 'react-router-dom';
  import birthdaysHero from '@/assets/birthdays-hero.webp';
@@ -80,7 +80,7 @@ const Birthdays = () => {
 
   type Accent = 'red' | 'yellow' | 'blue' | 'pink';
 
-  const rentalFrom = fmtUSD(Math.min(...RENTAL_PACKAGES.map((p) => p.priceCents)));
+  const rentalFrom = fmtUSD(Math.min(...MACHINES.map((m) => m.first.weekday.cents)));
   const mobileFrom = fmtUSD(Math.min(...MOBILE_TIERS.map((t) => mobileRate(t, 'weekday', 1).cents)));
 
   const gridCols = 'grid grid-cols-[minmax(170px,1.6fr)_repeat(4,minmax(160px,1fr))]';
@@ -399,7 +399,7 @@ const Birthdays = () => {
             <p className="ds-eyebrow text-klawsome-navy/70 mb-1">Rent a Klaw Machine</p>
             <h3 className="font-heading font-bold text-2xl text-klawsome-navy uppercase leading-tight">Machine Rental Add-Ons</h3>
             <p className="text-klawsome-navy/70 font-body text-sm mt-1">
-              Goes with: Rent a Klaw Machine bookings at your venue. Rentals start at {rentalFrom} for 1 hour ({fmtUSD(RENTAL_PACKAGES[1].priceCents)} for 2 hours) and include 40 regular-size plushies or your own supplied product. Delivery is quoted at checkout.
+              Goes with: Rent a Klaw Machine bookings. Take the Klaw Mini for the whole day from {rentalFrom} (weekday) with self-pickup or delivery, or book the full-size Klaw Classic in 4-hour blocks from {fmtUSD(MACHINES[1].first.weekday.cents)}, delivered and set up. Add a 20-plush pack or bring your own plush. Delivery is quoted at checkout.
             </p>
           </div>
 

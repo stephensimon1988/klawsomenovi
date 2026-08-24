@@ -14,18 +14,26 @@ import {
   addonsFor,
   DELIVERY_SURCHARGE_VARIANT,
   FREE_DELIVERY_MILES,
+  MACHINES,
+  machineById,
+  deliveryRuleFor,
+  deliveryCentsFor,
   MOBILE_TIERS,
   dayTypeFor,
   fmtUSD,
   PATHWAYS,
   PATHWAY_BASE_CENTS,
-  RENTAL_PACKAGES,
   type Pathway,
   type PackageOption,
   type AddOnDef,
   type MobileTierId,
   type MobileDuration,
   type DayType,
+  type MachineId,
+  type MachineDef,
+  type DeliveryRule,
+  type PlushChoice,
+  type Fulfillment,
 } from '@/lib/booking/catalog';
 import { getMilesForZip, getServiceLevel, type ZipLookup } from '@/lib/booking/zipMiles';
 import {
@@ -37,13 +45,16 @@ import {
   type ApprovalRecord,
   type ApprovalStatus,
 } from '@/lib/booking/approvals';
-import { createBookingCart, deliveryLine, generateBookingRef, type CartLine } from '@/lib/booking/cart';
+import { createBookingCart, deliveryLines, generateBookingRef, type CartLine } from '@/lib/booking/cart';
+
 import rentalFamilyPlaying from '@/assets/rental-family-playing.webp';
 import rentalReadyToBook from '@/assets/rental-ready-to-book.webp';
 import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg.asset.json';
 import rentKlawMachine from '@/assets/rent-klaw-machine.png.asset.json';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
+import { useRentalPricing } from '@/hooks/useRentalPricing';
+
 
 export type OpenBookingDetail = { pathway?: Pathway };
 
@@ -56,6 +67,10 @@ type Step = 'pathway' | 'package' | 'datetime' | 'addons' | 'delivery' | 'contac
 interface State {
   pathway: Pathway | null;
   packageId: string | null;
+  machine: MachineId | null;
+  blocks: number;
+  fulfillment: Fulfillment | null;
+  plushChoice: PlushChoice | null;
   mobileTier: MobileTierId | null;
   mobileHours: MobileDuration;
   mobileExtraHours: number;
@@ -77,6 +92,10 @@ interface State {
 const emptyState = (): State => ({
   pathway: null,
   packageId: null,
+  machine: null,
+  blocks: 1,
+  fulfillment: null,
+  plushChoice: null,
   mobileTier: null,
   mobileHours: 1,
   mobileExtraHours: 0,
@@ -92,10 +111,10 @@ const emptyState = (): State => ({
   safetyAccepted: false,
 });
 
-function packagesFor(pathway: Pathway | null): PackageOption[] {
-  if (pathway === 'rental') return RENTAL_PACKAGES;
+function packagesFor(_pathway: Pathway | null): PackageOption[] {
   return [];
 }
+
 
 function BookingWizardDialog() {
   const [open, setOpen] = useState(false);
@@ -125,8 +144,13 @@ function BookingWizardDialog() {
   const pathway = state.pathway;
   const { availability, blackouts } = useAvailability(pathway);
   const pkgs = packagesFor(pathway);
+  const { machines, machineById: liveMachineById } = useRentalPricing();
+  const machine = useMemo(() => liveMachineById(state.machine), [liveMachineById, state.machine]);
+
+  const deliveryRule = useMemo(() => deliveryRuleFor(pathway, machine), [pathway, machine]);
 
   const selectedPackage = useMemo(() => pkgs.find((p) => p.id === state.packageId) || null, [pkgs, state.packageId]);
+
 
   const dayType: DayType = dayTypeFor(state.date);
   const mobileTier = useMemo(
@@ -209,42 +233,53 @@ function BookingWizardDialog() {
     return rec;
   };
 
-  const deliveryCents = zipInfo?.known
-    ? Math.max(0, Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)) * 300
-    : 0;
+  const usesDelivery = pathway === 'mobile' || (pathway === 'rental' && state.fulfillment === 'delivery');
+  const deliveryCents = usesDelivery && zipInfo?.known ? deliveryCentsFor(deliveryRule, zipInfo.miles) : 0;
   const zipBlocked = needsDelivery && state.zip.trim().length === 5 && zipInfo && !zipInfo.known;
 
   const availableAddons = pathway ? addonsFor(pathway) : [];
+
+  const machineCents = useMemo(() => {
+    if (pathway !== 'rental' || !machine) return 0;
+    let sum = machine.first[dayType].cents;
+    if (machine.unit === 'block' && machine.extraBlock) {
+      sum += machine.extraBlock[dayType].cents * Math.max(0, state.blocks - 1);
+    }
+    if (state.plushChoice === 'pack') sum += machine.plushPack.priceCents;
+    return sum;
+  }, [pathway, machine, dayType, state.blocks, state.plushChoice]);
 
   const totalCents = useMemo(() => {
     let sum = 0;
     if (pathway && pathway !== 'rental' && pathway !== 'mobile') sum += PATHWAY_BASE_CENTS[pathway];
     if (selectedPackage) sum += selectedPackage.priceCents;
     if (pathway === 'mobile') sum += mobileBaseCents + mobileExtraCents;
+    sum += machineCents;
     for (const [id, sel] of Object.entries(state.addons)) {
       const def = ADDONS.find((a) => a.id === id);
       if (def) sum += def.priceCents * (sel.qty || 0);
     }
     sum += deliveryCents;
     return sum;
-  }, [pathway, selectedPackage, state.addons, deliveryCents, mobileBaseCents, mobileExtraCents]);
+  }, [pathway, selectedPackage, state.addons, deliveryCents, mobileBaseCents, mobileExtraCents, machineCents]);
 
   const canNext = validateStep(step, state, selectedPackage, availability, blackouts, zipInfo);
 
   const goNext = () => {
-    const order = stepOrder(pathway);
+    const order = stepOrder(pathway, state.fulfillment);
     const idx = order.indexOf(step);
     if (idx < 0 || idx >= order.length - 1) return;
     setStep(order[idx + 1]);
   };
   const goBack = () => {
-    const order = stepOrder(pathway);
+    const order = stepOrder(pathway, state.fulfillment);
     const idx = order.indexOf(step);
     if (idx <= 0) return;
     // If pathway was pre-set from a page CTA, keep them out of pathway picker
     if (idx === 1 && initialPathway) return;
     setStep(order[idx - 1]);
   };
+
 
   const submit = async () => {
     if (!pathway) return;
@@ -274,6 +309,14 @@ function BookingWizardDialog() {
             attributes: lineAttrs,
           });
         }
+      } else if (pathway === 'rental' && machine) {
+        lines.push({ merchandiseId: machine.first[dayType].variantId, quantity: 1, attributes: lineAttrs });
+        if (machine.unit === 'block' && machine.extraBlock && state.blocks > 1) {
+          lines.push({ merchandiseId: machine.extraBlock[dayType].variantId, quantity: state.blocks - 1, attributes: lineAttrs });
+        }
+        if (state.plushChoice === 'pack') {
+          lines.push({ merchandiseId: machine.plushPack.variantId, quantity: 1, attributes: lineAttrs });
+        }
       } else if (selectedPackage) {
         lines.push({ merchandiseId: selectedPackage.variantId, quantity: 1, attributes: lineAttrs });
       }
@@ -288,10 +331,12 @@ function BookingWizardDialog() {
         lines.push({ merchandiseId: variantId, quantity: sel.qty, attributes: attrs });
       }
       // delivery
-      if (pathway === 'rental' || pathway === 'mobile') {
-        const dl = deliveryLine(zipInfo?.known ? zipInfo.miles : 0);
-        if (dl) lines.push({ ...dl, attributes: [{ key: 'booking_ref', value: ref }, { key: 'zip', value: state.zip }] });
+      if (usesDelivery) {
+        for (const dl of deliveryLines(zipInfo?.known ? zipInfo.miles : 0, deliveryRule)) {
+          lines.push({ ...dl, attributes: [{ key: 'booking_ref', value: ref }, { key: 'zip', value: state.zip }] });
+        }
       }
+
       const attributes = [
         { key: 'booking_ref', value: ref },
         { key: 'event_type', value: pathway },
@@ -390,8 +435,31 @@ function BookingWizardDialog() {
                 onChange={(patch) => setState((s) => ({ ...s, ...patch }))}
               />
             ) : (
-              <PackageStep pathway={pathway} packages={pkgs} selectedId={state.packageId} onSelect={(id) => setState((s) => ({ ...s, packageId: id }))} />
+              <div className="space-y-8">
+                <MachineStep
+                  machines={machines}
+                  selectedId={state.machine}
+                  onSelect={(id) => setState((s) => ({
+                    ...s,
+                    machine: id,
+                    blocks: 1,
+                    fulfillment: machineById(id)?.deliveryOnly ? 'delivery' : s.fulfillment,
+                  }))}
+                />
+                {machine && (
+                  <RentalOptionsStep
+                    machine={machine}
+                    dayType={dayType}
+                    date={state.date}
+                    fulfillment={state.fulfillment}
+                    blocks={state.blocks}
+                    plushChoice={state.plushChoice}
+                    onChange={(patch) => setState((s) => ({ ...s, ...patch }))}
+                  />
+                )}
+              </div>
             )
+
           )}
           {step === 'datetime' && pathway && (
             <DateTimeStep
@@ -420,6 +488,8 @@ function BookingWizardDialog() {
               onRequestApproval={submitApproval}
               contactDefaults={state.contact}
               onContactChange={(c) => setState((s) => ({ ...s, contact: { ...s.contact, ...c } }))}
+              deliveryRule={deliveryRule}
+
             />
           )}
           {step === 'contact' && (
@@ -436,6 +506,9 @@ function BookingWizardDialog() {
               dayType={dayType}
               mobileBaseCents={mobileBaseCents}
               mobileExtraCents={mobileExtraCents}
+              machine={machine}
+              deliveryRule={deliveryRule}
+
               safetyAccepted={state.safetyAccepted}
               onSafetyChange={(v) => setState((s) => ({ ...s, safetyAccepted: v }))}
             />
@@ -471,21 +544,21 @@ function BookingWizardDialog() {
 
 /* ---------- helpers ---------- */
 
-function stepOrder(pathway: Pathway | null): Step[] {
-  const needsDelivery = pathway === 'rental' || pathway === 'mobile';
-  const base: Step[] = ['pathway'];
-  if (pathway === 'rental') base.push('package');
-  base.push('datetime');
-  // Mobile pricing depends on the date (weekday vs weekend), so tiers come after.
-  if (pathway === 'mobile') base.push('package');
+function stepOrder(pathway: Pathway | null, fulfillment?: Fulfillment | null): Step[] {
+  const needsDelivery =
+    pathway === 'mobile' || (pathway === 'rental' && fulfillment !== 'pickup');
+  const base: Step[] = ['pathway', 'datetime'];
+  // Rental and mobile pricing depend on the date (weekday vs weekend), so the
+  // machine / tier picker comes after the calendar.
+  if (pathway === 'rental' || pathway === 'mobile') base.push('package');
   base.push('addons');
   if (needsDelivery) base.push('delivery');
   base.push('contact', 'review', 'done');
   return base;
 }
 
-function nextAfterPathway(p: Pathway): Step {
-  return p === 'rental' ? 'package' : 'datetime';
+function nextAfterPathway(_p: Pathway): Step {
+  return 'datetime';
 }
 
 function combineDateTime(date: Date, time: string): Date {
@@ -503,10 +576,14 @@ function validateStep(
 ): boolean {
   switch (step as string) {
     case 'pathway': return !!s.pathway;
-    case 'package': return s.pathway === 'mobile' ? !!s.mobileTier : !!pkg;
+    case 'package':
+      if (s.pathway === 'mobile') return !!s.mobileTier;
+      if (s.pathway === 'rental') return !!s.machine && !!s.fulfillment && !!s.plushChoice;
+      return !!pkg;
     case 'datetime': return !!s.date && !!s.time;
     case 'addons': return true;
     case 'delivery': return s.isIndoors !== null && s.over200 !== null && !!zipInfo?.known;
+
     case 'contact': {
       const c = s.contact;
       if (!(c.name.trim() && /.+@.+\..+/.test(c.email) && c.phone.trim())) return false;
@@ -546,10 +623,11 @@ const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
   mobile: { src: klawsomeMobileArcadeSetup.url, alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
 };
 
-const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
-  'rent-1hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
-  'rent-2hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
+const MACHINE_IMAGES: Record<MachineId, { src: string; alt: string }> = {
+  mini: { src: rentKlawMachine.url, alt: 'A Klawsome mini claw machine filled with plush prizes' },
+  classic: { src: rentKlawMachine.url, alt: 'A full-size Klaw Classic claw machine filled with plush prizes' },
 };
+
 
 const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
   token: { src: '/gallery/novi-community-fest-01.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
@@ -588,41 +666,131 @@ function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
 }
 
 
-function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pathway; packages: PackageOption[]; selectedId: string | null; onSelect: (id: string) => void }) {
+function MachineStep({
+  machines, selectedId, onSelect,
+}: { machines: MachineDef[]; selectedId: MachineId | null; onSelect: (id: MachineId) => void }) {
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground font-body mb-2">
-        {pathway === 'rental' ? 'Pick your rental package.' : 'Pick your Klawsome Mobile duration.'}
-      </p>
+      <p className="text-sm text-muted-foreground font-body mb-2">Pick your machine.</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {packages.map((p) => (
+        {machines.map((m) => (
           <button
-            key={p.id}
-            onClick={() => onSelect(p.id)}
+            key={m.id}
+            onClick={() => onSelect(m.id)}
             className={cn(
               'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
-              selectedId === p.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
+              selectedId === m.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
             )}
           >
-            {PACKAGE_IMAGES[p.id] && <CardImage {...PACKAGE_IMAGES[p.id]} />}
+            <CardImage {...MACHINE_IMAGES[m.id]} />
             <div className="p-5">
-              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-              <p className="font-heading font-bold text-2xl text-primary mt-1">{p.price}</p>
-              {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
+              <p className="font-heading font-bold text-lg text-foreground">{m.label}</p>
+              <p className="font-heading font-bold text-2xl text-primary mt-1">
+                {fmtUSD(m.first.weekday.cents)}
+                {m.first.weekend.cents !== m.first.weekday.cents ? ` weekday · ${fmtUSD(m.first.weekend.cents)} weekend` : ''}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {m.unit === 'whole_day' ? 'Whole day' : 'First 4-hour block'}
+                {m.extraBlock ? ` · +${fmtUSD(m.extraBlock.weekday.cents)} weekday / ${fmtUSD(m.extraBlock.weekend.cents)} weekend per additional block` : ''}
+              </p>
+              <p className="text-sm text-muted-foreground font-body mt-2">{m.description}</p>
+              <p className="text-xs text-muted-foreground font-body mt-1">{m.specs}</p>
+              {m.notes.map((n) => (
+                <p key={n} className="text-xs text-muted-foreground font-body mt-2">{n}</p>
+              ))}
             </div>
           </button>
         ))}
-
       </div>
-      {pathway === 'rental' && (
-        <p className="text-xs text-muted-foreground font-body mt-2">Free delivery within 20 miles; $3/mile beyond 20.</p>
-      )}
-      {(pathway === 'rental' || pathway === 'mobile') && (
-        <p className="text-xs italic text-muted-foreground font-body mt-1">*Plushie selection subject to stock.</p>
-      )}
+      <p className="text-xs italic text-muted-foreground font-body mt-1">*Plushie selection subject to stock.</p>
     </div>
   );
 }
+
+function RentalOptionsStep({
+  machine, dayType, date, fulfillment, blocks, plushChoice, onChange,
+}: {
+  machine: MachineDef;
+  dayType: DayType;
+  date: Date | null;
+  fulfillment: Fulfillment | null;
+  blocks: number;
+  plushChoice: PlushChoice | null;
+  onChange: (patch: Partial<State>) => void;
+}) {
+  const extraBlocks = Math.max(0, blocks - 1);
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <p className="text-sm text-muted-foreground font-body">Set up your {machine.label}.</p>
+        <span className="text-xs font-heading font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">
+          {dayType === 'weekend' ? 'Weekend pricing' : 'Weekday pricing'}
+          {date ? ` · ${date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}` : ''}
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        <Label>How are you getting the machine?</Label>
+        <div className="flex flex-wrap gap-2">
+          {(machine.deliveryOnly ? (['delivery'] as Fulfillment[]) : (['pickup', 'delivery'] as Fulfillment[])).map((f) => (
+            <button
+              key={f}
+              onClick={() => onChange({ fulfillment: f })}
+              className={cn(
+                'px-4 py-2 rounded-full text-sm font-heading font-bold border transition',
+                fulfillment === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50',
+              )}
+            >
+              {f === 'pickup' ? 'Self-pickup' : machine.deliveryBaseCents > 0 ? `Delivered — ${fmtUSD(machine.deliveryBaseCents)} + $3/mile` : 'Delivered'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {machine.unit === 'block' && machine.extraBlock && (
+        <div className="rounded-2xl border border-border bg-card p-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="font-heading font-bold text-foreground">4-hour blocks</p>
+            <p className="text-sm text-muted-foreground font-body">
+              {fmtUSD(machine.first[dayType].cents)} first block
+              {extraBlocks > 0 ? ` + ${extraBlocks} × ${fmtUSD(machine.extraBlock[dayType].cents)}` : ''}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => onChange({ blocks: Math.max(1, blocks - 1) })} className="w-8 h-8 rounded-full border border-border">−</button>
+            <span className="w-6 text-center">{blocks}</span>
+            <button onClick={() => onChange({ blocks: Math.min(1 + machine.maxExtraBlocks, blocks + 1) })} className="w-8 h-8 rounded-full border border-border">+</button>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <Label>Plush fill</Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {([
+            { id: 'pack' as PlushChoice, label: machine.plushPack.label, price: fmtUSD(machine.plushPack.priceCents) },
+            { id: 'byo' as PlushChoice, label: 'Bring your own plush', price: 'Free' },
+          ]).map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => onChange({ plushChoice: opt.id })}
+              className={cn(
+                'text-left rounded-2xl border p-5 transition-all',
+                plushChoice === opt.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
+              )}
+            >
+              <p className="font-heading font-bold text-foreground">{opt.label}</p>
+              <p className="font-heading font-bold text-xl text-primary mt-1">{opt.price}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-xs italic text-muted-foreground font-body">*Plushie selection subject to stock.</p>
+    </div>
+  );
+}
+
 
 function MobileTierStep({
   dayType, date, tierId, hours, extraHours, onChange,
@@ -866,7 +1034,7 @@ function GateToggle({
 function DeliveryStep({
   zip, onZipChange, zipInfo, resolving,
   isIndoors, over200, onGateChange,
-  approval, onRequestApproval, contactDefaults, onContactChange,
+  approval, onRequestApproval, contactDefaults, onContactChange, deliveryRule,
 }: {
   zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null; resolving: boolean;
   isIndoors: boolean | null; over200: boolean | null;
@@ -875,7 +1043,9 @@ function DeliveryStep({
   onRequestApproval: (notes: string) => Promise<ApprovalRecord>;
   contactDefaults: { name: string; email: string; phone: string };
   onContactChange: (c: Partial<{ name: string; email: string; phone: string }>) => void;
+  deliveryRule: DeliveryRule;
 }) {
+
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: storeHours } = useCmsTable<StoreHour>('store_hours');
   const phone = (settings?.phone || '').trim();
@@ -915,9 +1085,17 @@ function DeliveryStep({
     setSubmitting(false);
   };
 
+  const billableMiles = zipInfo?.known ? Math.max(0, Math.ceil(zipInfo.miles - deliveryRule.freeMiles)) : 0;
+
   return (
     <div className="space-y-6">
-      <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
+      <p className="text-sm text-muted-foreground font-body">
+        Where are we delivering?
+        {deliveryRule.baseCents > 0 ? ` ${fmtUSD(deliveryRule.baseCents)} base fee` : ''}
+        {deliveryRule.freeMiles > 0 ? ` Free within ${deliveryRule.freeMiles} miles;` : ''} $3/mile
+        {deliveryRule.freeMiles > 0 ? ' beyond that.' : '.'}
+      </p>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="space-y-6">
@@ -953,11 +1131,17 @@ function DeliveryStep({
           {gatesAnswered && zipInfo && zipInfo.known && (
             <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
               <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
-              {zipInfo.miles <= FREE_DELIVERY_MILES ? (
+              {deliveryCentsFor(deliveryRule, zipInfo.miles) === 0 ? (
                 <p className="text-primary mt-1">Free delivery ✓</p>
               ) : (
-                <p className="text-foreground mt-1">Delivery surcharge: ${(Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES) * 3).toFixed(2)} ({Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} extra miles × $3)</p>
+                <p className="text-foreground mt-1">
+                  Delivery: {fmtUSD(deliveryCentsFor(deliveryRule, zipInfo.miles))}
+                  {deliveryRule.baseCents > 0 ? ` (${fmtUSD(deliveryRule.baseCents)} base` : ' ('}
+                  {billableMiles > 0 ? `${deliveryRule.baseCents > 0 ? ' + ' : ''}${billableMiles} mi × $3` : ''}
+                  )
+                </p>
               )}
+
               {approvalForZip?.status === 'approved' && (
                 <p className="text-primary mt-1">Confirmed by our team ✓ (request #{approvalForZip.code})</p>
               )}
@@ -1119,16 +1303,20 @@ function ContactStep({ contact, pathway, onChange }: { contact: State['contact']
 
 function ReviewStep({
   pathway, selectedPackage, state, zipInfo, deliveryCents, totalCents, dayType, mobileBaseCents, mobileExtraCents,
-  safetyAccepted, onSafetyChange,
+  machine, deliveryRule, safetyAccepted, onSafetyChange,
 }: {
   pathway: Pathway; selectedPackage: PackageOption | null; state: State;
   zipInfo: ZipLookup | null; deliveryCents: number; totalCents: number;
   dayType: DayType; mobileBaseCents: number; mobileExtraCents: number;
+  machine: MachineDef | null; deliveryRule: DeliveryRule;
   safetyAccepted: boolean; onSafetyChange: (v: boolean) => void;
 }) {
   const p = PATHWAYS.find((x) => x.id === pathway)!;
   const tier = MOBILE_TIERS.find((t) => t.id === state.mobileTier) || null;
   const startAt = state.date && state.time ? combineDateTime(state.date, state.time) : null;
+  const extraBlocks = Math.max(0, state.blocks - 1);
+  const extraBlockCents = machine?.extraBlock ? machine.extraBlock[dayType].cents * extraBlocks : 0;
+  const billableMiles = zipInfo?.known ? Math.max(0, Math.ceil(zipInfo.miles - deliveryRule.freeMiles)) : 0;
   const addonEntries = Object.entries(state.addons).map(([id, sel]) => {
     const def = ADDONS.find((a) => a.id === id)!;
     return { def, sel };
@@ -1141,8 +1329,16 @@ function ReviewStep({
         <p className="font-heading font-bold text-lg mt-1">
           {p.label}
           {selectedPackage ? ` — ${selectedPackage.label}` : ''}
+          {pathway === 'rental' && machine ? ` — ${machine.label}` : ''}
           {pathway === 'mobile' && tier ? ` — ${tier.label}` : ''}
         </p>
+        {pathway === 'rental' && machine && (
+          <p className="text-sm text-muted-foreground mt-1">
+            {machine.unit === 'whole_day' ? 'Whole day' : `${state.blocks} × 4-hour block${state.blocks === 1 ? '' : 's'}`}
+            {' · '}{dayType === 'weekend' ? 'Weekend' : 'Weekday'} rate
+            {' · '}{state.fulfillment === 'pickup' ? 'Self-pickup' : 'Delivered'}
+          </p>
+        )}
         {pathway === 'mobile' && tier && (
           <p className="text-sm text-muted-foreground mt-1">
             {state.mobileHours + state.mobileExtraHours} hour{state.mobileHours + state.mobileExtraHours === 1 ? '' : 's'} · {dayType === 'weekend' ? 'Weekend' : 'Weekday'} rate
@@ -1157,6 +1353,21 @@ function ReviewStep({
             <Row label={p.label} amount={PATHWAY_BASE_CENTS[pathway]} />
           )}
           {selectedPackage && <Row label={selectedPackage.label} amount={selectedPackage.priceCents} />}
+          {pathway === 'rental' && machine && (
+            <Row
+              label={`${machine.label} — ${machine.unit === 'whole_day' ? 'whole day' : 'first 4-hour block'} (${dayType === 'weekend' ? 'weekend' : 'weekday'})`}
+              amount={machine.first[dayType].cents}
+            />
+          )}
+          {pathway === 'rental' && machine && extraBlocks > 0 && (
+            <Row label={`Additional 4-hour blocks × ${extraBlocks}`} amount={extraBlockCents} />
+          )}
+          {pathway === 'rental' && machine && state.plushChoice === 'pack' && (
+            <Row label={machine.plushPack.label} amount={machine.plushPack.priceCents} />
+          )}
+          {pathway === 'rental' && state.plushChoice === 'byo' && (
+            <p className="text-muted-foreground">Bringing your own plush</p>
+          )}
           {pathway === 'mobile' && tier && (
             <Row label={`${tier.label} — ${state.mobileHours} hr (${dayType === 'weekend' ? 'weekend' : 'weekday'})`} amount={mobileBaseCents} />
           )}
@@ -1166,10 +1377,16 @@ function ReviewStep({
           {addonEntries.map(({ def, sel }) => (
             <Row key={def.id} label={`${def.label}${sel.character ? ` — ${sel.character}` : ''}${sel.qty > 1 ? ` × ${sel.qty}` : ''}`} amount={def.priceCents * sel.qty} />
           ))}
-          {deliveryCents > 0 && zipInfo?.known && (
-            <Row label={`Delivery surcharge (${Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} mi × $3)`} amount={deliveryCents} />
+          {pathway === 'rental' && state.fulfillment === 'pickup' && (
+            <Row label="Self-pickup from Klawsome" amount={0} />
           )}
-          {deliveryCents === 0 && (pathway === 'rental' || pathway === 'mobile') && zipInfo?.known && (
+          {deliveryCents > 0 && zipInfo?.known && (
+            <Row
+              label={`Delivery${deliveryRule.baseCents > 0 ? ' (base fee' : ''}${deliveryRule.baseCents > 0 && billableMiles > 0 ? ' + ' : ''}${billableMiles > 0 ? `${billableMiles} mi × $3` : ''}${deliveryRule.baseCents > 0 ? ')' : ''}`}
+              amount={deliveryCents}
+            />
+          )}
+          {deliveryCents === 0 && (pathway === 'rental' || pathway === 'mobile') && state.fulfillment !== 'pickup' && zipInfo?.known && (
             <p className="text-primary text-sm">Free delivery ✓</p>
           )}
         </div>
@@ -1178,6 +1395,7 @@ function ReviewStep({
         </div>
       </div>
       </div>
+
       <div className="rounded-2xl border border-border p-4 bg-muted/30">
         <label htmlFor="safety-policy" className="flex items-start gap-3 cursor-pointer">
           <Checkbox
