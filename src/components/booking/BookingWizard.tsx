@@ -229,42 +229,53 @@ function BookingWizardDialog() {
     return rec;
   };
 
-  const deliveryCents = zipInfo?.known
-    ? Math.max(0, Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)) * 300
-    : 0;
+  const usesDelivery = pathway === 'mobile' || (pathway === 'rental' && state.fulfillment === 'delivery');
+  const deliveryCents = usesDelivery && zipInfo?.known ? deliveryCentsFor(deliveryRule, zipInfo.miles) : 0;
   const zipBlocked = needsDelivery && state.zip.trim().length === 5 && zipInfo && !zipInfo.known;
 
   const availableAddons = pathway ? addonsFor(pathway) : [];
+
+  const machineCents = useMemo(() => {
+    if (pathway !== 'rental' || !machine) return 0;
+    let sum = machine.first[dayType].cents;
+    if (machine.unit === 'block' && machine.extraBlock) {
+      sum += machine.extraBlock[dayType].cents * Math.max(0, state.blocks - 1);
+    }
+    if (state.plushChoice === 'pack') sum += machine.plushPack.priceCents;
+    return sum;
+  }, [pathway, machine, dayType, state.blocks, state.plushChoice]);
 
   const totalCents = useMemo(() => {
     let sum = 0;
     if (pathway && pathway !== 'rental' && pathway !== 'mobile') sum += PATHWAY_BASE_CENTS[pathway];
     if (selectedPackage) sum += selectedPackage.priceCents;
     if (pathway === 'mobile') sum += mobileBaseCents + mobileExtraCents;
+    sum += machineCents;
     for (const [id, sel] of Object.entries(state.addons)) {
       const def = ADDONS.find((a) => a.id === id);
       if (def) sum += def.priceCents * (sel.qty || 0);
     }
     sum += deliveryCents;
     return sum;
-  }, [pathway, selectedPackage, state.addons, deliveryCents, mobileBaseCents, mobileExtraCents]);
+  }, [pathway, selectedPackage, state.addons, deliveryCents, mobileBaseCents, mobileExtraCents, machineCents]);
 
   const canNext = validateStep(step, state, selectedPackage, availability, blackouts, zipInfo);
 
   const goNext = () => {
-    const order = stepOrder(pathway);
+    const order = stepOrder(pathway, state.fulfillment);
     const idx = order.indexOf(step);
     if (idx < 0 || idx >= order.length - 1) return;
     setStep(order[idx + 1]);
   };
   const goBack = () => {
-    const order = stepOrder(pathway);
+    const order = stepOrder(pathway, state.fulfillment);
     const idx = order.indexOf(step);
     if (idx <= 0) return;
     // If pathway was pre-set from a page CTA, keep them out of pathway picker
     if (idx === 1 && initialPathway) return;
     setStep(order[idx - 1]);
   };
+
 
   const submit = async () => {
     if (!pathway) return;
