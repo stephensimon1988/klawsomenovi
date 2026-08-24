@@ -491,21 +491,21 @@ function BookingWizardDialog() {
 
 /* ---------- helpers ---------- */
 
-function stepOrder(pathway: Pathway | null): Step[] {
-  const needsDelivery = pathway === 'rental' || pathway === 'mobile';
-  const base: Step[] = ['pathway'];
-  if (pathway === 'rental') base.push('package');
-  base.push('datetime');
-  // Mobile pricing depends on the date (weekday vs weekend), so tiers come after.
-  if (pathway === 'mobile') base.push('package');
+function stepOrder(pathway: Pathway | null, fulfillment?: Fulfillment | null): Step[] {
+  const needsDelivery =
+    pathway === 'mobile' || (pathway === 'rental' && fulfillment !== 'pickup');
+  const base: Step[] = ['pathway', 'datetime'];
+  // Rental and mobile pricing depend on the date (weekday vs weekend), so the
+  // machine / tier picker comes after the calendar.
+  if (pathway === 'rental' || pathway === 'mobile') base.push('package');
   base.push('addons');
   if (needsDelivery) base.push('delivery');
   base.push('contact', 'review', 'done');
   return base;
 }
 
-function nextAfterPathway(p: Pathway): Step {
-  return p === 'rental' ? 'package' : 'datetime';
+function nextAfterPathway(_p: Pathway): Step {
+  return 'datetime';
 }
 
 function combineDateTime(date: Date, time: string): Date {
@@ -523,10 +523,14 @@ function validateStep(
 ): boolean {
   switch (step as string) {
     case 'pathway': return !!s.pathway;
-    case 'package': return s.pathway === 'mobile' ? !!s.mobileTier : !!pkg;
+    case 'package':
+      if (s.pathway === 'mobile') return !!s.mobileTier;
+      if (s.pathway === 'rental') return !!s.machine && !!s.fulfillment && !!s.plushChoice;
+      return !!pkg;
     case 'datetime': return !!s.date && !!s.time;
     case 'addons': return true;
     case 'delivery': return s.isIndoors !== null && s.over200 !== null && !!zipInfo?.known;
+
     case 'contact': {
       const c = s.contact;
       if (!(c.name.trim() && /.+@.+\..+/.test(c.email) && c.phone.trim())) return false;
