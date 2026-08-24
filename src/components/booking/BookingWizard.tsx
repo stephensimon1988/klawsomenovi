@@ -588,41 +588,131 @@ function PathwayStep({ onPick }: { onPick: (p: Pathway) => void }) {
 }
 
 
-function PackageStep({ pathway, packages, selectedId, onSelect }: { pathway: Pathway; packages: PackageOption[]; selectedId: string | null; onSelect: (id: string) => void }) {
+function MachineStep({
+  machines, selectedId, onSelect,
+}: { machines: MachineDef[]; selectedId: MachineId | null; onSelect: (id: MachineId) => void }) {
   return (
     <div className="space-y-3">
-      <p className="text-sm text-muted-foreground font-body mb-2">
-        {pathway === 'rental' ? 'Pick your rental package.' : 'Pick your Klawsome Mobile duration.'}
-      </p>
+      <p className="text-sm text-muted-foreground font-body mb-2">Pick your machine.</p>
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {packages.map((p) => (
+        {machines.map((m) => (
           <button
-            key={p.id}
-            onClick={() => onSelect(p.id)}
+            key={m.id}
+            onClick={() => onSelect(m.id)}
             className={cn(
               'text-left rounded-2xl border overflow-hidden flex flex-col transition-all',
-              selectedId === p.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
+              selectedId === m.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
             )}
           >
-            {PACKAGE_IMAGES[p.id] && <CardImage {...PACKAGE_IMAGES[p.id]} />}
+            <CardImage {...MACHINE_IMAGES[m.id]} />
             <div className="p-5">
-              <p className="font-heading font-bold text-lg text-foreground">{p.label}</p>
-              <p className="font-heading font-bold text-2xl text-primary mt-1">{p.price}</p>
-              {p.description && <p className="text-sm text-muted-foreground font-body mt-1">{p.description}</p>}
+              <p className="font-heading font-bold text-lg text-foreground">{m.label}</p>
+              <p className="font-heading font-bold text-2xl text-primary mt-1">
+                {fmtUSD(m.first.weekday.cents)}
+                {m.first.weekend.cents !== m.first.weekday.cents ? ` weekday · ${fmtUSD(m.first.weekend.cents)} weekend` : ''}
+              </p>
+              <p className="text-xs text-muted-foreground mt-1">
+                {m.unit === 'whole_day' ? 'Whole day' : 'First 4-hour block'}
+                {m.extraBlock ? ` · +${fmtUSD(m.extraBlock.weekday.cents)} weekday / ${fmtUSD(m.extraBlock.weekend.cents)} weekend per additional block` : ''}
+              </p>
+              <p className="text-sm text-muted-foreground font-body mt-2">{m.description}</p>
+              <p className="text-xs text-muted-foreground font-body mt-1">{m.specs}</p>
+              {m.notes.map((n) => (
+                <p key={n} className="text-xs text-muted-foreground font-body mt-2">{n}</p>
+              ))}
             </div>
           </button>
         ))}
-
       </div>
-      {pathway === 'rental' && (
-        <p className="text-xs text-muted-foreground font-body mt-2">Free delivery within 20 miles; $3/mile beyond 20.</p>
-      )}
-      {(pathway === 'rental' || pathway === 'mobile') && (
-        <p className="text-xs italic text-muted-foreground font-body mt-1">*Plushie selection subject to stock.</p>
-      )}
+      <p className="text-xs italic text-muted-foreground font-body mt-1">*Plushie selection subject to stock.</p>
     </div>
   );
 }
+
+function RentalOptionsStep({
+  machine, dayType, date, fulfillment, blocks, plushChoice, onChange,
+}: {
+  machine: MachineDef;
+  dayType: DayType;
+  date: Date | null;
+  fulfillment: Fulfillment | null;
+  blocks: number;
+  plushChoice: PlushChoice | null;
+  onChange: (patch: Partial<State>) => void;
+}) {
+  const extraBlocks = Math.max(0, blocks - 1);
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-wrap items-center gap-3">
+        <p className="text-sm text-muted-foreground font-body">Set up your {machine.label}.</p>
+        <span className="text-xs font-heading font-bold px-3 py-1 rounded-full bg-primary/10 text-primary">
+          {dayType === 'weekend' ? 'Weekend pricing' : 'Weekday pricing'}
+          {date ? ` · ${date.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric' })}` : ''}
+        </span>
+      </div>
+
+      <div className="space-y-3">
+        <Label>How are you getting the machine?</Label>
+        <div className="flex flex-wrap gap-2">
+          {(machine.deliveryOnly ? (['delivery'] as Fulfillment[]) : (['pickup', 'delivery'] as Fulfillment[])).map((f) => (
+            <button
+              key={f}
+              onClick={() => onChange({ fulfillment: f })}
+              className={cn(
+                'px-4 py-2 rounded-full text-sm font-heading font-bold border transition',
+                fulfillment === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50',
+              )}
+            >
+              {f === 'pickup' ? 'Self-pickup' : machine.deliveryBaseCents > 0 ? `Delivered — ${fmtUSD(machine.deliveryBaseCents)} + $3/mile` : 'Delivered'}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {machine.unit === 'block' && machine.extraBlock && (
+        <div className="rounded-2xl border border-border bg-card p-4 flex items-center justify-between gap-4">
+          <div>
+            <p className="font-heading font-bold text-foreground">4-hour blocks</p>
+            <p className="text-sm text-muted-foreground font-body">
+              {fmtUSD(machine.first[dayType].cents)} first block
+              {extraBlocks > 0 ? ` + ${extraBlocks} × ${fmtUSD(machine.extraBlock[dayType].cents)}` : ''}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => onChange({ blocks: Math.max(1, blocks - 1) })} className="w-8 h-8 rounded-full border border-border">−</button>
+            <span className="w-6 text-center">{blocks}</span>
+            <button onClick={() => onChange({ blocks: Math.min(1 + machine.maxExtraBlocks, blocks + 1) })} className="w-8 h-8 rounded-full border border-border">+</button>
+          </div>
+        </div>
+      )}
+
+      <div className="space-y-3">
+        <Label>Plush fill</Label>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {([
+            { id: 'pack' as PlushChoice, label: machine.plushPack.label, price: fmtUSD(machine.plushPack.priceCents) },
+            { id: 'byo' as PlushChoice, label: 'Bring your own plush', price: 'Free' },
+          ]).map((opt) => (
+            <button
+              key={opt.id}
+              onClick={() => onChange({ plushChoice: opt.id })}
+              className={cn(
+                'text-left rounded-2xl border p-5 transition-all',
+                plushChoice === opt.id ? 'border-primary bg-primary/5 shadow-md' : 'border-border bg-card hover:border-primary/50',
+              )}
+            >
+              <p className="font-heading font-bold text-foreground">{opt.label}</p>
+              <p className="font-heading font-bold text-xl text-primary mt-1">{opt.price}</p>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <p className="text-xs italic text-muted-foreground font-body">*Plushie selection subject to stock.</p>
+    </div>
+  );
+}
+
 
 function MobileTierStep({
   dayType, date, tierId, hours, extraHours, onChange,
