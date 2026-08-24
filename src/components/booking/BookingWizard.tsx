@@ -866,7 +866,7 @@ function GateToggle({
 function DeliveryStep({
   zip, onZipChange, zipInfo, resolving,
   isIndoors, over200, onGateChange,
-  approval, onRequestApproval, contactDefaults, onContactChange,
+  approval, onRequestApproval, contactDefaults, onContactChange, deliveryRule,
 }: {
   zip: string; onZipChange: (z: string) => void; zipInfo: ZipLookup | null; resolving: boolean;
   isIndoors: boolean | null; over200: boolean | null;
@@ -875,7 +875,9 @@ function DeliveryStep({
   onRequestApproval: (notes: string) => Promise<ApprovalRecord>;
   contactDefaults: { name: string; email: string; phone: string };
   onContactChange: (c: Partial<{ name: string; email: string; phone: string }>) => void;
+  deliveryRule: DeliveryRule;
 }) {
+
   const { data: settings } = useCmsSingle<SiteSettings>('site_settings');
   const { data: storeHours } = useCmsTable<StoreHour>('store_hours');
   const phone = (settings?.phone || '').trim();
