@@ -9,6 +9,7 @@ const API_VERSION = '2025-07';
 function listTokens(): { token: string; name: string }[] {
   const names = [
     ...Object.keys(Deno.env.toObject()).filter((k) => k.startsWith('SHOPIFY_ONLINE_ACCESS_TOKEN')),
+    'SHOPIFY_RENTAL_SYNC_ADMIN_TOKEN',
     'SHOPIFY_ADMIN_API_TOKEN',
     'SHOPIFY_ACCESS_TOKEN',
   ];
@@ -31,7 +32,10 @@ async function pickWorkingToken(): Promise<string> {
     await r.body?.cancel();
     if (r.ok) return t.token;
   }
-  throw new Error(`No working Shopify Admin token. Attempts: ${JSON.stringify(attempts)}`);
+  throw new Error(
+    'Shopify rejected every stored admin token (they expire). Ask Lovable to store a fresh Shopify Admin API token, then run the sync again. ' +
+      `Attempts: ${JSON.stringify(attempts)}`,
+  );
 }
 
 async function admin(token: string, query: string, variables: Record<string, unknown> = {}) {
