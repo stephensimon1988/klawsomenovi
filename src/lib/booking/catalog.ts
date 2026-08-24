@@ -16,7 +16,7 @@ export interface PathwayDef {
 export const PATHWAYS: PathwayDef[] = [
   { id: 'private', label: 'Klawsome Private Party', subtitle: 'Exclusive space, your color + music, 325 tokens.', price: '$319', duration: '1 hour', variantId: gid(52297242738990), needsDelivery: false },
   { id: 'semi', label: 'Semi-Private Party', subtitle: 'Paris Baguette table + 325 tokens.', price: '$250', duration: '1 hour', variantId: gid(52297250636078), needsDelivery: false },
-  { id: 'rental', label: 'Rent a Klaw Machine', subtitle: 'We bring the arcade to you.', price: 'from $445', duration: '1 or 2 hours', variantId: '', needsDelivery: true },
+  { id: 'rental', label: 'Rent a Klaw Machine', subtitle: 'Klaw Mini for the day, or the full-size Klaw Classic in 4-hour blocks.', price: 'from $95', duration: 'whole day or 4-hour blocks', variantId: '', needsDelivery: true },
   { id: 'mobile', label: 'Book Klawsome Mobile', subtitle: 'Mobile claw machine arcade for your event. Weekday & weekend rates.', price: 'from $295', duration: '1 or 2 hours + extra hours', variantId: '', needsDelivery: true },
 ];
 
@@ -36,10 +36,87 @@ export const PATHWAY_BASE_CENTS: Record<Pathway, number> = {
   mobile: 0,
 };
 
-export const RENTAL_PACKAGES: PackageOption[] = [
-  { id: 'rent-1hr', label: '1-Hour Party Package', price: '$445', priceCents: 44500, variantId: gid(52297295561006), description: '40 regular-size plushies (based on availability) OR your supplied product (5–10 in, 0–5 lb).' },
-  { id: 'rent-2hr', label: '2-Hour Extended Party', price: '$645', priceCents: 64500, variantId: gid(52297298411822), description: '40 regular-size plushies (based on availability) OR your supplied product (5–10 in, 0–5 lb).' },
+/* ---------- Machine rentals: Klaw Mini vs Klaw Classic ---------- */
+
+export type MachineId = 'mini' | 'classic';
+
+export interface MachineRate { cents: number; variantId: string }
+
+export interface MachineDef {
+  id: MachineId;
+  label: string;
+  specs: string;
+  description: string;
+  /** How the base rate is sold. */
+  unit: 'whole_day' | 'block';
+  unitLabel: string;
+  /** First unit price by day type. */
+  first: Record<DayType, MachineRate>;
+  /** Price for each additional 4-hour block (block machines only). */
+  extraBlock?: Record<DayType, MachineRate>;
+  maxExtraBlocks: number;
+  /** Klaw Classic is delivered and set up by our team. */
+  deliveryOnly: boolean;
+  deliveryBaseCents: number;
+  deliveryBaseVariantId: string;
+  freeMiles: number;
+  plushPack: { label: string; priceCents: number; variantId: string };
+  notes: string[];
+}
+
+export const MACHINES: MachineDef[] = [
+  {
+    id: 'mini',
+    label: 'Single Klaw Mini',
+    specs: 'H30 × L16 × W16 in · prizes 3 in or less',
+    description: 'One mini claw machine for the whole day. Pick it up yourself or have it delivered.',
+    unit: 'whole_day',
+    unitLabel: 'Whole day',
+    first: {
+      weekday: { cents: 9500, variantId: gid(52492252381486) },
+      weekend: { cents: 14500, variantId: gid(52492252414254) },
+    },
+    maxExtraBlocks: 0,
+    deliveryOnly: false,
+    deliveryBaseCents: 2000,
+    deliveryBaseVariantId: gid(52492252447022),
+    freeMiles: 0,
+    plushPack: { label: '20 plush of your choice', priceCents: 5000, variantId: gid(52492252479790) },
+    notes: [
+      'Customer agrees to pay up to $700 for substantial damage and $50 for aesthetic damage.',
+    ],
+  },
+  {
+    id: 'classic',
+    label: 'Klaw Classic (full size)',
+    specs: 'Full-size arcade cabinet · delivered and set up',
+    description: 'Our full-size machine, priced per 4-hour block.',
+    unit: 'block',
+    unitLabel: '4-hour block',
+    first: {
+      weekday: { cents: 44500, variantId: gid(52492252512558) },
+      weekend: { cents: 44500, variantId: gid(52492252512558) },
+    },
+    extraBlock: {
+      weekday: { cents: 19500, variantId: gid(52492252545326) },
+      weekend: { cents: 24500, variantId: gid(52492252578094) },
+    },
+    maxExtraBlocks: 5,
+    deliveryOnly: true,
+    deliveryBaseCents: 0,
+    deliveryBaseVariantId: '',
+    freeMiles: 10,
+    plushPack: { label: '20 plush of your choice', priceCents: 8000, variantId: gid(52492252610862) },
+    notes: [],
+  },
 ];
+
+export const machineById = (id: MachineId | null | undefined): MachineDef | null =>
+  MACHINES.find((m) => m.id === id) ?? null;
+
+export type PlushChoice = 'pack' | 'byo';
+export type Fulfillment = 'pickup' | 'delivery';
+
 
 /* ---------- Klawsome Mobile: tiered, weekday/weekend pricing ---------- */
 
