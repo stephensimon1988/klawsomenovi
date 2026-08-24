@@ -245,7 +245,7 @@ export const ADDONS: AddOnDef[] = [
   },
   { id: 'xl-plushie', label: 'XL Plushie', price: '$89', priceCents: 8900, variantId: gid(52297272557870), description: "An XL plushie of the celebrant's choice (19-plushie trade-in value or smaller).", scope: ['private', 'semi'] },
   { id: 'photographer', label: 'Event Photographer', price: '$79 / hr', priceCents: 7900, variantId: gid(52297274818862), description: 'On-staff photographer for one hour to capture the celebration.', scope: ['private', 'semi'] },
-  { id: 'extra-hour', label: 'Extra Hour', price: '$145', priceCents: 14500, variantId: gid(52297302540590), description: 'Add another hour to your rental.', scope: ['rental'] },
+  { id: 'extra-hour', label: 'Extra Hour', price: '$145', priceCents: 14500, variantId: gid(52297302540590), description: 'Add another hour to your rental.', scope: [] },
   { id: 'plush-refill', label: 'Plushie Refill', price: '$200', priceCents: 20000, variantId: gid(52297306538286), description: 'Refill the machine with fresh plushies.', scope: ['rental', 'mobile'] },
   { id: 'extra-machine', label: 'Additional Machine', price: '$245', priceCents: 24500, variantId: gid(52297315746094), description: 'Add a second claw machine.', scope: ['rental'] },
 ];
@@ -253,6 +253,37 @@ export const ADDONS: AddOnDef[] = [
 export const DELIVERY_SURCHARGE_VARIANT = gid(52297332719918);
 export const DELIVERY_PER_MILE_CENTS = 300;
 export const FREE_DELIVERY_MILES = 20;
+
+export interface DeliveryRule {
+  baseCents: number;
+  baseVariantId: string;
+  freeMiles: number;
+  perMileCents: number;
+}
+
+/** Delivery pricing depends on what's being delivered. */
+export function deliveryRuleFor(pathway: Pathway | null, machine: MachineDef | null): DeliveryRule {
+  if (pathway === 'rental' && machine) {
+    return {
+      baseCents: machine.deliveryBaseCents,
+      baseVariantId: machine.deliveryBaseVariantId,
+      freeMiles: machine.freeMiles,
+      perMileCents: DELIVERY_PER_MILE_CENTS,
+    };
+  }
+  return {
+    baseCents: 0,
+    baseVariantId: '',
+    freeMiles: FREE_DELIVERY_MILES,
+    perMileCents: DELIVERY_PER_MILE_CENTS,
+  };
+}
+
+export function deliveryCentsFor(rule: DeliveryRule, miles: number): number {
+  const billable = Math.max(0, Math.ceil(miles - rule.freeMiles));
+  return rule.baseCents + billable * rule.perMileCents;
+}
+
 // Any auto-quoted distance beyond this cap forces a "call to confirm" gate
 // instead of proceeding to checkout. Tunable.
 export const SERVICE_AREA_CAP_MILES = 60;
