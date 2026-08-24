@@ -502,6 +502,9 @@ function BookingWizardDialog() {
               dayType={dayType}
               mobileBaseCents={mobileBaseCents}
               mobileExtraCents={mobileExtraCents}
+              machine={machine}
+              deliveryRule={deliveryRule}
+
               safetyAccepted={state.safetyAccepted}
               onSafetyChange={(v) => setState((s) => ({ ...s, safetyAccepted: v }))}
             />
