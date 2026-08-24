@@ -98,6 +98,90 @@ export type Database = {
         }
         Relationships: []
       }
+      booking_rental_options: {
+        Row: {
+          created_at: string
+          id: string
+          is_active: boolean
+          label: string
+          machine: string
+          numeric_value: number
+          option_key: string
+          price_cents: number
+          sort_order: number
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          machine: string
+          numeric_value?: number
+          option_key: string
+          price_cents?: number
+          sort_order?: number
+          updated_at?: string
+          variant_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          machine?: string
+          numeric_value?: number
+          option_key?: string
+          price_cents?: number
+          sort_order?: number
+          updated_at?: string
+          variant_id?: string
+        }
+        Relationships: []
+      }
+      booking_rental_pricing: {
+        Row: {
+          created_at: string
+          day_type: string
+          id: string
+          is_active: boolean
+          label: string
+          machine: string
+          price_cents: number
+          sort_order: number
+          unit: string
+          updated_at: string
+          variant_id: string
+        }
+        Insert: {
+          created_at?: string
+          day_type?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          machine: string
+          price_cents?: number
+          sort_order?: number
+          unit: string
+          updated_at?: string
+          variant_id?: string
+        }
+        Update: {
+          created_at?: string
+          day_type?: string
+          id?: string
+          is_active?: boolean
+          label?: string
+          machine?: string
+          price_cents?: number
+          sort_order?: number
+          unit?: string
+          updated_at?: string
+          variant_id?: string
+        }
+        Relationships: []
+      }
       contact_submissions: {
         Row: {
           created_at: string
