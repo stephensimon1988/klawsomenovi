@@ -80,7 +80,7 @@ const Birthdays = () => {
 
   type Accent = 'red' | 'yellow' | 'blue' | 'pink';
 
-  const rentalFrom = fmtUSD(Math.min(...RENTAL_PACKAGES.map((p) => p.priceCents)));
+  const rentalFrom = fmtUSD(Math.min(...MACHINES.map((m) => m.first.weekday.cents)));
   const mobileFrom = fmtUSD(Math.min(...MOBILE_TIERS.map((t) => mobileRate(t, 'weekday', 1).cents)));
 
   const gridCols = 'grid grid-cols-[minmax(170px,1.6fr)_repeat(4,minmax(160px,1fr))]';
