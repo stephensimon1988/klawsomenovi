@@ -17,6 +17,8 @@ const TABLES_ALLOWED = [
   'page_content_sections', 'team_members', 'press_articles', 'rental_packages',
   'event_availability', 'event_blackout_dates', 'event_bookings',
   'service_area_zips', 'booking_approval_requests',
+  'booking_rental_pricing', 'booking_rental_options',
+
 ];
 
 serve(async (req) => {
