@@ -108,7 +108,7 @@ export type CmsColumn = {
 };
 
 /** Multi-row editor with optional search + group filter */
-export function MultiRowEditor({ table, password, columns, defaultRow, searchKeys, filterKey, filterLabel, note }: {
+export function MultiRowEditor({ table, password, columns, defaultRow, searchKeys, filterKey, filterLabel, note, onSaved }: {
   table: string; password: string;
   columns: CmsColumn[];
   defaultRow?: Record<string, unknown>;
@@ -116,6 +116,8 @@ export function MultiRowEditor({ table, password, columns, defaultRow, searchKey
   filterKey?: string;
   filterLabel?: string;
   note?: string;
+  /** Runs after a row is saved (used to push rental prices to Shopify). */
+  onSaved?: () => void;
 }) {
   const [rows, setRows] = useState<any[]>([]);
   const [editing, setEditing] = useState<Record<string, any>>({});
@@ -162,6 +164,7 @@ export function MultiRowEditor({ table, password, columns, defaultRow, searchKey
       toast.success('Row saved');
       cancelEdit(id);
       load();
+      onSaved?.();
     } catch (e: any) { toast.error(e.message); }
     setSaving(null);
   };

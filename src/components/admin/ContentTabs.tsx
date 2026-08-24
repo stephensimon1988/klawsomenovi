@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MultiRowEditor, SingleRowEditor } from './CmsEditors';
+import { RentalShopifySyncPanel, useRentalShopifySync } from './RentalShopifySync';
 import type { ReactNode } from 'react';
 
 const SHOPIFY_NOTE =
@@ -235,42 +236,50 @@ export const CONTENT_TABS: ContentTab[] = [
   {
     value: 'machine-rentals',
     label: '🕹 Machine Rental Pricing',
-    render: (pw) => (
-      <Panel title="Machine Rental Pricing">
-        <p className="text-xs text-white/50 mb-4 font-heading">
-          Live pricing used by the booking wizard for Klaw Mini and Klaw Classic. Machine must be{' '}
-          <strong>mini</strong> or <strong>classic</strong>; day type <strong>weekday</strong>,{' '}
-          <strong>weekend</strong> or <strong>any</strong>; unit <strong>whole_day</strong>,{' '}
-          <strong>first_block</strong> or <strong>extra_block</strong>. Variant ID must match the Shopify
-          variant that gets charged.
+    render: (pw) => <MachineRentalPanel password={pw} />,
+  },
+];
+
+function MachineRentalPanel({ password }: { password: string }) {
+  const sync = useRentalShopifySync();
+  const autoSync = () => sync.run({ silent: true });
+  return (
+    <Panel title="Machine Rental Pricing">
+      <RentalShopifySyncPanel {...sync} />
+      <p className="text-xs text-white/50 mb-4 font-heading">
+        Live pricing used by the booking wizard for Klaw Mini and Klaw Classic. Machine must be{' '}
+        <strong>mini</strong> or <strong>classic</strong>; day type <strong>weekday</strong>,{' '}
+        <strong>weekend</strong> or <strong>any</strong>; unit <strong>whole_day</strong>,{' '}
+        <strong>first_block</strong> or <strong>extra_block</strong>. Variant ID must match the Shopify
+        item that gets charged.
+      </p>
+      <MultiRowEditor password={password} table="booking_rental_pricing" onSaved={autoSync} searchKeys={['machine', 'label']} filterKey="machine" filterLabel="machines" columns={[
+        { key: 'machine', label: 'Machine', width: '110px' },
+        { key: 'day_type', label: 'Day Type', width: '110px' },
+        { key: 'unit', label: 'Unit', width: '130px' },
+        { key: 'label', label: 'Label' },
+        { key: 'price_cents', label: 'Price (cents)', type: 'number', width: '120px' },
+        { key: 'variant_id', label: 'Shopify Variant ID' },
+        { key: 'is_active', label: 'Active', type: 'bool' },
+      ]} />
+      <div className="mt-8">
+        <p className="text-xs text-white/50 mb-3 font-heading">
+          Delivery fees, free-mile allowance and plush packs. Option key must be{' '}
+          <strong>delivery_base</strong>, <strong>free_miles</strong>, <strong>per_mile</strong> or{' '}
+          <strong>plush_pack</strong>.
         </p>
-        <MultiRowEditor password={pw} table="booking_rental_pricing" searchKeys={['machine', 'label']} filterKey="machine" filterLabel="machines" columns={[
+        <MultiRowEditor password={password} table="booking_rental_options" onSaved={autoSync} searchKeys={['machine', 'option_key', 'label']} filterKey="machine" filterLabel="machines" columns={[
           { key: 'machine', label: 'Machine', width: '110px' },
-          { key: 'day_type', label: 'Day Type', width: '110px' },
-          { key: 'unit', label: 'Unit', width: '130px' },
+          { key: 'option_key', label: 'Option', width: '140px' },
           { key: 'label', label: 'Label' },
           { key: 'price_cents', label: 'Price (cents)', type: 'number', width: '120px' },
+          { key: 'numeric_value', label: 'Number', type: 'number', width: '100px' },
           { key: 'variant_id', label: 'Shopify Variant ID' },
           { key: 'is_active', label: 'Active', type: 'bool' },
         ]} />
-        <div className="mt-8">
-          <p className="text-xs text-white/50 mb-3 font-heading">
-            Delivery fees, free-mile allowance and plush packs. Option key must be{' '}
-            <strong>delivery_base</strong>, <strong>free_miles</strong>, <strong>per_mile</strong> or{' '}
-            <strong>plush_pack</strong>.
-          </p>
-          <MultiRowEditor password={pw} table="booking_rental_options" searchKeys={['machine', 'option_key', 'label']} filterKey="machine" filterLabel="machines" columns={[
-            { key: 'machine', label: 'Machine', width: '110px' },
-            { key: 'option_key', label: 'Option', width: '140px' },
-            { key: 'label', label: 'Label' },
-            { key: 'price_cents', label: 'Price (cents)', type: 'number', width: '120px' },
-            { key: 'numeric_value', label: 'Number', type: 'number', width: '100px' },
-            { key: 'variant_id', label: 'Shopify Variant ID' },
-            { key: 'is_active', label: 'Active', type: 'bool' },
-          ]} />
-        </div>
-      </Panel>
-    ),
-  },
-];
+      </div>
+    </Panel>
+  );
+}
+
 

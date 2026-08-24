@@ -10,7 +10,7 @@ export interface CartLine {
 
 const CART_CREATE = `mutation cartCreate($input: CartInput!) {
   cartCreate(input: $input) {
-    cart { id checkoutUrl }
+    cart { id checkoutUrl cost { subtotalAmount { amount currencyCode } } }
     userErrors { field message }
   }
 }`;
@@ -19,7 +19,7 @@ export async function createBookingCart(params: {
   lines: CartLine[];
   attributes: CartAttribute[];
   buyerIdentity?: { email?: string; phone?: string };
-}): Promise<{ cartId: string; checkoutUrl: string } | { error: string }> {
+}): Promise<{ cartId: string; checkoutUrl: string; subtotalCents: number | null } | { error: string }> {
   const input: Record<string, unknown> = {
     lines: params.lines,
     attributes: params.attributes,
@@ -33,7 +33,12 @@ export async function createBookingCart(params: {
   if (errs.length) return { error: errs.map((e: { message: string }) => e.message).join(', ') };
   const cart = data?.data?.cartCreate?.cart;
   if (!cart?.checkoutUrl) return { error: 'No checkout URL returned' };
-  return { cartId: cart.id, checkoutUrl: formatCheckoutUrl(cart.checkoutUrl) };
+  const amount = cart?.cost?.subtotalAmount?.amount;
+  return {
+    cartId: cart.id,
+    checkoutUrl: formatCheckoutUrl(cart.checkoutUrl),
+    subtotalCents: amount != null ? Math.round(Number(amount) * 100) : null,
+  };
 }
 
 /** Delivery lines for a quoted distance: an optional base fee plus per-mile surcharge. */
@@ -44,7 +49,10 @@ export function deliveryLines(miles: number, rule: DeliveryRule): CartLine[] {
   }
   const billable = Math.max(0, Math.ceil(miles - rule.freeMiles));
   if (billable > 0) {
-    lines.push({ merchandiseId: DELIVERY_SURCHARGE_VARIANT, quantity: billable });
+    lines.push({
+      merchandiseId: rule.perMileVariantId || DELIVERY_SURCHARGE_VARIANT,
+      quantity: billable,
+    });
   }
   return lines;
 }

@@ -372,6 +372,34 @@ function BookingWizardDialog() {
         toast.error('Could not start checkout', { description: result.error });
         return;
       }
+      // Safety net: if Shopify's cart total doesn't match what we quoted, stop
+      // before payment rather than charging a different amount.
+      if (result.subtotalCents != null && Math.abs(result.subtotalCents - totalCents) > 1) {
+        toast.error('Prices are being updated — please try again in a moment.');
+        try {
+          const { supabase } = await import('@/integrations/supabase/client');
+          await supabase.functions.invoke('create-pending-booking', {
+            body: {
+              booking_ref: ref,
+              event_type: pathway,
+              start_at: startAt.toISOString(),
+              duration_minutes: 60,
+              contact_name: state.contact.name,
+              contact_email: state.contact.email,
+              contact_phone: state.contact.phone,
+              zip: state.zip,
+              addons: state.addons,
+              notes: `PRICE MISMATCH — quoted ${fmtUSD(totalCents)} vs Shopify ${fmtUSD(result.subtotalCents)}. Checkout blocked.`,
+              total_cents: totalCents,
+              status: 'price_mismatch',
+            },
+          });
+        } catch (err) {
+          console.warn('mismatch log failed', err);
+        }
+        return;
+      }
+
       // Persist a pending booking record via service-role edge function so the
       // admin calendar shows the booking immediately. Status updates to
       // confirmed when the Shopify order sync runs.
