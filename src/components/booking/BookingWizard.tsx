@@ -431,8 +431,31 @@ function BookingWizardDialog() {
                 onChange={(patch) => setState((s) => ({ ...s, ...patch }))}
               />
             ) : (
-              <PackageStep pathway={pathway} packages={pkgs} selectedId={state.packageId} onSelect={(id) => setState((s) => ({ ...s, packageId: id }))} />
+              <div className="space-y-8">
+                <MachineStep
+                  machines={MACHINES}
+                  selectedId={state.machine}
+                  onSelect={(id) => setState((s) => ({
+                    ...s,
+                    machine: id,
+                    blocks: 1,
+                    fulfillment: machineById(id)?.deliveryOnly ? 'delivery' : s.fulfillment,
+                  }))}
+                />
+                {machine && (
+                  <RentalOptionsStep
+                    machine={machine}
+                    dayType={dayType}
+                    date={state.date}
+                    fulfillment={state.fulfillment}
+                    blocks={state.blocks}
+                    plushChoice={state.plushChoice}
+                    onChange={(patch) => setState((s) => ({ ...s, ...patch }))}
+                  />
+                )}
+              </div>
             )
+
           )}
           {step === 'datetime' && pathway && (
             <DateTimeStep
