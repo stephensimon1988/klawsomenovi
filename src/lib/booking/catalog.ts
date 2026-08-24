@@ -60,6 +60,8 @@ export interface MachineDef {
   deliveryBaseCents: number;
   deliveryBaseVariantId: string;
   freeMiles: number;
+  /** Per-mile delivery surcharge for this machine (cents). */
+  perMileCents: number;
   plushPack: { label: string; priceCents: number; variantId: string };
   notes: string[];
 }
@@ -81,6 +83,7 @@ export const MACHINES: MachineDef[] = [
     deliveryBaseCents: 2000,
     deliveryBaseVariantId: gid(52492252447022),
     freeMiles: 0,
+    perMileCents: 300,
     plushPack: { label: '20 plush of your choice', priceCents: 5000, variantId: gid(52492252479790) },
     notes: [
       'Customer agrees to pay up to $700 for substantial damage and $50 for aesthetic damage.',
@@ -106,6 +109,7 @@ export const MACHINES: MachineDef[] = [
     deliveryBaseCents: 0,
     deliveryBaseVariantId: '',
     freeMiles: 10,
+    perMileCents: 300,
     plushPack: { label: '20 plush of your choice', priceCents: 8000, variantId: gid(52492252610862) },
     notes: [],
   },
@@ -268,7 +272,7 @@ export function deliveryRuleFor(pathway: Pathway | null, machine: MachineDef | n
       baseCents: machine.deliveryBaseCents,
       baseVariantId: machine.deliveryBaseVariantId,
       freeMiles: machine.freeMiles,
-      perMileCents: DELIVERY_PER_MILE_CENTS,
+      perMileCents: machine.perMileCents || DELIVERY_PER_MILE_CENTS,
     };
   }
   return {

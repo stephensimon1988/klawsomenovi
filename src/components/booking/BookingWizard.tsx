@@ -741,7 +741,7 @@ function RentalOptionsStep({
                 fulfillment === f ? 'bg-primary text-primary-foreground border-primary' : 'bg-card border-border hover:border-primary/50',
               )}
             >
-              {f === 'pickup' ? 'Self-pickup' : machine.deliveryBaseCents > 0 ? `Delivered — ${fmtUSD(machine.deliveryBaseCents)} + $3/mile` : 'Delivered'}
+              {f === 'pickup' ? 'Self-pickup' : machine.deliveryBaseCents > 0 ? `Delivered — ${fmtUSD(machine.deliveryBaseCents)} + ${fmtUSD(machine.perMileCents)}/mile` : 'Delivered'}
             </button>
           ))}
         </div>
@@ -1092,7 +1092,7 @@ function DeliveryStep({
       <p className="text-sm text-muted-foreground font-body">
         Where are we delivering?
         {deliveryRule.baseCents > 0 ? ` ${fmtUSD(deliveryRule.baseCents)} base fee` : ''}
-        {deliveryRule.freeMiles > 0 ? ` Free within ${deliveryRule.freeMiles} miles;` : ''} $3/mile
+        {deliveryRule.freeMiles > 0 ? ` Free within ${deliveryRule.freeMiles} miles;` : ''} {fmtUSD(deliveryRule.perMileCents)}/mile
         {deliveryRule.freeMiles > 0 ? ' beyond that.' : '.'}
       </p>
 

@@ -41,6 +41,9 @@ function applyOverrides(pricing: PricingRow[], options: OptionRow[]): MachineDef
         case 'free_miles':
           m.freeMiles = Number(row.numeric_value) || 0;
           break;
+        case 'per_mile':
+          m.perMileCents = Number(row.price_cents) || m.perMileCents;
+          break;
         case 'plush_pack':
           m.plushPack = {
             label: row.label || m.plushPack.label,
