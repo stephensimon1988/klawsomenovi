@@ -53,6 +53,8 @@ import klawsomeMobileArcadeSetup from '@/assets/klawsome-mobile-arcade-setup.jpg
 import rentKlawMachine from '@/assets/rent-klaw-machine.png.asset.json';
 import { generateSlots, isDateAvailable, useAvailability } from '@/hooks/useAvailability';
 import { useCmsSingle, useCmsTable, type SiteSettings, type StoreHour } from '@/hooks/useCmsContent';
+import { useRentalPricing } from '@/hooks/useRentalPricing';
+
 
 export type OpenBookingDetail = { pathway?: Pathway };
 
