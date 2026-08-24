@@ -399,7 +399,7 @@ const Birthdays = () => {
             <p className="ds-eyebrow text-klawsome-navy/70 mb-1">Rent a Klaw Machine</p>
             <h3 className="font-heading font-bold text-2xl text-klawsome-navy uppercase leading-tight">Machine Rental Add-Ons</h3>
             <p className="text-klawsome-navy/70 font-body text-sm mt-1">
-              Goes with: Rent a Klaw Machine bookings at your venue. Rentals start at {rentalFrom} for 1 hour ({fmtUSD(RENTAL_PACKAGES[1].priceCents)} for 2 hours) and include 40 regular-size plushies or your own supplied product. Delivery is quoted at checkout.
+              Goes with: Rent a Klaw Machine bookings. Take the Klaw Mini for the whole day from {rentalFrom} (weekday) with self-pickup or delivery, or book the full-size Klaw Classic in 4-hour blocks from {fmtUSD(MACHINES[1].first.weekday.cents)}, delivered and set up. Add a 20-plush pack or bring your own plush. Delivery is quoted at checkout.
             </p>
           </div>
 
