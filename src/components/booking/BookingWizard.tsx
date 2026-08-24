@@ -546,10 +546,11 @@ const PATHWAY_IMAGES: Record<Pathway, { src: string; alt: string }> = {
   mobile: { src: klawsomeMobileArcadeSetup.url, alt: 'Klawsome Mobile claw machine arcade set up at a community event' },
 };
 
-const PACKAGE_IMAGES: Record<string, { src: string; alt: string }> = {
-  'rent-1hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
-  'rent-2hr': { src: rentKlawMachine.url, alt: 'A Klawsome claw machine filled with plush prizes ready for rental' },
+const MACHINE_IMAGES: Record<MachineId, { src: string; alt: string }> = {
+  mini: { src: rentKlawMachine.url, alt: 'A Klawsome mini claw machine filled with plush prizes' },
+  classic: { src: rentKlawMachine.url, alt: 'A full-size Klaw Classic claw machine filled with plush prizes' },
 };
+
 
 const MOBILE_TIER_IMAGES: Record<MobileTierId, { src: string; alt: string }> = {
   token: { src: '/gallery/novi-community-fest-01.webp', alt: 'Guests using tokens at the Klawsome Mobile arcade' },
