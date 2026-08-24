@@ -44,7 +44,10 @@ export function deliveryLines(miles: number, rule: DeliveryRule): CartLine[] {
   }
   const billable = Math.max(0, Math.ceil(miles - rule.freeMiles));
   if (billable > 0) {
-    lines.push({ merchandiseId: DELIVERY_SURCHARGE_VARIANT, quantity: billable });
+    lines.push({
+      merchandiseId: rule.perMileVariantId || DELIVERY_SURCHARGE_VARIANT,
+      quantity: billable,
+    });
   }
   return lines;
 }

@@ -43,6 +43,7 @@ function applyOverrides(pricing: PricingRow[], options: OptionRow[]): MachineDef
           break;
         case 'per_mile':
           m.perMileCents = Number(row.price_cents) || m.perMileCents;
+          if (row.variant_id) m.perMileVariantId = row.variant_id;
           break;
         case 'plush_pack':
           m.plushPack = {

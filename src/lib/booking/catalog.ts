@@ -62,6 +62,8 @@ export interface MachineDef {
   freeMiles: number;
   /** Per-mile delivery surcharge for this machine (cents). */
   perMileCents: number;
+  /** Shopify variant charged once per billable mile for this machine. */
+  perMileVariantId: string;
   plushPack: { label: string; priceCents: number; variantId: string };
   notes: string[];
 }
@@ -84,6 +86,7 @@ export const MACHINES: MachineDef[] = [
     deliveryBaseVariantId: gid(52492252447022),
     freeMiles: 0,
     perMileCents: 300,
+    perMileVariantId: gid(52492272533806),
     plushPack: { label: '20 plush of your choice', priceCents: 5000, variantId: gid(52492252479790) },
     notes: [
       'Customer agrees to pay up to $700 for substantial damage and $50 for aesthetic damage.',
@@ -110,6 +113,7 @@ export const MACHINES: MachineDef[] = [
     deliveryBaseVariantId: '',
     freeMiles: 10,
     perMileCents: 300,
+    perMileVariantId: gid(52492272566574),
     plushPack: { label: '20 plush of your choice', priceCents: 8000, variantId: gid(52492252610862) },
     notes: [],
   },
@@ -263,6 +267,7 @@ export interface DeliveryRule {
   baseVariantId: string;
   freeMiles: number;
   perMileCents: number;
+  perMileVariantId: string;
 }
 
 /** Delivery pricing depends on what's being delivered. */
@@ -273,6 +278,7 @@ export function deliveryRuleFor(pathway: Pathway | null, machine: MachineDef | n
       baseVariantId: machine.deliveryBaseVariantId,
       freeMiles: machine.freeMiles,
       perMileCents: machine.perMileCents || DELIVERY_PER_MILE_CENTS,
+      perMileVariantId: machine.perMileVariantId || DELIVERY_SURCHARGE_VARIANT,
     };
   }
   return {
@@ -280,6 +286,7 @@ export function deliveryRuleFor(pathway: Pathway | null, machine: MachineDef | n
     baseVariantId: '',
     freeMiles: FREE_DELIVERY_MILES,
     perMileCents: DELIVERY_PER_MILE_CENTS,
+    perMileVariantId: DELIVERY_SURCHARGE_VARIANT,
   };
 }
 
