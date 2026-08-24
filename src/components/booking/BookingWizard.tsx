@@ -305,6 +305,14 @@ function BookingWizardDialog() {
             attributes: lineAttrs,
           });
         }
+      } else if (pathway === 'rental' && machine) {
+        lines.push({ merchandiseId: machine.first[dayType].variantId, quantity: 1, attributes: lineAttrs });
+        if (machine.unit === 'block' && machine.extraBlock && state.blocks > 1) {
+          lines.push({ merchandiseId: machine.extraBlock[dayType].variantId, quantity: state.blocks - 1, attributes: lineAttrs });
+        }
+        if (state.plushChoice === 'pack') {
+          lines.push({ merchandiseId: machine.plushPack.variantId, quantity: 1, attributes: lineAttrs });
+        }
       } else if (selectedPackage) {
         lines.push({ merchandiseId: selectedPackage.variantId, quantity: 1, attributes: lineAttrs });
       }
@@ -319,10 +327,12 @@ function BookingWizardDialog() {
         lines.push({ merchandiseId: variantId, quantity: sel.qty, attributes: attrs });
       }
       // delivery
-      if (pathway === 'rental' || pathway === 'mobile') {
-        const dl = deliveryLine(zipInfo?.known ? zipInfo.miles : 0);
-        if (dl) lines.push({ ...dl, attributes: [{ key: 'booking_ref', value: ref }, { key: 'zip', value: state.zip }] });
+      if (usesDelivery) {
+        for (const dl of deliveryLines(zipInfo?.known ? zipInfo.miles : 0, deliveryRule)) {
+          lines.push({ ...dl, attributes: [{ key: 'booking_ref', value: ref }, { key: 'zip', value: state.zip }] });
+        }
       }
+
       const attributes = [
         { key: 'booking_ref', value: ref },
         { key: 'event_type', value: pathway },
