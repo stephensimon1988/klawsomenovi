@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { MultiRowEditor, SingleRowEditor } from './CmsEditors';
+import { RentalShopifySyncPanel, useRentalShopifySync } from './RentalShopifySync';
 import type { ReactNode } from 'react';
 
 const SHOPIFY_NOTE =
