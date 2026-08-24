@@ -142,8 +142,11 @@ function BookingWizardDialog() {
   const pathway = state.pathway;
   const { availability, blackouts } = useAvailability(pathway);
   const pkgs = packagesFor(pathway);
+  const machine = useMemo(() => machineById(state.machine), [state.machine]);
+  const deliveryRule = useMemo(() => deliveryRuleFor(pathway, machine), [pathway, machine]);
 
   const selectedPackage = useMemo(() => pkgs.find((p) => p.id === state.packageId) || null, [pkgs, state.packageId]);
+
 
   const dayType: DayType = dayTypeFor(state.date);
   const mobileTier = useMemo(
