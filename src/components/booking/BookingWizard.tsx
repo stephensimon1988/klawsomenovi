@@ -955,11 +955,17 @@ function DeliveryStep({
           {gatesAnswered && zipInfo && zipInfo.known && (
             <div className="rounded-xl bg-muted/40 border border-border p-4 text-sm font-body">
               <p className="font-heading font-bold text-foreground">~{zipInfo.miles} miles from Klawsome</p>
-              {zipInfo.miles <= FREE_DELIVERY_MILES ? (
+              {deliveryCentsFor(deliveryRule, zipInfo.miles) === 0 ? (
                 <p className="text-primary mt-1">Free delivery ✓</p>
               ) : (
-                <p className="text-foreground mt-1">Delivery surcharge: ${(Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES) * 3).toFixed(2)} ({Math.ceil(zipInfo.miles - FREE_DELIVERY_MILES)} extra miles × $3)</p>
+                <p className="text-foreground mt-1">
+                  Delivery: {fmtUSD(deliveryCentsFor(deliveryRule, zipInfo.miles))}
+                  {deliveryRule.baseCents > 0 ? ` (${fmtUSD(deliveryRule.baseCents)} base` : ' ('}
+                  {billableMiles > 0 ? `${deliveryRule.baseCents > 0 ? ' + ' : ''}${billableMiles} mi × $3` : ''}
+                  )
+                </p>
               )}
+
               {approvalForZip?.status === 'approved' && (
                 <p className="text-primary mt-1">Confirmed by our team ✓ (request #{approvalForZip.code})</p>
               )}
