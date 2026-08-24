@@ -437,7 +437,7 @@ function BookingWizardDialog() {
             ) : (
               <div className="space-y-8">
                 <MachineStep
-                  machines={MACHINES}
+                  machines={machines}
                   selectedId={state.machine}
                   onSelect={(id) => setState((s) => ({
                     ...s,
