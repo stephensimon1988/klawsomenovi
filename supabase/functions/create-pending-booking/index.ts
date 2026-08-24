@@ -14,7 +14,7 @@ Deno.serve(async (req) => {
       event_type: body.event_type,
       pathway: body.event_type,
       start_at: body.start_at,
-      status: 'pending_payment',
+      status: body.status === 'price_mismatch' ? 'price_mismatch' : 'pending_payment',
       contact_name: body.contact_name ?? null,
       contact_email: body.contact_email ?? null,
       contact_phone: body.contact_phone ?? null,
