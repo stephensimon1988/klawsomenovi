@@ -917,9 +917,17 @@ function DeliveryStep({
     setSubmitting(false);
   };
 
+  const billableMiles = zipInfo?.known ? Math.max(0, Math.ceil(zipInfo.miles - deliveryRule.freeMiles)) : 0;
+
   return (
     <div className="space-y-6">
-      <p className="text-sm text-muted-foreground font-body">Where are we delivering? Free within 20 miles; $3/mile beyond that.</p>
+      <p className="text-sm text-muted-foreground font-body">
+        Where are we delivering?
+        {deliveryRule.baseCents > 0 ? ` ${fmtUSD(deliveryRule.baseCents)} base fee` : ''}
+        {deliveryRule.freeMiles > 0 ? ` Free within ${deliveryRule.freeMiles} miles;` : ''} $3/mile
+        {deliveryRule.freeMiles > 0 ? ' beyond that.' : '.'}
+      </p>
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
         <div className="space-y-6">
