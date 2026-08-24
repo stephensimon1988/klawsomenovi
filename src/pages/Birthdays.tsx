@@ -8,7 +8,7 @@ import KawaiiDivider from '@/components/KawaiiDivider';
 import { useCmsSingle, useCmsTable, usePageHero, type BirthdaysContent, type PartyOption, type FaqItem, type InviteTemplate, type SiteSettings } from '@/hooks/useCmsContent';
 import PageHero from '@/components/PageHero';
 import { openBookingModal } from '@/components/BookNowDialog';
-import { RENTAL_PACKAGES, MOBILE_TIERS, ADDONS, fmtUSD, mobileRate } from '@/lib/booking/catalog';
+import { MACHINES, MOBILE_TIERS, ADDONS, fmtUSD, mobileRate } from '@/lib/booking/catalog';
 import FramedImage from '@/components/FramedImage';
 import { Link } from 'react-router-dom';
  import birthdaysHero from '@/assets/birthdays-hero.webp';
